@@ -52,7 +52,7 @@ const Index = () => {
           <div className="flex items-center gap-2">
             <Heart className="w-8 h-8 text-primary fill-primary" />
             <h1 className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-              VagasPride
+              QueerCode1.2
             </h1>
           </div>
           <AddJobDialog />
