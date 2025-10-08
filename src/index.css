@@ -1,127 +1,122 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@tailwind base; /* Importa os estilos base do Tailwind (reset de CSS e estilos globais). */
+@tailwind components; /* Importa componentes customizados definidos pelo Tailwind. */
+@tailwind utilities; /* Importa utilitários (classes como p-4, text-center, bg-blue, etc). */
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Sistema de design: define todas as cores, gradientes, fontes, raios de borda e transições. 
+   As cores devem ser sempre em formato HSL para facilitar ajustes de tema. */
 
-@layer base {
-  :root {
-    --background: 250 100% 98%;
-    --foreground: 260 60% 15%;
+@layer base { /* Inicia uma camada base personalizada. */
+  :root { /* Define variáveis CSS globais para o tema claro. */
+    --background: 250 100% 98%; /* Cor de fundo geral (bem clara). */
+    --foreground: 260 60% 15%; /* Cor principal do texto (escura). */
 
-    --card: 0 0% 100%;
-    --card-foreground: 260 60% 15%;
+    --card: 0 0% 100%; /* Cor do fundo de cartões (branco). */
+    --card-foreground: 260 60% 15%; /* Cor do texto dentro dos cartões. */
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 260 60% 15%;
+    --popover: 0 0% 100%; /* Fundo de popovers (janelas pequenas, brancas). */
+    --popover-foreground: 260 60% 15%; /* Texto dentro dos popovers. */
 
-    --primary: 280 80% 55%;
-    --primary-foreground: 0 0% 100%;
-    --primary-glow: 290 85% 70%;
+    --primary: 280 80% 55%; /* Cor principal (roxo). */
+    --primary-foreground: 0 0% 100%; /* Texto sobre cor primária (branco). */
+    --primary-glow: 290 85% 70%; /* Efeito de brilho para cor primária. */
 
-    --secondary: 320 75% 60%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 320 75% 60%; /* Cor secundária (rosa). */
+    --secondary-foreground: 0 0% 100%; /* Texto sobre cor secundária. */
 
-    --muted: 250 40% 95%;
-    --muted-foreground: 260 20% 50%;
+    --muted: 250 40% 95%; /* Fundo de áreas suaves (cinza claro). */
+    --muted-foreground: 260 20% 50%; /* Texto em áreas suaves (cinza médio). */
 
-    --accent: 200 90% 55%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 200 90% 55%; /* Cor de destaque (azul). */
+    --accent-foreground: 0 0% 100%; /* Texto sobre cor de destaque. */
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 0 84.2% 60.2%; /* Cor de erro (vermelho). */
+    --destructive-foreground: 0 0% 100%; /* Texto sobre cor de erro. */
 
-    --border: 250 30% 90%;
-    --input: 250 30% 92%;
-    --ring: 280 80% 55%;
+    --border: 250 30% 90%; /* Cor padrão das bordas (cinza claro). */
+    --input: 250 30% 92%; /* Cor de fundo de campos de entrada. */
+    --ring: 280 80% 55%; /* Cor usada em foco (ex: anéis de input). */
 
-    --radius: 0.75rem;
+    --radius: 0.75rem; /* Raio padrão de bordas arredondadas. */
 
-    /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(280 80% 55%), hsl(320 75% 60%));
-    --gradient-accent: linear-gradient(135deg, hsl(200 90% 55%), hsl(280 80% 55%));
-    --gradient-hero: linear-gradient(135deg, hsl(280 80% 55% / 0.1), hsl(320 75% 60% / 0.1));
-    
-    /* Shadows */
-    --shadow-glow: 0 0 40px hsl(280 80% 55% / 0.3);
-    --shadow-card: 0 10px 30px -10px hsl(280 80% 55% / 0.2);
-    
-    /* Transitions */
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Gradientes */
+    --gradient-primary: linear-gradient(135deg, hsl(280 80% 55%), hsl(320 75% 60%)); /* Gradiente roxo-rosa. */
+    --gradient-accent: linear-gradient(135deg, hsl(200 90% 55%), hsl(280 80% 55%)); /* Gradiente azul-roxo. */
+    --gradient-hero: linear-gradient(135deg, hsla(280, 87%, 50%, 0.1), hsl(320 75% 60% / 0.1)); /* Gradiente leve para seções de destaque. */
+
+    /* Transições */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Transição suave padrão para animações. */
   }
 
-  .dark {
-    --background: 260 70% 8%;
-    --foreground: 250 40% 95%;
+  .dark { /* Define o tema escuro (modo dark). */
+    --background: 260 70% 8%; /* Fundo escuro. */
+    --foreground: 250 40% 95%; /* Texto claro. */
 
-    --card: 260 60% 12%;
-    --card-foreground: 250 40% 95%;
+    --card: 260 60% 12%; /* Fundo dos cartões (escuro). */
+    --card-foreground: 250 40% 95%; /* Texto dos cartões (claro). */
 
-    --popover: 260 60% 12%;
-    --popover-foreground: 250 40% 95%;
+    --popover: 260 60% 12%; /* Fundo dos popovers (escuro). */
+    --popover-foreground: 250 40% 95%; /* Texto dos popovers (claro). */
 
-    --primary: 280 80% 60%;
-    --primary-foreground: 0 0% 100%;
-    --primary-glow: 290 85% 75%;
+    --primary: 280 80% 60%; /* Cor primária no modo escuro (roxo claro). */
+    --primary-foreground: 0 0% 100%; /* Texto branco sobre cor primária. */
+    --primary-glow: 290 85% 75%; /* Efeito de brilho mais intenso no dark mode. */
 
-    --secondary: 320 75% 65%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 320 75% 65%; /* Cor secundária (rosa mais claro). */
+    --secondary-foreground: 0 0% 100%; /* Texto sobre cor secundária. */
 
-    --muted: 260 50% 15%;
-    --muted-foreground: 250 20% 65%;
+    --muted: 260 50% 15%; /* Fundo de áreas suaves (quase preto). */
+    --muted-foreground: 250 20% 65%; /* Texto cinza claro em áreas suaves. */
 
-    --accent: 200 90% 60%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 200 90% 60%; /* Cor de destaque (azul). */
+    --accent-foreground: 0 0% 100%; /* Texto branco sobre destaque. */
 
-    --destructive: 0 62.8% 50%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 0 62.8% 50%; /* Cor de erro (vermelho escuro). */
+    --destructive-foreground: 0 0% 100%; /* Texto branco sobre erro. */
 
-    --border: 260 40% 20%;
-    --input: 260 40% 20%;
-    --ring: 280 80% 60%;
+    --border: 260 40% 20%; /* Cor das bordas no modo escuro. */
+    --input: 260 40% 20%; /* Fundo dos inputs no modo escuro. */
+    --ring: 280 80% 60%; /* Cor de foco no modo escuro. */
 
-    --gradient-primary: linear-gradient(135deg, hsl(280 80% 60%), hsl(320 75% 65%));
-    --gradient-accent: linear-gradient(135deg, hsl(200 90% 60%), hsl(280 80% 60%));
-    --gradient-hero: linear-gradient(135deg, hsl(280 80% 60% / 0.15), hsl(320 75% 65% / 0.15));
+    --gradient-primary: linear-gradient(135deg, hsl(280 80% 60%), hsl(320 75% 65%)); /* Gradiente roxo-rosa (versão escura). */
+    --gradient-accent: linear-gradient(135deg, hsl(200 90% 60%), hsl(280 80% 60%)); /* Gradiente azul-roxo (versão escura). */
+    --gradient-hero: linear-gradient(135deg, hsl(280 80% 60% / 0.15), hsl(320 75% 65% / 0.15)); /* Gradiente sutil de fundo no dark mode. */
     
-    --shadow-glow: 0 0 40px hsl(280 80% 60% / 0.4);
-    --shadow-card: 0 10px 30px -10px hsl(280 80% 60% / 0.3);
+    --shadow-glow: 0 0 40px hsl(280 80% 60% / 0.4); /* Efeito de brilho ao redor (roxo translúcido). */
+    --shadow-card: 0 10px 30px -10px hsl(280 80% 60% / 0.3); /* Sombra dos cartões no modo escuro. */
   }
 }
 
-@layer base {
+@layer base { /* Segunda camada base: aplica estilos globais e utilitários. */
   * {
-    @apply border-border;
+    @apply border-border; /* Aplica a cor de borda padrão a todos os elementos. */
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    @apply bg-background text-foreground antialiased; /* Define fundo, texto e suavização de fontes. */
+    font-feature-settings: "rlig" 1, "calt" 1; /* Melhora a legibilidade da tipografia. */
   }
   
   .gradient-primary {
-    background: var(--gradient-primary);
+    background: var(--gradient-primary); /* Classe utilitária para aplicar gradiente principal. */
   }
   
   .gradient-accent {
-    background: var(--gradient-accent);
+    background: var(--gradient-accent); /* Classe utilitária para aplicar gradiente de destaque. */
   }
   
   .gradient-hero {
-    background: var(--gradient-hero);
+    background: var(--gradient-hero); /* Classe utilitária para aplicar gradiente leve. */
   }
   
   .shadow-glow {
-    box-shadow: var(--shadow-glow);
+    box-shadow: var(--shadow-glow); /* Classe para aplicar brilho. */
   }
   
   .shadow-card {
-    box-shadow: var(--shadow-card);
+    box-shadow: var(--shadow-card); /* Classe para aplicar sombra em cartões. */
   }
   
   .transition-smooth {
-    transition: var(--transition-smooth);
+    transition: var(--transition-smooth); /* Classe para transições suaves. */
   }
 }

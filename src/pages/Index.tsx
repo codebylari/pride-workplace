@@ -2,6 +2,8 @@ import JobCard from "@/components/JobCard";
 import AddJobDialog from "@/components/AddJobDialog";
 import SearchBar from "@/components/SearchBar";
 import { Heart } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 
 const Index = () => {
   // Mock data - em uma aplicação real, isso viria de uma API/banco
@@ -52,11 +54,13 @@ const Index = () => {
           <div className="flex items-center gap-2">
             <Heart className="w-8 h-8 text-primary fill-primary" />
             <h1 className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-              QueerCode1.2
+              QueerCode 
             </h1>
           </div>
           <AddJobDialog />
         </div>
+
+        
       </header>
 
       {/* Hero Section */}

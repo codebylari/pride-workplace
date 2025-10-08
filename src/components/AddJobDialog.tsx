@@ -38,6 +38,8 @@ const AddJobDialog = () => {
           <Plus className="w-4 h-4 mr-2" />
           Cadastrar Vaga
         </Button>
+
+        
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">
         <form onSubmit={handleSubmit}>
