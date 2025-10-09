@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/Logo.png";
 
 export default function Auth() {
   const [email, setEmail] = useState("");
