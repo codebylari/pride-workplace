@@ -16,6 +16,12 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index"; 
 // Página principal (rota "/")
 
+import Auth from "./pages/Auth";
+// Página de autenticação (login)
+
+import Register from "./pages/Register";
+// Página de cadastro
+
 import NotFound from "./pages/NotFound"; 
 // Página exibida quando a rota não existe (erro 404)
 
@@ -36,8 +42,14 @@ const App = () => (
         {/* Habilita o roteamento baseado em URLs */}
         <Routes>
           {/* Define as rotas da aplicação */}
+          <Route path="/auth" element={<Auth />} />
+          {/* Página de login */}
+          
+          <Route path="/register" element={<Register />} />
+          {/* Página de cadastro */}
+          
           <Route path="/" element={<Index />} />
-          {/* Página inicial */}
+          {/* Página inicial (protegida) */}
           
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           {/* Comentário lembrando que novas rotas devem vir antes da rota coringa */}

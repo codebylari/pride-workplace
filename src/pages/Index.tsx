@@ -1,11 +1,33 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import JobCard from "@/components/JobCard";
 import AddJobDialog from "@/components/AddJobDialog";
 import SearchBar from "@/components/SearchBar";
-import { Heart } from "lucide-react";
+import { Heart, Briefcase, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
 
 const Index = () => {
+  const { user, userRole, loading, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      navigate("/auth");
+    }
+  }, [user, loading, navigate]);
   // Mock data - em uma aplicação real, isso viria de uma API/banco
   const jobs = [
     {
@@ -46,22 +68,68 @@ const Index = () => {
     },
   ];
 
-  return (
-    <div className="min-h-screen">
-      {/* Header */}
-      <header className="border-b border-border/50 bg-card/30 backdrop-blur-md sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <Heart className="w-8 h-8 text-primary fill-primary" />
-            <h1 className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-              QueerCode 
-            </h1>
-          </div>
-          <AddJobDialog />
-        </div>
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-lg">Carregando...</p>
+      </div>
+    );
+  }
 
-        
-      </header>
+  return (
+    <SidebarProvider>
+      <div className="min-h-screen flex w-full bg-background">
+        {/* Sidebar */}
+        <Sidebar className="border-r border-border/50">
+          <SidebarContent>
+            <div className="p-6">
+              <div className="flex items-center gap-2 mb-6">
+                <Heart className="w-8 h-8 text-primary fill-primary" />
+                <h1 className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+                  QueerCode
+                </h1>
+              </div>
+            </div>
+
+            <SidebarGroup>
+              <SidebarGroupLabel>Menu</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton>
+                      <Briefcase className="h-4 w-4" />
+                      <span>Vagas</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+
+            <div className="mt-auto p-6">
+              <Button
+                variant="outline"
+                className="w-full justify-start"
+                onClick={async () => {
+                  await signOut();
+                  navigate("/auth");
+                }}
+              >
+                <LogOut className="h-4 w-4 mr-2" />
+                Sair
+              </Button>
+            </div>
+          </SidebarContent>
+        </Sidebar>
+
+        {/* Main Content */}
+        <div className="flex-1 flex flex-col">
+          {/* Header */}
+          <header className="border-b border-border/50 bg-background sticky top-0 z-50">
+            <div className="px-6 py-4 flex justify-between items-center">
+              <SidebarTrigger />
+              {userRole === "company" && <AddJobDialog />}
+            </div>
+          </header>
 
       {/* Hero Section */}
       <section className="gradient-hero py-20 px-4">
@@ -96,15 +164,17 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-border/50 bg-card/30 backdrop-blur-md mt-16">
-        <div className="container mx-auto px-4 py-8 text-center text-muted-foreground">
-          <p className="flex items-center justify-center gap-2">
-            Feito com <Heart className="w-4 h-4 text-primary fill-primary" /> para a comunidade LGBTQIA+
-          </p>
+          {/* Footer */}
+          <footer className="border-t border-border/50 bg-background mt-auto">
+            <div className="px-6 py-8 text-center text-muted-foreground">
+              <p className="flex items-center justify-center gap-2">
+                Feito com <Heart className="w-4 h-4 text-primary fill-primary" /> para a comunidade LGBTQIA+
+              </p>
+            </div>
+          </footer>
         </div>
-      </footer>
-    </div>
+      </div>
+    </SidebarProvider>
   );
 };
 
