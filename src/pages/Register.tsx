@@ -96,7 +96,7 @@ export default function Register() {
         description: "Você já pode fazer login na plataforma.",
       });
       navigate("/auth");
-    } catch (error: any) {
+    } catch (error) {
       toast({
         title: "Erro no cadastro",
         description: error.message,
@@ -454,9 +454,7 @@ export default function Register() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-purple-700 to-purple-600 p-4">
       <div className="w-full max-w-4xl bg-white/10 backdrop-blur-lg rounded-3xl p-12 shadow-2xl">
-        <div className="flex flex-col items-center mb-8">
-          <img src={logo} alt="QueerCode Logo" className="w-40 h-auto mb-4" />
-        </div>
+        
         {/* Renderização condicional das etapas */}
         {step === 1 && <Step1 />}
         {step === 2 && role === "candidate" && <Step2 />}
