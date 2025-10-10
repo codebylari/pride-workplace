@@ -1,3 +1,20 @@
+# Trabalho academico PI2 (unisales)
+
+Desenvolveu-se a ideia de uma plataforma web e mobile, que tem como objetivo conectar exclusivamente mulheres e pessoas da comunidade LGBTQIAPN+ da área de tecnologia a empresas comprometidas com a diversidade. Busca oferecer um espaço seguro e inclusivo para divulgação de vagas temporárias, permitindo que profissionais encontrem oportunidades com flexibilidade, reconhecimento e valorização de suas habilidades. Ao mesmo tempo, atende empresas que necessitam de mão de obra qualificada para demandas pontuais, promovendo a inclusão, a representatividade e a diversidade no setor de tecnologia.
+
+<p>Linguagens utilizadas para criação da plataforma:</p>
+
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![shadcn-ui](https://img.shields.io/badge/shadcn--ui-FFFFFF?style=for-the-badge&logo=appveyor&logoColor=black)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwind-css&logoColor=white)
+
+
+
+
+
+
 # Welcome to your Lovable project
 
 ## Project info
