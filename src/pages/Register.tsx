@@ -197,12 +197,10 @@ export default function Register() {
       )}
     </div>
   );
-
+  // formulário
   const Step6Candidate = ({
     email,
     setEmail,
-    password,
-    setPassword,
     handleRegister,
   }) => {
     const [fullName, setFullName] = React.useState("");
@@ -214,8 +212,11 @@ export default function Register() {
     const [city, setCity] = React.useState("");
     const [state, setState] = React.useState("");
     const [phone, setPhone] = React.useState("");
-    const [customEmail, setCustomEmail] = React.useState("");
-    const [useCustomEmail, setUseCustomEmail] = React.useState(false);
+    const [confirmEmail, setConfirmEmail] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [password, setPassword] = useState("");
+
+
 
     return (
       <form onSubmit={handleRegister} className="space-y-6 max-w-4xl mx-auto">
@@ -286,6 +287,45 @@ export default function Register() {
                 className="w-full p-3 rounded-lg border border-gray-300"
               />
             </div>
+
+            <div>
+              <label className="block text-white mb-1">Estado (UF)</label>
+              <select
+                value={state}
+                onChange={(e) => setState(e.target.value)}
+                required
+                className="w-full p-3 rounded-lg border border-gray-300 bg-white text-black"
+              >
+                <option value="">Selecione seu estado</option>
+                <option value="AC">Acre (AC)</option>
+                <option value="AL">Alagoas (AL)</option>
+                <option value="AP">Amapá (AP)</option>
+                <option value="AM">Amazonas (AM)</option>
+                <option value="BA">Bahia (BA)</option>
+                <option value="CE">Ceará (CE)</option>
+                <option value="DF">Distrito Federal (DF)</option>
+                <option value="ES">Espírito Santo (ES)</option>
+                <option value="GO">Goiás (GO)</option>
+                <option value="MA">Maranhão (MA)</option>
+                <option value="MT">Mato Grosso (MT)</option>
+                <option value="MS">Mato Grosso do Sul (MS)</option>
+                <option value="MG">Minas Gerais (MG)</option>
+                <option value="PA">Pará (PA)</option>
+                <option value="PB">Paraíba (PB)</option>
+                <option value="PR">Paraná (PR)</option>
+                <option value="PE">Pernambuco (PE)</option>
+                <option value="PI">Piauí (PI)</option>
+                <option value="RJ">Rio de Janeiro (RJ)</option>
+                <option value="RN">Rio Grande do Norte (RN)</option>
+                <option value="RS">Rio Grande do Sul (RS)</option>
+                <option value="RO">Rondônia (RO)</option>
+                <option value="RR">Roraima (RR)</option>
+                <option value="SC">Santa Catarina (SC)</option>
+                <option value="SP">São Paulo (SP)</option>
+                <option value="SE">Sergipe (SE)</option>
+                <option value="TO">Tocantins (TO)</option>
+              </select>
+            </div>
             <div>
               <label className="block text-white mb-1">Cidade</label>
               <input
@@ -296,16 +336,7 @@ export default function Register() {
                 className="w-full p-3 rounded-lg border border-gray-300"
               />
             </div>
-            <div>
-              <label className="block text-white mb-1">Estado (UF)</label>
-              <input
-                type="text"
-                value={state}
-                onChange={(e) => setState(e.target.value)}
-                required
-                className="w-full p-3 rounded-lg border border-gray-300"
-              />
-            </div>
+
             <div>
               <label className="block text-white mb-1">Telefone/WhatsApp</label>
               <input
@@ -320,57 +351,28 @@ export default function Register() {
 
           {/* SEÇÃO DE EMAIL */}
           <div className="mt-4">
-            <p className="text-white mb-2">
-              Escolha um endereço de email ou crie o seu próprio:
-            </p>
-            <div className="flex flex-col gap-2">
-              {["renatasilva@gmail.com", "silvarenata@gmail.com"].map((option) => (
-                <label key={option} className="flex items-center gap-2 text-white">
-                  <input
-                    type="radio"
-                    name="emailChoice"
-                    value={option}
-                    checked={!useCustomEmail && email === option}
-                    onChange={() => {
-                      setEmail(option);
-                      setUseCustomEmail(false);
-                    }}
-                    className="accent-green-500"
-                  />
-                  {option}
-                </label>
-              ))}
+            <p className="text-white mb-2">Digite seu email e confirme abaixo:</p>
+            <div className="flex flex-col gap-3">
+              <input
+                type="email"
+                placeholder="Digite seu email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full p-3 rounded-lg border border-gray-300"
+              />
 
-              <label className="flex items-center gap-2 text-white">
-                <input
-                  type="radio"
-                  name="emailChoice"
-                  value="custom"
-                  checked={useCustomEmail}
-                  onChange={() => {
-                    setUseCustomEmail(true);
-                    setEmail(customEmail);
-                  }}
-                  className="accent-green-500"
-                />
-                Crie seu próprio email
-              </label>
-
-              {useCustomEmail && (
-                <input
-                  type="email"
-                  placeholder="Digite seu email"
-                  value={customEmail}
-                  onChange={(e) => {
-                    setCustomEmail(e.target.value);
-                    setEmail(e.target.value);
-                  }}
-                  required
-                  className="w-full p-3 rounded-lg border border-gray-300 mt-2"
-                />
-              )}
+              <input
+                type="email"
+                placeholder="Confirme seu email"
+                value={confirmEmail}
+                onChange={(e) => setConfirmEmail(e.target.value)}
+                required
+                className="w-full p-3 rounded-lg border border-gray-300"
+              />
             </div>
           </div>
+
 
           <div className="grid grid-cols-2 gap-4 mt-4">
             <div>
@@ -384,16 +386,20 @@ export default function Register() {
                 className="w-full p-3 rounded-lg border border-gray-300"
               />
             </div>
+
             <div>
               <label className="block text-white mb-1">Repita sua Senha</label>
               <input
                 type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 required
                 minLength={6}
                 className="w-full p-3 rounded-lg border border-gray-300"
               />
             </div>
           </div>
+
 
           <button
             type="button"
@@ -530,6 +536,7 @@ export default function Register() {
 
 
   // ------------------- FLUXO EMPRESA -------------------
+
   const Step2Company = () => (
     <div className="flex flex-col items-center space-y-6 text-center text-white">
       <h2 className="text-3xl font-bold">Tipo de projeto</h2>
@@ -543,7 +550,7 @@ export default function Register() {
         <Button
           key={option}
           onClick={() => setStep(3)}
-          className="w-80 py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-lg"
+          className="w-80 py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-lg transition-all"
         >
           {option}
         </Button>
@@ -573,7 +580,7 @@ export default function Register() {
         <Button
           key={option}
           onClick={() => setStep(4)}
-          className="w-80 py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-lg"
+          className="w-80 py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-lg transition-all"
         >
           {option}
         </Button>
@@ -584,150 +591,182 @@ export default function Register() {
   const Step4Company = () => (
     <div className="flex flex-col items-center space-y-6 text-center text-white">
       <h2 className="text-3xl font-bold">Quanto tempo precisa do profissional?</h2>
-      {["Decidir mais tarde", "< 1 semana", "1 semana - 6 meses", "+ 6 meses"].map(
-        (option) => (
-          <Button
-            key={option}
-            onClick={() => setStep(5)}
-            className="w-80 py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-lg"
-          >
-            {option}
-          </Button>
-        )
-      )}
+      {["Decidir mais tarde", "< 1 semana", "1 semana - 6 meses", "+ 6 meses"].map((option) => (
+        <Button
+          key={option}
+          onClick={() => setStep(5)}
+          className="w-80 py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-lg transition-all"
+        >
+          {option}
+        </Button>
+      ))}
     </div>
   );
 
   const Step5Company = () => (
     <div className="flex flex-col items-center space-y-6 text-center text-white">
       <h2 className="text-3xl font-bold">Experiência em Git?</h2>
-      {["Sim, básico", "Sim, avançado", "Conhecimento teórico", "Não necessário"].map(
-        (option) => (
-          <Button
-            key={option}
-            onClick={() => setStep(6)}
-            className="w-80 py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-lg"
-          >
-            {option}
-          </Button>
-        )
-      )}
+      {["Sim, básico", "Sim, avançado", "Conhecimento teórico", "Não necessário"].map((option) => (
+        <Button
+          key={option}
+          onClick={() => setStep(6)}
+          className="w-80 py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-lg transition-all"
+        >
+          {option}
+        </Button>
+      ))}
     </div>
   );
 
-  const Step6Company = () => (
-    <form onSubmit={handleRegister} className="space-y-6 max-w-2xl mx-auto">
-      <h2 className="text-3xl font-bold text-center text-white mb-6">Dados da empresa</h2>
-      <div className="bg-white/20 backdrop-blur-md rounded-2xl p-6 space-y-4">
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="text-white text-sm">Nome da Empresa</label>
-            <input
-              type="text"
-              value={companyName}
-              onChange={(e) => setCompanyName(e.target.value)}
-              required
-              className="w-full bg-white/90 rounded-xl py-3 px-4 text-gray-800"
-            />
-          </div>
-          <div>
-            <label className="text-white text-sm">Seu Nome</label>
-            <input
-              type="text"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              required
-              className="w-full bg-white/90 rounded-xl py-3 px-4 text-gray-800"
-            />
-          </div>
-          <div>
-            <label className="text-white text-sm">CNPJ</label>
-            <input
-              type="text"
-              value={cnpj}
-              onChange={(e) => setCnpj(e.target.value)}
-              required
-              className="w-full bg-white/90 rounded-xl py-3 px-4 text-gray-800"
-            />
-          </div>
-          <div>
-            <label className="text-white text-sm">Cargo</label>
-            <input
-              type="text"
-              value={position}
-              onChange={(e) => setPosition(e.target.value)}
-              required
-              className="w-full bg-white/90 rounded-xl py-3 px-4 text-gray-800"
-            />
-          </div>
-          <div>
-            <label className="text-white text-sm">Cidade</label>
-            <input
-              type="text"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-              required
-              className="w-full bg-white/90 rounded-xl py-3 px-4 text-gray-800"
-            />
-          </div>
-          <div>
-            <label className="text-white text-sm">Estado (UF)</label>
-            <input
-              type="text"
-              value={state}
-              onChange={(e) => setState(e.target.value)}
-              required
-              className="w-full bg-white/90 rounded-xl py-3 px-4 text-gray-800"
-            />
-          </div>
-          <div className="col-span-2">
-            <label className="text-white text-sm">Telefone/WhatsApp</label>
-            <input
-              type="text"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              required
-              className="w-full bg-white/90 rounded-xl py-3 px-4 text-gray-800"
-            />
-          </div>
-          <div className="col-span-2">
-            <label className="text-white text-sm">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full bg-white/90 rounded-xl py-3 px-4 text-gray-800"
-            />
-          </div>
-          <div className="col-span-2 grid grid-cols-2 gap-4">
+  // CAMPOS OTIMIZADOS — DIGITAÇÃO FLUÍDA
+  const Step6Company = ({
+    email,
+    setEmail,
+    password,
+    setPassword,
+    handleRegister,
+  }) => {
+    const [companyName, setCompanyName] = React.useState("");
+    const [fullName, setFullName] = React.useState("");
+    const [cnpj, setCnpj] = React.useState("");
+    const [position, setPosition] = React.useState("");
+    const [city, setCity] = React.useState("");
+    const [state, setState] = React.useState("");
+    const [phone, setPhone] = React.useState("");
+    const [confirmPassword, setConfirmPassword] = React.useState("");
+    const [diversity, setDiversity] = React.useState<"sim" | "nao" | null>(null);
+
+    return (
+      <form onSubmit={handleRegister} className="space-y-6 max-w-4xl mx-auto">
+        <h2 className="text-3xl font-bold text-center text-white mb-6">
+          Cadastramento de Empresa
+        </h2>
+
+        <div className="bg-white/20 backdrop-blur-md rounded-2xl p-6 space-y-4">
+          <div className="grid grid-cols-3 gap-4">
             <div>
-              <label className="text-white text-sm">Senha</label>
+              <label className="block text-white mb-1">Nome da Empresa</label>
+              <input
+                type="text"
+                value={companyName}
+                onChange={(e) => setCompanyName(e.target.value)}
+                required
+                className="w-full p-3 rounded-lg border border-gray-300"
+              />
+            </div>
+
+            <div>
+              <label className="block text-white mb-1">Seu Nome</label>
+              <input
+                type="text"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                required
+                className="w-full p-3 rounded-lg border border-gray-300"
+              />
+            </div>
+
+            <div>
+              <label className="block text-white mb-1">CNPJ</label>
+              <input
+                type="text"
+                value={cnpj}
+                onChange={(e) => setCnpj(e.target.value)}
+                required
+                className="w-full p-3 rounded-lg border border-gray-300"
+              />
+            </div>
+
+            <div>
+              <label className="block text-white mb-1">Cargo</label>
+              <input
+                type="text"
+                value={position}
+                onChange={(e) => setPosition(e.target.value)}
+                required
+                className="w-full p-3 rounded-lg border border-gray-300"
+              />
+            </div>
+
+            <div>
+              <label className="block text-white mb-1">Cidade</label>
+              <input
+                type="text"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                required
+                className="w-full p-3 rounded-lg border border-gray-300"
+              />
+            </div>
+
+            <div>
+              <label className="block text-white mb-1">Estado (UF)</label>
+              <input
+                type="text"
+                value={state}
+                onChange={(e) => setState(e.target.value)}
+                required
+                className="w-full p-3 rounded-lg border border-gray-300"
+              />
+            </div>
+
+            <div>
+              <label className="block text-white mb-1">Telefone/WhatsApp</label>
+              <input
+                type="text"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                required
+                className="w-full p-3 rounded-lg border border-gray-300"
+              />
+            </div>
+          </div>
+
+          {/* EMAIL E SENHA */}
+          <div className="grid grid-cols-2 gap-4 mt-4">
+            <div className="col-span-2">
+              <label className="block text-white mb-1">Email</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full p-3 rounded-lg border border-gray-300"
+              />
+            </div>
+
+            <div>
+              <label className="block text-white mb-1">Senha</label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength={6}
-                className="w-full bg-white/90 rounded-xl py-3 px-4 text-gray-800"
+                className="w-full p-3 rounded-lg border border-gray-300"
               />
             </div>
+
             <div>
-              <label className="text-white text-sm">Confirme a Senha</label>
+              <label className="block text-white mb-1">Confirmar Senha</label>
               <input
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
                 minLength={6}
-                className="w-full bg-white/90 rounded-xl py-3 px-4 text-gray-800"
+                className="w-full p-3 rounded-lg border border-gray-300"
               />
             </div>
           </div>
-          <div className="col-span-2">
-            <label className="text-white text-sm">Diversidade e inclusão</label>
+
+          {/* RADIO */}
+          <div className="mt-4">
+            <label className="block text-white mb-1">
+              Sua empresa possui políticas de diversidade e inclusão?
+            </label>
             <div className="flex gap-4 mt-1">
-              <label className="flex items-center gap-2">
+              <label className="flex items-center gap-2 text-white">
                 <input
                   type="radio"
                   name="diversity"
@@ -738,7 +777,7 @@ export default function Register() {
                 />
                 Sim
               </label>
-              <label className="flex items-center gap-2">
+              <label className="flex items-center gap-2 text-white">
                 <input
                   type="radio"
                   name="diversity"
@@ -751,19 +790,19 @@ export default function Register() {
               </label>
             </div>
           </div>
-        </div>
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-green-300/80 hover:bg-green-400/80 text-green-900 py-4 rounded-full text-lg font-semibold mt-4"
-        >
-          {loading ? "Enviando..." : "Finalizar Cadastro"}
-        </button>
-      </div>
-    </form>
-  );
 
-   const Step7Company = () => (
+          <button
+            type="submit"
+            className="w-full bg-green-300/80 hover:bg-green-400/80 text-green-900 py-4 rounded-full mt-4 font-semibold"
+          >
+            CONTINUAR E ENVIAR OS DADOS
+          </button>
+        </div>
+      </form>
+    );
+  };
+
+  const Step7Company = () => (
     <div className="text-white space-y-6 max-w-3xl mx-auto text-justify">
       <h2 className="text-3xl font-bold text-center mb-6">
         📌 Termos e Condições – Empresas Apoiadoras
@@ -789,7 +828,7 @@ export default function Register() {
       <div className="text-center">
         <Button
           onClick={handleRegister}
-          className="bg-green-300/80 hover:bg-green-400/80 text-green-900 py-4 px-10 rounded-full font-semibold mt-4"
+          className="bg-green-300/80 hover:bg-green-400/80 text-green-900 py-4 px-10 rounded-full font-semibold mt-4 transition-all"
         >
           Concordo com os termos e quero apoiar
         </Button>
@@ -797,7 +836,67 @@ export default function Register() {
     </div>
   );
 
+  const Step8Company = () => {
+    const [logo, setLogo] = useState<File | null>(null);
+
+    const handleLogoSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (event.target.files && event.target.files[0]) {
+        setLogo(event.target.files[0]);
+      }
+    };
+
+    return (
+      <div className="flex flex-col items-center text-white space-y-6">
+        <h2 className="text-3xl font-bold">Envie o logo da sua empresa</h2>
+
+        {logo ? (
+          <img
+            src={URL.createObjectURL(logo)}
+            alt="Prévia da logo"
+            className="w-40 h-40 rounded-full object-cover border-4 border-green-300 shadow-lg"
+          />
+        ) : (
+          <div className="w-40 h-40 rounded-full bg-white/10 flex items-center justify-center text-4xl border-2 border-white/30">
+            🏢
+          </div>
+        )}
+
+        <div className="flex flex-col items-center gap-4">
+          <label className="cursor-pointer bg-white/20 hover:bg-white/30 px-6 py-3 rounded-full">
+            🖼️ Escolher logo
+            <input type="file" accept="image/*" onChange={handleLogoSelect} className="hidden" />
+          </label>
+
+          <Button
+            disabled={!logo}
+            onClick={() => setStep(9)}
+            className="bg-green-300/80 hover:bg-green-400/80 text-green-900 py-3 px-8 rounded-full font-semibold"
+          >
+            {logo ? "Finalizar cadastro" : "Selecione uma logo"}
+          </Button>
+        </div>
+      </div>
+    );
+  };
+
+  const Step9Company = () => (
+    <div className="flex flex-col items-center text-white space-y-6 text-center">
+      <h2 className="text-4xl font-bold text-green-300">Cadastro concluído!</h2>
+      <p className="text-lg max-w-md">
+        Sua empresa agora faz parte de uma rede que apoia a diversidade e a inclusão.
+        Obrigado por se juntar a nós 💜
+      </p>
+      <Button
+        onClick={() => navigate("/auth")}
+        className="bg-green-300/80 hover:bg-green-400/80 text-green-900 py-4 px-10 rounded-full font-semibold"
+      >
+        Ir para login
+      </Button>
+    </div>
+  );
+
   // ------------------- RENDER -------------------
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-purple-700 to-purple-600 p-4">
       <div className="w-full max-w-4xl bg-white/10 backdrop-blur-lg rounded-3xl p-12 shadow-2xl">
