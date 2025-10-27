@@ -209,7 +209,13 @@ export default function CandidateDashboard() {
                 <span className="text-lg">Quem Somos</span>
               </button>
               
-              <button className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left">
+              <button 
+                onClick={() => {
+                  setShowSidebar(false);
+                  navigate("/terms-candidate");
+                }}
+                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
+              >
                 <FileText size={24} />
                 <span className="text-lg">Termos de Uso</span>
               </button>

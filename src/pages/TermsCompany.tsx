@@ -1,18 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Menu, Bell, Briefcase, PlusCircle, User, Settings, Headset, Info, FileText, LogOut } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
 
-export default function Support() {
+export default function TermsCompany() {
   const navigate = useNavigate();
-  const { user, signOut, userRole } = useAuth();
+  const { user, signOut } = useAuth();
   const [showSidebar, setShowSidebar] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
 
-  const userName = user?.user_metadata?.full_name || user?.user_metadata?.company_name || "Usuário";
-  const isCompany = userRole === "company";
+  const companyName = user?.user_metadata?.company_name || "Empresa";
 
   const handleLogout = async () => {
     await signOut();
@@ -22,7 +20,7 @@ export default function Support() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-gradient-to-r from-purple-800 to-purple-600 text-white p-4 flex justify-between items-center sticky top-0 z-40">
+      <header className="bg-gradient-to-r from-purple-800 to-purple-600 text-white p-4 flex justify-between items-center">
         <button
           onClick={() => setShowSidebar(!showSidebar)}
           className="p-2 hover:bg-white/10 rounded-lg transition"
@@ -65,27 +63,25 @@ export default function Support() {
             className="absolute left-0 top-0 h-full w-80 bg-gradient-to-b from-purple-400 via-purple-500 to-purple-600 shadow-xl text-white flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Profile Section */}
             <div className="p-6 space-y-2 border-b border-white/20">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center">
                   <span className="text-xs font-bold text-black">
-                    {userName.substring(0, 2).toUpperCase()}
+                    {companyName.substring(0, 2).toUpperCase()}
                   </span>
                 </div>
                 <div>
-                  <h2 className="text-xl font-semibold">{userName}</h2>
-                  <p className="text-sm text-white/80">{isCompany ? "empresa" : "candidato (a)"}</p>
+                  <h2 className="text-xl font-semibold">{companyName}</h2>
+                  <p className="text-sm text-white/80">empresa</p>
                 </div>
               </div>
             </div>
 
-            {/* Menu Items */}
             <nav className="flex-1 py-6 px-4 space-y-2">
               <button 
                 onClick={() => {
                   setShowSidebar(false);
-                  navigate(isCompany ? "/company-dashboard" : "/candidate-dashboard");
+                  navigate("/company-dashboard");
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
@@ -93,17 +89,15 @@ export default function Support() {
                 <span className="text-lg">Vagas</span>
               </button>
               
-              {isCompany && (
-                <button className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left">
-                  <PlusCircle size={24} />
-                  <span className="text-lg">Cadastrar Vagas</span>
-                </button>
-              )}
+              <button className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left">
+                <PlusCircle size={24} />
+                <span className="text-lg">Cadastrar Vagas</span>
+              </button>
               
               <button 
                 onClick={() => {
                   setShowSidebar(false);
-                  navigate(isCompany ? "/company-profile" : "/candidate-profile");
+                  navigate("/company-profile");
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
@@ -117,8 +111,11 @@ export default function Support() {
               </button>
               
               <button 
-                onClick={() => setShowSidebar(false)}
-                className="w-full flex items-center gap-4 p-4 bg-white/20 rounded-lg transition text-left"
+                onClick={() => {
+                  setShowSidebar(false);
+                  navigate("/support");
+                }}
+                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
                 <Headset size={24} />
                 <span className="text-lg">Suporte</span>
@@ -136,18 +133,14 @@ export default function Support() {
               </button>
               
               <button 
-                onClick={() => {
-                  setShowSidebar(false);
-                  navigate(isCompany ? "/terms-company" : "/terms-candidate");
-                }}
-                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
+                onClick={() => setShowSidebar(false)}
+                className="w-full flex items-center gap-4 p-4 bg-white/20 rounded-lg transition text-left"
               >
                 <FileText size={24} />
                 <span className="text-lg">Termos de Uso</span>
               </button>
             </nav>
 
-            {/* Logout Button at Bottom */}
             <div className="p-4 border-t border-white/20">
               <button 
                 onClick={handleLogout}
@@ -162,25 +155,59 @@ export default function Support() {
       )}
 
       {/* Main Content */}
-      <main className="container mx-auto px-6 py-16 max-w-4xl">
-        {/* Page Title */}
-        <h1 className="text-4xl font-bold text-center text-gray-800 mb-16">
-          Suporte
+      <main className="container mx-auto px-8 py-12 max-w-5xl">
+        <h1 className="text-3xl font-bold text-center text-gray-800 mb-8 flex items-center justify-center gap-3">
+          <span className="text-red-500">📌</span>
+          Termos e Condições – Empresas Apoiadoras
         </h1>
 
-        {/* Buttons Section */}
-        <div className="space-y-6 mb-16">
-          <Button className="w-full bg-gradient-to-r from-purple-700 to-purple-600 hover:from-purple-800 hover:to-purple-700 text-white py-8 rounded-full text-xl font-semibold shadow-lg">
-            Chat/Suporte
-          </Button>
+        <div className="bg-white rounded-lg shadow-sm p-8 space-y-6 text-gray-700 text-justify leading-relaxed">
+          <p>Bem-vindo(a) à nossa plataforma.</p>
 
-          <Button className="w-full bg-gradient-to-r from-purple-700 to-purple-600 hover:from-purple-800 hover:to-purple-700 text-white py-8 rounded-full text-xl font-semibold shadow-lg">
-            Regras da Comunidade
-          </Button>
+          <p>
+            O cadastro e participação de empresas aqui representam um compromisso com um ambiente inclusivo, justo e respeitoso. Ao aceitar estes Termos, sua empresa passa a fazer parte de uma rede que valoriza a diversidade e reconhece a importância de oportunidades seguras para mulheres e pessoas da comunidade LGBT+.
+          </p>
+
+          <div>
+            <h2 className="font-bold text-gray-800 mb-2">1. Compromisso com o Respeito e a Inclusão</h2>
+            <p>
+              A empresa declara que todas as vagas e interações realizadas dentro da plataforma estarão alinhadas com os princípios de inclusão, igualdade e respeito. É expressamente proibida a divulgação de vagas discriminatórias, linguagem preconceituosa ou restrições que não tenham justificativa técnica ou legal.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-bold text-gray-800 mb-2">2. Profissionalismo e Cordialidade nas Relações</h2>
+            <p>
+              A comunicação com os candidatos deve ser conduzida com ética, transparência e profissionalismo em todas as etapas do processo seletivo. Espera-se que a empresa trate cada candidato(a) com a devida consideração, reconhecendo que por trás de cada perfil existe uma história, uma trajetória e um projeto de vida.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-bold text-gray-800 mb-2">3. Clareza e Honestidade nas Vagas Publicadas</h2>
+            <p>
+              A empresa se compromete a fornecer descrições de vagas claras, completas e verdadeiras. Devem constar informações como título do cargo, atribuições, requisitos, diferenciais, tipo de contrato, remuneração/faixa salarial e local de trabalho (remoto, híbrido ou presencial). É vedado publicar anúncios enganosos ou utilizar a plataforma apenas para a oferta legítima de oportunidades.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-bold text-gray-800 mb-2">4. Valorização da Diversidade</h2>
+            <p>
+              Ao utilizar esta plataforma, a empresa reconhece que está em um espaço dedicado ao fortalecimento de grupos historicamente marginalizados. Assim, compromete-se a não apenas respeitar, mas também a incentivar a presença de mulheres e pessoas LGBT+ em seus processos seletivos, contribuindo para a construção de um mercado de trabalho mais justo e diverso.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-bold text-gray-800 mb-2">5. Confiabilidade e Responsabilidade</h2>
+            <p>
+              A empresa deve manter seus dados institucionais atualizados e disponíveis para eventual validação (como CNPJ ativo e informações do responsável). O descumprimento dos princípios estabelecidos poderá resultar em advertência, suspensão temporária ou exclusão definitiva da conta.
+            </p>
+            <p>
+              Ao prosseguir com o cadastro, a empresa declara ter lido, compreendido e aceito todos os termos acima, assumindo o compromisso de manter um ambiente seguro, respeitoso e inclusivo dentro da plataforma.
+            </p>
+          </div>
         </div>
       </main>
-      
-      {/* ChatBot */}
+
       <ChatBot />
     </div>
   );

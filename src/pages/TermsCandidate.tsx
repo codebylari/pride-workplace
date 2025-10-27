@@ -1,18 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, Bell, Briefcase, PlusCircle, User, Settings, Headset, Info, FileText, LogOut } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Menu, Bell, Briefcase, User, Settings, Headset, Info, FileText, LogOut } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
 
-export default function Support() {
+export default function TermsCandidate() {
   const navigate = useNavigate();
-  const { user, signOut, userRole } = useAuth();
+  const { user, signOut } = useAuth();
   const [showSidebar, setShowSidebar] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
 
-  const userName = user?.user_metadata?.full_name || user?.user_metadata?.company_name || "Usuário";
-  const isCompany = userRole === "company";
+  const userName = user?.user_metadata?.full_name || "Usuário";
 
   const handleLogout = async () => {
     await signOut();
@@ -65,27 +63,23 @@ export default function Support() {
             className="absolute left-0 top-0 h-full w-80 bg-gradient-to-b from-purple-400 via-purple-500 to-purple-600 shadow-xl text-white flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Profile Section */}
-            <div className="p-6 space-y-2 border-b border-white/20">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center">
-                  <span className="text-xs font-bold text-black">
-                    {userName.substring(0, 2).toUpperCase()}
-                  </span>
+            <div className="p-6 flex items-center gap-4 border-b border-white/20">
+              <div className="w-20 h-20 rounded-full bg-gray-300 overflow-hidden border-4 border-white/30">
+                <div className="w-full h-full bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center text-2xl font-bold text-white">
+                  {userName.charAt(0).toUpperCase()}
                 </div>
-                <div>
-                  <h2 className="text-xl font-semibold">{userName}</h2>
-                  <p className="text-sm text-white/80">{isCompany ? "empresa" : "candidato (a)"}</p>
-                </div>
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold">{userName}</h2>
+                <p className="text-sm text-white/80">candidato (a)</p>
               </div>
             </div>
 
-            {/* Menu Items */}
             <nav className="flex-1 py-6 px-4 space-y-2">
               <button 
                 onClick={() => {
                   setShowSidebar(false);
-                  navigate(isCompany ? "/company-dashboard" : "/candidate-dashboard");
+                  navigate("/candidate-dashboard");
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
@@ -93,17 +87,10 @@ export default function Support() {
                 <span className="text-lg">Vagas</span>
               </button>
               
-              {isCompany && (
-                <button className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left">
-                  <PlusCircle size={24} />
-                  <span className="text-lg">Cadastrar Vagas</span>
-                </button>
-              )}
-              
               <button 
                 onClick={() => {
                   setShowSidebar(false);
-                  navigate(isCompany ? "/company-profile" : "/candidate-profile");
+                  navigate("/candidate-profile");
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
@@ -117,8 +104,11 @@ export default function Support() {
               </button>
               
               <button 
-                onClick={() => setShowSidebar(false)}
-                className="w-full flex items-center gap-4 p-4 bg-white/20 rounded-lg transition text-left"
+                onClick={() => {
+                  setShowSidebar(false);
+                  navigate("/support");
+                }}
+                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
                 <Headset size={24} />
                 <span className="text-lg">Suporte</span>
@@ -136,18 +126,14 @@ export default function Support() {
               </button>
               
               <button 
-                onClick={() => {
-                  setShowSidebar(false);
-                  navigate(isCompany ? "/terms-company" : "/terms-candidate");
-                }}
-                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
+                onClick={() => setShowSidebar(false)}
+                className="w-full flex items-center gap-4 p-4 bg-white/20 rounded-lg transition text-left"
               >
                 <FileText size={24} />
                 <span className="text-lg">Termos de Uso</span>
               </button>
             </nav>
 
-            {/* Logout Button at Bottom */}
             <div className="p-4 border-t border-white/20">
               <button 
                 onClick={handleLogout}
@@ -162,25 +148,59 @@ export default function Support() {
       )}
 
       {/* Main Content */}
-      <main className="container mx-auto px-6 py-16 max-w-4xl">
-        {/* Page Title */}
-        <h1 className="text-4xl font-bold text-center text-gray-800 mb-16">
-          Suporte
+      <main className="container mx-auto px-8 py-12 max-w-5xl">
+        <h1 className="text-3xl font-bold text-center text-gray-800 mb-8 flex items-center justify-center gap-3">
+          <span className="text-red-500">📌</span>
+          Termos e Condições – Candidatos
         </h1>
 
-        {/* Buttons Section */}
-        <div className="space-y-6 mb-16">
-          <Button className="w-full bg-gradient-to-r from-purple-700 to-purple-600 hover:from-purple-800 hover:to-purple-700 text-white py-8 rounded-full text-xl font-semibold shadow-lg">
-            Chat/Suporte
-          </Button>
+        <div className="bg-white rounded-lg shadow-sm p-8 space-y-6 text-gray-700 text-justify leading-relaxed">
+          <p className="font-semibold">Bem-vindo(a)!!</p>
 
-          <Button className="w-full bg-gradient-to-r from-purple-700 to-purple-600 hover:from-purple-800 hover:to-purple-700 text-white py-8 rounded-full text-xl font-semibold shadow-lg">
-            Regras da Comunidade
-          </Button>
+          <p>
+            Este é um espaço criado especialmente para mulheres e pessoas da comunidade LGBT+, com o objetivo de promover conexões profissionais seguras, respeitosas e transformadoras. Ao aceitar estes Termos, você se une a uma rede que acredita no poder da diversidade e no valor da sua trajetória.
+          </p>
+
+          <div>
+            <h2 className="font-bold text-gray-800 mb-2">1. Um Ambiente Acolhedor e Seguro</h2>
+            <p>
+              Nosso compromisso é oferecer um espaço livre de preconceito, onde cada pessoa possa se apresentar de forma autêntica, sem medo de julgamento. Esta é uma plataforma feita para apoiar quem deseja mostrar sua história, suas habilidades e seu potencial profissional.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-bold text-gray-800 mb-2">2. Responsabilidade nas Informações Prestadas</h2>
+            <p>
+              Ao criar seu perfil, é essencial que os dados fornecidos sejam verdadeiros e representem sua experiência e formação de maneira transparente. Informações falsas, plágio de currículos ou tentativas de se passar por outra pessoa não serão toleradas e podem resultar na exclusão da conta.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-bold text-gray-800 mb-2">3. Respeito na Comunicação</h2>
+            <p>
+              Todas as interações com empresas ou outros participantes devem ser pautadas pela cordialidade, respeito e profissionalismo. Acreditamos que oportunidades surgem de diálogos saudáveis, e que cada conversa é também uma forma de aprendizado e troca.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-bold text-gray-800 mb-2">4. Confidencialidade e Segurança</h2>
+            <p>
+              Seus dados pessoais sensíveis (como CPF, endereço ou telefone) não serão exibidos em seu perfil público. Toda comunicação deve ocorrer dentro da própria plataforma, garantindo maior proteção tanto para você quanto para a empresa.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-bold text-gray-800 mb-2">5. Valorização da Jornada</h2>
+            <p>
+              Seu perfil é o reflexo da sua caminhada: suas formações, suas experiências, suas conquistas. Aqui você terá espaço para mostrar quem é profissionalmente e como chegou até aqui. Acreditamos que cada trajetória importa, e é por isso que a sua história tem lugar especial na nossa rede.
+            </p>
+            <p>
+              Ao continuar, você declara estar de acordo com os termos acima e reafirma seu compromisso em construir, junto com outras pessoas, uma comunidade profissional inclusiva, respeitosa e transformadora.
+            </p>
+          </div>
         </div>
       </main>
-      
-      {/* ChatBot */}
+
       <ChatBot />
     </div>
   );

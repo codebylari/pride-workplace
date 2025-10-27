@@ -40,6 +40,12 @@ import AboutUs from "./pages/AboutUs";
 import Support from "./pages/Support";
 // Página de Suporte
 
+import TermsCandidate from "./pages/TermsCandidate";
+// Termos de Uso - Candidatos
+
+import TermsCompany from "./pages/TermsCompany";
+// Termos de Uso - Empresas
+
 import NotFound from "./pages/NotFound";
 // Página exibida quando a rota não existe (erro 404)
 
@@ -83,6 +89,12 @@ const App = () => (
           
           <Route path="/support" element={<Support />} />
           {/* Página de Suporte */}
+          
+          <Route path="/terms-candidate" element={<TermsCandidate />} />
+          {/* Termos de Uso - Candidatos */}
+          
+          <Route path="/terms-company" element={<TermsCompany />} />
+          {/* Termos de Uso - Empresas */}
           
           <Route path="/" element={<Index />} />
           {/* Página inicial (protegida) */}
