@@ -202,14 +202,14 @@ export default function AboutUs() {
             Nossa Equipe
           </h2>
           
-          <p className="text-gray-700 text-center leading-relaxed max-w-3xl mx-auto">
+          <p className={`text-center leading-relaxed max-w-3xl mx-auto ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
             Alunos do terceiro período de Sistemas de Informação, Engenharia de Software e Tecnologia de Análise e Desenvolvimento de Sistemas: Adryel Costa, Bruno Araujo, Larissa Soeiro e Rafaella Costa
           </p>
         </div>
 
         {/* Partners Section */}
-        <div className="bg-white rounded-2xl shadow-sm p-12 mb-12 animate-fade-in" style={{ animationDelay: '0.2s' }}>
-          <h2 className="text-2xl font-semibold text-gray-800 mb-8 text-center">
+        <div className={`rounded-2xl shadow-sm p-12 mb-12 animate-fade-in ${darkMode ? "bg-gray-700" : "bg-white"}`} style={{ animationDelay: '0.2s' }}>
+          <h2 className={`text-2xl font-semibold mb-8 text-center ${darkMode ? "text-white" : "text-gray-800"}`}>
             Nossas Parcerias
           </h2>
           
@@ -219,7 +219,7 @@ export default function AboutUs() {
                 <span className="text-red-600">U</span>
                 <span className="text-blue-600">niSales</span>
               </div>
-              <p className="text-gray-600">Centro Universitário Salesiano</p>
+              <p className={darkMode ? "text-gray-300" : "text-gray-600"}>Centro Universitário Salesiano</p>
             </div>
           </div>
         </div>
@@ -232,7 +232,7 @@ export default function AboutUs() {
                 QueerCode
               </span>
             </div>
-            <p className="text-gray-600 text-lg">
+            <p className={`text-lg ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
               Diversidade em Tecnologia
             </p>
           </div>

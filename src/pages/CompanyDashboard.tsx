@@ -4,10 +4,12 @@ import { Menu, Bell, Bot, Briefcase, PlusCircle, User, Settings, Headset, Info, 
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
+import { useTheme } from "@/contexts/ThemeContext";
 
 export default function CompanyDashboard() {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
+  const { darkMode } = useTheme();
   const [showSidebar, setShowSidebar] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
 
@@ -20,7 +22,7 @@ export default function CompanyDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={`min-h-screen ${darkMode ? "bg-gray-800" : "bg-gray-50"}`}>
       {/* Header */}
       <header className="bg-gradient-to-r from-purple-800 to-purple-600 text-white p-4 flex justify-between items-center">
         <button
@@ -161,13 +163,13 @@ export default function CompanyDashboard() {
       <main className="container mx-auto px-4 py-12">
         <div className="max-w-4xl mx-auto">
           {/* Welcome Card */}
-          <div className="bg-white border-4 border-blue-500 rounded-2xl p-12 shadow-lg mb-8 relative">
+          <div className={`border-4 border-blue-500 rounded-2xl p-12 shadow-lg mb-8 relative ${darkMode ? "bg-gray-700" : "bg-white"}`}>
             <div className="text-center space-y-8">
-              <h1 className="text-4xl font-bold text-gray-800">
+              <h1 className={`text-4xl font-bold ${darkMode ? "text-white" : "text-gray-800"}`}>
                 Bem-vindo, {companyName}!
               </h1>
               
-              <p className="text-xl text-gray-600">
+              <p className={`text-xl ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
                 "Gerencie suas oportunidades de forma simples e rápida."
               </p>
 
@@ -198,18 +200,18 @@ export default function CompanyDashboard() {
 
           {/* Quick Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white rounded-xl p-6 shadow-md">
-              <h3 className="text-gray-600 text-sm font-medium mb-2">Vagas Ativas</h3>
+            <div className={`rounded-xl p-6 shadow-md ${darkMode ? "bg-gray-700" : "bg-white"}`}>
+              <h3 className={`text-sm font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>Vagas Ativas</h3>
               <p className="text-3xl font-bold text-purple-600">0</p>
             </div>
             
-            <div className="bg-white rounded-xl p-6 shadow-md">
-              <h3 className="text-gray-600 text-sm font-medium mb-2">Candidaturas</h3>
+            <div className={`rounded-xl p-6 shadow-md ${darkMode ? "bg-gray-700" : "bg-white"}`}>
+              <h3 className={`text-sm font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>Candidaturas</h3>
               <p className="text-3xl font-bold text-green-600">0</p>
             </div>
             
-            <div className="bg-white rounded-xl p-6 shadow-md">
-              <h3 className="text-gray-600 text-sm font-medium mb-2">Em Análise</h3>
+            <div className={`rounded-xl p-6 shadow-md ${darkMode ? "bg-gray-700" : "bg-white"}`}>
+              <h3 className={`text-sm font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>Em Análise</h3>
               <p className="text-3xl font-bold text-blue-600">0</p>
             </div>
           </div>
