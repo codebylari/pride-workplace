@@ -45,6 +45,8 @@ export default function Register() {
   const [phone, setPhone] = useState("");
   const [state, setState] = useState("");
   const [city, setCity] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [checkingEmail, setCheckingEmail] = useState(false);
 
   // ------------------- CAMPOS EMPRESA -------------------
   const [companyName, setCompanyName] = useState("");
@@ -276,9 +278,48 @@ export default function Register() {
     </div>
   );
 
+  // Função para verificar se o email já está em uso
+  const checkEmailAvailability = async (emailToCheck: string) => {
+    if (!emailToCheck || !emailToCheck.includes("@")) return;
+    
+    setCheckingEmail(true);
+    setEmailError("");
+    
+    try {
+      // Tenta fazer um signUp temporário para verificar se o email já existe
+      const { data, error } = await supabase.auth.signUp({
+        email: emailToCheck,
+        password: "temp_password_for_validation_12345",
+        options: {
+          data: { temp_validation: true }
+        }
+      });
+      
+      if (error) {
+        if (error.message.includes("already registered") || 
+            error.message.includes("User already registered")) {
+          setEmailError("Este email já está cadastrado. Por favor, use outro email ou faça login.");
+        }
+      }
+    } catch (error: any) {
+      console.error("Erro ao verificar email:", error);
+    } finally {
+      setCheckingEmail(false);
+    }
+  };
+
   const Step6Candidate = React.useMemo(() => {
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
+      
+      // Verifica o email antes de avançar
+      await checkEmailAvailability(email);
+      
+      // Se houver erro de email, não avança
+      if (emailError) {
+        return;
+      }
+      
       setStep(7);
     };
 
@@ -407,10 +448,22 @@ export default function Register() {
               type="email"
               placeholder="Digite seu email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setEmailError("");
+              }}
+              onBlur={(e) => checkEmailAvailability(e.target.value)}
               required
-              className="w-full p-3 rounded-lg border border-gray-300 text-black"
+              className={`w-full p-3 rounded-lg border ${
+                emailError ? "border-red-500" : "border-gray-300"
+              } text-black`}
             />
+            {checkingEmail && (
+              <p className="text-yellow-300 text-sm mt-1">Verificando email...</p>
+            )}
+            {emailError && (
+              <p className="text-red-300 text-sm mt-1 font-semibold">{emailError}</p>
+            )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
@@ -459,14 +512,15 @@ export default function Register() {
 
           <button
             type="submit"
-            className="w-full bg-green-300/80 hover:bg-green-400/80 text-green-900 py-4 rounded-full mt-4 font-semibold"
+            disabled={checkingEmail || !!emailError}
+            className="w-full bg-green-300/80 hover:bg-green-400/80 text-green-900 py-4 rounded-full mt-4 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            CONTINUAR E ENVIAR OS DADOS
+            {checkingEmail ? "VERIFICANDO..." : "CONTINUAR E ENVIAR OS DADOS"}
           </button>
         </div>
       </form>
     );
-  }, [fullName, lastName, birthDate, socialName, cpf, rg, email, password, confirmPassword, phone, state, city, states, cities, loadingCities]);
+  }, [fullName, lastName, birthDate, socialName, cpf, rg, email, password, confirmPassword, phone, state, city, states, cities, loadingCities, checkingEmail, emailError]);
 
   const Step7Terms = () => (
     <div className="text-white space-y-6 max-w-3xl mx-auto text-justify">
@@ -669,8 +723,17 @@ export default function Register() {
   );
 
   const Step6Company = React.useMemo(() => {
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
+      
+      // Verifica o email antes de avançar
+      await checkEmailAvailability(email);
+      
+      // Se houver erro de email, não avança
+      if (emailError) {
+        return;
+      }
+      
       setStep(7);
     };
 
@@ -781,10 +844,22 @@ export default function Register() {
               <input
                 type="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setEmailError("");
+                }}
+                onBlur={(e) => checkEmailAvailability(e.target.value)}
                 required
-                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+                className={`w-full p-3 rounded-lg border ${
+                  emailError ? "border-red-500" : "border-gray-300"
+                } text-black`}
               />
+              {checkingEmail && (
+                <p className="text-yellow-300 text-sm mt-1">Verificando email...</p>
+              )}
+              {emailError && (
+                <p className="text-red-300 text-sm mt-1 font-semibold">{emailError}</p>
+              )}
             </div>
 
             <div>
@@ -864,14 +939,15 @@ export default function Register() {
 
           <button
             type="submit"
-            className="w-full bg-green-300/80 hover:bg-green-400/80 text-green-900 py-4 rounded-full mt-4 font-semibold"
+            disabled={checkingEmail || !!emailError}
+            className="w-full bg-green-300/80 hover:bg-green-400/80 text-green-900 py-4 rounded-full mt-4 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            CONTINUAR E ENVIAR OS DADOS
+            {checkingEmail ? "VERIFICANDO..." : "CONTINUAR E ENVIAR OS DADOS"}
           </button>
         </div>
       </form>
     );
-  }, [companyName, fullName, cnpj, position, email, password, confirmPassword, phone, state, city, diversity, states, cities, loadingCities]);
+  }, [companyName, fullName, cnpj, position, email, password, confirmPassword, phone, state, city, diversity, states, cities, loadingCities, checkingEmail, emailError]);
 
   const Step7Company = () => (
     <div className="text-white space-y-6 max-w-3xl mx-auto text-justify">
