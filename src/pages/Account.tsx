@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, Bell } from "lucide-react";
+import { Menu, Bell, CheckCircle2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
 import { useTheme } from "@/contexts/ThemeContext";
+import { supabase } from "@/integrations/supabase/client";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Account() {
   const navigate = useNavigate();
@@ -11,6 +14,25 @@ export default function Account() {
   const [showSidebar, setShowSidebar] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const { darkMode } = useTheme();
+  const { toast } = useToast();
+
+  // Dialog states
+  const [showPasswordDialog, setShowPasswordDialog] = useState(false);
+  const [showEmailDialog, setShowEmailDialog] = useState(false);
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+
+  // Password form states
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  const [loadingPassword, setLoadingPassword] = useState(false);
+
+  // Email form states
+  const [currentEmail, setCurrentEmail] = useState("");
+  const [newEmail, setNewEmail] = useState("");
+  const [confirmNewEmail, setConfirmNewEmail] = useState("");
+  const [loadingEmail, setLoadingEmail] = useState(false);
 
   const isCompany = user?.user_metadata?.user_type === "company";
   const displayName = isCompany 
@@ -20,6 +42,114 @@ export default function Account() {
   const handleLogout = async () => {
     await signOut();
     navigate("/auth");
+  };
+
+  const handleChangePassword = async () => {
+    if (!currentPassword || !newPassword || !confirmNewPassword) {
+      toast({
+        title: "Erro",
+        description: "Por favor, preencha todos os campos",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (newPassword !== confirmNewPassword) {
+      toast({
+        title: "Erro",
+        description: "As senhas não coincidem",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      toast({
+        title: "Erro",
+        description: "A nova senha deve ter pelo menos 6 caracteres",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setLoadingPassword(true);
+
+    try {
+      const { error } = await supabase.auth.updateUser({
+        password: newPassword,
+      });
+
+      if (error) throw error;
+
+      setShowPasswordDialog(false);
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmNewPassword("");
+      setSuccessMessage("Sua senha foi alterada com Sucesso!");
+      setShowSuccessDialog(true);
+    } catch (error: any) {
+      toast({
+        title: "Erro",
+        description: error.message || "Não foi possível alterar a senha",
+        variant: "destructive",
+      });
+    } finally {
+      setLoadingPassword(false);
+    }
+  };
+
+  const handleChangeEmail = async () => {
+    if (!currentEmail || !newEmail || !confirmNewEmail) {
+      toast({
+        title: "Erro",
+        description: "Por favor, preencha todos os campos",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (newEmail !== confirmNewEmail) {
+      toast({
+        title: "Erro",
+        description: "Os emails não coincidem",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (currentEmail !== user?.email) {
+      toast({
+        title: "Erro",
+        description: "O email atual está incorreto",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setLoadingEmail(true);
+
+    try {
+      const { error } = await supabase.auth.updateUser({
+        email: newEmail,
+      });
+
+      if (error) throw error;
+
+      setShowEmailDialog(false);
+      setCurrentEmail("");
+      setNewEmail("");
+      setConfirmNewEmail("");
+      setSuccessMessage("Seu email foi alterado com Sucesso!");
+      setShowSuccessDialog(true);
+    } catch (error: any) {
+      toast({
+        title: "Erro",
+        description: error.message || "Não foi possível alterar o email",
+        variant: "destructive",
+      });
+    } finally {
+      setLoadingEmail(false);
+    }
   };
 
   return (
@@ -167,10 +297,7 @@ export default function Account() {
             {/* Alterar senha */}
             <button 
               className={`w-full flex justify-between items-center py-4 border-b ${darkMode ? "border-gray-600 text-gray-300 hover:text-white" : "border-gray-200 text-gray-700 hover:text-gray-900"} transition text-left`}
-              onClick={() => {
-                // TODO: Implementar alteração de senha
-                console.log("Alterar senha");
-              }}
+              onClick={() => setShowPasswordDialog(true)}
             >
               <span className="text-lg">Alterar senha</span>
             </button>
@@ -178,10 +305,7 @@ export default function Account() {
             {/* Alterar email */}
             <button 
               className={`w-full flex justify-between items-center py-4 border-b ${darkMode ? "border-gray-600 text-gray-300 hover:text-white" : "border-gray-200 text-gray-700 hover:text-gray-900"} transition text-left`}
-              onClick={() => {
-                // TODO: Implementar alteração de email
-                console.log("Alterar email");
-              }}
+              onClick={() => setShowEmailDialog(true)}
             >
               <span className="text-lg">Alterar email</span>
             </button>
@@ -212,6 +336,127 @@ export default function Account() {
           </div>
         </div>
       </main>
+
+      {/* Dialog Alterar Senha */}
+      <Dialog open={showPasswordDialog} onOpenChange={setShowPasswordDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-center text-2xl">Alterar senha</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <p className="text-center text-gray-600">
+              Atualize suas credenciais quando precisar.
+            </p>
+            <div>
+              <label className="block text-sm mb-1 text-gray-700">Digite sua senha atual</label>
+              <input
+                type="password"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                className="w-full p-3 rounded-lg border border-gray-300"
+                placeholder="Senha atual"
+              />
+            </div>
+            <div>
+              <label className="block text-sm mb-1 text-gray-700">Digite sua nova senha</label>
+              <input
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="w-full p-3 rounded-lg border border-gray-300"
+                placeholder="Nova senha"
+              />
+            </div>
+            <div>
+              <label className="block text-sm mb-1 text-gray-700">Confirme sua nova senha</label>
+              <input
+                type="password"
+                value={confirmNewPassword}
+                onChange={(e) => setConfirmNewPassword(e.target.value)}
+                className="w-full p-3 rounded-lg border border-gray-300"
+                placeholder="Confirme a nova senha"
+              />
+            </div>
+            <button
+              onClick={handleChangePassword}
+              disabled={loadingPassword}
+              className="w-full py-3 bg-green-400 hover:bg-green-500 text-white rounded-lg transition disabled:opacity-50"
+            >
+              {loadingPassword ? "Alterando..." : "Confirmar"}
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Dialog Alterar Email */}
+      <Dialog open={showEmailDialog} onOpenChange={setShowEmailDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-center text-2xl">Alterar email</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <p className="text-center text-gray-600">
+              Atualize suas credenciais quando precisar.
+            </p>
+            <div>
+              <label className="block text-sm mb-1 text-gray-700">Digite seu email cadastrado</label>
+              <input
+                type="email"
+                value={currentEmail}
+                onChange={(e) => setCurrentEmail(e.target.value)}
+                className="w-full p-3 rounded-lg border border-gray-300"
+                placeholder="Email atual"
+              />
+            </div>
+            <div>
+              <label className="block text-sm mb-1 text-gray-700">Digite o seu novo email</label>
+              <input
+                type="email"
+                value={newEmail}
+                onChange={(e) => setNewEmail(e.target.value)}
+                className="w-full p-3 rounded-lg border border-gray-300"
+                placeholder="Novo email"
+              />
+            </div>
+            <div>
+              <label className="block text-sm mb-1 text-gray-700">Confirme seu novo email</label>
+              <input
+                type="email"
+                value={confirmNewEmail}
+                onChange={(e) => setConfirmNewEmail(e.target.value)}
+                className="w-full p-3 rounded-lg border border-gray-300"
+                placeholder="Confirme o novo email"
+              />
+            </div>
+            <button
+              onClick={handleChangeEmail}
+              disabled={loadingEmail}
+              className="w-full py-3 bg-green-400 hover:bg-green-500 text-white rounded-lg transition disabled:opacity-50"
+            >
+              {loadingEmail ? "Alterando..." : "Confirmar"}
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Dialog de Sucesso */}
+      <Dialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>
+        <DialogContent className="sm:max-w-md">
+          <div className="flex flex-col items-center justify-center space-y-4 py-6">
+            <div className="w-16 h-16 bg-green-400 rounded-full flex items-center justify-center">
+              <CheckCircle2 className="w-10 h-10 text-white" />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900">SUCESSO!</h2>
+            <p className="text-center text-gray-600">{successMessage}</p>
+            <button
+              onClick={() => setShowSuccessDialog(false)}
+              className="w-full max-w-xs py-3 bg-pink-400 hover:bg-pink-500 text-white rounded-lg transition"
+            >
+              Ok
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
       
       <ChatBot />
     </div>
