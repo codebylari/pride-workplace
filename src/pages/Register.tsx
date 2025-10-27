@@ -278,183 +278,190 @@ export default function Register() {
     </div>
   );
 
-  const Step6Candidate = () => (
-    <form onSubmit={(e) => { e.preventDefault(); setStep(7); }} className="space-y-6 max-w-4xl mx-auto">
-      <h2 className="text-3xl font-bold text-center text-white mb-6">
-        Cadastramento de Dados
-      </h2>
+  const Step6Candidate = () => {
+    const handleSubmit = (e: React.FormEvent) => {
+      e.preventDefault();
+      setStep(7);
+    };
 
-      <div className="bg-white/20 backdrop-blur-md rounded-2xl p-6 space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <label className="block text-white mb-1">Nome</label>
-            <input
-              type="text"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              required
-              className="w-full p-3 rounded-lg border border-gray-300 text-black"
-            />
-          </div>
-          <div>
-            <label className="block text-white mb-1">Sobrenome</label>
-            <input
-              type="text"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              required
-              className="w-full p-3 rounded-lg border border-gray-300 text-black"
-            />
-          </div>
-          <div>
-            <label className="block text-white mb-1">Data de Nascimento</label>
-            <input
-              type="date"
-              value={birthDate}
-              onChange={(e) => setBirthDate(e.target.value)}
-              required
-              className="w-full p-3 rounded-lg border border-gray-300 text-black"
-            />
-          </div>
+    return (
+      <form onSubmit={handleSubmit} className="space-y-6 max-w-4xl mx-auto">
+        <h2 className="text-3xl font-bold text-center text-white mb-6">
+          Cadastramento de Dados
+        </h2>
 
-          <div className="col-span-1 md:col-span-3">
-            <label className="block text-white mb-1">Nome Social (se tiver)</label>
-            <input
-              type="text"
-              value={socialName}
-              onChange={(e) => setSocialName(e.target.value)}
-              className="w-full p-3 rounded-lg border border-gray-300 text-black"
-            />
-          </div>
+        <div className="bg-white/20 backdrop-blur-md rounded-2xl p-6 space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-white mb-1">Nome</label>
+              <input
+                type="text"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                required
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+              />
+            </div>
+            <div>
+              <label className="block text-white mb-1">Sobrenome</label>
+              <input
+                type="text"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                required
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+              />
+            </div>
+            <div>
+              <label className="block text-white mb-1">Data de Nascimento</label>
+              <input
+                type="date"
+                value={birthDate}
+                onChange={(e) => setBirthDate(e.target.value)}
+                required
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+              />
+            </div>
 
-          <div>
-            <label className="block text-white mb-1">CPF</label>
-            <input
-              type="text"
-              value={cpf}
-              onChange={(e) => setCpf(e.target.value)}
-              required
-              className="w-full p-3 rounded-lg border border-gray-300 text-black"
-            />
-          </div>
-          <div>
-            <label className="block text-white mb-1">RG</label>
-            <input
-              type="text"
-              value={rg}
-              onChange={(e) => setRg(e.target.value)}
-              required
-              className="w-full p-3 rounded-lg border border-gray-300 text-black"
-            />
-          </div>
+            <div className="col-span-1 md:col-span-3">
+              <label className="block text-white mb-1">Nome Social (se tiver)</label>
+              <input
+                type="text"
+                value={socialName}
+                onChange={(e) => setSocialName(e.target.value)}
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+              />
+            </div>
 
-          <div>
-            <label className="block text-white mb-1">Estado (UF)</label>
-            <select
-              value={state}
-              onChange={(e) => setState(e.target.value)}
-              required
-              className="w-full p-3 rounded-lg border border-gray-300 bg-white text-black"
-            >
-              <option value="">Selecione seu estado</option>
-              {states.map((st) => (
-                <option key={st.id} value={st.sigla}>
-                  {st.nome} ({st.sigla})
+            <div>
+              <label className="block text-white mb-1">CPF</label>
+              <input
+                type="text"
+                value={cpf}
+                onChange={(e) => setCpf(e.target.value)}
+                required
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+              />
+            </div>
+            <div>
+              <label className="block text-white mb-1">RG</label>
+              <input
+                type="text"
+                value={rg}
+                onChange={(e) => setRg(e.target.value)}
+                required
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+              />
+            </div>
+
+            <div>
+              <label className="block text-white mb-1">Estado (UF)</label>
+              <select
+                value={state}
+                onChange={(e) => setState(e.target.value)}
+                required
+                className="w-full p-3 rounded-lg border border-gray-300 bg-white text-black"
+              >
+                <option value="">Selecione seu estado</option>
+                {states.map((st) => (
+                  <option key={st.id} value={st.sigla}>
+                    {st.nome} ({st.sigla})
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-white mb-1">Cidade</label>
+              <select
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                required
+                disabled={!state || loadingCities}
+                className="w-full p-3 rounded-lg border border-gray-300 bg-white text-black disabled:opacity-50"
+              >
+                <option value="">
+                  {loadingCities ? "Carregando..." : !state ? "Selecione o estado primeiro" : "Selecione sua cidade"}
                 </option>
-              ))}
-            </select>
+                {cities.map((c) => (
+                  <option key={c.id} value={c.nome}>
+                    {c.nome}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-white mb-1">Telefone/WhatsApp</label>
+              <input
+                type="text"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                required
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+              />
+            </div>
           </div>
 
-          <div>
-            <label className="block text-white mb-1">Cidade</label>
-            <select
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-              required
-              disabled={!state || loadingCities}
-              className="w-full p-3 rounded-lg border border-gray-300 bg-white text-black disabled:opacity-50"
-            >
-              <option value="">
-                {loadingCities ? "Carregando..." : !state ? "Selecione o estado primeiro" : "Selecione sua cidade"}
-              </option>
-              {cities.map((c) => (
-                <option key={c.id} value={c.nome}>
-                  {c.nome}
-                </option>
-              ))}
-            </select>
+          <div className="mt-4">
+            <p className="text-white mb-2">Digite seu email e confirme abaixo:</p>
+            <div className="flex flex-col gap-3">
+              <input
+                type="email"
+                placeholder="Digite seu email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+              />
+
+              <input
+                type="email"
+                placeholder="Confirme seu email"
+                value={confirmEmail}
+                onChange={(e) => setConfirmEmail(e.target.value)}
+                required
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+              />
+            </div>
           </div>
 
-          <div>
-            <label className="block text-white mb-1">Telefone/WhatsApp</label>
-            <input
-              type="text"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              required
-              className="w-full p-3 rounded-lg border border-gray-300 text-black"
-            />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+            <div>
+              <label className="block text-white mb-1">Digite sua Senha</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                minLength={6}
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+              />
+            </div>
+
+            <div>
+              <label className="block text-white mb-1">Repita sua Senha</label>
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                minLength={6}
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+              />
+            </div>
           </div>
+
+          <button
+            type="submit"
+            className="w-full bg-green-300/80 hover:bg-green-400/80 text-green-900 py-4 rounded-full mt-4 font-semibold"
+          >
+            CONTINUAR E ENVIAR OS DADOS
+          </button>
         </div>
-
-        <div className="mt-4">
-          <p className="text-white mb-2">Digite seu email e confirme abaixo:</p>
-          <div className="flex flex-col gap-3">
-            <input
-              type="email"
-              placeholder="Digite seu email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full p-3 rounded-lg border border-gray-300 text-black"
-            />
-
-            <input
-              type="email"
-              placeholder="Confirme seu email"
-              value={confirmEmail}
-              onChange={(e) => setConfirmEmail(e.target.value)}
-              required
-              className="w-full p-3 rounded-lg border border-gray-300 text-black"
-            />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-          <div>
-            <label className="block text-white mb-1">Digite sua Senha</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              minLength={6}
-              className="w-full p-3 rounded-lg border border-gray-300 text-black"
-            />
-          </div>
-
-          <div>
-            <label className="block text-white mb-1">Repita sua Senha</label>
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              minLength={6}
-              className="w-full p-3 rounded-lg border border-gray-300 text-black"
-            />
-          </div>
-        </div>
-
-        <button
-          type="submit"
-          className="w-full bg-green-300/80 hover:bg-green-400/80 text-green-900 py-4 rounded-full mt-4 font-semibold"
-        >
-          CONTINUAR E ENVIAR OS DADOS
-        </button>
-      </div>
-    </form>
-  );
+      </form>
+    );
+  };
 
   const Step7Terms = () => (
     <div className="text-white space-y-6 max-w-3xl mx-auto text-justify">
@@ -656,183 +663,190 @@ export default function Register() {
     </div>
   );
 
-  const Step6Company = () => (
-    <form onSubmit={(e) => { e.preventDefault(); setStep(7); }} className="space-y-6 max-w-4xl mx-auto">
-      <h2 className="text-3xl font-bold text-center text-white mb-6">
-        Cadastramento de Empresa
-      </h2>
+  const Step6Company = () => {
+    const handleSubmit = (e: React.FormEvent) => {
+      e.preventDefault();
+      setStep(7);
+    };
 
-      <div className="bg-white/20 backdrop-blur-md rounded-2xl p-6 space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <label className="block text-white mb-1">Nome da Empresa</label>
-            <input
-              type="text"
-              value={companyName}
-              onChange={(e) => setCompanyName(e.target.value)}
-              required
-              className="w-full p-3 rounded-lg border border-gray-300 text-black"
-            />
-          </div>
+    return (
+      <form onSubmit={handleSubmit} className="space-y-6 max-w-4xl mx-auto">
+        <h2 className="text-3xl font-bold text-center text-white mb-6">
+          Cadastramento de Empresa
+        </h2>
 
-          <div>
-            <label className="block text-white mb-1">Seu Nome</label>
-            <input
-              type="text"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              required
-              className="w-full p-3 rounded-lg border border-gray-300 text-black"
-            />
-          </div>
-
-          <div>
-            <label className="block text-white mb-1">CNPJ</label>
-            <input
-              type="text"
-              value={cnpj}
-              onChange={(e) => setCnpj(e.target.value)}
-              required
-              className="w-full p-3 rounded-lg border border-gray-300 text-black"
-            />
-          </div>
-
-          <div>
-            <label className="block text-white mb-1">Cargo</label>
-            <input
-              type="text"
-              value={position}
-              onChange={(e) => setPosition(e.target.value)}
-              required
-              className="w-full p-3 rounded-lg border border-gray-300 text-black"
-            />
-          </div>
-
-          <div>
-            <label className="block text-white mb-1">Estado (UF)</label>
-            <select
-              value={state}
-              onChange={(e) => setState(e.target.value)}
-              required
-              className="w-full p-3 rounded-lg border border-gray-300 bg-white text-black"
-            >
-              <option value="">Selecione o estado</option>
-              {states.map((st) => (
-                <option key={st.id} value={st.sigla}>
-                  {st.nome} ({st.sigla})
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-white mb-1">Cidade</label>
-            <select
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-              required
-              disabled={!state || loadingCities}
-              className="w-full p-3 rounded-lg border border-gray-300 bg-white text-black disabled:opacity-50"
-            >
-              <option value="">
-                {loadingCities ? "Carregando..." : !state ? "Selecione o estado primeiro" : "Selecione a cidade"}
-              </option>
-              {cities.map((c) => (
-                <option key={c.id} value={c.nome}>
-                  {c.nome}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-white mb-1">Telefone/WhatsApp</label>
-            <input
-              type="text"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              required
-              className="w-full p-3 rounded-lg border border-gray-300 text-black"
-            />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-          <div className="col-span-1 md:col-span-2">
-            <label className="block text-white mb-1">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full p-3 rounded-lg border border-gray-300 text-black"
-            />
-          </div>
-
-          <div>
-            <label className="block text-white mb-1">Senha</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              minLength={6}
-              className="w-full p-3 rounded-lg border border-gray-300 text-black"
-            />
-          </div>
-
-          <div>
-            <label className="block text-white mb-1">Confirmar Senha</label>
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              minLength={6}
-              className="w-full p-3 rounded-lg border border-gray-300 text-black"
-            />
-          </div>
-        </div>
-
-        <div className="mt-4">
-          <label className="block text-white mb-1">
-            Sua empresa possui políticas de diversidade e inclusão?
-          </label>
-          <div className="flex gap-4 mt-1">
-            <label className="flex items-center gap-2 text-white">
+        <div className="bg-white/20 backdrop-blur-md rounded-2xl p-6 space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-white mb-1">Nome da Empresa</label>
               <input
-                type="radio"
-                name="diversity"
-                value="sim"
-                checked={diversity === "sim"}
-                onChange={() => setDiversity("sim")}
-                className="accent-green-500"
+                type="text"
+                value={companyName}
+                onChange={(e) => setCompanyName(e.target.value)}
+                required
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
               />
-              Sim
-            </label>
-            <label className="flex items-center gap-2 text-white">
-              <input
-                type="radio"
-                name="diversity"
-                value="nao"
-                checked={diversity === "nao"}
-                onChange={() => setDiversity("nao")}
-                className="accent-green-500"
-              />
-              Não
-            </label>
-          </div>
-        </div>
+            </div>
 
-        <button
-          type="submit"
-          className="w-full bg-green-300/80 hover:bg-green-400/80 text-green-900 py-4 rounded-full mt-4 font-semibold"
-        >
-          CONTINUAR E ENVIAR OS DADOS
-        </button>
-      </div>
-    </form>
-  );
+            <div>
+              <label className="block text-white mb-1">Seu Nome</label>
+              <input
+                type="text"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                required
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+              />
+            </div>
+
+            <div>
+              <label className="block text-white mb-1">CNPJ</label>
+              <input
+                type="text"
+                value={cnpj}
+                onChange={(e) => setCnpj(e.target.value)}
+                required
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+              />
+            </div>
+
+            <div>
+              <label className="block text-white mb-1">Cargo</label>
+              <input
+                type="text"
+                value={position}
+                onChange={(e) => setPosition(e.target.value)}
+                required
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+              />
+            </div>
+
+            <div>
+              <label className="block text-white mb-1">Estado (UF)</label>
+              <select
+                value={state}
+                onChange={(e) => setState(e.target.value)}
+                required
+                className="w-full p-3 rounded-lg border border-gray-300 bg-white text-black"
+              >
+                <option value="">Selecione o estado</option>
+                {states.map((st) => (
+                  <option key={st.id} value={st.sigla}>
+                    {st.nome} ({st.sigla})
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-white mb-1">Cidade</label>
+              <select
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                required
+                disabled={!state || loadingCities}
+                className="w-full p-3 rounded-lg border border-gray-300 bg-white text-black disabled:opacity-50"
+              >
+                <option value="">
+                  {loadingCities ? "Carregando..." : !state ? "Selecione o estado primeiro" : "Selecione a cidade"}
+                </option>
+                {cities.map((c) => (
+                  <option key={c.id} value={c.nome}>
+                    {c.nome}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-white mb-1">Telefone/WhatsApp</label>
+              <input
+                type="text"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                required
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+            <div className="col-span-1 md:col-span-2">
+              <label className="block text-white mb-1">Email</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+              />
+            </div>
+
+            <div>
+              <label className="block text-white mb-1">Senha</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                minLength={6}
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+              />
+            </div>
+
+            <div>
+              <label className="block text-white mb-1">Confirmar Senha</label>
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                minLength={6}
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+              />
+            </div>
+          </div>
+
+          <div className="mt-4">
+            <label className="block text-white mb-1">
+              Sua empresa possui políticas de diversidade e inclusão?
+            </label>
+            <div className="flex gap-4 mt-1">
+              <label className="flex items-center gap-2 text-white">
+                <input
+                  type="radio"
+                  name="diversity"
+                  value="sim"
+                  checked={diversity === "sim"}
+                  onChange={() => setDiversity("sim")}
+                  className="accent-green-500"
+                />
+                Sim
+              </label>
+              <label className="flex items-center gap-2 text-white">
+                <input
+                  type="radio"
+                  name="diversity"
+                  value="nao"
+                  checked={diversity === "nao"}
+                  onChange={() => setDiversity("nao")}
+                  className="accent-green-500"
+                />
+                Não
+              </label>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-green-300/80 hover:bg-green-400/80 text-green-900 py-4 rounded-full mt-4 font-semibold"
+          >
+            CONTINUAR E ENVIAR OS DADOS
+          </button>
+        </div>
+      </form>
+    );
+  };
 
   const Step7Company = () => (
     <div className="text-white space-y-6 max-w-3xl mx-auto text-justify">
