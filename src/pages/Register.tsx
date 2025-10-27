@@ -54,6 +54,7 @@ export default function Register() {
   const [companyName, setCompanyName] = useState("");
   const [cnpj, setCnpj] = useState("");
   const [position, setPosition] = useState("");
+  const [companyContactLastName, setCompanyContactLastName] = useState("");
   const [diversity, setDiversity] = useState<"sim" | "nao" | null>(null);
 
   // ------------------- CARREGAR ESTADOS -------------------
@@ -129,7 +130,7 @@ export default function Register() {
         options: {
           emailRedirectTo: `${window.location.origin}/`,
           data: {
-            full_name: role === "candidate" ? `${fullName} ${lastName}` : fullName,
+            full_name: role === "candidate" ? `${fullName} ${lastName}` : `${fullName} ${companyContactLastName}`,
             role,
             state,
             city,
@@ -856,7 +857,7 @@ export default function Register() {
         </h2>
 
         <div className="bg-white/20 backdrop-blur-md rounded-2xl p-6 space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-4">
             <div>
               <label className="block text-white mb-1">Nome da Empresa</label>
               <input
@@ -867,7 +868,9 @@ export default function Register() {
                 className="w-full p-3 rounded-lg border border-gray-300 text-black"
               />
             </div>
+          </div>
 
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-white mb-1">Seu Nome</label>
               <input
@@ -879,6 +882,19 @@ export default function Register() {
               />
             </div>
 
+            <div>
+              <label className="block text-white mb-1">Sobrenome</label>
+              <input
+                type="text"
+                value={companyContactLastName}
+                onChange={(e) => setCompanyContactLastName(e.target.value)}
+                required
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-white mb-1">CNPJ (apenas números)</label>
               <input
@@ -1097,7 +1113,7 @@ export default function Register() {
         </div>
       </form>
     );
-  }, [companyName, fullName, cnpj, position, state, city, phone, email, password, confirmPassword, diversity, states, cities, loadingCities, checkingEmail, emailError, passwordError, confirmPasswordError, showPassword, showConfirmPassword]);
+  }, [companyName, fullName, companyContactLastName, cnpj, position, state, city, phone, email, password, confirmPassword, diversity, states, cities, loadingCities, checkingEmail, emailError, passwordError, confirmPasswordError, showPassword, showConfirmPassword]);
 
   const Step7Company = () => (
     <div className="text-white space-y-6 max-w-3xl mx-auto text-justify">
