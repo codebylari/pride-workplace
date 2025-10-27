@@ -1,16 +1,17 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, Bell, Star, Edit, Briefcase, PlusCircle, User, Settings, Headset, Info, FileText, LogOut } from "lucide-react";
+import { Menu, Bell, Briefcase, PlusCircle, User, Settings, Headset, Info, FileText, LogOut, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 
-export default function CompanyProfile() {
+export default function Support() {
   const navigate = useNavigate();
-  const { user, signOut } = useAuth();
+  const { user, signOut, userRole } = useAuth();
   const [showSidebar, setShowSidebar] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
 
-  const companyName = user?.user_metadata?.company_name || "Nome da Empresa";
+  const userName = user?.user_metadata?.full_name || user?.user_metadata?.company_name || "Usuário";
+  const isCompany = userRole === "company";
 
   const handleLogout = async () => {
     await signOut();
@@ -20,7 +21,7 @@ export default function CompanyProfile() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-gradient-to-r from-purple-800 to-purple-600 text-white p-4 flex justify-between items-center">
+      <header className="bg-gradient-to-r from-purple-800 to-purple-600 text-white p-4 flex justify-between items-center sticky top-0 z-40">
         <button
           onClick={() => setShowSidebar(!showSidebar)}
           className="p-2 hover:bg-white/10 rounded-lg transition"
@@ -68,12 +69,12 @@ export default function CompanyProfile() {
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center">
                   <span className="text-xs font-bold text-black">
-                    {companyName.substring(0, 2).toUpperCase()}
+                    {userName.substring(0, 2).toUpperCase()}
                   </span>
                 </div>
                 <div>
-                  <h2 className="text-xl font-semibold">{companyName}</h2>
-                  <p className="text-sm text-white/80">empresa</p>
+                  <h2 className="text-xl font-semibold">{userName}</h2>
+                  <p className="text-sm text-white/80">{isCompany ? "empresa" : "candidato (a)"}</p>
                 </div>
               </div>
             </div>
@@ -83,7 +84,7 @@ export default function CompanyProfile() {
               <button 
                 onClick={() => {
                   setShowSidebar(false);
-                  navigate("/company-dashboard");
+                  navigate(isCompany ? "/company-dashboard" : "/candidate-dashboard");
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
@@ -91,15 +92,17 @@ export default function CompanyProfile() {
                 <span className="text-lg">Vagas</span>
               </button>
               
-              <button className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left">
-                <PlusCircle size={24} />
-                <span className="text-lg">Cadastrar Vagas</span>
-              </button>
+              {isCompany && (
+                <button className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left">
+                  <PlusCircle size={24} />
+                  <span className="text-lg">Cadastrar Vagas</span>
+                </button>
+              )}
               
               <button 
                 onClick={() => {
                   setShowSidebar(false);
-                  navigate("/company-profile");
+                  navigate(isCompany ? "/company-profile" : "/candidate-profile");
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
@@ -113,11 +116,8 @@ export default function CompanyProfile() {
               </button>
               
               <button 
-                onClick={() => {
-                  setShowSidebar(false);
-                  navigate("/support");
-                }}
-                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
+                onClick={() => setShowSidebar(false)}
+                className="w-full flex items-center gap-4 p-4 bg-white/20 rounded-lg transition text-left"
               >
                 <Headset size={24} />
                 <span className="text-lg">Suporte</span>
@@ -155,75 +155,27 @@ export default function CompanyProfile() {
       )}
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto">
-          {/* Profile Card */}
-          <div className="bg-white rounded-3xl shadow-lg p-8">
-            {/* Logo Section */}
-            <div className="flex justify-center mb-6">
-              <div className="relative">
-                <div className="w-32 h-32 bg-yellow-400 rounded-full flex items-center justify-center shadow-lg">
-                  <span className="text-4xl font-bold text-white">
-                    {companyName.substring(0, 2).toUpperCase()}
-                  </span>
-                </div>
-                <button className="absolute bottom-0 right-0 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition">
-                  <Edit size={20} className="text-gray-600" />
-                </button>
-              </div>
-            </div>
+      <main className="container mx-auto px-6 py-16 max-w-4xl">
+        {/* Page Title */}
+        <h1 className="text-4xl font-bold text-center text-gray-800 mb-16">
+          Suporte
+        </h1>
 
-            {/* Rating */}
-            <div className="flex justify-center items-center gap-2 mb-4">
-              {[1, 2, 3, 4].map((star) => (
-                <Star key={star} size={24} className="fill-green-400 text-green-400" />
-              ))}
-              <Star size={24} className="fill-gray-300 text-gray-300" />
-              <span className="ml-2 text-gray-600 font-semibold">4.5</span>
-            </div>
+        {/* Buttons Section */}
+        <div className="space-y-6 mb-16">
+          <Button className="w-full bg-gradient-to-r from-purple-700 to-purple-600 hover:from-purple-800 hover:to-purple-700 text-white py-8 rounded-full text-xl font-semibold shadow-lg">
+            Chat/Suporte
+          </Button>
 
-            {/* Company Name */}
-            <h1 className="text-2xl font-semibold text-center text-gray-800 mb-8">
-              Nome Empresa: {companyName}
-            </h1>
+          <Button className="w-full bg-gradient-to-r from-purple-700 to-purple-600 hover:from-purple-800 hover:to-purple-700 text-white py-8 rounded-full text-xl font-semibold shadow-lg">
+            Regras da Comunidade
+          </Button>
+        </div>
 
-            {/* Action Buttons */}
-            <div className="space-y-4 max-w-md mx-auto">
-              <Button
-                onClick={() => {}}
-                className="w-full bg-pink-300 hover:bg-pink-400 text-white py-6 rounded-full text-lg font-medium shadow-md"
-              >
-                Conheça a Empresa
-              </Button>
-
-              <Button
-                onClick={() => {}}
-                className="w-full bg-pink-300 hover:bg-pink-400 text-white py-6 rounded-full text-lg font-medium shadow-md"
-              >
-                O que buscamos
-              </Button>
-
-              <Button
-                onClick={() => {}}
-                className="w-full bg-pink-300 hover:bg-pink-400 text-white py-6 rounded-full text-lg font-medium shadow-md"
-              >
-                Relatos
-              </Button>
-
-              <Button
-                onClick={() => {}}
-                className="w-full bg-pink-300 hover:bg-pink-400 text-white py-6 rounded-full text-lg font-medium shadow-md"
-              >
-                Formação
-              </Button>
-
-              <Button
-                onClick={() => {}}
-                className="w-full bg-pink-300 hover:bg-pink-400 text-white py-6 rounded-full text-lg font-medium shadow-md"
-              >
-                Vagas Disponíveis
-              </Button>
-            </div>
+        {/* Chatbot Icon */}
+        <div className="fixed bottom-8 right-8">
+          <div className="w-24 h-24 bg-gradient-to-br from-pink-300 to-pink-400 rounded-full flex items-center justify-center shadow-xl cursor-pointer hover:scale-110 transition-transform">
+            <Bot size={48} className="text-white" />
           </div>
         </div>
       </main>

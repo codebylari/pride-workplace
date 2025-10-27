@@ -37,6 +37,9 @@ import CompanyProfile from "./pages/CompanyProfile";
 import AboutUs from "./pages/AboutUs";
 // Página Quem Somos
 
+import Support from "./pages/Support";
+// Página de Suporte
+
 import NotFound from "./pages/NotFound";
 // Página exibida quando a rota não existe (erro 404)
 
@@ -77,6 +80,9 @@ const App = () => (
           
           <Route path="/about" element={<AboutUs />} />
           {/* Página Quem Somos */}
+          
+          <Route path="/support" element={<Support />} />
+          {/* Página de Suporte */}
           
           <Route path="/" element={<Index />} />
           {/* Página inicial (protegida) */}

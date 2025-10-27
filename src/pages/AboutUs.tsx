@@ -114,7 +114,13 @@ export default function AboutUs() {
                 <span className="text-lg">Configurações</span>
               </button>
               
-              <button className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left">
+              <button 
+                onClick={() => {
+                  setShowSidebar(false);
+                  navigate("/support");
+                }}
+                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
+              >
                 <Headset size={24} />
                 <span className="text-lg">Suporte</span>
               </button>
