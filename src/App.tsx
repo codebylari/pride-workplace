@@ -28,6 +28,9 @@ import CompanyDashboard from "./pages/CompanyDashboard";
 import CandidateDashboard from "./pages/CandidateDashboard";
 // Dashboard do candidato
 
+import CandidateProfile from "./pages/CandidateProfile";
+// Perfil do candidato
+
 import NotFound from "./pages/NotFound";
 // Página exibida quando a rota não existe (erro 404)
 
@@ -59,6 +62,9 @@ const App = () => (
           
           <Route path="/candidate-dashboard" element={<CandidateDashboard />} />
           {/* Dashboard do candidato */}
+          
+          <Route path="/candidate-profile" element={<CandidateProfile />} />
+          {/* Perfil do candidato */}
           
           <Route path="/" element={<Index />} />
           {/* Página inicial (protegida) */}

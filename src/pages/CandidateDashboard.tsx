@@ -146,7 +146,13 @@ export default function CandidateDashboard() {
                 <span className="text-lg">Vagas</span>
               </button>
               
-              <button className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left">
+              <button 
+                onClick={() => {
+                  setShowSidebar(false);
+                  navigate("/candidate-profile");
+                }}
+                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
+              >
                 <User size={24} />
                 <span className="text-lg">Meu Perfil</span>
               </button>
