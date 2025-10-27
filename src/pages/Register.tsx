@@ -689,17 +689,6 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1">Cidade</label>
-              <input
-                type="text"
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                required
-                className="w-full p-3 rounded-lg border border-gray-300"
-              />
-            </div>
-
-            <div>
               <label className="block text-white mb-1">Estado (UF)</label>
               <select
                 value={state}
@@ -738,6 +727,19 @@ export default function Register() {
               </select>
             </div>
 
+
+            <div>
+              <label className="block text-white mb-1">Cidade</label>
+              <input
+                type="text"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                required
+                className="w-full p-3 rounded-lg border border-gray-300"
+              />
+            </div>
+
+            
             <div>
               <label className="block text-white mb-1">Telefone/WhatsApp</label>
               <input
