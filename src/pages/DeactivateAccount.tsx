@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, Bell, Eye, EyeOff } from "lucide-react";
+import { Menu, Bell, Eye, EyeOff, CheckCircle2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
 import { useTheme } from "@/contexts/ThemeContext";
 import { supabase } from "@/integrations/supabase/client";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 
 export default function DeactivateAccount() {
@@ -15,6 +16,7 @@ export default function DeactivateAccount() {
   const { darkMode } = useTheme();
   const { toast } = useToast();
 
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -68,13 +70,9 @@ export default function DeactivateAccount() {
 
       if (deleteError) throw deleteError;
 
-      toast({
-        title: "Conta desativada",
-        description: "Sua conta foi desativada com sucesso",
-      });
-
-      await signOut();
-      navigate("/auth");
+      setPassword("");
+      setConfirmPassword("");
+      setShowSuccessDialog(true);
     } catch (error: any) {
       toast({
         title: "Erro",
@@ -304,6 +302,29 @@ export default function DeactivateAccount() {
           </div>
         </div>
       </main>
+
+      {/* Dialog de Sucesso */}
+      <Dialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>
+        <DialogContent className="sm:max-w-md">
+          <div className="flex flex-col items-center justify-center space-y-4 py-6">
+            <div className="w-16 h-16 bg-green-400 rounded-full flex items-center justify-center">
+              <CheckCircle2 className="w-10 h-10 text-white" />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900">SUCESSO!</h2>
+            <p className="text-center text-gray-600">Sua conta foi desativada com Sucesso!</p>
+            <button
+              onClick={async () => {
+                setShowSuccessDialog(false);
+                await signOut();
+                navigate("/auth");
+              }}
+              className="w-full max-w-xs py-3 bg-pink-400 hover:bg-pink-500 text-white rounded-lg transition"
+            >
+              Ok
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
       
       <ChatBot />
     </div>
