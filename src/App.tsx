@@ -22,7 +22,10 @@ import Auth from "./pages/Auth";
 import Register from "./pages/Register";
 // Página de cadastro
 
-import NotFound from "./pages/NotFound"; 
+import CompanyDashboard from "./pages/CompanyDashboard";
+// Dashboard da empresa
+
+import NotFound from "./pages/NotFound";
 // Página exibida quando a rota não existe (erro 404)
 
 const queryClient = new QueryClient(); 
@@ -47,6 +50,9 @@ const App = () => (
           
           <Route path="/register" element={<Register />} />
           {/* Página de cadastro */}
+          
+          <Route path="/company-dashboard" element={<CompanyDashboard />} />
+          {/* Dashboard da empresa */}
           
           <Route path="/" element={<Index />} />
           {/* Página inicial (protegida) */}

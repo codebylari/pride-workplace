@@ -4,11 +4,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { Eye, EyeOff } from "lucide-react";
 import logo from "@/assets/logo.png";
 
 export default function Auth() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -42,7 +44,18 @@ export default function Auth() {
         variant: "destructive",
       });
     } else if (data.session) {
-      navigate("/");
+      // Check user role to redirect appropriately
+      const { data: roleData } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", data.session.user.id)
+        .single();
+
+      if (roleData?.role === "company") {
+        navigate("/company-dashboard");
+      } else {
+        navigate("/");
+      }
     }
   };
 
@@ -82,14 +95,23 @@ export default function Auth() {
 
               <div className="space-y-2">
                 <label className="text-white text-sm">Digite sua nova senha</label>
-                <Input
-                  type="password"
-                  placeholder="**********"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  className="bg-white/90 rounded-xl py-6 text-gray-800"
-                />
+                <div className="relative">
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="**********"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    className="bg-white/90 rounded-xl py-6 text-gray-800 pr-10"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800"
+                  >
+                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  </button>
+                </div>
               </div>
 
               <div className="text-right">
