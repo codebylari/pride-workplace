@@ -1,16 +1,26 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, Bell } from "lucide-react";
+import { Menu, Bell, CheckCircle2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
 import { useTheme } from "@/contexts/ThemeContext";
+import { supabase } from "@/integrations/supabase/client";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
 
-export default function Account() {
+export default function ChangePassword() {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
   const [showSidebar, setShowSidebar] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const { darkMode } = useTheme();
+  const { toast } = useToast();
+
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const isCompany = user?.user_metadata?.user_type === "company";
   const displayName = isCompany 
@@ -20,6 +30,58 @@ export default function Account() {
   const handleLogout = async () => {
     await signOut();
     navigate("/auth");
+  };
+
+  const handleChangePassword = async () => {
+    if (!currentPassword || !newPassword || !confirmNewPassword) {
+      toast({
+        title: "Erro",
+        description: "Por favor, preencha todos os campos",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (newPassword !== confirmNewPassword) {
+      toast({
+        title: "Erro",
+        description: "As senhas não coincidem",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      toast({
+        title: "Erro",
+        description: "A nova senha deve ter pelo menos 6 caracteres",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const { error } = await supabase.auth.updateUser({
+        password: newPassword,
+      });
+
+      if (error) throw error;
+
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmNewPassword("");
+      setShowSuccessDialog(true);
+    } catch (error: any) {
+      toast({
+        title: "Erro",
+        description: error.message || "Não foi possível alterar a senha",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -159,53 +221,86 @@ export default function Account() {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto">
-          <h1 className={`text-3xl font-bold text-center mb-12 ${darkMode ? "text-white" : "text-gray-900"}`}>
-            Conta
+          <h1 className={`text-3xl font-bold text-center mb-8 ${darkMode ? "text-white" : "text-gray-900"}`}>
+            Alterar senha
           </h1>
 
-          <div className="space-y-6">
-            {/* Alterar senha */}
-            <button 
-              className={`w-full flex justify-between items-center py-4 border-b ${darkMode ? "border-gray-600 text-gray-300 hover:text-white" : "border-gray-200 text-gray-700 hover:text-gray-900"} transition text-left`}
-              onClick={() => navigate("/change-password")}
-            >
-              <span className="text-lg">Alterar senha</span>
-            </button>
+          <div className={`${darkMode ? "bg-gray-700" : "bg-white"} rounded-2xl p-8 shadow-lg space-y-6`}>
+            <p className={`text-center ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+              Atualize suas credenciais quando precisar.
+            </p>
 
-            {/* Alterar email */}
-            <button 
-              className={`w-full flex justify-between items-center py-4 border-b ${darkMode ? "border-gray-600 text-gray-300 hover:text-white" : "border-gray-200 text-gray-700 hover:text-gray-900"} transition text-left`}
-              onClick={() => navigate("/change-email")}
-            >
-              <span className="text-lg">Alterar email</span>
-            </button>
+            <div>
+              <label className={`block text-sm mb-2 ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+                Digite sua senha atual
+              </label>
+              <input
+                type="password"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+                placeholder="Senha atual"
+              />
+            </div>
 
-            {/* Desativar conta */}
-            <button 
-              className={`w-full flex justify-between items-center py-4 border-b ${darkMode ? "border-gray-600 text-gray-300 hover:text-white" : "border-gray-200 text-gray-700 hover:text-gray-900"} transition text-left`}
-              onClick={() => {
-                // TODO: Implementar desativação de conta
-                console.log("Desativar conta");
-              }}
-            >
-              <span className="text-lg">Desativar conta</span>
-            </button>
-          </div>
+            <div>
+              <label className={`block text-sm mb-2 ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+                Digite sua nova senha
+              </label>
+              <input
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+                placeholder="Nova senha"
+              />
+            </div>
 
-          {/* Deletar conta */}
-          <div className="mt-12 pt-12 border-t border-gray-300">
-            <button 
-              className="text-red-600 hover:text-red-700 transition font-medium"
-              onClick={() => {
-                // TODO: Implementar exclusão de conta
-                console.log("Deletar conta");
-              }}
+            <div>
+              <label className={`block text-sm mb-2 ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+                Confirme sua nova senha
+              </label>
+              <input
+                type="password"
+                value={confirmNewPassword}
+                onChange={(e) => setConfirmNewPassword(e.target.value)}
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+                placeholder="Confirme a nova senha"
+              />
+            </div>
+
+            <button
+              onClick={handleChangePassword}
+              disabled={loading}
+              className="w-full py-3 bg-green-400 hover:bg-green-500 text-white rounded-lg transition disabled:opacity-50 font-medium"
             >
-              Deletar conta
+              {loading ? "Alterando..." : "Confirmar"}
             </button>
           </div>
         </div>
       </main>
+
+      {/* Dialog de Sucesso */}
+      <Dialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>
+        <DialogContent className="sm:max-w-md">
+          <div className="flex flex-col items-center justify-center space-y-4 py-6">
+            <div className="w-16 h-16 bg-green-400 rounded-full flex items-center justify-center">
+              <CheckCircle2 className="w-10 h-10 text-white" />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900">SUCESSO!</h2>
+            <p className="text-center text-gray-600">Sua senha foi alterada com Sucesso!</p>
+            <button
+              onClick={() => {
+                setShowSuccessDialog(false);
+                navigate("/account");
+              }}
+              className="w-full max-w-xs py-3 bg-pink-400 hover:bg-pink-500 text-white rounded-lg transition"
+            >
+              Ok
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
       
       <ChatBot />
     </div>

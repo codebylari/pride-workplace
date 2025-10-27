@@ -55,6 +55,12 @@ import Settings from "./pages/Settings";
 import Account from "./pages/Account";
 // Página de Conta
 
+import ChangePassword from "./pages/ChangePassword";
+// Página de Alterar Senha
+
+import ChangeEmail from "./pages/ChangeEmail";
+// Página de Alterar Email
+
 import NotFound from "./pages/NotFound";
 // Página exibida quando a rota não existe (erro 404)
 
@@ -112,6 +118,12 @@ const App = () => (
             
             <Route path="/account" element={<Account />} />
             {/* Página de Conta */}
+            
+            <Route path="/change-password" element={<ChangePassword />} />
+            {/* Página de Alterar Senha */}
+            
+            <Route path="/change-email" element={<ChangeEmail />} />
+            {/* Página de Alterar Email */}
             
             <Route path="/" element={<Index />} />
             {/* Página inicial (protegida) */}
