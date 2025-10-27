@@ -4,10 +4,12 @@ import { Menu, Bell, Briefcase, PlusCircle, User, Settings, Headset, Info, FileT
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
+import { useTheme } from "@/contexts/ThemeContext";
 
 export default function Support() {
   const navigate = useNavigate();
   const { user, signOut, userRole } = useAuth();
+  const { darkMode } = useTheme();
   const [showSidebar, setShowSidebar] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
 
@@ -20,7 +22,7 @@ export default function Support() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={`min-h-screen ${darkMode ? "bg-gray-800" : "bg-gray-50"}`}>
       {/* Header */}
       <header className="bg-gradient-to-r from-purple-800 to-purple-600 text-white p-4 flex justify-between items-center sticky top-0 z-40">
         <button
@@ -170,7 +172,7 @@ export default function Support() {
       {/* Main Content */}
       <main className="container mx-auto px-6 py-16 max-w-4xl">
         {/* Page Title */}
-        <h1 className="text-4xl font-bold text-center text-gray-800 mb-16">
+        <h1 className={`text-4xl font-bold text-center mb-16 ${darkMode ? "text-white" : "text-gray-800"}`}>
           Suporte
         </h1>
 

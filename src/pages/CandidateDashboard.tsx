@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
+import { useTheme } from "@/contexts/ThemeContext";
 
 // Mock data - será substituído por dados reais do banco
 const mockJobs = [
@@ -85,6 +86,7 @@ const mockJobs = [
 export default function CandidateDashboard() {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
+  const { darkMode } = useTheme();
   const [showSidebar, setShowSidebar] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -106,7 +108,7 @@ export default function CandidateDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={`min-h-screen ${darkMode ? "bg-gray-800" : "bg-gray-50"}`}>
       {/* Header */}
       <header className="bg-gradient-to-r from-purple-800 to-purple-600 text-white p-4 flex justify-between items-center sticky top-0 z-40">
         <button
@@ -242,7 +244,7 @@ export default function CandidateDashboard() {
       )}
 
       {/* Search Bar */}
-      <div className="bg-white shadow-sm p-4">
+      <div className={`shadow-sm p-4 ${darkMode ? "bg-gray-700" : "bg-white"}`}>
         <div className="container mx-auto max-w-6xl">
           <div className="relative">
             <Input
@@ -250,7 +252,7 @@ export default function CandidateDashboard() {
               placeholder="Buscar"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full md:w-64 ml-auto bg-green-100 border-green-300 rounded-lg"
+              className={`w-full md:w-64 ml-auto rounded-lg ${darkMode ? "bg-gray-600 border-gray-500 text-white placeholder:text-gray-300" : "bg-green-100 border-green-300"}`}
             />
           </div>
         </div>
@@ -263,7 +265,7 @@ export default function CandidateDashboard() {
           {currentJobs.map((job) => (
             <div
               key={job.id}
-              className="bg-white rounded-xl shadow-md hover:shadow-lg transition p-6 space-y-4"
+              className={`rounded-xl shadow-md hover:shadow-lg transition p-6 space-y-4 ${darkMode ? "bg-gray-700" : "bg-white"}`}
             >
               {/* Company Logo */}
               <div className="flex items-start justify-between">
@@ -279,16 +281,16 @@ export default function CandidateDashboard() {
               </div>
 
               {/* Company Name */}
-              <h3 className="font-semibold text-gray-800">{job.company}</h3>
+              <h3 className={`font-semibold ${darkMode ? "text-white" : "text-gray-800"}`}>{job.company}</h3>
 
               {/* Job Title */}
-              <p className="text-sm text-gray-700 font-medium">{job.title}</p>
+              <p className={`text-sm font-medium ${darkMode ? "text-gray-300" : "text-gray-700"}`}>{job.title}</p>
 
               {/* Job Type */}
-              <p className="text-xs text-gray-500">{job.type}</p>
+              <p className={`text-xs ${darkMode ? "text-gray-400" : "text-gray-500"}`}>{job.type}</p>
 
               {/* Applicants */}
-              <div className="flex items-center gap-2 text-sm text-gray-600">
+              <div className={`flex items-center gap-2 text-sm ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
                 <Users size={16} />
                 <span>{job.applicants}</span>
               </div>
@@ -309,7 +311,7 @@ export default function CandidateDashboard() {
           <button
             onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
             disabled={currentPage === 1}
-            className="px-3 py-1 rounded hover:bg-gray-100 disabled:opacity-50"
+            className={`px-3 py-1 rounded disabled:opacity-50 ${darkMode ? "hover:bg-gray-700 text-white" : "hover:bg-gray-100"}`}
           >
             ‹
           </button>
@@ -321,7 +323,7 @@ export default function CandidateDashboard() {
               className={`px-3 py-1 rounded ${
                 currentPage === index + 1
                   ? "bg-gray-800 text-white"
-                  : "hover:bg-gray-100"
+                  : darkMode ? "hover:bg-gray-700 text-white" : "hover:bg-gray-100"
               }`}
             >
               {index + 1}
@@ -331,7 +333,7 @@ export default function CandidateDashboard() {
           <button
             onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
             disabled={currentPage === totalPages}
-            className="px-3 py-1 rounded hover:bg-gray-100 disabled:opacity-50"
+            className={`px-3 py-1 rounded disabled:opacity-50 ${darkMode ? "hover:bg-gray-700 text-white" : "hover:bg-gray-100"}`}
           >
             ›
           </button>

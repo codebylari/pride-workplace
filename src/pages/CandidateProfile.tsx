@@ -8,6 +8,7 @@ import { ChatBot } from "@/components/ChatBot";
 export default function CandidateProfile() {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
+  const { darkMode } = useTheme();
   const [showSidebar, setShowSidebar] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
 
@@ -22,7 +23,7 @@ export default function CandidateProfile() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={`min-h-screen ${darkMode ? "bg-gray-800" : "bg-gray-50"}`}>
       {/* Header */}
       <header className="bg-gradient-to-r from-purple-800 to-purple-600 text-white p-4 flex justify-between items-center sticky top-0 z-40">
         <button
@@ -165,7 +166,7 @@ export default function CandidateProfile() {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8 max-w-4xl">
-        <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+        <div className={`rounded-2xl shadow-lg overflow-hidden ${darkMode ? "bg-gray-700" : "bg-white"}`}>
           {/* Profile Header Background */}
           <div className="h-32 bg-gradient-to-r from-gray-200 to-gray-300"></div>
 
@@ -174,7 +175,7 @@ export default function CandidateProfile() {
             {/* Profile Photo */}
             <div className="relative -mt-16 mb-6 flex justify-center">
               <div className="relative">
-                <div className="w-32 h-32 rounded-full bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center text-4xl font-bold text-white border-4 border-white shadow-xl">
+                <div className={`w-32 h-32 rounded-full bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center text-4xl font-bold text-white border-4 shadow-xl ${darkMode ? "border-gray-700" : "border-white"}`}>
                   {userName.charAt(0).toUpperCase()}
                 </div>
                 <button className="absolute bottom-0 right-0 w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white hover:bg-blue-600 transition shadow-lg">
@@ -189,15 +190,15 @@ export default function CandidateProfile() {
                 <Star key={star} size={24} fill="#22c55e" className="text-green-500" />
               ))}
               <Star size={24} fill="#22c55e" className="text-green-500" fillOpacity={0.5} />
-              <span className="ml-2 text-gray-600 font-semibold">{rating}</span>
+              <span className={`ml-2 font-semibold ${darkMode ? "text-gray-300" : "text-gray-600"}`}>{rating}</span>
             </div>
 
             {/* Name and Gender */}
             <div className="text-center mb-8 space-y-1">
-              <h1 className="text-2xl font-bold text-gray-800">
+              <h1 className={`text-2xl font-bold ${darkMode ? "text-white" : "text-gray-800"}`}>
                 Nome: {userName}
               </h1>
-              <p className="text-lg text-gray-600">
+              <p className={`text-lg ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
                 Gênero: Feminino
               </p>
             </div>

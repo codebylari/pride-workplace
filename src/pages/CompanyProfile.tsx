@@ -8,6 +8,7 @@ import { ChatBot } from "@/components/ChatBot";
 export default function CompanyProfile() {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
+  const { darkMode } = useTheme();
   const [showSidebar, setShowSidebar] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
 
@@ -19,7 +20,7 @@ export default function CompanyProfile() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={`min-h-screen ${darkMode ? "bg-gray-800" : "bg-gray-50"}`}>
       {/* Header */}
       <header className="bg-gradient-to-r from-purple-800 to-purple-600 text-white p-4 flex justify-between items-center">
         <button
@@ -171,7 +172,7 @@ export default function CompanyProfile() {
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           {/* Profile Card */}
-          <div className="bg-white rounded-3xl shadow-lg p-8">
+          <div className={`rounded-3xl shadow-lg p-8 ${darkMode ? "bg-gray-700" : "bg-white"}`}>
             {/* Logo Section */}
             <div className="flex justify-center mb-6">
               <div className="relative">
@@ -180,8 +181,8 @@ export default function CompanyProfile() {
                     {companyName.substring(0, 2).toUpperCase()}
                   </span>
                 </div>
-                <button className="absolute bottom-0 right-0 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition">
-                  <Edit size={20} className="text-gray-600" />
+                <button className={`absolute bottom-0 right-0 p-2 rounded-full shadow-md transition ${darkMode ? "bg-gray-600 hover:bg-gray-500" : "bg-white hover:bg-gray-100"}`}>
+                  <Edit size={20} className={darkMode ? "text-gray-300" : "text-gray-600"} />
                 </button>
               </div>
             </div>
@@ -192,11 +193,11 @@ export default function CompanyProfile() {
                 <Star key={star} size={24} className="fill-green-400 text-green-400" />
               ))}
               <Star size={24} className="fill-gray-300 text-gray-300" />
-              <span className="ml-2 text-gray-600 font-semibold">4.5</span>
+              <span className={`ml-2 font-semibold ${darkMode ? "text-gray-300" : "text-gray-600"}`}>4.5</span>
             </div>
 
             {/* Company Name */}
-            <h1 className="text-2xl font-semibold text-center text-gray-800 mb-8">
+            <h1 className={`text-2xl font-semibold text-center mb-8 ${darkMode ? "text-white" : "text-gray-800"}`}>
               Nome Empresa: {companyName}
             </h1>
 
