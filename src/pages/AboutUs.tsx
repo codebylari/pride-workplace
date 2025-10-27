@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Menu, Bell, Briefcase, PlusCircle, User, Settings, Headset, Info, FileText, LogOut } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { ChatBot } from "@/components/ChatBot";
 
 export default function AboutUs() {
   const navigate = useNavigate();
@@ -223,6 +224,9 @@ export default function AboutUs() {
           </div>
         </div>
       </main>
+      
+      {/* ChatBot */}
+      <ChatBot />
     </div>
   );
 }

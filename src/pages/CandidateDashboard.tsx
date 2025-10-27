@@ -4,6 +4,7 @@ import { Menu, Bell, MapPin, Users, Briefcase, User, Settings, Headset, Info, Fi
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/useAuth";
+import { ChatBot } from "@/components/ChatBot";
 
 // Mock data - será substituído por dados reais do banco
 const mockJobs = [
@@ -324,6 +325,9 @@ export default function CandidateDashboard() {
           </button>
         </div>
       </main>
+      
+      {/* ChatBot */}
+      <ChatBot />
     </div>
   );
 }

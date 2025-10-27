@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, Bell, Briefcase, PlusCircle, User, Settings, Headset, Info, FileText, LogOut, Bot } from "lucide-react";
+import { Menu, Bell, Briefcase, PlusCircle, User, Settings, Headset, Info, FileText, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
+import { ChatBot } from "@/components/ChatBot";
 
 export default function Support() {
   const navigate = useNavigate();
@@ -171,14 +172,10 @@ export default function Support() {
             Regras da Comunidade
           </Button>
         </div>
-
-        {/* Chatbot Icon */}
-        <div className="fixed bottom-8 right-8">
-          <div className="w-24 h-24 bg-gradient-to-br from-pink-300 to-pink-400 rounded-full flex items-center justify-center shadow-xl cursor-pointer hover:scale-110 transition-transform">
-            <Bot size={48} className="text-white" />
-          </div>
-        </div>
       </main>
+      
+      {/* ChatBot */}
+      <ChatBot />
     </div>
   );
 }
