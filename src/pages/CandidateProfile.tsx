@@ -1,24 +1,30 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, Bell, Star, Edit2 } from "lucide-react";
+import { Menu, Bell, Star, Edit2, Briefcase, User, Settings, Headset, Info, FileText, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 
 export default function CandidateProfile() {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const [showSidebar, setShowSidebar] = useState(false);
 
   // Get user data
   const userName = user?.user_metadata?.full_name?.split(" ")[0] || "Usuário";
+  const fullName = user?.user_metadata?.full_name || "Usuário";
   const rating = 4.5;
+
+  const handleLogout = async () => {
+    await signOut();
+    navigate("/auth");
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-gradient-to-r from-purple-800 to-purple-600 text-white p-4 flex justify-between items-center sticky top-0 z-40">
         <button
-          onClick={() => navigate("/candidate-dashboard")}
+          onClick={() => setShowSidebar(!showSidebar)}
           className="p-2 hover:bg-white/10 rounded-lg transition"
         >
           <Menu size={24} />
@@ -28,6 +34,85 @@ export default function CandidateProfile() {
           <Bell size={24} />
         </button>
       </header>
+
+      {/* Sidebar */}
+      {showSidebar && (
+        <div className="fixed inset-0 z-50 bg-black/50" onClick={() => setShowSidebar(false)}>
+          <div 
+            className="absolute left-0 top-0 h-full w-80 bg-gradient-to-b from-purple-400 via-purple-500 to-purple-600 shadow-xl text-white flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Profile Section */}
+            <div className="p-6 flex items-center gap-4 border-b border-white/20">
+              <div className="w-20 h-20 rounded-full bg-gray-300 overflow-hidden border-4 border-white/30">
+                <div className="w-full h-full bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center text-2xl font-bold text-white">
+                  {userName.charAt(0).toUpperCase()}
+                </div>
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold">{fullName}</h2>
+                <p className="text-sm text-white/80">candidato (a)</p>
+              </div>
+            </div>
+
+            {/* Menu Items */}
+            <nav className="flex-1 py-6 px-4 space-y-2">
+              <button 
+                onClick={() => {
+                  setShowSidebar(false);
+                  navigate("/candidate-dashboard");
+                }}
+                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
+              >
+                <Briefcase size={24} />
+                <span className="text-lg">Vagas</span>
+              </button>
+              
+              <button 
+                onClick={() => {
+                  setShowSidebar(false);
+                  navigate("/candidate-profile");
+                }}
+                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
+              >
+                <User size={24} />
+                <span className="text-lg">Meu Perfil</span>
+              </button>
+              
+              <button className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left">
+                <Settings size={24} />
+                <span className="text-lg">Configurações</span>
+              </button>
+              
+              <button className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left">
+                <Headset size={24} />
+                <span className="text-lg">Suporte</span>
+              </button>
+              
+              <button className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left">
+                <Info size={24} />
+                <span className="text-lg">Quem Somos</span>
+              </button>
+              
+              <button className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left">
+                <FileText size={24} />
+                <span className="text-lg">Termos de Uso</span>
+              </button>
+            </nav>
+
+            {/* Logout Button at Bottom */}
+            <div className="p-4 border-t border-white/20">
+              <button 
+                onClick={handleLogout}
+                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
+              >
+                <LogOut size={24} />
+                <span className="text-lg">Sair</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8 max-w-4xl">
