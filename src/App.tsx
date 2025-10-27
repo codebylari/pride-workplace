@@ -34,6 +34,9 @@ import CandidateProfile from "./pages/CandidateProfile";
 import CompanyProfile from "./pages/CompanyProfile";
 // Perfil da empresa
 
+import AboutUs from "./pages/AboutUs";
+// Página Quem Somos
+
 import NotFound from "./pages/NotFound";
 // Página exibida quando a rota não existe (erro 404)
 
@@ -71,6 +74,9 @@ const App = () => (
           
           <Route path="/company-profile" element={<CompanyProfile />} />
           {/* Perfil da empresa */}
+          
+          <Route path="/about" element={<AboutUs />} />
+          {/* Página Quem Somos */}
           
           <Route path="/" element={<Index />} />
           {/* Página inicial (protegida) */}
