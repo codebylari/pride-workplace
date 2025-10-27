@@ -47,6 +47,8 @@ export default function Register() {
   const [city, setCity] = useState("");
   const [emailError, setEmailError] = useState("");
   const [checkingEmail, setCheckingEmail] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
   // ------------------- CAMPOS EMPRESA -------------------
   const [companyName, setCompanyName] = useState("");
@@ -96,7 +98,20 @@ export default function Register() {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Validação de senha - deve conter pelo menos uma letra
+    const hasLetter = /[a-zA-Z]/.test(password);
+    if (!hasLetter) {
+      setPasswordError("A senha deve conter pelo menos uma letra");
+      toast({
+        title: "Erro",
+        description: "A senha deve conter pelo menos uma letra.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (password !== confirmPassword) {
+      setConfirmPasswordError("As senhas não coincidem");
       toast({
         title: "Erro",
         description: "As senhas não coincidem.",
@@ -312,6 +327,33 @@ export default function Register() {
     const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
       
+      // Limpar erros anteriores
+      setPasswordError("");
+      setConfirmPasswordError("");
+      
+      // Validação de senha - deve conter pelo menos uma letra
+      const hasLetter = /[a-zA-Z]/.test(password);
+      if (!hasLetter) {
+        setPasswordError("A senha deve conter pelo menos uma letra");
+        toast({
+          title: "Erro na senha",
+          description: "A senha deve conter pelo menos uma letra.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Validação de senhas iguais
+      if (password !== confirmPassword) {
+        setConfirmPasswordError("As senhas não coincidem");
+        toast({
+          title: "Erro",
+          description: "As senhas não coincidem.",
+          variant: "destructive",
+        });
+        return;
+      }
+      
       // Verifica o email antes de avançar
       await checkEmailAvailability(email);
       
@@ -373,22 +415,32 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1">CPF</label>
+              <label className="block text-white mb-1">CPF (apenas números)</label>
               <input
                 type="text"
                 value={cpf}
-                onChange={(e) => setCpf(e.target.value)}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, '');
+                  setCpf(value);
+                }}
                 required
+                maxLength={11}
+                placeholder="00000000000"
                 className="w-full p-3 rounded-lg border border-gray-300 text-black"
               />
             </div>
             <div>
-              <label className="block text-white mb-1">RG</label>
+              <label className="block text-white mb-1">RG (apenas números)</label>
               <input
                 type="text"
                 value={rg}
-                onChange={(e) => setRg(e.target.value)}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, '');
+                  setRg(value);
+                }}
                 required
+                maxLength={15}
+                placeholder="000000000"
                 className="w-full p-3 rounded-lg border border-gray-300 text-black"
               />
             </div>
@@ -431,12 +483,17 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1">Telefone/WhatsApp</label>
+              <label className="block text-white mb-1">Telefone/WhatsApp (apenas números)</label>
               <input
                 type="text"
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, '');
+                  setPhone(value);
+                }}
                 required
+                maxLength={11}
+                placeholder="11999999999"
                 className="w-full p-3 rounded-lg border border-gray-300 text-black"
               />
             </div>
@@ -468,15 +525,20 @@ export default function Register() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <div>
-              <label className="block text-white mb-1">Digite sua Senha</label>
+              <label className="block text-white mb-1">Digite sua Senha (deve conter pelo menos uma letra)</label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setPasswordError("");
+                  }}
                   required
                   minLength={6}
-                  className="w-full p-3 pr-10 rounded-lg border border-gray-300 text-black"
+                  className={`w-full p-3 pr-10 rounded-lg border ${
+                    passwordError ? "border-red-500" : "border-gray-300"
+                  } text-black`}
                 />
                 <button
                   type="button"
@@ -486,6 +548,9 @@ export default function Register() {
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
+              {passwordError && (
+                <p className="text-red-300 text-sm mt-1 font-semibold">{passwordError}</p>
+              )}
             </div>
 
             <div>
@@ -494,10 +559,15 @@ export default function Register() {
                 <input
                   type={showConfirmPassword ? "text" : "password"}
                   value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  onChange={(e) => {
+                    setConfirmPassword(e.target.value);
+                    setConfirmPasswordError("");
+                  }}
                   required
                   minLength={6}
-                  className="w-full p-3 pr-10 rounded-lg border border-gray-300 text-black"
+                  className={`w-full p-3 pr-10 rounded-lg border ${
+                    confirmPasswordError ? "border-red-500" : "border-gray-300"
+                  } text-black`}
                 />
                 <button
                   type="button"
@@ -507,12 +577,15 @@ export default function Register() {
                   {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
+              {confirmPasswordError && (
+                <p className="text-red-300 text-sm mt-1 font-semibold">{confirmPasswordError}</p>
+              )}
             </div>
           </div>
 
           <button
             type="submit"
-            disabled={checkingEmail || !!emailError}
+            disabled={checkingEmail || !!emailError || !!passwordError || !!confirmPasswordError}
             className="w-full bg-green-300/80 hover:bg-green-400/80 text-green-900 py-4 rounded-full mt-4 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {checkingEmail ? "VERIFICANDO..." : "CONTINUAR E ENVIAR OS DADOS"}
@@ -520,7 +593,7 @@ export default function Register() {
         </div>
       </form>
     );
-  }, [fullName, lastName, birthDate, socialName, cpf, rg, email, password, confirmPassword, phone, state, city, states, cities, loadingCities, checkingEmail, emailError]);
+  }, [fullName, lastName, birthDate, socialName, cpf, rg, email, password, confirmPassword, phone, state, city, states, cities, loadingCities, checkingEmail, emailError, passwordError, confirmPasswordError, showPassword, showConfirmPassword]);
 
   const Step7Terms = () => (
     <div className="text-white space-y-6 max-w-3xl mx-auto text-justify">
@@ -726,6 +799,33 @@ export default function Register() {
     const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
       
+      // Limpar erros anteriores
+      setPasswordError("");
+      setConfirmPasswordError("");
+      
+      // Validação de senha - deve conter pelo menos uma letra
+      const hasLetter = /[a-zA-Z]/.test(password);
+      if (!hasLetter) {
+        setPasswordError("A senha deve conter pelo menos uma letra");
+        toast({
+          title: "Erro na senha",
+          description: "A senha deve conter pelo menos uma letra.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Validação de senhas iguais
+      if (password !== confirmPassword) {
+        setConfirmPasswordError("As senhas não coincidem");
+        toast({
+          title: "Erro",
+          description: "As senhas não coincidem.",
+          variant: "destructive",
+        });
+        return;
+      }
+      
       // Verifica o email antes de avançar
       await checkEmailAvailability(email);
       
@@ -768,12 +868,17 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1">CNPJ</label>
+              <label className="block text-white mb-1">CNPJ (apenas números)</label>
               <input
                 type="text"
                 value={cnpj}
-                onChange={(e) => setCnpj(e.target.value)}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, '');
+                  setCnpj(value);
+                }}
                 required
+                maxLength={14}
+                placeholder="00000000000000"
                 className="w-full p-3 rounded-lg border border-gray-300 text-black"
               />
             </div>
@@ -827,12 +932,17 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1">Telefone/WhatsApp</label>
+              <label className="block text-white mb-1">Telefone/WhatsApp (apenas números)</label>
               <input
                 type="text"
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, '');
+                  setPhone(value);
+                }}
                 required
+                maxLength={11}
+                placeholder="11999999999"
                 className="w-full p-3 rounded-lg border border-gray-300 text-black"
               />
             </div>
@@ -863,15 +973,20 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1">Senha</label>
+              <label className="block text-white mb-1">Senha (deve conter pelo menos uma letra)</label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setPasswordError("");
+                  }}
                   required
                   minLength={6}
-                  className="w-full p-3 pr-10 rounded-lg border border-gray-300 text-black"
+                  className={`w-full p-3 pr-10 rounded-lg border ${
+                    passwordError ? "border-red-500" : "border-gray-300"
+                  } text-black`}
                 />
                 <button
                   type="button"
@@ -881,6 +996,9 @@ export default function Register() {
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
+              {passwordError && (
+                <p className="text-red-300 text-sm mt-1 font-semibold">{passwordError}</p>
+              )}
             </div>
 
             <div>
@@ -889,10 +1007,15 @@ export default function Register() {
                 <input
                   type={showConfirmPassword ? "text" : "password"}
                   value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  onChange={(e) => {
+                    setConfirmPassword(e.target.value);
+                    setConfirmPasswordError("");
+                  }}
                   required
                   minLength={6}
-                  className="w-full p-3 pr-10 rounded-lg border border-gray-300 text-black"
+                  className={`w-full p-3 pr-10 rounded-lg border ${
+                    confirmPasswordError ? "border-red-500" : "border-gray-300"
+                  } text-black`}
                 />
                 <button
                   type="button"
@@ -902,6 +1025,9 @@ export default function Register() {
                   {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
+              {confirmPasswordError && (
+                <p className="text-red-300 text-sm mt-1 font-semibold">{confirmPasswordError}</p>
+              )}
             </div>
           </div>
 
@@ -939,7 +1065,7 @@ export default function Register() {
 
           <button
             type="submit"
-            disabled={checkingEmail || !!emailError}
+            disabled={checkingEmail || !!emailError || !!passwordError || !!confirmPasswordError}
             className="w-full bg-green-300/80 hover:bg-green-400/80 text-green-900 py-4 rounded-full mt-4 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {checkingEmail ? "VERIFICANDO..." : "CONTINUAR E ENVIAR OS DADOS"}
@@ -947,7 +1073,7 @@ export default function Register() {
         </div>
       </form>
     );
-  }, [companyName, fullName, cnpj, position, email, password, confirmPassword, phone, state, city, diversity, states, cities, loadingCities, checkingEmail, emailError]);
+  }, [companyName, fullName, cnpj, position, state, city, phone, email, password, confirmPassword, diversity, states, cities, loadingCities, checkingEmail, emailError, passwordError, confirmPasswordError, showPassword, showConfirmPassword]);
 
   const Step7Company = () => (
     <div className="text-white space-y-6 max-w-3xl mx-auto text-justify">
