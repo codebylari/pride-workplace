@@ -832,7 +832,7 @@ export default function Register() {
 
           <div className="mt-4">
             <label className="block text-white mb-1">
-              Sua empresa possui políticas de diversidade e inclusão?
+              Sua empresa possui políticas de diversidade e inclusão? *
             </label>
             <div className="flex gap-4 mt-1">
               <label className="flex items-center gap-2 text-white">
@@ -842,6 +842,7 @@ export default function Register() {
                   value="sim"
                   checked={diversity === "sim"}
                   onChange={() => setDiversity("sim")}
+                  required
                   className="accent-green-500"
                 />
                 Sim
@@ -853,6 +854,7 @@ export default function Register() {
                   value="nao"
                   checked={diversity === "nao"}
                   onChange={() => setDiversity("nao")}
+                  required
                   className="accent-green-500"
                 />
                 Não
