@@ -27,6 +27,14 @@ export default function ChangePassword() {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  // Password validation
+  const passwordValidation = {
+    minLength: newPassword.length >= 6,
+    hasUpperCase: /[A-Z]/.test(newPassword),
+    hasLowerCase: /[a-z]/.test(newPassword),
+    hasNumber: /[0-9]/.test(newPassword),
+  };
+
   const isCompany = user?.user_metadata?.user_type === "company";
   const displayName = isCompany 
     ? user?.user_metadata?.company_name || "Nome da Empresa"
@@ -60,6 +68,15 @@ export default function ChangePassword() {
       toast({
         title: "Erro",
         description: "A nova senha deve ter pelo menos 6 caracteres",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!passwordValidation.hasUpperCase || !passwordValidation.hasLowerCase || !passwordValidation.hasNumber) {
+      toast({
+        title: "Erro",
+        description: "A senha deve conter pelo menos 1 letra maiúscula, 1 letra minúscula e 1 número",
         variant: "destructive",
       });
       return;
@@ -286,6 +303,29 @@ export default function ChangePassword() {
                 >
                   {showNewPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
+              </div>
+              
+              {/* Password Requirements */}
+              <div className={`mt-3 space-y-2 text-sm ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+                <p className="font-medium">Sua senha deve conter:</p>
+                <div className="space-y-1">
+                  <div className={`flex items-center gap-2 ${passwordValidation.minLength ? "text-green-600" : ""}`}>
+                    <span>{passwordValidation.minLength ? "✓" : "○"}</span>
+                    <span>Mínimo de 6 caracteres</span>
+                  </div>
+                  <div className={`flex items-center gap-2 ${passwordValidation.hasUpperCase ? "text-green-600" : ""}`}>
+                    <span>{passwordValidation.hasUpperCase ? "✓" : "○"}</span>
+                    <span>Pelo menos 1 letra maiúscula</span>
+                  </div>
+                  <div className={`flex items-center gap-2 ${passwordValidation.hasLowerCase ? "text-green-600" : ""}`}>
+                    <span>{passwordValidation.hasLowerCase ? "✓" : "○"}</span>
+                    <span>Pelo menos 1 letra minúscula</span>
+                  </div>
+                  <div className={`flex items-center gap-2 ${passwordValidation.hasNumber ? "text-green-600" : ""}`}>
+                    <span>{passwordValidation.hasNumber ? "✓" : "○"}</span>
+                    <span>Pelo menos 1 número</span>
+                  </div>
+                </div>
               </div>
             </div>
 
