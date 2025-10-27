@@ -525,7 +525,8 @@ export default function Register() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <div>
-              <label className="block text-white mb-1">Digite sua Senha (deve conter pelo menos uma letra)</label>
+              <label className="block text-white mb-1 min-h-[3rem] flex items-end">Digite sua Senha</label>
+              <p className="text-white/80 text-xs mb-1">(deve conter pelo menos uma letra)</p>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -542,8 +543,13 @@ export default function Register() {
                 />
                 <button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setShowPassword(!showPassword);
+                  }}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800 z-10"
+                  tabIndex={-1}
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
@@ -554,7 +560,8 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1">Repita sua Senha</label>
+              <label className="block text-white mb-1 min-h-[3rem] flex items-end">Repita sua Senha</label>
+              <p className="text-white/80 text-xs mb-1 invisible">(espaço reservado)</p>
               <div className="relative">
                 <input
                   type={showConfirmPassword ? "text" : "password"}
@@ -571,8 +578,13 @@ export default function Register() {
                 />
                 <button
                   type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setShowConfirmPassword(!showConfirmPassword);
+                  }}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800 z-10"
+                  tabIndex={-1}
                 >
                   {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
@@ -973,7 +985,8 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1">Senha (deve conter pelo menos uma letra)</label>
+              <label className="block text-white mb-1 min-h-[3rem] flex items-end">Senha</label>
+              <p className="text-white/80 text-xs mb-1">(deve conter pelo menos uma letra)</p>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -990,8 +1003,13 @@ export default function Register() {
                 />
                 <button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setShowPassword(!showPassword);
+                  }}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800 z-10"
+                  tabIndex={-1}
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
@@ -1002,7 +1020,8 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1">Confirmar Senha</label>
+              <label className="block text-white mb-1 min-h-[3rem] flex items-end">Confirmar Senha</label>
+              <p className="text-white/80 text-xs mb-1 invisible">(espaço reservado)</p>
               <div className="relative">
                 <input
                   type={showConfirmPassword ? "text" : "password"}
@@ -1019,8 +1038,13 @@ export default function Register() {
                 />
                 <button
                   type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setShowConfirmPassword(!showConfirmPassword);
+                  }}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800 z-10"
+                  tabIndex={-1}
                 >
                   {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
