@@ -4,6 +4,17 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 
+interface City {
+  id: number;
+  nome: string;
+}
+
+interface State {
+  id: number;
+  sigla: string;
+  nome: string;
+}
+
 export default function Register() {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -13,20 +24,60 @@ export default function Register() {
   const [role, setRole] = useState<"candidate" | "company" | "">("");
   const [loading, setLoading] = useState(false);
 
+  // ------------------- API IBGE -------------------
+  const [states, setStates] = useState<State[]>([]);
+  const [cities, setCities] = useState<City[]>([]);
+  const [loadingCities, setLoadingCities] = useState(false);
+
   // ------------------- CAMPOS CANDIDATO -------------------
   const [fullName, setFullName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [birthDate, setBirthDate] = useState("");
+  const [socialName, setSocialName] = useState("");
+  const [cpf, setCpf] = useState("");
+  const [rg, setRg] = useState("");
   const [email, setEmail] = useState("");
+  const [confirmEmail, setConfirmEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [phone, setPhone] = useState("");
+  const [state, setState] = useState("");
+  const [city, setCity] = useState("");
 
   // ------------------- CAMPOS EMPRESA -------------------
   const [companyName, setCompanyName] = useState("");
   const [cnpj, setCnpj] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [phone, setPhone] = useState("");
   const [position, setPosition] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [diversity, setDiversity] = useState<"sim" | "nao" | null>(null);
+
+  // ------------------- CARREGAR ESTADOS -------------------
+  useEffect(() => {
+    fetch("https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome")
+      .then((res) => res.json())
+      .then((data) => setStates(data))
+      .catch((err) => console.error("Erro ao carregar estados:", err));
+  }, []);
+
+  // ------------------- CARREGAR CIDADES AO SELECIONAR ESTADO -------------------
+  useEffect(() => {
+    if (!state) {
+      setCities([]);
+      setCity("");
+      return;
+    }
+
+    setLoadingCities(true);
+    fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${state}/municipios?orderBy=nome`)
+      .then((res) => res.json())
+      .then((data) => {
+        setCities(data);
+        setLoadingCities(false);
+      })
+      .catch((err) => {
+        console.error("Erro ao carregar cidades:", err);
+        setLoadingCities(false);
+      });
+  }, [state]);
 
   // ------------------- VERIFICA SESSÃO -------------------
   useEffect(() => {
@@ -40,6 +91,25 @@ export default function Register() {
   // ------------------- FUNÇÃO DE CADASTRO -------------------
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (email !== confirmEmail) {
+      toast({
+        title: "Erro",
+        description: "Os emails não coincidem.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      toast({
+        title: "Erro",
+        description: "As senhas não coincidem.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -49,16 +119,23 @@ export default function Register() {
         options: {
           emailRedirectTo: `${window.location.origin}/`,
           data: {
-            full_name: fullName,
+            full_name: role === "candidate" ? `${fullName} ${lastName}` : fullName,
             role,
+            state,
+            city,
             ...(role === "company" && {
               company_name: companyName,
               cnpj,
-              city,
-              state,
               phone,
               position,
               diversity,
+            }),
+            ...(role === "candidate" && {
+              birth_date: birthDate,
+              social_name: socialName,
+              cpf,
+              rg,
+              phone,
             }),
           },
         },
@@ -72,9 +149,10 @@ export default function Register() {
       });
 
       navigate("/auth");
-    } catch {
+    } catch (error: any) {
       toast({
         title: "Erro no cadastro",
+        description: error.message || "Ocorreu um erro ao realizar o cadastro.",
         variant: "destructive",
       });
     } finally {
@@ -91,10 +169,11 @@ export default function Register() {
       <div className="flex flex-col md:flex-row gap-6">
         <div
           onClick={() => setRole("candidate")}
-          className={`cursor-pointer p-6 rounded-2xl text-center w-56 transition ${role === "candidate"
-            ? "bg-green-300 text-black"
-            : "bg-white/20 text-white"
-            }`}
+          className={`cursor-pointer p-6 rounded-2xl text-center w-56 transition ${
+            role === "candidate"
+              ? "bg-green-300 text-black"
+              : "bg-white/20 text-white"
+          }`}
         >
           <p className="text-5xl mb-2">👩‍💻</p>
           <p className="font-semibold">Sou um(a) candidato(a)</p>
@@ -102,10 +181,11 @@ export default function Register() {
 
         <div
           onClick={() => setRole("company")}
-          className={`cursor-pointer p-6 rounded-2xl text-center w-56 transition ${role === "company"
-            ? "bg-green-300 text-black"
-            : "bg-white/20 text-white"
-            }`}
+          className={`cursor-pointer p-6 rounded-2xl text-center w-56 transition ${
+            role === "company"
+              ? "bg-green-300 text-black"
+              : "bg-white/20 text-white"
+          }`}
         >
           <p className="text-5xl mb-2">🏢</p>
           <p className="font-semibold">Sou uma empresa</p>
@@ -197,221 +277,184 @@ export default function Register() {
       )}
     </div>
   );
-  // formulário
-  const Step6Candidate = ({
-    email,
-    setEmail,
-    handleRegister,
-  }) => {
-    const [fullName, setFullName] = React.useState("");
-    const [lastName, setLastName] = React.useState("");
-    const [birthDate, setBirthDate] = React.useState("");
-    const [socialName, setSocialName] = React.useState("");
-    const [cpf, setCpf] = React.useState("");
-    const [rg, setRg] = React.useState("");
-    const [city, setCity] = React.useState("");
-    const [state, setState] = React.useState("");
-    const [phone, setPhone] = React.useState("");
-    const [confirmEmail, setConfirmEmail] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const [password, setPassword] = useState("");
 
+  const Step6Candidate = () => (
+    <form onSubmit={(e) => { e.preventDefault(); setStep(7); }} className="space-y-6 max-w-4xl mx-auto">
+      <h2 className="text-3xl font-bold text-center text-white mb-6">
+        Cadastramento de Dados
+      </h2>
 
-
-    return (
-      <form onSubmit={handleRegister} className="space-y-6 max-w-4xl mx-auto">
-        <h2 className="text-3xl font-bold text-center text-white mb-6">
-          Cadastramento de Dados
-        </h2>
-
-        <div className="bg-white/20 backdrop-blur-md rounded-2xl p-6 space-y-4">
-          <div className="grid grid-cols-3 gap-4">
-            <div>
-              <label className="block text-white mb-1">Nome</label>
-              <input
-                type="text"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                required
-                className="w-full p-3 rounded-lg border border-gray-300"
-              />
-            </div>
-            <div>
-              <label className="block text-white mb-1">Sobrenome</label>
-              <input
-                type="text"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-                required
-                className="w-full p-3 rounded-lg border border-gray-300"
-              />
-            </div>
-            <div>
-              <label className="block text-white mb-1">Data de Nascimento</label>
-              <input
-                type="date"
-                value={birthDate}
-                onChange={(e) => setBirthDate(e.target.value)}
-                required
-                className="w-full p-3 rounded-lg border border-gray-300"
-              />
-            </div>
-
-            <div className="col-span-3">
-              <label className="block text-white mb-1">Nome Social (se tiver)</label>
-              <input
-                type="text"
-                value={socialName}
-                onChange={(e) => setSocialName(e.target.value)}
-                className="w-full p-3 rounded-lg border border-gray-300"
-              />
-            </div>
-
-            <div>
-              <label className="block text-white mb-1">CPF</label>
-              <input
-                type="text"
-                value={cpf}
-                onChange={(e) => setCpf(e.target.value)}
-                required
-                className="w-full p-3 rounded-lg border border-gray-300"
-              />
-            </div>
-            <div>
-              <label className="block text-white mb-1">RG</label>
-              <input
-                type="text"
-                value={rg}
-                onChange={(e) => setRg(e.target.value)}
-                required
-                className="w-full p-3 rounded-lg border border-gray-300"
-              />
-            </div>
-
-            <div>
-              <label className="block text-white mb-1">Estado (UF)</label>
-              <select
-                value={state}
-                onChange={(e) => setState(e.target.value)}
-                required
-                className="w-full p-3 rounded-lg border border-gray-300 bg-white text-black"
-              >
-                <option value="">Selecione seu estado</option>
-                <option value="AC">Acre (AC)</option>
-                <option value="AL">Alagoas (AL)</option>
-                <option value="AP">Amapá (AP)</option>
-                <option value="AM">Amazonas (AM)</option>
-                <option value="BA">Bahia (BA)</option>
-                <option value="CE">Ceará (CE)</option>
-                <option value="DF">Distrito Federal (DF)</option>
-                <option value="ES">Espírito Santo (ES)</option>
-                <option value="GO">Goiás (GO)</option>
-                <option value="MA">Maranhão (MA)</option>
-                <option value="MT">Mato Grosso (MT)</option>
-                <option value="MS">Mato Grosso do Sul (MS)</option>
-                <option value="MG">Minas Gerais (MG)</option>
-                <option value="PA">Pará (PA)</option>
-                <option value="PB">Paraíba (PB)</option>
-                <option value="PR">Paraná (PR)</option>
-                <option value="PE">Pernambuco (PE)</option>
-                <option value="PI">Piauí (PI)</option>
-                <option value="RJ">Rio de Janeiro (RJ)</option>
-                <option value="RN">Rio Grande do Norte (RN)</option>
-                <option value="RS">Rio Grande do Sul (RS)</option>
-                <option value="RO">Rondônia (RO)</option>
-                <option value="RR">Roraima (RR)</option>
-                <option value="SC">Santa Catarina (SC)</option>
-                <option value="SP">São Paulo (SP)</option>
-                <option value="SE">Sergipe (SE)</option>
-                <option value="TO">Tocantins (TO)</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-white mb-1">Cidade</label>
-              <input
-                type="text"
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                required
-                className="w-full p-3 rounded-lg border border-gray-300"
-              />
-            </div>
-
-            <div>
-              <label className="block text-white mb-1">Telefone/WhatsApp</label>
-              <input
-                type="text"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                required
-                className="w-full p-3 rounded-lg border border-gray-300"
-              />
-            </div>
+      <div className="bg-white/20 backdrop-blur-md rounded-2xl p-6 space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label className="block text-white mb-1">Nome</label>
+            <input
+              type="text"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              required
+              className="w-full p-3 rounded-lg border border-gray-300 text-black"
+            />
+          </div>
+          <div>
+            <label className="block text-white mb-1">Sobrenome</label>
+            <input
+              type="text"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              required
+              className="w-full p-3 rounded-lg border border-gray-300 text-black"
+            />
+          </div>
+          <div>
+            <label className="block text-white mb-1">Data de Nascimento</label>
+            <input
+              type="date"
+              value={birthDate}
+              onChange={(e) => setBirthDate(e.target.value)}
+              required
+              className="w-full p-3 rounded-lg border border-gray-300 text-black"
+            />
           </div>
 
-          {/* SEÇÃO DE EMAIL */}
-          <div className="mt-4">
-            <p className="text-white mb-2">Digite seu email e confirme abaixo:</p>
-            <div className="flex flex-col gap-3">
-              <input
-                type="email"
-                placeholder="Digite seu email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full p-3 rounded-lg border border-gray-300"
-              />
-
-              <input
-                type="email"
-                placeholder="Confirme seu email"
-                value={confirmEmail}
-                onChange={(e) => setConfirmEmail(e.target.value)}
-                required
-                className="w-full p-3 rounded-lg border border-gray-300"
-              />
-            </div>
+          <div className="col-span-1 md:col-span-3">
+            <label className="block text-white mb-1">Nome Social (se tiver)</label>
+            <input
+              type="text"
+              value={socialName}
+              onChange={(e) => setSocialName(e.target.value)}
+              className="w-full p-3 rounded-lg border border-gray-300 text-black"
+            />
           </div>
 
-
-          <div className="grid grid-cols-2 gap-4 mt-4">
-            <div>
-              <label className="block text-white mb-1">Digite sua Senha</label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                minLength={6}
-                className="w-full p-3 rounded-lg border border-gray-300"
-              />
-            </div>
-
-            <div>
-              <label className="block text-white mb-1">Repita sua Senha</label>
-              <input
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-                minLength={6}
-                className="w-full p-3 rounded-lg border border-gray-300"
-              />
-            </div>
+          <div>
+            <label className="block text-white mb-1">CPF</label>
+            <input
+              type="text"
+              value={cpf}
+              onChange={(e) => setCpf(e.target.value)}
+              required
+              className="w-full p-3 rounded-lg border border-gray-300 text-black"
+            />
+          </div>
+          <div>
+            <label className="block text-white mb-1">RG</label>
+            <input
+              type="text"
+              value={rg}
+              onChange={(e) => setRg(e.target.value)}
+              required
+              className="w-full p-3 rounded-lg border border-gray-300 text-black"
+            />
           </div>
 
+          <div>
+            <label className="block text-white mb-1">Estado (UF)</label>
+            <select
+              value={state}
+              onChange={(e) => setState(e.target.value)}
+              required
+              className="w-full p-3 rounded-lg border border-gray-300 bg-white text-black"
+            >
+              <option value="">Selecione seu estado</option>
+              {states.map((st) => (
+                <option key={st.id} value={st.sigla}>
+                  {st.nome} ({st.sigla})
+                </option>
+              ))}
+            </select>
+          </div>
 
-          <button
-            type="button"
-            onClick={() => setStep(7)}  // antes chamava handleRegister
-            className="w-full bg-green-300/80 hover:bg-green-400/80 text-green-900 py-4 rounded-full mt-4 font-semibold"
-          >
-            CONTINUAR E ENVIAR OS DADOS
-          </button>
+          <div>
+            <label className="block text-white mb-1">Cidade</label>
+            <select
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+              required
+              disabled={!state || loadingCities}
+              className="w-full p-3 rounded-lg border border-gray-300 bg-white text-black disabled:opacity-50"
+            >
+              <option value="">
+                {loadingCities ? "Carregando..." : !state ? "Selecione o estado primeiro" : "Selecione sua cidade"}
+              </option>
+              {cities.map((c) => (
+                <option key={c.id} value={c.nome}>
+                  {c.nome}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-white mb-1">Telefone/WhatsApp</label>
+            <input
+              type="text"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              required
+              className="w-full p-3 rounded-lg border border-gray-300 text-black"
+            />
+          </div>
         </div>
-      </form>
-    );
-  };
+
+        <div className="mt-4">
+          <p className="text-white mb-2">Digite seu email e confirme abaixo:</p>
+          <div className="flex flex-col gap-3">
+            <input
+              type="email"
+              placeholder="Digite seu email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full p-3 rounded-lg border border-gray-300 text-black"
+            />
+
+            <input
+              type="email"
+              placeholder="Confirme seu email"
+              value={confirmEmail}
+              onChange={(e) => setConfirmEmail(e.target.value)}
+              required
+              className="w-full p-3 rounded-lg border border-gray-300 text-black"
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          <div>
+            <label className="block text-white mb-1">Digite sua Senha</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              minLength={6}
+              className="w-full p-3 rounded-lg border border-gray-300 text-black"
+            />
+          </div>
+
+          <div>
+            <label className="block text-white mb-1">Repita sua Senha</label>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              minLength={6}
+              className="w-full p-3 rounded-lg border border-gray-300 text-black"
+            />
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          className="w-full bg-green-300/80 hover:bg-green-400/80 text-green-900 py-4 rounded-full mt-4 font-semibold"
+        >
+          CONTINUAR E ENVIAR OS DADOS
+        </button>
+      </div>
+    </form>
+  );
 
   const Step7Terms = () => (
     <div className="text-white space-y-6 max-w-3xl mx-auto text-justify">
@@ -430,7 +473,6 @@ export default function Register() {
           <strong>Um Ambiente Acolhedor e Seguro</strong><br />
           Nosso compromisso é oferecer um espaço livre de preconceito, onde cada pessoa possa se apresentar de forma autêntica, sem medo de julgamento.
           Esta é uma plataforma feita para apoiar quem deseja mostrar sua história, suas habilidades e seu potencial profissional.
-
         </li>
 
         <li>
@@ -454,7 +496,6 @@ export default function Register() {
         <li>
           <strong>Valorização da Jornada</strong><br />
           Seu perfil é o reflexo da sua caminhada: suas formações, suas experiências, suas conquistas. Aqui você terá espaço para mostrar quem é profissionalmente e como chegou até aqui. Acreditamos que cada trajetória importa, e é por isso que a sua história tem lugar especial na nossa rede.
-          Ao continuar, você declara estar de acordo com os termos acima e reafirma seu compromisso em construir, junto com outras pessoas, uma comunidade profissional inclusiva, respeitosa e transformadora.
         </li>
       </ol>
 
@@ -506,7 +547,7 @@ export default function Register() {
 
           <Button
             disabled={!photo}
-            onClick={() => setStep(9)}
+            onClick={handleRegister}
             className="bg-green-300/80 hover:bg-green-400/80 text-green-900 py-3 px-8 rounded-full font-semibold"
           >
             {photo ? "Cadastrar" : "Selecione uma foto primeiro"}
@@ -531,9 +572,6 @@ export default function Register() {
       </Button>
     </div>
   );
-
-
-
 
   // ------------------- FLUXO EMPRESA -------------------
 
@@ -618,219 +656,183 @@ export default function Register() {
     </div>
   );
 
-  // CAMPOS OTIMIZADOS — DIGITAÇÃO FLUÍDA
-  const Step6Company = ({
-    email,
-    setEmail,
-    password,
-    setPassword,
-    handleRegister,
-  }) => {
-    const [companyName, setCompanyName] = React.useState("");
-    const [fullName, setFullName] = React.useState("");
-    const [cnpj, setCnpj] = React.useState("");
-    const [position, setPosition] = React.useState("");
-    const [city, setCity] = React.useState("");
-    const [state, setState] = React.useState("");
-    const [phone, setPhone] = React.useState("");
-    const [confirmPassword, setConfirmPassword] = React.useState("");
-    const [diversity, setDiversity] = React.useState<"sim" | "nao" | null>(null);
+  const Step6Company = () => (
+    <form onSubmit={(e) => { e.preventDefault(); setStep(7); }} className="space-y-6 max-w-4xl mx-auto">
+      <h2 className="text-3xl font-bold text-center text-white mb-6">
+        Cadastramento de Empresa
+      </h2>
 
-    return (
-      <form onSubmit={handleRegister} className="space-y-6 max-w-4xl mx-auto">
-        <h2 className="text-3xl font-bold text-center text-white mb-6">
-          Cadastramento de Empresa
-        </h2>
-
-        <div className="bg-white/20 backdrop-blur-md rounded-2xl p-6 space-y-4">
-          <div className="grid grid-cols-3 gap-4">
-            <div>
-              <label className="block text-white mb-1">Nome da Empresa</label>
-              <input
-                type="text"
-                value={companyName}
-                onChange={(e) => setCompanyName(e.target.value)}
-                required
-                className="w-full p-3 rounded-lg border border-gray-300"
-              />
-            </div>
-
-            <div>
-              <label className="block text-white mb-1">Seu Nome</label>
-              <input
-                type="text"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                required
-                className="w-full p-3 rounded-lg border border-gray-300"
-              />
-            </div>
-
-            <div>
-              <label className="block text-white mb-1">CNPJ</label>
-              <input
-                type="text"
-                value={cnpj}
-                onChange={(e) => setCnpj(e.target.value)}
-                required
-                className="w-full p-3 rounded-lg border border-gray-300"
-              />
-            </div>
-
-            <div>
-              <label className="block text-white mb-1">Cargo</label>
-              <input
-                type="text"
-                value={position}
-                onChange={(e) => setPosition(e.target.value)}
-                required
-                className="w-full p-3 rounded-lg border border-gray-300"
-              />
-            </div>
-
-            <div>
-              <label className="block text-white mb-1">Estado (UF)</label>
-              <select
-                value={state}
-                onChange={(e) => setState(e.target.value)}
-                required
-                className="w-full p-3 rounded-lg border border-gray-300 bg-white text-black"
-              >
-                <option value="">Selecione seu estado</option>
-                <option value="AC">Acre (AC)</option>
-                <option value="AL">Alagoas (AL)</option>
-                <option value="AP">Amapá (AP)</option>
-                <option value="AM">Amazonas (AM)</option>
-                <option value="BA">Bahia (BA)</option>
-                <option value="CE">Ceará (CE)</option>
-                <option value="DF">Distrito Federal (DF)</option>
-                <option value="ES">Espírito Santo (ES)</option>
-                <option value="GO">Goiás (GO)</option>
-                <option value="MA">Maranhão (MA)</option>
-                <option value="MT">Mato Grosso (MT)</option>
-                <option value="MS">Mato Grosso do Sul (MS)</option>
-                <option value="MG">Minas Gerais (MG)</option>
-                <option value="PA">Pará (PA)</option>
-                <option value="PB">Paraíba (PB)</option>
-                <option value="PR">Paraná (PR)</option>
-                <option value="PE">Pernambuco (PE)</option>
-                <option value="PI">Piauí (PI)</option>
-                <option value="RJ">Rio de Janeiro (RJ)</option>
-                <option value="RN">Rio Grande do Norte (RN)</option>
-                <option value="RS">Rio Grande do Sul (RS)</option>
-                <option value="RO">Rondônia (RO)</option>
-                <option value="RR">Roraima (RR)</option>
-                <option value="SC">Santa Catarina (SC)</option>
-                <option value="SP">São Paulo (SP)</option>
-                <option value="SE">Sergipe (SE)</option>
-                <option value="TO">Tocantins (TO)</option>
-              </select>
-            </div>
-
-
-            <div>
-              <label className="block text-white mb-1">Cidade</label>
-              <input
-                type="text"
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                required
-                className="w-full p-3 rounded-lg border border-gray-300"
-              />
-            </div>
-
-            
-            <div>
-              <label className="block text-white mb-1">Telefone/WhatsApp</label>
-              <input
-                type="text"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                required
-                className="w-full p-3 rounded-lg border border-gray-300"
-              />
-            </div>
+      <div className="bg-white/20 backdrop-blur-md rounded-2xl p-6 space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label className="block text-white mb-1">Nome da Empresa</label>
+            <input
+              type="text"
+              value={companyName}
+              onChange={(e) => setCompanyName(e.target.value)}
+              required
+              className="w-full p-3 rounded-lg border border-gray-300 text-black"
+            />
           </div>
 
-          {/* EMAIL E SENHA */}
-          <div className="grid grid-cols-2 gap-4 mt-4">
-            <div className="col-span-2">
-              <label className="block text-white mb-1">Email</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full p-3 rounded-lg border border-gray-300"
-              />
-            </div>
-
-            <div>
-              <label className="block text-white mb-1">Senha</label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                minLength={6}
-                className="w-full p-3 rounded-lg border border-gray-300"
-              />
-            </div>
-
-            <div>
-              <label className="block text-white mb-1">Confirmar Senha</label>
-              <input
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-                minLength={6}
-                className="w-full p-3 rounded-lg border border-gray-300"
-              />
-            </div>
+          <div>
+            <label className="block text-white mb-1">Seu Nome</label>
+            <input
+              type="text"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              required
+              className="w-full p-3 rounded-lg border border-gray-300 text-black"
+            />
           </div>
 
-          {/* RADIO */}
-          <div className="mt-4">
-            <label className="block text-white mb-1">
-              Sua empresa possui políticas de diversidade e inclusão?
-            </label>
-            <div className="flex gap-4 mt-1">
-              <label className="flex items-center gap-2 text-white">
-                <input
-                  type="radio"
-                  name="diversity"
-                  value="sim"
-                  checked={diversity === "sim"}
-                  onChange={() => setDiversity("sim")}
-                  className="accent-green-500"
-                />
-                Sim
-              </label>
-              <label className="flex items-center gap-2 text-white">
-                <input
-                  type="radio"
-                  name="diversity"
-                  value="nao"
-                  checked={diversity === "nao"}
-                  onChange={() => setDiversity("nao")}
-                  className="accent-green-500"
-                />
-                Não
-              </label>
-            </div>
+          <div>
+            <label className="block text-white mb-1">CNPJ</label>
+            <input
+              type="text"
+              value={cnpj}
+              onChange={(e) => setCnpj(e.target.value)}
+              required
+              className="w-full p-3 rounded-lg border border-gray-300 text-black"
+            />
           </div>
 
-          <button
-            type="submit"
-            className="w-full bg-green-300/80 hover:bg-green-400/80 text-green-900 py-4 rounded-full mt-4 font-semibold"
-          >
-            CONTINUAR E ENVIAR OS DADOS
-          </button>
+          <div>
+            <label className="block text-white mb-1">Cargo</label>
+            <input
+              type="text"
+              value={position}
+              onChange={(e) => setPosition(e.target.value)}
+              required
+              className="w-full p-3 rounded-lg border border-gray-300 text-black"
+            />
+          </div>
+
+          <div>
+            <label className="block text-white mb-1">Estado (UF)</label>
+            <select
+              value={state}
+              onChange={(e) => setState(e.target.value)}
+              required
+              className="w-full p-3 rounded-lg border border-gray-300 bg-white text-black"
+            >
+              <option value="">Selecione o estado</option>
+              {states.map((st) => (
+                <option key={st.id} value={st.sigla}>
+                  {st.nome} ({st.sigla})
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-white mb-1">Cidade</label>
+            <select
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+              required
+              disabled={!state || loadingCities}
+              className="w-full p-3 rounded-lg border border-gray-300 bg-white text-black disabled:opacity-50"
+            >
+              <option value="">
+                {loadingCities ? "Carregando..." : !state ? "Selecione o estado primeiro" : "Selecione a cidade"}
+              </option>
+              {cities.map((c) => (
+                <option key={c.id} value={c.nome}>
+                  {c.nome}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-white mb-1">Telefone/WhatsApp</label>
+            <input
+              type="text"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              required
+              className="w-full p-3 rounded-lg border border-gray-300 text-black"
+            />
+          </div>
         </div>
-      </form>
-    );
-  };
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          <div className="col-span-1 md:col-span-2">
+            <label className="block text-white mb-1">Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full p-3 rounded-lg border border-gray-300 text-black"
+            />
+          </div>
+
+          <div>
+            <label className="block text-white mb-1">Senha</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              minLength={6}
+              className="w-full p-3 rounded-lg border border-gray-300 text-black"
+            />
+          </div>
+
+          <div>
+            <label className="block text-white mb-1">Confirmar Senha</label>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              minLength={6}
+              className="w-full p-3 rounded-lg border border-gray-300 text-black"
+            />
+          </div>
+        </div>
+
+        <div className="mt-4">
+          <label className="block text-white mb-1">
+            Sua empresa possui políticas de diversidade e inclusão?
+          </label>
+          <div className="flex gap-4 mt-1">
+            <label className="flex items-center gap-2 text-white">
+              <input
+                type="radio"
+                name="diversity"
+                value="sim"
+                checked={diversity === "sim"}
+                onChange={() => setDiversity("sim")}
+                className="accent-green-500"
+              />
+              Sim
+            </label>
+            <label className="flex items-center gap-2 text-white">
+              <input
+                type="radio"
+                name="diversity"
+                value="nao"
+                checked={diversity === "nao"}
+                onChange={() => setDiversity("nao")}
+                className="accent-green-500"
+              />
+              Não
+            </label>
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          className="w-full bg-green-300/80 hover:bg-green-400/80 text-green-900 py-4 rounded-full mt-4 font-semibold"
+        >
+          CONTINUAR E ENVIAR OS DADOS
+        </button>
+      </div>
+    </form>
+  );
 
   const Step7Company = () => (
     <div className="text-white space-y-6 max-w-3xl mx-auto text-justify">
@@ -857,7 +859,7 @@ export default function Register() {
 
       <div className="text-center">
         <Button
-          onClick={handleRegister}
+          onClick={() => setStep(8)}
           className="bg-green-300/80 hover:bg-green-400/80 text-green-900 py-4 px-10 rounded-full font-semibold mt-4 transition-all"
         >
           Concordo com os termos e quero apoiar
@@ -899,7 +901,7 @@ export default function Register() {
 
           <Button
             disabled={!logo}
-            onClick={() => setStep(9)}
+            onClick={handleRegister}
             className="bg-green-300/80 hover:bg-green-400/80 text-green-900 py-3 px-8 rounded-full font-semibold"
           >
             {logo ? "Finalizar cadastro" : "Selecione uma logo"}
@@ -935,15 +937,7 @@ export default function Register() {
         {role === "candidate" && step === 3 && <Step3Candidate />}
         {role === "candidate" && step === 4 && <Step4Candidate />}
         {role === "candidate" && step === 5 && <Step5Candidate />}
-        {role === "candidate" && step === 6 && (
-          <Step6Candidate
-            email={email}
-            setEmail={setEmail}
-            password={password}
-            setPassword={setPassword}
-            handleRegister={handleRegister}
-          />
-        )}
+        {role === "candidate" && step === 6 && <Step6Candidate />}
         {role === "candidate" && step === 7 && <Step7Terms />}
         {role === "candidate" && step === 8 && <Step8Photo />}
         {role === "candidate" && step === 9 && <Step9Success />}
@@ -954,6 +948,8 @@ export default function Register() {
         {role === "company" && step === 5 && <Step5Company />}
         {role === "company" && step === 6 && <Step6Company />}
         {role === "company" && step === 7 && <Step7Company />}
+        {role === "company" && step === 8 && <Step8Company />}
+        {role === "company" && step === 9 && <Step9Company />}
       </div>
     </div>
   );

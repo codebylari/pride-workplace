@@ -16,32 +16,38 @@ export type Database = {
     Tables: {
       company_profiles: {
         Row: {
+          city: string | null
           cnpj: string
           created_at: string
           description: string | null
           fantasy_name: string
           id: string
           sector: string | null
+          state: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
+          city?: string | null
           cnpj: string
           created_at?: string
           description?: string | null
           fantasy_name: string
           id?: string
           sector?: string | null
+          state?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
+          city?: string | null
           cnpj?: string
           created_at?: string
           description?: string | null
           fantasy_name?: string
           id?: string
           sector?: string | null
+          state?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -49,21 +55,27 @@ export type Database = {
       }
       profiles: {
         Row: {
+          city: string | null
           created_at: string
           full_name: string
           id: string
+          state: string | null
           updated_at: string
         }
         Insert: {
+          city?: string | null
           created_at?: string
           full_name: string
           id: string
+          state?: string | null
           updated_at?: string
         }
         Update: {
+          city?: string | null
           created_at?: string
           full_name?: string
           id?: string
+          state?: string | null
           updated_at?: string
         }
         Relationships: []
