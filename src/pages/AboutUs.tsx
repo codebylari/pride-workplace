@@ -124,90 +124,72 @@ export default function AboutUs() {
       )}
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-12 max-w-7xl">
-        <div className="space-y-12">
-          {/* Page Title */}
-          <h1 className="text-4xl font-bold text-center text-gray-800 mb-12">
-            Quem Somos
-          </h1>
+      <main className="container mx-auto px-6 py-16 max-w-6xl">
+        {/* Page Title */}
+        <h1 className="text-4xl font-bold text-center text-gray-800 mb-16">
+          Quem Somos
+        </h1>
 
-          {/* Main Content Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* About Text Card */}
-            <div className="bg-gradient-to-br from-pink-100 to-pink-200 rounded-3xl p-8 shadow-lg animate-fade-in">
-              <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-                Quem somos
-              </h2>
-              
-              <div className="space-y-4 text-gray-700 text-justify leading-relaxed">
-                <p>
-                  Somos uma plataforma criada com o propósito de fortalecer a presença de mulheres e pessoas da comunidade LGBTIAPN+ no mercado de Tecnologia da Informação.
-                </p>
-                
-                <p>
-                  Nosso objetivo é oferecer um espaço seguro, inclusivo e especializado para a divulgação de oportunidades de trabalho temporário, conectando profissionais qualificados a empresas que compartilham dos mesmos valores de respeito e diversidade.
-                </p>
-                
-                <p>
-                  Acreditamos que a tecnologia pode e deve ser um instrumento de transformação social.
-                </p>
-                
-                <p>
-                  Mais do que uma plataforma de trabalho, somos uma comunidade que apoia, acolhe e incentiva o crescimento profissional de cada pessoa usuária.
-                </p>
-              </div>
-            </div>
+        {/* About Section */}
+        <div className="bg-white rounded-2xl shadow-sm p-12 mb-12 animate-fade-in">
+          <div className="prose prose-lg max-w-none">
+            <p className="text-gray-700 leading-relaxed text-justify mb-6">
+              Somos uma plataforma criada com o propósito de fortalecer a presença de mulheres e pessoas da comunidade LGBTIAPN+ no mercado de Tecnologia da Informação.
+            </p>
+            
+            <p className="text-gray-700 leading-relaxed text-justify mb-6">
+              Nosso objetivo é oferecer um espaço seguro, inclusivo e especializado para a divulgação de oportunidades de trabalho temporário, conectando profissionais qualificados a empresas que compartilham dos mesmos valores de respeito e diversidade.
+            </p>
+            
+            <p className="text-gray-700 leading-relaxed text-justify mb-6">
+              Acreditamos que a tecnologia pode e deve ser um instrumento de transformação social.
+            </p>
+            
+            <p className="text-gray-700 leading-relaxed text-justify">
+              Mais do que uma plataforma de trabalho, somos uma comunidade que apoia, acolhe e incentiva o crescimento profissional de cada pessoa usuária.
+            </p>
+          </div>
+        </div>
 
-            {/* Team & Partners Section */}
-            <div className="space-y-8">
-              {/* Team Card */}
-              <div className="bg-white rounded-3xl p-8 shadow-lg animate-fade-in" style={{ animationDelay: '0.1s' }}>
-                <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
-                  Nossa Equipe
-                </h2>
-                
-                <p className="text-gray-700 text-center leading-relaxed">
-                  Alunos do terceiro período de Sistemas de Informação, Engenharia de Software e Tecnologia de Análise e Desenvolvimento de Sistemas: <strong>Adryel Costa, Bruno Araujo, Larissa Soeiro e Rafaella Costa</strong>
-                </p>
-              </div>
+        {/* Team Section */}
+        <div className="bg-white rounded-2xl shadow-sm p-12 mb-12 animate-fade-in" style={{ animationDelay: '0.1s' }}>
+          <h2 className="text-2xl font-semibold text-gray-800 mb-8 text-center">
+            Nossa Equipe
+          </h2>
+          
+          <p className="text-gray-700 text-center leading-relaxed max-w-3xl mx-auto">
+            Alunos do terceiro período de Sistemas de Informação, Engenharia de Software e Tecnologia de Análise e Desenvolvimento de Sistemas: Adryel Costa, Bruno Araujo, Larissa Soeiro e Rafaella Costa
+          </p>
+        </div>
 
-              {/* Partners Card */}
-              <div className="bg-white rounded-3xl p-8 shadow-lg animate-fade-in" style={{ animationDelay: '0.2s' }}>
-                <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-                  Nossas Parcerias
-                </h2>
-                
-                <div className="flex justify-center">
-                  <div className="bg-white p-4 rounded-xl shadow-md">
-                    <div className="text-center space-y-2">
-                      <div className="text-5xl font-bold">
-                        <span className="text-red-600">U</span>
-                        <span className="text-blue-600">niSales</span>
-                      </div>
-                      <p className="text-sm text-gray-600">Centro Universitário Salesiano</p>
-                    </div>
-                  </div>
-                </div>
+        {/* Partners Section */}
+        <div className="bg-white rounded-2xl shadow-sm p-12 mb-12 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+          <h2 className="text-2xl font-semibold text-gray-800 mb-8 text-center">
+            Nossas Parcerias
+          </h2>
+          
+          <div className="flex justify-center">
+            <div className="text-center">
+              <div className="text-6xl font-bold mb-2">
+                <span className="text-red-600">U</span>
+                <span className="text-blue-600">niSales</span>
               </div>
+              <p className="text-gray-600">Centro Universitário Salesiano</p>
             </div>
           </div>
+        </div>
 
-          {/* Logo Section */}
-          <div className="flex justify-center mt-12 animate-fade-in" style={{ animationDelay: '0.3s' }}>
-            <div className="text-center">
-              <div className="inline-block bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 p-1 rounded-3xl shadow-xl">
-                <div className="bg-white rounded-3xl px-12 py-6">
-                  <div className="text-6xl font-bold">
-                    <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-                      QueerCode
-                    </span>
-                  </div>
-                  <div className="text-lg text-gray-600 mt-2">
-                    Diversidade em Tecnologia
-                  </div>
-                </div>
-              </div>
+        {/* Logo Section */}
+        <div className="flex justify-center animate-fade-in" style={{ animationDelay: '0.3s' }}>
+          <div className="text-center py-8">
+            <div className="text-7xl font-bold mb-3">
+              <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                QueerCode
+              </span>
             </div>
+            <p className="text-gray-600 text-lg">
+              Diversidade em Tecnologia
+            </p>
           </div>
         </div>
       </main>
