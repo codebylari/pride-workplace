@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, Bell, MapPin, Users } from "lucide-react";
+import { Menu, Bell, MapPin, Users, Briefcase, User, Settings, Headset, Info, FileText, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/useAuth";
@@ -89,6 +89,9 @@ export default function CandidateDashboard() {
   const [currentPage, setCurrentPage] = useState(1);
   const jobsPerPage = 9;
 
+  // Get user name from metadata
+  const userName = user?.user_metadata?.full_name || "Usuário";
+
   // Calculate pagination
   const indexOfLastJob = currentPage * jobsPerPage;
   const indexOfFirstJob = indexOfLastJob - jobsPerPage;
@@ -120,30 +123,65 @@ export default function CandidateDashboard() {
       {showSidebar && (
         <div className="fixed inset-0 z-50 bg-black/50" onClick={() => setShowSidebar(false)}>
           <div 
-            className="absolute left-0 top-0 h-full w-64 bg-white shadow-xl p-6"
+            className="absolute left-0 top-0 h-full w-80 bg-gradient-to-b from-purple-400 via-purple-500 to-purple-600 shadow-xl text-white flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            <h2 className="text-xl font-bold mb-6">Menu</h2>
-            <nav className="space-y-4">
-              <button className="w-full text-left p-3 hover:bg-gray-100 rounded-lg">
-                Minhas Candidaturas
+            {/* Profile Section */}
+            <div className="p-6 flex items-center gap-4 border-b border-white/20">
+              <div className="w-20 h-20 rounded-full bg-gray-300 overflow-hidden border-4 border-white/30">
+                <div className="w-full h-full bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center text-2xl font-bold text-white">
+                  {userName.charAt(0).toUpperCase()}
+                </div>
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold">{userName}</h2>
+                <p className="text-sm text-white/80">candidato (a)</p>
+              </div>
+            </div>
+
+            {/* Menu Items */}
+            <nav className="flex-1 py-6 px-4 space-y-2">
+              <button className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left">
+                <Briefcase size={24} />
+                <span className="text-lg">Vagas</span>
               </button>
-              <button className="w-full text-left p-3 hover:bg-gray-100 rounded-lg">
-                Vagas Salvas
+              
+              <button className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left">
+                <User size={24} />
+                <span className="text-lg">Meu Perfil</span>
               </button>
-              <button className="w-full text-left p-3 hover:bg-gray-100 rounded-lg">
-                Meu Perfil
+              
+              <button className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left">
+                <Settings size={24} />
+                <span className="text-lg">Configurações</span>
               </button>
-              <button className="w-full text-left p-3 hover:bg-gray-100 rounded-lg">
-                Configurações
+              
+              <button className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left">
+                <Headset size={24} />
+                <span className="text-lg">Suporte</span>
               </button>
-              <button 
-                onClick={handleLogout}
-                className="w-full text-left p-3 hover:bg-gray-100 rounded-lg text-red-600"
-              >
-                Sair
+              
+              <button className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left">
+                <Info size={24} />
+                <span className="text-lg">Quem Somos</span>
+              </button>
+              
+              <button className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left">
+                <FileText size={24} />
+                <span className="text-lg">Termos de Uso</span>
               </button>
             </nav>
+
+            {/* Logout Button at Bottom */}
+            <div className="p-4 border-t border-white/20">
+              <button 
+                onClick={handleLogout}
+                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
+              >
+                <LogOut size={24} />
+                <span className="text-lg">Sair</span>
+              </button>
+            </div>
           </div>
         </div>
       )}
