@@ -37,7 +37,6 @@ export default function Register() {
   const [cpf, setCpf] = useState("");
   const [rg, setRg] = useState("");
   const [email, setEmail] = useState("");
-  const [confirmEmail, setConfirmEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [phone, setPhone] = useState("");
@@ -91,15 +90,6 @@ export default function Register() {
   // ------------------- FUNÇÃO DE CADASTRO -------------------
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (email !== confirmEmail) {
-      toast({
-        title: "Erro",
-        description: "Os emails não coincidem.",
-        variant: "destructive",
-      });
-      return;
-    }
 
     if (password !== confirmPassword) {
       toast({
@@ -278,7 +268,7 @@ export default function Register() {
     </div>
   );
 
-  const Step6Candidate = () => {
+  const Step6Candidate = React.useMemo(() => {
     const handleSubmit = (e: React.FormEvent) => {
       e.preventDefault();
       setStep(7);
@@ -404,26 +394,15 @@ export default function Register() {
           </div>
 
           <div className="mt-4">
-            <p className="text-white mb-2">Digite seu email e confirme abaixo:</p>
-            <div className="flex flex-col gap-3">
-              <input
-                type="email"
-                placeholder="Digite seu email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full p-3 rounded-lg border border-gray-300 text-black"
-              />
-
-              <input
-                type="email"
-                placeholder="Confirme seu email"
-                value={confirmEmail}
-                onChange={(e) => setConfirmEmail(e.target.value)}
-                required
-                className="w-full p-3 rounded-lg border border-gray-300 text-black"
-              />
-            </div>
+            <label className="block text-white mb-2">Email</label>
+            <input
+              type="email"
+              placeholder="Digite seu email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full p-3 rounded-lg border border-gray-300 text-black"
+            />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
@@ -461,7 +440,7 @@ export default function Register() {
         </div>
       </form>
     );
-  };
+  }, [fullName, lastName, birthDate, socialName, cpf, rg, email, password, confirmPassword, phone, state, city, states, cities, loadingCities]);
 
   const Step7Terms = () => (
     <div className="text-white space-y-6 max-w-3xl mx-auto text-justify">
@@ -663,7 +642,7 @@ export default function Register() {
     </div>
   );
 
-  const Step6Company = () => {
+  const Step6Company = React.useMemo(() => {
     const handleSubmit = (e: React.FormEvent) => {
       e.preventDefault();
       setStep(7);
@@ -846,7 +825,7 @@ export default function Register() {
         </div>
       </form>
     );
-  };
+  }, [companyName, fullName, cnpj, position, email, password, confirmPassword, phone, state, city, diversity, states, cities, loadingCities]);
 
   const Step7Company = () => (
     <div className="text-white space-y-6 max-w-3xl mx-auto text-justify">
@@ -951,7 +930,7 @@ export default function Register() {
         {role === "candidate" && step === 3 && <Step3Candidate />}
         {role === "candidate" && step === 4 && <Step4Candidate />}
         {role === "candidate" && step === 5 && <Step5Candidate />}
-        {role === "candidate" && step === 6 && <Step6Candidate />}
+        {role === "candidate" && step === 6 && Step6Candidate}
         {role === "candidate" && step === 7 && <Step7Terms />}
         {role === "candidate" && step === 8 && <Step8Photo />}
         {role === "candidate" && step === 9 && <Step9Success />}
@@ -960,7 +939,7 @@ export default function Register() {
         {role === "company" && step === 3 && <Step3Company />}
         {role === "company" && step === 4 && <Step4Company />}
         {role === "company" && step === 5 && <Step5Company />}
-        {role === "company" && step === 6 && <Step6Company />}
+        {role === "company" && step === 6 && Step6Company}
         {role === "company" && step === 7 && <Step7Company />}
         {role === "company" && step === 8 && <Step8Company />}
         {role === "company" && step === 9 && <Step9Company />}
