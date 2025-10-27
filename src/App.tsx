@@ -52,6 +52,9 @@ import TermsCompany from "./pages/TermsCompany";
 import Settings from "./pages/Settings";
 // Página de Configurações
 
+import Account from "./pages/Account";
+// Página de Conta
+
 import NotFound from "./pages/NotFound";
 // Página exibida quando a rota não existe (erro 404)
 
@@ -106,6 +109,9 @@ const App = () => (
             
             <Route path="/settings" element={<Settings />} />
             {/* Página de Configurações */}
+            
+            <Route path="/account" element={<Account />} />
+            {/* Página de Conta */}
             
             <Route path="/" element={<Index />} />
             {/* Página inicial (protegida) */}

@@ -1,31 +1,22 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Menu, Bell } from "lucide-react";
-import { Switch } from "@/components/ui/switch";
 import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
 import { useTheme } from "@/contexts/ThemeContext";
 
-export default function Settings() {
+export default function Account() {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
   const [showSidebar, setShowSidebar] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
-  
-  // Settings state
-  const [notifications, setNotifications] = useState(true);
-  const [emailNotifications, setEmailNotifications] = useState(true);
-  const { darkMode, setDarkMode } = useTheme();
+  const { darkMode } = useTheme();
 
   const isCompany = user?.user_metadata?.user_type === "company";
   const displayName = isCompany 
     ? user?.user_metadata?.company_name || "Nome da Empresa"
     : user?.user_metadata?.full_name || "Nome do Usuário";
 
-  // Toggle dark mode via global ThemeContext
-  const handleDarkModeToggle = (checked: boolean) => {
-    setDarkMode(checked);
-  };
   const handleLogout = async () => {
     await signOut();
     navigate("/auth");
@@ -117,7 +108,7 @@ export default function Settings() {
                   setShowSidebar(false);
                   navigate("/settings");
                 }}
-                className="w-full flex items-center gap-4 p-4 bg-white/10 rounded-lg transition text-left"
+                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
                 <span className="text-lg">Configurações</span>
               </button>
@@ -169,51 +160,54 @@ export default function Settings() {
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto">
           <h1 className={`text-3xl font-bold text-center mb-12 ${darkMode ? "text-white" : "text-gray-900"}`}>
-            Configurações
+            Conta
           </h1>
 
           <div className="space-y-6">
-            {/* Notificações */}
-            <div className={`flex justify-between items-center py-4 border-b ${darkMode ? "border-gray-600" : "border-gray-200"}`}>
-              <span className={`text-lg ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-                Notificações
-              </span>
-              <Switch
-                checked={notifications}
-                onCheckedChange={setNotifications}
-              />
-            </div>
-
-            {/* Notificações Email */}
-            <div className={`flex justify-between items-center py-4 border-b ${darkMode ? "border-gray-600" : "border-gray-200"}`}>
-              <span className={`text-lg ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-                Notificações Email
-              </span>
-              <Switch
-                checked={emailNotifications}
-                onCheckedChange={setEmailNotifications}
-              />
-            </div>
-
-            {/* Dark Mode */}
-            <div className={`flex justify-between items-center py-4 border-b ${darkMode ? "border-gray-600" : "border-gray-200"}`}>
-              <span className={`text-lg ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-                Dark mode
-              </span>
-              <Switch
-                checked={darkMode}
-                onCheckedChange={handleDarkModeToggle}
-              />
-            </div>
-
-            {/* Conta */}
+            {/* Alterar senha */}
             <button 
-              onClick={() => navigate("/account")}
-              className={`w-full flex justify-between items-center py-4 border-b ${darkMode ? "border-gray-600 hover:bg-gray-700" : "border-gray-200 hover:bg-gray-100"} transition text-left`}
+              className={`w-full flex justify-between items-center py-4 border-b ${darkMode ? "border-gray-600 text-gray-300 hover:text-white" : "border-gray-200 text-gray-700 hover:text-gray-900"} transition text-left`}
+              onClick={() => {
+                // TODO: Implementar alteração de senha
+                console.log("Alterar senha");
+              }}
             >
-              <span className={`text-lg ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-                Conta
-              </span>
+              <span className="text-lg">Alterar senha</span>
+            </button>
+
+            {/* Alterar email */}
+            <button 
+              className={`w-full flex justify-between items-center py-4 border-b ${darkMode ? "border-gray-600 text-gray-300 hover:text-white" : "border-gray-200 text-gray-700 hover:text-gray-900"} transition text-left`}
+              onClick={() => {
+                // TODO: Implementar alteração de email
+                console.log("Alterar email");
+              }}
+            >
+              <span className="text-lg">Alterar email</span>
+            </button>
+
+            {/* Desativar conta */}
+            <button 
+              className={`w-full flex justify-between items-center py-4 border-b ${darkMode ? "border-gray-600 text-gray-300 hover:text-white" : "border-gray-200 text-gray-700 hover:text-gray-900"} transition text-left`}
+              onClick={() => {
+                // TODO: Implementar desativação de conta
+                console.log("Desativar conta");
+              }}
+            >
+              <span className="text-lg">Desativar conta</span>
+            </button>
+          </div>
+
+          {/* Deletar conta */}
+          <div className="mt-12 pt-12 border-t border-gray-300">
+            <button 
+              className="text-red-600 hover:text-red-700 transition font-medium"
+              onClick={() => {
+                // TODO: Implementar exclusão de conta
+                console.log("Deletar conta");
+              }}
+            >
+              Deletar conta
             </button>
           </div>
         </div>
