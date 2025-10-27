@@ -4,6 +4,7 @@ import { Menu, Bell, Star, Edit2, Briefcase, User, Settings, Headset, Info, File
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
+import { useTheme } from "@/contexts/ThemeContext";
 
 export default function CandidateProfile() {
   const navigate = useNavigate();

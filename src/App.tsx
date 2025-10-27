@@ -13,6 +13,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom"; 
 // Importa o sistema de rotas do React (navegação entre páginas)
 
+import { ThemeProvider } from "./contexts/ThemeContext";
+// Importa o provedor de tema para dark mode global
+
 import Index from "./pages/Index"; 
 // Página principal (rota "/")
 
@@ -59,60 +62,63 @@ const App = () => (
   // Componente principal da aplicação
   <QueryClientProvider client={queryClient}>
     {/* Fornece o contexto do React Query para toda a aplicação */}
-    <TooltipProvider>
-      {/* Fornece o contexto para tooltips (dicas de interface) */}
-      <Toaster />
-      {/* Componente de notificações padrão */}
-      <Sonner />
-      {/* Outro sistema de notificações (personalizado) */}
-      <BrowserRouter>
-        {/* Habilita o roteamento baseado em URLs */}
-        <Routes>
-          {/* Define as rotas da aplicação */}
-          <Route path="/auth" element={<Auth />} />
-          {/* Página de login */}
-          
-          <Route path="/register" element={<Register />} />
-          {/* Página de cadastro */}
-          
-          <Route path="/company-dashboard" element={<CompanyDashboard />} />
-          {/* Dashboard da empresa */}
-          
-          <Route path="/candidate-dashboard" element={<CandidateDashboard />} />
-          {/* Dashboard do candidato */}
-          
-          <Route path="/candidate-profile" element={<CandidateProfile />} />
-          {/* Perfil do candidato */}
-          
-          <Route path="/company-profile" element={<CompanyProfile />} />
-          {/* Perfil da empresa */}
-          
-          <Route path="/about" element={<AboutUs />} />
-          {/* Página Quem Somos */}
-          
-          <Route path="/support" element={<Support />} />
-          {/* Página de Suporte */}
-          
-          <Route path="/terms-candidate" element={<TermsCandidate />} />
-          {/* Termos de Uso - Candidatos */}
-          
-          <Route path="/terms-company" element={<TermsCompany />} />
-          {/* Termos de Uso - Empresas */}
-          
-          <Route path="/settings" element={<Settings />} />
-          {/* Página de Configurações */}
-          
-          <Route path="/" element={<Index />} />
-          {/* Página inicial (protegida) */}
-          
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          {/* Comentário lembrando que novas rotas devem vir antes da rota coringa */}
-          
-          <Route path="*" element={<NotFound />} />
-          {/* Rota coringa ("*") para páginas não encontradas */}
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+    <ThemeProvider>
+      {/* Fornece o contexto de tema (dark mode) para toda a aplicação */}
+      <TooltipProvider>
+        {/* Fornece o contexto para tooltips (dicas de interface) */}
+        <Toaster />
+        {/* Componente de notificações padrão */}
+        <Sonner />
+        {/* Outro sistema de notificações (personalizado) */}
+        <BrowserRouter>
+          {/* Habilita o roteamento baseado em URLs */}
+          <Routes>
+            {/* Define as rotas da aplicação */}
+            <Route path="/auth" element={<Auth />} />
+            {/* Página de login */}
+            
+            <Route path="/register" element={<Register />} />
+            {/* Página de cadastro */}
+            
+            <Route path="/company-dashboard" element={<CompanyDashboard />} />
+            {/* Dashboard da empresa */}
+            
+            <Route path="/candidate-dashboard" element={<CandidateDashboard />} />
+            {/* Dashboard do candidato */}
+            
+            <Route path="/candidate-profile" element={<CandidateProfile />} />
+            {/* Perfil do candidato */}
+            
+            <Route path="/company-profile" element={<CompanyProfile />} />
+            {/* Perfil da empresa */}
+            
+            <Route path="/about" element={<AboutUs />} />
+            {/* Página Quem Somos */}
+            
+            <Route path="/support" element={<Support />} />
+            {/* Página de Suporte */}
+            
+            <Route path="/terms-candidate" element={<TermsCandidate />} />
+            {/* Termos de Uso - Candidatos */}
+            
+            <Route path="/terms-company" element={<TermsCompany />} />
+            {/* Termos de Uso - Empresas */}
+            
+            <Route path="/settings" element={<Settings />} />
+            {/* Página de Configurações */}
+            
+            <Route path="/" element={<Index />} />
+            {/* Página inicial (protegida) */}
+            
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            {/* Comentário lembrando que novas rotas devem vir antes da rota coringa */}
+            
+            <Route path="*" element={<NotFound />} />
+            {/* Rota coringa ("*") para páginas não encontradas */}
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </ThemeProvider>
   </QueryClientProvider>
 );
 

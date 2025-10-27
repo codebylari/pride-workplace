@@ -4,6 +4,7 @@ import { Menu, Bell, Star, Edit, Briefcase, PlusCircle, User, Settings, Headset,
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
+import { useTheme } from "@/contexts/ThemeContext";
 
 export default function CompanyProfile() {
   const navigate = useNavigate();
