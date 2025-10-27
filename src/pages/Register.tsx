@@ -145,7 +145,7 @@ export default function Register() {
       if (role === "company") {
         navigate("/company-dashboard");
       } else {
-        navigate("/");
+        navigate("/candidate-dashboard");
       }
     } catch (error: any) {
       toast({

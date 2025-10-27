@@ -54,7 +54,7 @@ export default function Auth() {
       if (roleData?.role === "company") {
         navigate("/company-dashboard");
       } else {
-        navigate("/");
+        navigate("/candidate-dashboard");
       }
     }
   };
