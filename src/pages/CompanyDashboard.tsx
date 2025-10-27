@@ -1,16 +1,21 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, Bell, Bot } from "lucide-react";
+import { Menu, Bell, Bot, Briefcase, PlusCircle, User, Settings, Headset, Info, FileText, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 
 export default function CompanyDashboard() {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const [showSidebar, setShowSidebar] = useState(false);
 
   // Extract company name from user metadata
   const companyName = user?.user_metadata?.company_name || "Empresa";
+
+  const handleLogout = async () => {
+    await signOut();
+    navigate("/auth");
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -32,30 +37,70 @@ export default function CompanyDashboard() {
       {showSidebar && (
         <div className="fixed inset-0 z-50 bg-black/50" onClick={() => setShowSidebar(false)}>
           <div 
-            className="absolute left-0 top-0 h-full w-64 bg-white shadow-xl p-6"
+            className="absolute left-0 top-0 h-full w-80 bg-gradient-to-b from-purple-400 via-purple-500 to-purple-600 shadow-xl text-white flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            <h2 className="text-xl font-bold mb-6">Menu</h2>
-            <nav className="space-y-4">
-              <button className="w-full text-left p-3 hover:bg-gray-100 rounded-lg">
-                Dashboard
+            {/* Profile Section */}
+            <div className="p-6 space-y-2 border-b border-white/20">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center">
+                  <span className="text-xs font-bold text-black">ML</span>
+                </div>
+                <div>
+                  <h2 className="text-xl font-semibold">{companyName}</h2>
+                  <p className="text-sm text-white/80">empresa</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Menu Items */}
+            <nav className="flex-1 py-6 px-4 space-y-2">
+              <button className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left">
+                <Briefcase size={24} />
+                <span className="text-lg">Vagas</span>
               </button>
-              <button className="w-full text-left p-3 hover:bg-gray-100 rounded-lg">
-                Minhas Vagas
+              
+              <button className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left">
+                <PlusCircle size={24} />
+                <span className="text-lg">Cadastrar Vagas</span>
               </button>
-              <button className="w-full text-left p-3 hover:bg-gray-100 rounded-lg">
-                Candidatos
+              
+              <button className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left">
+                <User size={24} />
+                <span className="text-lg">Meu Perfil</span>
               </button>
-              <button className="w-full text-left p-3 hover:bg-gray-100 rounded-lg">
-                Configurações
+              
+              <button className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left">
+                <Settings size={24} />
+                <span className="text-lg">Configurações</span>
               </button>
-              <button 
-                onClick={() => navigate("/")}
-                className="w-full text-left p-3 hover:bg-gray-100 rounded-lg text-red-600"
-              >
-                Sair
+              
+              <button className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left">
+                <Headset size={24} />
+                <span className="text-lg">Suporte</span>
+              </button>
+              
+              <button className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left">
+                <Info size={24} />
+                <span className="text-lg">Quem Somos</span>
+              </button>
+              
+              <button className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left">
+                <FileText size={24} />
+                <span className="text-lg">Termos de Uso</span>
               </button>
             </nav>
+
+            {/* Logout Button at Bottom */}
+            <div className="p-4 border-t border-white/20">
+              <button 
+                onClick={handleLogout}
+                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
+              >
+                <LogOut size={24} />
+                <span className="text-lg">Sair</span>
+              </button>
+            </div>
           </div>
         </div>
       )}
