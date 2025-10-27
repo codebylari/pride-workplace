@@ -7,6 +7,7 @@ export default function AboutUs() {
   const navigate = useNavigate();
   const { user, signOut, userRole } = useAuth();
   const [showSidebar, setShowSidebar] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   const userName = user?.user_metadata?.full_name || user?.user_metadata?.company_name || "Usuário";
   const isCompany = userRole === "company";
@@ -27,9 +28,32 @@ export default function AboutUs() {
           <Menu size={24} />
         </button>
         
-        <button className="p-2 hover:bg-white/10 rounded-lg transition">
-          <Bell size={24} />
-        </button>
+        <div className="relative">
+          <button 
+            onClick={() => setShowNotifications(!showNotifications)}
+            className="p-2 hover:bg-white/10 rounded-lg transition"
+          >
+            <Bell size={24} />
+          </button>
+          
+          {showNotifications && (
+            <>
+              <div 
+                className="fixed inset-0 z-40" 
+                onClick={() => setShowNotifications(false)}
+              />
+              <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl z-50 animate-fade-in">
+                <div className="p-4 border-b border-gray-200">
+                  <h3 className="font-semibold text-gray-800">Notificações</h3>
+                </div>
+                <div className="p-6 text-center text-gray-500">
+                  <Bell size={48} className="mx-auto mb-3 text-gray-300" />
+                  <p>Sem novas notificações</p>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
       </header>
 
       {/* Sidebar */}
