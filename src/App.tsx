@@ -46,6 +46,9 @@ import TermsCandidate from "./pages/TermsCandidate";
 import TermsCompany from "./pages/TermsCompany";
 // Termos de Uso - Empresas
 
+import Settings from "./pages/Settings";
+// Página de Configurações
+
 import NotFound from "./pages/NotFound";
 // Página exibida quando a rota não existe (erro 404)
 
@@ -95,6 +98,9 @@ const App = () => (
           
           <Route path="/terms-company" element={<TermsCompany />} />
           {/* Termos de Uso - Empresas */}
+          
+          <Route path="/settings" element={<Settings />} />
+          {/* Página de Configurações */}
           
           <Route path="/" element={<Index />} />
           {/* Página inicial (protegida) */}

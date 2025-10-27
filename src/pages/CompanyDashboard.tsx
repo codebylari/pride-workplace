@@ -98,7 +98,13 @@ export default function CompanyDashboard() {
                 <span className="text-lg">Meu Perfil</span>
               </button>
               
-              <button className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left">
+              <button 
+                onClick={() => {
+                  setShowSidebar(false);
+                  navigate("/settings");
+                }}
+                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
+              >
                 <Settings size={24} />
                 <span className="text-lg">Configurações</span>
               </button>

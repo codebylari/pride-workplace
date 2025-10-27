@@ -1,17 +1,44 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, Bell, Star, Edit, Briefcase, PlusCircle, User, Settings, Headset, Info, FileText, LogOut } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Menu, Bell } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
 
-export default function CompanyProfile() {
+export default function Settings() {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
   const [showSidebar, setShowSidebar] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  
+  // Settings state
+  const [notifications, setNotifications] = useState(true);
+  const [emailNotifications, setEmailNotifications] = useState(true);
+  const [darkMode, setDarkMode] = useState(false);
 
-  const companyName = user?.user_metadata?.company_name || "Nome da Empresa";
+  const isCompany = user?.user_metadata?.user_type === "company";
+  const displayName = isCompany 
+    ? user?.user_metadata?.company_name || "Nome da Empresa"
+    : user?.user_metadata?.full_name || "Nome do Usuário";
+
+  // Load dark mode preference
+  useEffect(() => {
+    const savedDarkMode = localStorage.getItem("darkMode") === "true";
+    setDarkMode(savedDarkMode);
+    if (savedDarkMode) {
+      document.documentElement.classList.add("dark");
+    }
+  }, []);
+
+  const handleDarkModeToggle = (checked: boolean) => {
+    setDarkMode(checked);
+    localStorage.setItem("darkMode", checked.toString());
+    if (checked) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  };
 
   const handleLogout = async () => {
     await signOut();
@@ -19,7 +46,7 @@ export default function CompanyProfile() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={`min-h-screen ${darkMode ? "bg-gray-800" : "bg-gray-50"}`}>
       {/* Header */}
       <header className="bg-gradient-to-r from-purple-800 to-purple-600 text-white p-4 flex justify-between items-center">
         <button
@@ -64,47 +91,38 @@ export default function CompanyProfile() {
             className="absolute left-0 top-0 h-full w-80 bg-gradient-to-b from-purple-400 via-purple-500 to-purple-600 shadow-xl text-white flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Profile Section */}
             <div className="p-6 space-y-2 border-b border-white/20">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center">
                   <span className="text-xs font-bold text-black">
-                    {companyName.substring(0, 2).toUpperCase()}
+                    {displayName.substring(0, 2).toUpperCase()}
                   </span>
                 </div>
                 <div>
-                  <h2 className="text-xl font-semibold">{companyName}</h2>
-                  <p className="text-sm text-white/80">empresa</p>
+                  <h2 className="text-xl font-semibold">{displayName}</h2>
+                  <p className="text-sm text-white/80">{isCompany ? "empresa" : "candidato"}</p>
                 </div>
               </div>
             </div>
 
-            {/* Menu Items */}
-            <nav className="flex-1 py-6 px-4 space-y-2">
+            <nav className="flex-1 py-6 px-4 space-y-2 overflow-y-auto">
               <button 
                 onClick={() => {
                   setShowSidebar(false);
-                  navigate("/company-dashboard");
+                  navigate(isCompany ? "/company-dashboard" : "/candidate-dashboard");
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
-                <Briefcase size={24} />
-                <span className="text-lg">Vagas</span>
-              </button>
-              
-              <button className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left">
-                <PlusCircle size={24} />
-                <span className="text-lg">Cadastrar Vagas</span>
+                <span className="text-lg">Dashboard</span>
               </button>
               
               <button 
                 onClick={() => {
                   setShowSidebar(false);
-                  navigate("/company-profile");
+                  navigate(isCompany ? "/company-profile" : "/candidate-profile");
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
-                <User size={24} />
                 <span className="text-lg">Meu Perfil</span>
               </button>
               
@@ -113,9 +131,8 @@ export default function CompanyProfile() {
                   setShowSidebar(false);
                   navigate("/settings");
                 }}
-                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
+                className="w-full flex items-center gap-4 p-4 bg-white/10 rounded-lg transition text-left"
               >
-                <Settings size={24} />
                 <span className="text-lg">Configurações</span>
               </button>
               
@@ -126,7 +143,6 @@ export default function CompanyProfile() {
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
-                <Headset size={24} />
                 <span className="text-lg">Suporte</span>
               </button>
               
@@ -137,29 +153,25 @@ export default function CompanyProfile() {
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
-                <Info size={24} />
                 <span className="text-lg">Quem Somos</span>
               </button>
               
               <button 
                 onClick={() => {
                   setShowSidebar(false);
-                  navigate("/terms-company");
+                  navigate(isCompany ? "/terms-company" : "/terms-candidate");
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
-                <FileText size={24} />
                 <span className="text-lg">Termos de Uso</span>
               </button>
             </nav>
 
-            {/* Logout Button at Bottom */}
             <div className="p-4 border-t border-white/20">
               <button 
                 onClick={handleLogout}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
-                <LogOut size={24} />
                 <span className="text-lg">Sair</span>
               </button>
             </div>
@@ -169,79 +181,55 @@ export default function CompanyProfile() {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto">
-          {/* Profile Card */}
-          <div className="bg-white rounded-3xl shadow-lg p-8">
-            {/* Logo Section */}
-            <div className="flex justify-center mb-6">
-              <div className="relative">
-                <div className="w-32 h-32 bg-yellow-400 rounded-full flex items-center justify-center shadow-lg">
-                  <span className="text-4xl font-bold text-white">
-                    {companyName.substring(0, 2).toUpperCase()}
-                  </span>
-                </div>
-                <button className="absolute bottom-0 right-0 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition">
-                  <Edit size={20} className="text-gray-600" />
-                </button>
-              </div>
+        <div className="max-w-2xl mx-auto">
+          <h1 className={`text-3xl font-bold text-center mb-12 ${darkMode ? "text-white" : "text-gray-900"}`}>
+            Configurações
+          </h1>
+
+          <div className="space-y-6">
+            {/* Notificações */}
+            <div className={`flex justify-between items-center py-4 border-b ${darkMode ? "border-gray-600" : "border-gray-200"}`}>
+              <span className={`text-lg ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+                Notificações
+              </span>
+              <Switch
+                checked={notifications}
+                onCheckedChange={setNotifications}
+              />
             </div>
 
-            {/* Rating */}
-            <div className="flex justify-center items-center gap-2 mb-4">
-              {[1, 2, 3, 4].map((star) => (
-                <Star key={star} size={24} className="fill-green-400 text-green-400" />
-              ))}
-              <Star size={24} className="fill-gray-300 text-gray-300" />
-              <span className="ml-2 text-gray-600 font-semibold">4.5</span>
+            {/* Notificações Email */}
+            <div className={`flex justify-between items-center py-4 border-b ${darkMode ? "border-gray-600" : "border-gray-200"}`}>
+              <span className={`text-lg ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+                Notificações Email
+              </span>
+              <Switch
+                checked={emailNotifications}
+                onCheckedChange={setEmailNotifications}
+              />
             </div>
 
-            {/* Company Name */}
-            <h1 className="text-2xl font-semibold text-center text-gray-800 mb-8">
-              Nome Empresa: {companyName}
-            </h1>
+            {/* Dark Mode */}
+            <div className={`flex justify-between items-center py-4 border-b ${darkMode ? "border-gray-600" : "border-gray-200"}`}>
+              <span className={`text-lg ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+                Dark mode
+              </span>
+              <Switch
+                checked={darkMode}
+                onCheckedChange={handleDarkModeToggle}
+              />
+            </div>
 
-            {/* Action Buttons */}
-            <div className="space-y-4 max-w-md mx-auto">
-              <Button
-                onClick={() => {}}
-                className="w-full bg-pink-300 hover:bg-pink-400 text-white py-6 rounded-full text-lg font-medium shadow-md"
-              >
-                Conheça a Empresa
-              </Button>
-
-              <Button
-                onClick={() => {}}
-                className="w-full bg-pink-300 hover:bg-pink-400 text-white py-6 rounded-full text-lg font-medium shadow-md"
-              >
-                O que buscamos
-              </Button>
-
-              <Button
-                onClick={() => {}}
-                className="w-full bg-pink-300 hover:bg-pink-400 text-white py-6 rounded-full text-lg font-medium shadow-md"
-              >
-                Relatos
-              </Button>
-
-              <Button
-                onClick={() => {}}
-                className="w-full bg-pink-300 hover:bg-pink-400 text-white py-6 rounded-full text-lg font-medium shadow-md"
-              >
-                Formação
-              </Button>
-
-              <Button
-                onClick={() => {}}
-                className="w-full bg-pink-300 hover:bg-pink-400 text-white py-6 rounded-full text-lg font-medium shadow-md"
-              >
-                Vagas Disponíveis
-              </Button>
+            {/* Conta */}
+            <div className={`flex justify-between items-center py-4 border-b ${darkMode ? "border-gray-600" : "border-gray-200"}`}>
+              <span className={`text-lg ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+                Conta
+              </span>
             </div>
           </div>
         </div>
       </main>
       
-      {/* ChatBot */}
       <ChatBot />
     </div>
   );
