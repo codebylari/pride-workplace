@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Menu, Bell } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
+import { useTheme } from "@/contexts/ThemeContext";
 
 export default function Settings() {
   const navigate = useNavigate();
@@ -14,32 +15,17 @@ export default function Settings() {
   // Settings state
   const [notifications, setNotifications] = useState(true);
   const [emailNotifications, setEmailNotifications] = useState(true);
-  const [darkMode, setDarkMode] = useState(false);
+  const { darkMode, setDarkMode } = useTheme();
 
   const isCompany = user?.user_metadata?.user_type === "company";
   const displayName = isCompany 
     ? user?.user_metadata?.company_name || "Nome da Empresa"
     : user?.user_metadata?.full_name || "Nome do Usuário";
 
-  // Load dark mode preference
-  useEffect(() => {
-    const savedDarkMode = localStorage.getItem("darkMode") === "true";
-    setDarkMode(savedDarkMode);
-    if (savedDarkMode) {
-      document.documentElement.classList.add("dark");
-    }
-  }, []);
-
+  // Toggle dark mode via global ThemeContext
   const handleDarkModeToggle = (checked: boolean) => {
     setDarkMode(checked);
-    localStorage.setItem("darkMode", checked.toString());
-    if (checked) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
   };
-
   const handleLogout = async () => {
     await signOut();
     navigate("/auth");

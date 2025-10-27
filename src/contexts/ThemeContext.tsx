@@ -16,6 +16,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     setDarkModeState(savedDarkMode);
     if (savedDarkMode) {
       document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
     }
   }, []);
 
