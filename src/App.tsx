@@ -67,6 +67,9 @@ import DeactivateAccount from "./pages/DeactivateAccount";
 import DeleteAccount from "./pages/DeleteAccount";
 // Página de Deletar Conta
 
+import ForgotPassword from "./pages/ForgotPassword";
+// Página de Recuperar Senha
+
 import NotFound from "./pages/NotFound";
 // Página exibida quando a rota não existe (erro 404)
 
@@ -136,6 +139,9 @@ const App = () => (
             
             <Route path="/delete-account" element={<DeleteAccount />} />
             {/* Página de Deletar Conta */}
+            
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            {/* Página de Recuperar Senha */}
             
             <Route path="/" element={<Index />} />
             {/* Página inicial (protegida) */}
