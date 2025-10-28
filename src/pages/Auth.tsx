@@ -60,157 +60,67 @@ export default function Auth() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden flex items-center justify-center p-6 md:p-8 bg-gradient-to-br from-primary/80 via-primary to-primary/90">
-      {/* Conexões tecnológicas com brilho em todo o fundo */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-15">
-        <svg className="w-full h-full" preserveAspectRatio="xMidYMid slice">
-          <defs>
-            {/* Filtro de brilho para os pontos */}
-            <filter id="glow-auth">
-              <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
-              <feMerge>
-                <feMergeNode in="coloredBlur"/>
-                <feMergeNode in="SourceGraphic"/>
-              </feMerge>
-            </filter>
-          </defs>
-          
-          {/* Pontos com brilho */}
-          <circle cx="10%" cy="15%" r="4" fill="#ffffff" filter="url(#glow-auth)" />
-          <circle cx="25%" cy="12%" r="2" fill="#e5e7eb" />
-          <circle cx="40%" cy="18%" r="5" fill="#ffffff" filter="url(#glow-auth)" />
-          <circle cx="55%" cy="10%" r="2" fill="#e5e7eb" />
-          <circle cx="70%" cy="20%" r="4" fill="#ffffff" filter="url(#glow-auth)" />
-          <circle cx="85%" cy="15%" r="2" fill="#e5e7eb" />
-          
-          <circle cx="15%" cy="30%" r="2" fill="#e5e7eb" />
-          <circle cx="32%" cy="35%" r="5" fill="#ffffff" filter="url(#glow-auth)" />
-          <circle cx="48%" cy="28%" r="2" fill="#e5e7eb" />
-          <circle cx="62%" cy="38%" r="4" fill="#ffffff" filter="url(#glow-auth)" />
-          <circle cx="78%" cy="32%" r="2" fill="#e5e7eb" />
-          <circle cx="90%" cy="35%" r="5" fill="#ffffff" filter="url(#glow-auth)" />
-          
-          <circle cx="8%" cy="50%" r="4" fill="#ffffff" filter="url(#glow-auth)" />
-          <circle cx="22%" cy="48%" r="2" fill="#e5e7eb" />
-          <circle cx="38%" cy="52%" r="5" fill="#ffffff" filter="url(#glow-auth)" />
-          <circle cx="52%" cy="45%" r="2" fill="#e5e7eb" />
-          <circle cx="68%" cy="55%" r="4" fill="#ffffff" filter="url(#glow-auth)" />
-          <circle cx="82%" cy="48%" r="2" fill="#e5e7eb" />
-          
-          <circle cx="12%" cy="68%" r="2" fill="#e5e7eb" />
-          <circle cx="28%" cy="65%" r="5" fill="#ffffff" filter="url(#glow-auth)" />
-          <circle cx="45%" cy="70%" r="2" fill="#e5e7eb" />
-          <circle cx="60%" cy="68%" r="4" fill="#ffffff" filter="url(#glow-auth)" />
-          <circle cx="75%" cy="72%" r="2" fill="#e5e7eb" />
-          <circle cx="88%" cy="65%" r="5" fill="#ffffff" filter="url(#glow-auth)" />
-          
-          <circle cx="18%" cy="85%" r="4" fill="#ffffff" filter="url(#glow-auth)" />
-          <circle cx="35%" cy="88%" r="2" fill="#e5e7eb" />
-          <circle cx="50%" cy="82%" r="5" fill="#ffffff" filter="url(#glow-auth)" />
-          <circle cx="65%" cy="90%" r="2" fill="#e5e7eb" />
-          <circle cx="80%" cy="85%" r="4" fill="#ffffff" filter="url(#glow-auth)" />
-          
-          {/* Linhas de conexão */}
-          <line x1="10%" y1="15%" x2="25%" y2="12%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="25%" y1="12%" x2="40%" y2="18%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="40%" y1="18%" x2="55%" y2="10%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="55%" y1="10%" x2="70%" y2="20%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="70%" y1="20%" x2="85%" y2="15%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          
-          <line x1="10%" y1="15%" x2="15%" y2="30%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="25%" y1="12%" x2="32%" y2="35%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="40%" y1="18%" x2="48%" y2="28%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="55%" y1="10%" x2="62%" y2="38%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="70%" y1="20%" x2="78%" y2="32%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="85%" y1="15%" x2="90%" y2="35%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          
-          <line x1="15%" y1="30%" x2="32%" y2="35%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="32%" y1="35%" x2="48%" y2="28%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="48%" y1="28%" x2="62%" y2="38%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="62%" y1="38%" x2="78%" y2="32%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="78%" y1="32%" x2="90%" y2="35%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          
-          <line x1="15%" y1="30%" x2="8%" y2="50%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="32%" y1="35%" x2="22%" y2="48%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="48%" y1="28%" x2="38%" y2="52%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="62%" y1="38%" x2="52%" y2="45%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="78%" y1="32%" x2="68%" y2="55%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="90%" y1="35%" x2="82%" y2="48%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          
-          <line x1="8%" y1="50%" x2="22%" y2="48%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="22%" y1="48%" x2="38%" y2="52%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="38%" y1="52%" x2="52%" y2="45%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="52%" y1="45%" x2="68%" y2="55%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="68%" y1="55%" x2="82%" y2="48%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          
-          <line x1="8%" y1="50%" x2="12%" y2="68%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="22%" y1="48%" x2="28%" y2="65%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="38%" y1="52%" x2="45%" y2="70%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="52%" y1="45%" x2="60%" y2="68%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="68%" y1="55%" x2="75%" y2="72%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="82%" y1="48%" x2="88%" y2="65%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          
-          <line x1="12%" y1="68%" x2="28%" y2="65%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="28%" y1="65%" x2="45%" y2="70%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="45%" y1="70%" x2="60%" y2="68%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="60%" y1="68%" x2="75%" y2="72%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="75%" y1="72%" x2="88%" y2="65%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          
-          <line x1="12%" y1="68%" x2="18%" y2="85%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="28%" y1="65%" x2="35%" y2="88%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="45%" y1="70%" x2="50%" y2="82%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="60%" y1="68%" x2="65%" y2="90%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="75%" y1="72%" x2="80%" y2="85%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          
-          <line x1="18%" y1="85%" x2="35%" y2="88%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="35%" y1="88%" x2="50%" y2="82%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="50%" y1="82%" x2="65%" y2="90%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-          <line x1="65%" y1="90%" x2="80%" y2="85%" stroke="#ffffff" strokeWidth="0.8" opacity="0.4" />
-        </svg>
+    <div className="min-h-screen relative overflow-hidden flex items-center justify-center p-4 bg-gradient-to-br from-purple-900 via-purple-800 to-purple-900">
+      {/* Elementos decorativos geométricos */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
+        {/* Círculos grandes */}
+        <div className="absolute top-20 left-20 w-64 h-64 rounded-full bg-purple-400/30 blur-3xl"></div>
+        <div className="absolute bottom-32 right-32 w-96 h-96 rounded-full bg-pink-400/20 blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/3 w-72 h-72 rounded-full bg-blue-400/20 blur-3xl"></div>
+        
+        {/* Elementos geométricos menores */}
+        <div className="absolute top-40 right-1/4 w-32 h-32 bg-white/10 rounded-lg rotate-45"></div>
+        <div className="absolute bottom-40 left-1/4 w-24 h-24 bg-white/10 rounded-full"></div>
+        <div className="absolute top-1/3 right-1/3 w-16 h-48 bg-white/5 rounded-lg"></div>
       </div>
 
-      <div className="w-full max-w-7xl grid md:grid-cols-2 gap-12 lg:gap-16 bg-purple-50 rounded-3xl p-8 md:p-16 shadow-2xl border-4 border-primary relative z-10">
+      <div className="w-full max-w-6xl grid md:grid-cols-2 gap-8 relative z-10 px-4">
         {/* Left side - Welcome */}
-        <div className="flex flex-col justify-center items-start space-y-10">
-          <img src={logo} alt="QueerCode Logo" className="w-56 md:w-72 h-auto" />
+        <div className="flex flex-col justify-center items-start space-y-8 text-white">
+          <img src={logo} alt="QueerCode Logo" className="w-16 h-16" />
+          
           <div className="space-y-4">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-gray-800">Bem vindos à plataforma!</h1>
-            <p className="text-lg md:text-xl text-gray-700">Conectando talentos com oportunidades</p>
+            <h1 className="text-5xl md:text-6xl font-bold leading-tight">
+              Bem-vindo!
+            </h1>
+            
+            <div className="w-16 h-1 bg-gradient-to-r from-orange-400 to-pink-500"></div>
+            
+            <p className="text-lg text-purple-200 max-w-md leading-relaxed">
+              Conectando talentos diversos com empresas que valorizam a inclusão e a diversidade no ambiente de trabalho.
+            </p>
           </div>
-          <div className="space-y-5 pt-4">
-            <p className="text-xl text-gray-800">Não possui conta?</p>
-            <Button
-              onClick={() => navigate("/register")}
-              className="bg-[#C1E1C1] hover:bg-[#B0D5B0] text-gray-900 px-10 py-6 rounded-full text-lg font-semibold shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300"
-            >
-              CADASTRAR-SE
-            </Button>
-          </div>
+          
+          <Button
+            onClick={() => navigate("/register")}
+            className="bg-gradient-to-r from-orange-400 to-pink-500 hover:from-orange-500 hover:to-pink-600 text-white px-8 py-6 rounded-full text-base font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+          >
+            Saiba Mais
+          </Button>
         </div>
 
         {/* Right side - Login form */}
         <div className="flex items-center justify-center">
-          <div className="w-full max-w-md bg-white rounded-3xl p-10 space-y-8 border-4 border-primary shadow-2xl relative z-10">
+          <div className="w-full max-w-md bg-purple-800/40 backdrop-blur-lg rounded-3xl p-10 space-y-8 shadow-2xl border border-purple-700/50">
             <div className="text-center space-y-2">
-              <h2 className="text-3xl font-bold text-gray-800">Login</h2>
-              <p className="text-gray-600">Entre com suas credenciais</p>
+              <h2 className="text-3xl font-bold text-white">Sign in</h2>
             </div>
             
             <form onSubmit={handleLogin} className="space-y-6">
-              <div className="space-y-3">
-                <label className="text-gray-700 text-sm font-medium">Email</label>
+              <div className="space-y-2">
+                <label className="text-purple-200 text-sm font-medium">Email</label>
                 <Input
                   type="email"
-                  placeholder="seu.email@exemplo.com"
+                  placeholder="Digite seu email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="bg-gray-50 rounded-xl py-6 text-gray-800 border-2 border-gray-200 focus:ring-2 focus:ring-primary"
+                  className="bg-purple-900/50 backdrop-blur-sm rounded-lg py-6 text-white placeholder:text-purple-300 border border-purple-700/50 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                 />
               </div>
 
-              <div className="space-y-3">
-                <label className="text-gray-700 text-sm font-medium">Senha</label>
+              <div className="space-y-2">
+                <label className="text-purple-200 text-sm font-medium">Senha</label>
                 <div className="relative">
                   <Input
                     type={showPassword ? "text" : "password"}
@@ -218,12 +128,12 @@ export default function Auth() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="bg-gray-50 rounded-xl py-6 text-gray-800 pr-12 border-2 border-gray-200 focus:ring-2 focus:ring-primary"
+                    className="bg-purple-900/50 backdrop-blur-sm rounded-lg py-6 text-white placeholder:text-purple-300 pr-12 border border-purple-700/50 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800 transition-colors"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-purple-300 hover:text-white transition-colors"
                   >
                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
@@ -234,7 +144,7 @@ export default function Auth() {
                 <button
                   type="button"
                   onClick={() => navigate("/forgot-password")}
-                  className="text-primary text-sm underline hover:text-primary/80 transition-colors"
+                  className="text-purple-300 text-sm hover:text-white transition-colors"
                 >
                   Esqueceu sua senha?
                 </button>
@@ -243,10 +153,29 @@ export default function Auth() {
               <Button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-primary hover:bg-primary/90 text-white py-6 rounded-full text-lg font-semibold shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 disabled:opacity-50"
+                className="w-full bg-gradient-to-r from-orange-400 to-pink-500 hover:from-orange-500 hover:to-pink-600 text-white py-6 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50"
               >
-                {loading ? "Entrando..." : "ENTRAR"}
+                {loading ? "Entrando..." : "Entrar"}
               </Button>
+
+              {/* Social Icons */}
+              <div className="flex justify-center items-center gap-6 pt-4">
+                <a href="#" className="text-white hover:text-pink-400 transition-colors">
+                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                  </svg>
+                </a>
+                <a href="#" className="text-white hover:text-pink-400 transition-colors">
+                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                  </svg>
+                </a>
+                <a href="#" className="text-white hover:text-pink-400 transition-colors">
+                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 0c-6.627 0-12 5.372-12 12 0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146 1.124.347 2.317.535 3.554.535 6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/>
+                  </svg>
+                </a>
+              </div>
             </form>
           </div>
         </div>
