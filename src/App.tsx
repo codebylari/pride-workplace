@@ -146,7 +146,13 @@ const App = () => (
             {/* Termos de Uso - Empresas */}
             
             <Route path="/settings" element={<Settings />} />
-            {/* Página de Configurações */}
+            {/* Página de Configurações (redireciona baseado no tipo de usuário) */}
+            
+            <Route path="/company-settings" element={<CompanySettings />} />
+            {/* Página de Configurações da Empresa */}
+            
+            <Route path="/candidate-settings" element={<CandidateSettings />} />
+            {/* Página de Configurações do Candidato */}
             
             <Route path="/account" element={<Account />} />
             {/* Página de Conta */}

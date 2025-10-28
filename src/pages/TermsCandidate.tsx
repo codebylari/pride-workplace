@@ -104,7 +104,7 @@ export default function TermsCandidate() {
               <button 
                 onClick={() => {
                   setShowSidebar(false);
-                  navigate("/settings");
+                  navigate("/candidate-settings");
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
