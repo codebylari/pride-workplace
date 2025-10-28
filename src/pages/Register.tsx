@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Check } from "lucide-react";
 
 interface City {
   id: number;
@@ -711,11 +711,17 @@ export default function Register() {
 
   const Step9Success = () => (
     <div className="flex flex-col items-center text-white space-y-6 text-center">
-      <h2 className="text-4xl font-bold text-green-300">SUCESSO!</h2>
-      <p className="text-lg max-w-md">
-        Perfil criado com sucesso.<br />
-        Agradecemos a sua confiança em nossa plataforma!
-      </p>
+      <div className="w-20 h-20 rounded-full bg-green-500 flex items-center justify-center">
+        <Check className="w-10 h-10 text-white" strokeWidth={3} />
+      </div>
+      
+      <h2 className="text-4xl font-bold text-gray-900">SUCESSO!</h2>
+      
+      <div className="space-y-2">
+        <p className="text-lg text-gray-900">Perfil criado com sucesso.</p>
+        <p className="text-lg text-gray-900">Agradecemos a sua confiança em nossa plataforma!</p>
+      </div>
+      
       <Button
         onClick={() => navigate("/auth")}
         className="bg-green-300/80 hover:bg-green-400/80 text-green-900 py-4 px-10 rounded-full font-semibold"
