@@ -69,11 +69,11 @@ export default function Auth() {
         <div className="absolute top-1/2 left-1/3 w-80 h-80 rounded-full bg-blue-500/15 blur-3xl"></div>
         
         {/* Formas geométricas decorativas */}
-        <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-white/5 rounded-2xl rotate-45 backdrop-blur-sm"></div>
-        <div className="absolute top-1/3 right-1/3 w-24 h-24 bg-white/5 rounded-full backdrop-blur-sm"></div>
-        <div className="absolute bottom-1/3 left-1/2 w-16 h-40 bg-white/5 rounded-xl rotate-12 backdrop-blur-sm"></div>
-        <div className="absolute top-1/2 right-1/4 w-28 h-28 bg-white/5 rounded-2xl -rotate-12 backdrop-blur-sm"></div>
-        <div className="absolute bottom-1/4 right-1/3 w-20 h-20 bg-white/5 rounded-full backdrop-blur-sm"></div>
+        <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-white/5 rounded-2xl rotate-45"></div>
+        <div className="absolute top-1/3 right-1/3 w-24 h-24 bg-white/5 rounded-full"></div>
+        <div className="absolute bottom-1/3 left-1/2 w-16 h-40 bg-white/5 rounded-xl rotate-12"></div>
+        <div className="absolute top-1/2 right-1/4 w-28 h-28 bg-white/5 rounded-2xl -rotate-12"></div>
+        <div className="absolute bottom-1/4 right-1/3 w-20 h-20 bg-white/5 rounded-full"></div>
         
         {/* Linhas decorativas */}
         <div className="absolute top-40 left-1/3 w-48 h-0.5 bg-white/10 rotate-45"></div>
