@@ -292,7 +292,7 @@ Busco oportunidades como freelancer para ganhar experiência prática, contribui
                 <div key={key} className="space-y-2">
                   <Button
                     onClick={() => toggleSection(key)}
-                    className="w-full bg-pink-300 hover:bg-pink-400 text-white py-6 rounded-full text-lg font-medium shadow-md flex items-center justify-between"
+                    className="w-full bg-pink-300 hover:bg-pink-400 text-white py-6 rounded-full text-lg font-medium shadow-md flex items-center justify-center gap-2"
                   >
                     <span>{section.title}</span>
                     {expandedSection === key ? <ChevronUp size={24} /> : <ChevronDown size={24} />}
