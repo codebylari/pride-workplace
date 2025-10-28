@@ -43,19 +43,11 @@ export default function Register() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [phone, setPhone] = useState("+55 ");
+  const [phone, setPhone] = useState("");
   const [state, setState] = useState("");
   const [city, setCity] = useState("");
   const [emailError, setEmailError] = useState("");
   const [checkingEmail, setCheckingEmail] = useState(false);
-
-  // Password validation
-  const passwordValidation = {
-    minLength: password.length >= 6,
-    hasUpperCase: /[A-Z]/.test(password),
-    hasLowerCase: /[a-z]/.test(password),
-    hasNumber: /[0-9]/.test(password),
-  };
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
@@ -145,17 +137,17 @@ export default function Register() {
             city,
             ...(role === "company" && {
               company_name: companyName,
-              cnpj: cnpj.replace(/\D/g, ''),
-              phone: phone.replace(/\D/g, ''),
+              cnpj,
+              phone,
               position,
               diversity,
             }),
             ...(role === "candidate" && {
               birth_date: birthDate,
               social_name: socialName,
-              cpf: cpf.replace(/\D/g, ''),
-              rg: rg.replace(/\D/g, ''),
-              phone: phone.replace(/\D/g, ''),
+              cpf,
+              rg,
+              phone,
             }),
           },
         },
@@ -381,10 +373,10 @@ export default function Register() {
           Cadastramento de Dados
         </h2>
 
-        <div className="rounded-2xl p-6 space-y-4">
+        <div className="bg-white/20 backdrop-blur-md rounded-2xl p-6 space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-white mb-1 font-medium">Nome</label>
+              <label className="block text-white mb-1">Nome</label>
               <input
                 type="text"
                 value={fullName}
@@ -394,7 +386,7 @@ export default function Register() {
               />
             </div>
             <div>
-              <label className="block text-white mb-1 font-medium">Sobrenome</label>
+              <label className="block text-white mb-1">Sobrenome</label>
               <input
                 type="text"
                 value={lastName}
@@ -404,7 +396,7 @@ export default function Register() {
               />
             </div>
             <div>
-              <label className="block text-white mb-1 font-medium">Data de Nascimento</label>
+              <label className="block text-white mb-1">Data de Nascimento</label>
               <input
                 type="date"
                 value={birthDate}
@@ -415,7 +407,7 @@ export default function Register() {
             </div>
 
             <div className="col-span-1 md:col-span-3">
-              <label className="block text-white mb-1 font-medium">Nome Social (se tiver)</label>
+              <label className="block text-white mb-1">Nome Social (se tiver)</label>
               <input
                 type="text"
                 value={socialName}
@@ -425,52 +417,38 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1 font-medium">CPF</label>
+              <label className="block text-white mb-1">CPF (apenas números)</label>
               <input
                 type="text"
                 value={cpf}
                 onChange={(e) => {
                   const value = e.target.value.replace(/\D/g, '');
-                  let formatted = value;
-                  if (value.length <= 11) {
-                    formatted = value
-                      .replace(/(\d{3})(\d)/, '$1.$2')
-                      .replace(/(\d{3})(\d)/, '$1.$2')
-                      .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-                  }
-                  setCpf(formatted);
+                  setCpf(value);
                 }}
                 required
-                maxLength={14}
-                placeholder="000.000.000-00"
+                maxLength={11}
+                placeholder="00000000000"
                 className="w-full p-3 rounded-lg border border-gray-300 text-black"
               />
             </div>
             <div>
-              <label className="block text-white mb-1 font-medium">RG</label>
+              <label className="block text-white mb-1">RG (apenas números)</label>
               <input
                 type="text"
                 value={rg}
                 onChange={(e) => {
                   const value = e.target.value.replace(/\D/g, '');
-                  let formatted = value;
-                  if (value.length <= 9) {
-                    formatted = value
-                      .replace(/(\d{2})(\d)/, '$1.$2')
-                      .replace(/(\d{3})(\d)/, '$1.$2')
-                      .replace(/(\d{3})(\d{1})$/, '$1-$2');
-                  }
-                  setRg(formatted);
+                  setRg(value);
                 }}
                 required
-                maxLength={12}
-                placeholder="00.000.000-0"
+                maxLength={15}
+                placeholder="000000000"
                 className="w-full p-3 rounded-lg border border-gray-300 text-black"
               />
             </div>
 
             <div>
-              <label className="block text-white mb-1 font-medium">Estado (UF)</label>
+              <label className="block text-white mb-1">Estado (UF)</label>
               <select
                 value={state}
                 onChange={(e) => setState(e.target.value)}
@@ -487,7 +465,7 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1 font-medium">Cidade</label>
+              <label className="block text-white mb-1">Cidade</label>
               <select
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
@@ -507,30 +485,24 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1 font-medium">Telefone/WhatsApp</label>
+              <label className="block text-white mb-1">Telefone/WhatsApp (apenas números)</label>
               <input
                 type="text"
                 value={phone}
                 onChange={(e) => {
-                  let value = e.target.value;
-                  // Sempre mantém o prefixo +55
-                  if (!value.startsWith('+55 ')) {
-                    value = '+55 ' + value.replace(/\D/g, '');
-                  } else {
-                    value = '+55 ' + value.slice(4).replace(/\D/g, '');
-                  }
+                  const value = e.target.value.replace(/\D/g, '');
                   setPhone(value);
                 }}
                 required
-                maxLength={16}
-                placeholder="+55 11999999999"
+                maxLength={11}
+                placeholder="11999999999"
                 className="w-full p-3 rounded-lg border border-gray-300 text-black"
               />
             </div>
           </div>
 
           <div className="mt-4">
-            <label className="block text-white mb-2 font-medium">Email</label>
+            <label className="block text-white mb-2">Email</label>
             <input
               type="email"
               placeholder="Digite seu email"
@@ -555,8 +527,8 @@ export default function Register() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <div>
-              <label className="block text-white mb-1 min-h-[3rem] flex items-end font-medium">Digite sua Senha</label>
-              <p className="text-white text-xs mb-1">(deve conter pelo menos uma letra)</p>
+              <label className="block text-white mb-1 min-h-[3rem] flex items-end">Digite sua Senha</label>
+              <p className="text-white/80 text-xs mb-1">(deve conter pelo menos uma letra)</p>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -587,34 +559,11 @@ export default function Register() {
               {passwordError && (
                 <p className="text-red-300 text-sm mt-1 font-semibold">{passwordError}</p>
               )}
-              
-              {/* Password Requirements */}
-              <div className="mt-3 space-y-1 text-sm text-white/90">
-                <p className="font-medium">Sua senha deve conter:</p>
-                <div className="space-y-1">
-                  <div className={`flex items-center gap-2 ${passwordValidation.minLength ? "text-green-300" : ""}`}>
-                    <span>{passwordValidation.minLength ? "✓" : "○"}</span>
-                    <span>Mínimo de 6 caracteres</span>
-                  </div>
-                  <div className={`flex items-center gap-2 ${passwordValidation.hasUpperCase ? "text-green-300" : ""}`}>
-                    <span>{passwordValidation.hasUpperCase ? "✓" : "○"}</span>
-                    <span>Pelo menos 1 letra maiúscula</span>
-                  </div>
-                  <div className={`flex items-center gap-2 ${passwordValidation.hasLowerCase ? "text-green-300" : ""}`}>
-                    <span>{passwordValidation.hasLowerCase ? "✓" : "○"}</span>
-                    <span>Pelo menos 1 letra minúscula</span>
-                  </div>
-                  <div className={`flex items-center gap-2 ${passwordValidation.hasNumber ? "text-green-300" : ""}`}>
-                    <span>{passwordValidation.hasNumber ? "✓" : "○"}</span>
-                    <span>Pelo menos 1 número</span>
-                  </div>
-                </div>
-              </div>
             </div>
 
             <div>
-              <label className="block text-white mb-1 min-h-[3rem] flex items-end font-medium">Repita sua Senha</label>
-              <p className="text-white text-xs mb-1 invisible">(espaço reservado)</p>
+              <label className="block text-white mb-1 min-h-[3rem] flex items-end">Repita sua Senha</label>
+              <p className="text-white/80 text-xs mb-1 invisible">(espaço reservado)</p>
               <div className="relative">
                 <input
                   type={showConfirmPassword ? "text" : "password"}
@@ -720,93 +669,54 @@ export default function Register() {
 
   const Step8Photo = () => {
     const [photo, setPhoto] = useState<File | null>(null);
-    const [showPhotoEditor, setShowPhotoEditor] = useState(false);
-    const [tempPhotoUrl, setTempPhotoUrl] = useState<string | null>(null);
 
     const handlePhotoSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
       if (event.target.files && event.target.files[0]) {
-        const file = event.target.files[0];
-        const url = URL.createObjectURL(file);
-        setTempPhotoUrl(url);
-        setShowPhotoEditor(true);
-      }
-    };
-
-    const handlePhotoSave = (croppedImage: Blob) => {
-      const file = new File([croppedImage], "profile-photo.jpg", { type: "image/jpeg" });
-      setPhoto(file);
-      setShowPhotoEditor(false);
-      if (tempPhotoUrl) {
-        URL.revokeObjectURL(tempPhotoUrl);
-        setTempPhotoUrl(null);
-      }
-    };
-
-    const handlePhotoCancel = () => {
-      setShowPhotoEditor(false);
-      if (tempPhotoUrl) {
-        URL.revokeObjectURL(tempPhotoUrl);
-        setTempPhotoUrl(null);
+        setPhoto(event.target.files[0]);
       }
     };
 
     return (
-      <>
-        <div className="flex flex-col items-center text-white space-y-6">
-          <h2 className="text-3xl font-bold">Escolha sua foto</h2>
+      <div className="flex flex-col items-center text-white space-y-6">
+        <h2 className="text-3xl font-bold">Escolha sua foto</h2>
 
-          {photo ? (
-            <img
-              src={URL.createObjectURL(photo)}
-              alt="Prévia da foto"
-              className="w-40 h-40 rounded-full object-cover border-4 border-green-300 shadow-lg"
-            />
-          ) : (
-            <div className="w-40 h-40 rounded-full bg-white/10 flex items-center justify-center text-4xl border-2 border-white/30">
-              📷
-            </div>
-          )}
-
-          <div className="flex flex-col items-center gap-4">
-            <label className="cursor-pointer bg-white/20 hover:bg-white/30 px-6 py-3 rounded-full">
-              🖼️ Escolher da galeria
-              <input type="file" accept="image/*" onChange={handlePhotoSelect} className="hidden" />
-            </label>
-
-            <Button
-              disabled={!photo}
-              onClick={handleRegister}
-              className="bg-green-300/80 hover:bg-green-400/80 text-green-900 py-3 px-8 rounded-full font-semibold"
-            >
-              {photo ? "Cadastrar" : "Selecione uma foto primeiro"}
-            </Button>
-          </div>
-        </div>
-
-        {showPhotoEditor && tempPhotoUrl && (
-          <PhotoEditor
-            image={tempPhotoUrl}
-            onSave={handlePhotoSave}
-            onCancel={handlePhotoCancel}
+        {photo ? (
+          <img
+            src={URL.createObjectURL(photo)}
+            alt="Prévia da foto"
+            className="w-40 h-40 rounded-full object-cover border-4 border-green-300 shadow-lg"
           />
+        ) : (
+          <div className="w-40 h-40 rounded-full bg-white/10 flex items-center justify-center text-4xl border-2 border-white/30">
+            📷
+          </div>
         )}
-      </>
+
+        <div className="flex flex-col items-center gap-4">
+          <label className="cursor-pointer bg-white/20 hover:bg-white/30 px-6 py-3 rounded-full">
+            🖼️ Escolher da galeria
+            <input type="file" accept="image/*" onChange={handlePhotoSelect} className="hidden" />
+          </label>
+
+          <Button
+            disabled={!photo}
+            onClick={handleRegister}
+            className="bg-green-300/80 hover:bg-green-400/80 text-green-900 py-3 px-8 rounded-full font-semibold"
+          >
+            {photo ? "Cadastrar" : "Selecione uma foto primeiro"}
+          </Button>
+        </div>
+      </div>
     );
   };
 
   const Step9Success = () => (
     <div className="flex flex-col items-center text-white space-y-6 text-center">
-      <div className="w-20 h-20 rounded-full bg-green-500 flex items-center justify-center">
-        <Check className="w-10 h-10 text-white" strokeWidth={3} />
-      </div>
-      
-      <h2 className="text-4xl font-bold text-gray-900">SUCESSO!</h2>
-      
-      <div className="space-y-2">
-        <p className="text-lg text-gray-900">Perfil criado com sucesso.</p>
-        <p className="text-lg text-gray-900">Agradecemos a sua confiança em nossa plataforma!</p>
-      </div>
-      
+      <h2 className="text-4xl font-bold text-green-300">SUCESSO!</h2>
+      <p className="text-lg max-w-md">
+        Perfil criado com sucesso.<br />
+        Agradecemos a sua confiança em nossa plataforma!
+      </p>
       <Button
         onClick={() => navigate("/auth")}
         className="bg-green-300/80 hover:bg-green-400/80 text-green-900 py-4 px-10 rounded-full font-semibold"
@@ -910,7 +820,7 @@ export default function Register() {
       // Validação de senha - deve conter pelo menos uma letra
       const hasLetter = /[a-zA-Z]/.test(password);
       if (!hasLetter) {
-        setPasswordError("A senha deve conter pelo menos uma letra");
+       // setPasswordError("A senha deve conter pelo menos uma letra");
         toast({
           title: "Erro na senha",
           description: "A senha deve conter pelo menos uma letra.",
@@ -947,10 +857,10 @@ export default function Register() {
           Cadastramento de Empresa
         </h2>
 
-        <div className="rounded-2xl p-6 space-y-4">
+        <div className="bg-white/20 backdrop-blur-md rounded-2xl p-6 space-y-4">
           <div className="grid grid-cols-1 gap-4">
             <div>
-              <label className="block text-white mb-1 font-medium">Nome da Empresa</label>
+              <label className="block text-white mb-1">Nome da Empresa</label>
               <input
                 type="text"
                 value={companyName}
@@ -963,7 +873,7 @@ export default function Register() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-white mb-1 font-medium">Seu Nome</label>
+              <label className="block text-white mb-1">Seu Nome</label>
               <input
                 type="text"
                 value={fullName}
@@ -974,7 +884,7 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1 font-medium">Sobrenome</label>
+              <label className="block text-white mb-1">Seu Sobrenome</label>
               <input
                 type="text"
                 value={companyContactLastName}
@@ -987,31 +897,23 @@ export default function Register() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-white mb-1 font-medium">CNPJ</label>
+              <label className="block text-white mb-1">CNPJ (apenas números)</label>
               <input
                 type="text"
                 value={cnpj}
                 onChange={(e) => {
                   const value = e.target.value.replace(/\D/g, '');
-                  let formatted = value;
-                  if (value.length <= 14) {
-                    formatted = value
-                      .replace(/(\d{2})(\d)/, '$1.$2')
-                      .replace(/(\d{3})(\d)/, '$1.$2')
-                      .replace(/(\d{3})(\d)/, '$1/$2')
-                      .replace(/(\d{4})(\d{1,2})$/, '$1-$2');
-                  }
-                  setCnpj(formatted);
+                  setCnpj(value);
                 }}
                 required
-                maxLength={18}
-                placeholder="00.000.000/0000-00"
+                maxLength={14}
+                placeholder="00000000000000"
                 className="w-full p-3 rounded-lg border border-gray-300 text-black"
               />
             </div>
 
             <div>
-              <label className="block text-white mb-1 font-medium">Cargo</label>
+              <label className="block text-white mb-1">Seu cargo na empresa</label>
               <input
                 type="text"
                 value={position}
@@ -1022,14 +924,14 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1 font-medium">Estado (UF)</label>
+              <label className="block text-white mb-1">Estado (UF)</label>
               <select
                 value={state}
                 onChange={(e) => setState(e.target.value)}
                 required
                 className="w-full p-3 rounded-lg border border-gray-300 bg-white text-black"
               >
-                <option value="">Selecione o estado</option>
+                <option value="">Selecione o estado da empresa</option>
                 {states.map((st) => (
                   <option key={st.id} value={st.sigla}>
                     {st.nome} ({st.sigla})
@@ -1039,7 +941,7 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1 font-medium">Cidade</label>
+              <label className="block text-white mb-1">Cidade da empresa</label>
               <select
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
@@ -1059,23 +961,17 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1 font-medium">Telefone/WhatsApp</label>
+              <label className="block text-white mb-1">Telefone/WhatsApp (apenas números)</label>
               <input
                 type="text"
                 value={phone}
                 onChange={(e) => {
-                  let value = e.target.value;
-                  // Sempre mantém o prefixo +55
-                  if (!value.startsWith('+55 ')) {
-                    value = '+55 ' + value.replace(/\D/g, '');
-                  } else {
-                    value = '+55 ' + value.slice(4).replace(/\D/g, '');
-                  }
+                  const value = e.target.value.replace(/\D/g, '');
                   setPhone(value);
                 }}
                 required
-                maxLength={16}
-                placeholder="+55 11999999999"
+                maxLength={11}
+                placeholder="11999999999"
                 className="w-full p-3 rounded-lg border border-gray-300 text-black"
               />
             </div>
@@ -1083,7 +979,7 @@ export default function Register() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <div className="col-span-1 md:col-span-2">
-              <label className="block text-white mb-1 font-medium">Email</label>
+              <label className="block text-white mb-1">Email</label>
               <input
                 type="email"
                 value={email}
@@ -1106,8 +1002,8 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1 min-h-[3rem] flex items-end font-medium">Senha</label>
-              <p className="text-white text-xs mb-1">(deve conter pelo menos uma letra)</p>
+              <label className="block text-white mb-1 min-h-[3rem] flex items-end">Senha</label>
+              <p className="text-white/80 text-xs mb-1">(deve conter pelo menos uma letra)</p>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -1138,34 +1034,11 @@ export default function Register() {
               {passwordError && (
                 <p className="text-red-300 text-sm mt-1 font-semibold">{passwordError}</p>
               )}
-              
-              {/* Password Requirements */}
-              <div className="mt-3 space-y-1 text-sm text-white/90">
-                <p className="font-medium">Sua senha deve conter:</p>
-                <div className="space-y-1">
-                  <div className={`flex items-center gap-2 ${passwordValidation.minLength ? "text-green-300" : ""}`}>
-                    <span>{passwordValidation.minLength ? "✓" : "○"}</span>
-                    <span>Mínimo de 6 caracteres</span>
-                  </div>
-                  <div className={`flex items-center gap-2 ${passwordValidation.hasUpperCase ? "text-green-300" : ""}`}>
-                    <span>{passwordValidation.hasUpperCase ? "✓" : "○"}</span>
-                    <span>Pelo menos 1 letra maiúscula</span>
-                  </div>
-                  <div className={`flex items-center gap-2 ${passwordValidation.hasLowerCase ? "text-green-300" : ""}`}>
-                    <span>{passwordValidation.hasLowerCase ? "✓" : "○"}</span>
-                    <span>Pelo menos 1 letra minúscula</span>
-                  </div>
-                  <div className={`flex items-center gap-2 ${passwordValidation.hasNumber ? "text-green-300" : ""}`}>
-                    <span>{passwordValidation.hasNumber ? "✓" : "○"}</span>
-                    <span>Pelo menos 1 número</span>
-                  </div>
-                </div>
-              </div>
             </div>
 
             <div>
-              <label className="block text-white mb-1 min-h-[3rem] flex items-end font-medium">Confirmar Senha</label>
-              <p className="text-white text-xs mb-1 invisible">(espaço reservado)</p>
+              <label className="block text-white mb-1 min-h-[3rem] flex items-end">Confirmar Senha</label>
+              <p className="text-white/80 text-xs mb-1 invisible">(espaço reservado)</p>
               <div className="relative">
                 <input
                   type={showConfirmPassword ? "text" : "password"}
@@ -1279,77 +1152,44 @@ export default function Register() {
 
   const Step8Company = () => {
     const [logo, setLogo] = useState<File | null>(null);
-    const [showLogoEditor, setShowLogoEditor] = useState(false);
-    const [tempLogoUrl, setTempLogoUrl] = useState<string | null>(null);
 
     const handleLogoSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
       if (event.target.files && event.target.files[0]) {
-        const file = event.target.files[0];
-        const url = URL.createObjectURL(file);
-        setTempLogoUrl(url);
-        setShowLogoEditor(true);
-      }
-    };
-
-    const handleLogoSave = (croppedImage: Blob) => {
-      const file = new File([croppedImage], "company-logo.jpg", { type: "image/jpeg" });
-      setLogo(file);
-      setShowLogoEditor(false);
-      if (tempLogoUrl) {
-        URL.revokeObjectURL(tempLogoUrl);
-        setTempLogoUrl(null);
-      }
-    };
-
-    const handleLogoCancel = () => {
-      setShowLogoEditor(false);
-      if (tempLogoUrl) {
-        URL.revokeObjectURL(tempLogoUrl);
-        setTempLogoUrl(null);
+        setLogo(event.target.files[0]);
       }
     };
 
     return (
-      <>
-        <div className="flex flex-col items-center text-white space-y-6">
-          <h2 className="text-3xl font-bold">Envie o logo da sua empresa</h2>
+      <div className="flex flex-col items-center text-white space-y-6">
+        <h2 className="text-3xl font-bold">Envie o logo da sua empresa</h2>
 
-          {logo ? (
-            <img
-              src={URL.createObjectURL(logo)}
-              alt="Prévia da logo"
-              className="w-40 h-40 rounded-full object-cover border-4 border-green-300 shadow-lg"
-            />
-          ) : (
-            <div className="w-40 h-40 rounded-full bg-white/10 flex items-center justify-center text-4xl border-2 border-white/30">
-              🏢
-            </div>
-          )}
-
-          <div className="flex flex-col items-center gap-4">
-            <label className="cursor-pointer bg-white/20 hover:bg-white/30 px-6 py-3 rounded-full">
-              🖼️ Escolher logo
-              <input type="file" accept="image/*" onChange={handleLogoSelect} className="hidden" />
-            </label>
-
-            <Button
-              disabled={!logo}
-              onClick={handleRegister}
-              className="bg-green-300/80 hover:bg-green-400/80 text-green-900 py-3 px-8 rounded-full font-semibold"
-            >
-              {logo ? "Finalizar cadastro" : "Selecione uma logo"}
-            </Button>
-          </div>
-        </div>
-
-        {showLogoEditor && tempLogoUrl && (
-          <PhotoEditor
-            image={tempLogoUrl}
-            onSave={handleLogoSave}
-            onCancel={handleLogoCancel}
+        {logo ? (
+          <img
+            src={URL.createObjectURL(logo)}
+            alt="Prévia da logo"
+            className="w-40 h-40 rounded-full object-cover border-4 border-green-300 shadow-lg"
           />
+        ) : (
+          <div className="w-40 h-40 rounded-full bg-white/10 flex items-center justify-center text-4xl border-2 border-white/30">
+            🏢
+          </div>
         )}
-      </>
+
+        <div className="flex flex-col items-center gap-4">
+          <label className="cursor-pointer bg-white/20 hover:bg-white/30 px-6 py-3 rounded-full">
+            🖼️ Escolher logo
+            <input type="file" accept="image/*" onChange={handleLogoSelect} className="hidden" />
+          </label>
+
+          <Button
+            disabled={!logo}
+            onClick={handleRegister}
+            className="bg-green-300/80 hover:bg-green-400/80 text-green-900 py-3 px-8 rounded-full font-semibold"
+          >
+            {logo ? "Finalizar cadastro" : "Selecione uma logo"}
+          </Button>
+        </div>
+      </div>
     );
   };
 
@@ -1371,21 +1211,9 @@ export default function Register() {
 
   // ------------------- RENDER -------------------
 
-  const canGoBack = step > 1 && step < 9;
-
   return (
-    <div style={{ background: 'linear-gradient(to bottom right, hsl(315, 26%, 40%), hsl(315, 30%, 50%), hsl(320, 30%, 50%))' }} className="min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-4xl bg-white/10 backdrop-blur-lg rounded-3xl p-12 shadow-2xl relative">
-        {canGoBack && (
-          <button
-            onClick={() => setStep(step - 1)}
-            className="absolute top-8 left-8 text-white hover:text-white/80 flex items-center gap-2 transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5" />
-            <span className="text-sm font-medium">Voltar</span>
-          </button>
-        )}
-        
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-purple-700 to-purple-600 p-4">
+      <div className="w-full max-w-4xl bg-white/10 backdrop-blur-lg rounded-3xl p-12 shadow-2xl">
         {step === 1 && <Step1 />}
         {role === "candidate" && step === 2 && <Step2Candidate />}
         {role === "candidate" && step === 3 && <Step3Candidate />}
