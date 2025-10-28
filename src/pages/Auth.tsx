@@ -91,12 +91,15 @@ export default function Auth() {
             </p>
           </div>
           
-          <Button
-            onClick={() => navigate("/register")}
-            className="bg-gradient-to-r from-orange-400 to-pink-500 hover:from-orange-500 hover:to-pink-600 text-white px-8 py-6 rounded-full text-base font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
-          >
-            CADASTRAR-SE
-          </Button>
+          <div className="space-y-4">
+            <p className="text-lg text-purple-200">Não possui conta?</p>
+            <Button
+              onClick={() => navigate("/register")}
+              className="bg-gradient-to-r from-orange-400 to-pink-500 hover:from-orange-500 hover:to-pink-600 text-white px-8 py-6 rounded-full text-base font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+            >
+              CADASTRAR-SE
+            </Button>
+          </div>
         </div>
 
         {/* Right side - Login form */}
