@@ -51,6 +51,8 @@ import TermsCompany from "./pages/TermsCompany";
 
 import Settings from "./pages/Settings";
 // Página de Configurações
+import CompanySettings from "./pages/CompanySettings";
+import CandidateSettings from "./pages/CandidateSettings";
 
 import Account from "./pages/Account";
 // Página de Conta
