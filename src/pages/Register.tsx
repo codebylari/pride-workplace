@@ -188,7 +188,7 @@ export default function Register() {
           onClick={() => setRole("candidate")}
           className={`cursor-pointer p-6 rounded-2xl text-center w-56 transition ${
             role === "candidate"
-              ? "bg-green-300 text-black"
+              ? "bg-primary/30 text-white border-2 border-primary"
               : "bg-white/20 text-white"
           }`}
         >
@@ -200,7 +200,7 @@ export default function Register() {
           onClick={() => setRole("company")}
           className={`cursor-pointer p-6 rounded-2xl text-center w-56 transition ${
             role === "company"
-              ? "bg-green-300 text-black"
+              ? "bg-primary/30 text-white border-2 border-primary"
               : "bg-white/20 text-white"
           }`}
         >
@@ -212,7 +212,7 @@ export default function Register() {
       <Button
         onClick={() => role && setStep(2)}
         disabled={!role}
-        className="mt-8 bg-green-300/80 hover:bg-green-400/80 text-green-900 py-6 rounded-full text-lg font-semibold px-10"
+        className="mt-8 bg-primary hover:bg-primary/80 text-white py-6 rounded-full text-lg font-semibold px-10"
       >
         PRÓXIMO
       </Button>
@@ -600,7 +600,7 @@ export default function Register() {
           <button
             type="submit"
             disabled={checkingEmail || !!emailError || !!passwordError || !!confirmPasswordError}
-            className="w-full bg-green-300/80 hover:bg-green-400/80 text-green-900 py-4 rounded-full mt-4 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-primary hover:bg-primary/80 text-white py-4 rounded-full mt-4 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {checkingEmail ? "VERIFICANDO..." : "CONTINUAR E ENVIAR OS DADOS"}
           </button>
@@ -659,7 +659,7 @@ export default function Register() {
       <div className="text-center">
         <Button
           onClick={() => setStep(8)}
-          className="bg-green-300/80 hover:bg-green-400/80 text-green-900 py-4 px-10 rounded-full font-semibold mt-4"
+          className="bg-primary hover:bg-primary/80 text-white py-4 px-10 rounded-full font-semibold mt-4"
         >
           Li e aceito os termos para continuar
         </Button>
@@ -684,7 +684,7 @@ export default function Register() {
           <img
             src={URL.createObjectURL(photo)}
             alt="Prévia da foto"
-            className="w-40 h-40 rounded-full object-cover border-4 border-green-300 shadow-lg"
+            className="w-40 h-40 rounded-full object-cover border-4 border-primary shadow-lg"
           />
         ) : (
           <div className="w-40 h-40 rounded-full bg-white/10 flex items-center justify-center text-4xl border-2 border-white/30">
@@ -701,7 +701,7 @@ export default function Register() {
           <Button
             disabled={!photo}
             onClick={handleRegister}
-            className="bg-green-300/80 hover:bg-green-400/80 text-green-900 py-3 px-8 rounded-full font-semibold"
+            className="bg-primary hover:bg-primary/80 text-white py-3 px-8 rounded-full font-semibold"
           >
             {photo ? "Cadastrar" : "Selecione uma foto primeiro"}
           </Button>
@@ -719,7 +719,7 @@ export default function Register() {
       </p>
       <Button
         onClick={() => navigate("/auth")}
-        className="bg-green-300/80 hover:bg-green-400/80 text-green-900 py-4 px-10 rounded-full font-semibold"
+        className="bg-primary hover:bg-primary/80 text-white py-4 px-10 rounded-full font-semibold"
       >
         Ir para página inicial
       </Button>
@@ -1085,7 +1085,7 @@ export default function Register() {
                   checked={diversity === "sim"}
                   onChange={() => setDiversity("sim")}
                   required
-                  className="accent-green-500"
+                  className="accent-primary"
                 />
                 Sim
               </label>
@@ -1097,7 +1097,7 @@ export default function Register() {
                   checked={diversity === "nao"}
                   onChange={() => setDiversity("nao")}
                   required
-                  className="accent-green-500"
+                  className="accent-primary"
                 />
                 Não
               </label>
@@ -1107,7 +1107,7 @@ export default function Register() {
           <button
             type="submit"
             disabled={checkingEmail || !!emailError || !!passwordError || !!confirmPasswordError}
-            className="w-full bg-green-300/80 hover:bg-green-400/80 text-green-900 py-4 rounded-full mt-4 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-primary hover:bg-primary/80 text-white py-4 rounded-full mt-4 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {checkingEmail ? "VERIFICANDO..." : "CONTINUAR E ENVIAR OS DADOS"}
           </button>
@@ -1142,7 +1142,7 @@ export default function Register() {
       <div className="text-center">
         <Button
           onClick={() => setStep(8)}
-          className="bg-green-300/80 hover:bg-green-400/80 text-green-900 py-4 px-10 rounded-full font-semibold mt-4 transition-all"
+          className="bg-primary hover:bg-primary/80 text-white py-4 px-10 rounded-full font-semibold mt-4 transition-all"
         >
           Concordo com os termos e quero apoiar
         </Button>
@@ -1167,7 +1167,7 @@ export default function Register() {
           <img
             src={URL.createObjectURL(logo)}
             alt="Prévia da logo"
-            className="w-40 h-40 rounded-full object-cover border-4 border-green-300 shadow-lg"
+            className="w-40 h-40 rounded-full object-cover border-4 border-primary shadow-lg"
           />
         ) : (
           <div className="w-40 h-40 rounded-full bg-white/10 flex items-center justify-center text-4xl border-2 border-white/30">
@@ -1184,7 +1184,7 @@ export default function Register() {
           <Button
             disabled={!logo}
             onClick={handleRegister}
-            className="bg-green-300/80 hover:bg-green-400/80 text-green-900 py-3 px-8 rounded-full font-semibold"
+            className="bg-primary hover:bg-primary/80 text-white py-3 px-8 rounded-full font-semibold"
           >
             {logo ? "Finalizar cadastro" : "Selecione uma logo"}
           </Button>
@@ -1195,14 +1195,14 @@ export default function Register() {
 
   const Step9Company = () => (
     <div className="flex flex-col items-center text-white space-y-6 text-center">
-      <h2 className="text-4xl font-bold text-green-300">Cadastro concluído!</h2>
+      <h2 className="text-4xl font-bold text-primary">Cadastro concluído!</h2>
       <p className="text-lg max-w-md">
         Sua empresa agora faz parte de uma rede que apoia a diversidade e a inclusão.
         Obrigado por se juntar a nós 💜
       </p>
       <Button
         onClick={() => navigate("/auth")}
-        className="bg-green-300/80 hover:bg-green-400/80 text-green-900 py-4 px-10 rounded-full font-semibold"
+        className="bg-primary hover:bg-primary/80 text-white py-4 px-10 rounded-full font-semibold"
       >
         Ir para login
       </Button>
@@ -1212,7 +1212,7 @@ export default function Register() {
   // ------------------- RENDER -------------------
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-purple-700 to-purple-600 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#6E4062] via-[#5a3452] to-[#6E4062] p-4">
       <div className="w-full max-w-4xl bg-white/10 backdrop-blur-lg rounded-3xl p-12 shadow-2xl">
         {step === 1 && <Step1 />}
         {role === "candidate" && step === 2 && <Step2Candidate />}
