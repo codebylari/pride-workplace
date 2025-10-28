@@ -109,8 +109,8 @@ export default function CandidateDashboard() {
 
   return (
     <div className={`min-h-screen relative overflow-hidden ${darkMode ? "bg-gray-800" : "bg-gray-50"}`}>
-      {/* Conexões tecnológicas com brilho em todo o fundo */}
-      <div className="absolute left-0 top-[72px] right-0 bottom-0 overflow-hidden pointer-events-none opacity-20">
+      {/* Conexões tecnológicas com brilho em todo o fundo branco */}
+      <div className="absolute left-0 top-[136px] right-0 bottom-0 overflow-hidden pointer-events-none opacity-20">
         <svg className="w-full h-full" preserveAspectRatio="xMidYMid slice">
           <defs>
             {/* Filtro de brilho para os pontos */}
