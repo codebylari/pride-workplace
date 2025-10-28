@@ -104,26 +104,26 @@ export default function Auth() {
 
         {/* Right side - Login form */}
         <div className="flex items-center justify-center">
-          <div className="w-full max-w-md bg-purple-800/40 backdrop-blur-lg rounded-3xl p-10 space-y-8 shadow-2xl border border-purple-700/50">
+          <div className="w-full max-w-md bg-gray-100/95 backdrop-blur-lg rounded-3xl p-10 space-y-8 shadow-2xl border border-gray-300/50">
             <div className="text-center space-y-2">
-              <h2 className="text-3xl font-bold text-white">Sign in</h2>
+              <h2 className="text-3xl font-bold text-gray-800">Sign in</h2>
             </div>
             
             <form onSubmit={handleLogin} className="space-y-6">
               <div className="space-y-2">
-                <label className="text-purple-200 text-sm font-medium">Email</label>
+                <label className="text-gray-700 text-sm font-medium">Email</label>
                 <Input
                   type="email"
                   placeholder="Digite seu email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="bg-purple-900/50 backdrop-blur-sm rounded-lg py-6 text-white placeholder:text-purple-300 border border-purple-700/50 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                  className="bg-white/80 backdrop-blur-sm rounded-lg py-6 text-gray-800 placeholder:text-gray-400 border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-purple-200 text-sm font-medium">Senha</label>
+                <label className="text-gray-700 text-sm font-medium">Senha</label>
                 <div className="relative">
                   <Input
                     type={showPassword ? "text" : "password"}
@@ -131,12 +131,12 @@ export default function Auth() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="bg-purple-900/50 backdrop-blur-sm rounded-lg py-6 text-white placeholder:text-purple-300 pr-12 border border-purple-700/50 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                    className="bg-white/80 backdrop-blur-sm rounded-lg py-6 text-gray-800 placeholder:text-gray-400 pr-12 border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-purple-300 hover:text-white transition-colors"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800 transition-colors"
                   >
                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
@@ -147,7 +147,7 @@ export default function Auth() {
                 <button
                   type="button"
                   onClick={() => navigate("/forgot-password")}
-                  className="text-purple-300 text-sm hover:text-white transition-colors"
+                  className="text-gray-600 text-sm hover:text-gray-800 transition-colors"
                 >
                   Esqueceu sua senha?
                 </button>
