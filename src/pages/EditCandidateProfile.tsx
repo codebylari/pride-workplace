@@ -42,7 +42,20 @@ export default function EditCandidateProfile() {
 
   const handleResumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setResume(e.target.files[0]);
+      const file = e.target.files[0];
+      
+      // Verifica se é PDF
+      if (file.type !== "application/pdf") {
+        toast({
+          title: "Arquivo inválido",
+          description: "Por favor, envie apenas arquivos em formato PDF.",
+          variant: "destructive",
+        });
+        e.target.value = ""; // Limpa o input
+        return;
+      }
+      
+      setResume(file);
     }
   };
 
@@ -305,15 +318,18 @@ export default function EditCandidateProfile() {
           {/* Resume Upload */}
           <div>
             <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-800"}`}>
-              Currículo
+              Currículo (apenas PDF)
             </label>
+            <p className={`text-sm mb-3 ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+              Envie seu currículo em formato PDF
+            </p>
             <div className="flex items-center gap-4">
               <Button
                 onClick={() => document.getElementById("resume-upload")?.click()}
                 className="bg-purple-500 hover:bg-purple-600 text-white px-6 py-3 rounded-lg font-medium flex items-center gap-2"
               >
                 <Upload size={20} />
-                Enviar outro arquivo
+                Enviar arquivo PDF
               </Button>
               {resume && (
                 <span className={`text-sm ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
@@ -323,7 +339,7 @@ export default function EditCandidateProfile() {
               <input
                 id="resume-upload"
                 type="file"
-                accept=".pdf,.doc,.docx"
+                accept=".pdf"
                 onChange={handleResumeChange}
                 className="hidden"
               />
