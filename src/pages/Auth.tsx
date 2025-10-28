@@ -127,7 +127,7 @@ export default function Auth() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="bg-white/20 backdrop-blur-sm rounded-lg py-6 text-white placeholder:text-white/60 border border-white/30 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                  className="bg-white/90 rounded-lg py-6 text-gray-900 placeholder:text-gray-500 border border-white/30 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                 />
               </div>
 
@@ -140,12 +140,12 @@ export default function Auth() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="bg-white/20 backdrop-blur-sm rounded-lg py-6 text-white placeholder:text-white/60 pr-12 border border-white/30 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                    className="bg-white/90 rounded-lg py-6 text-gray-900 placeholder:text-gray-500 pr-12 border border-white/30 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white transition-colors"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-900 transition-colors"
                   >
                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
