@@ -169,7 +169,7 @@ export default function Auth() {
         </svg>
       </div>
 
-      <div className="w-full max-w-7xl grid md:grid-cols-2 gap-12 lg:gap-16 bg-white rounded-3xl p-8 md:p-16 shadow-2xl relative z-10">
+      <div className="w-full max-w-7xl grid md:grid-cols-2 gap-12 lg:gap-16 bg-white rounded-3xl p-8 md:p-16 shadow-2xl border-4 border-primary relative z-10">
         {/* Left side - Welcome */}
         <div className="flex flex-col justify-center items-start space-y-10">
           <img src={logo} alt="QueerCode Logo" className="w-56 md:w-72 h-auto" />
