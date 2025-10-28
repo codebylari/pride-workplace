@@ -115,9 +115,13 @@ export default function Auth() {
               </div>
 
               <div className="text-right">
-                <a href="#" className="text-white text-sm underline hover:text-white/80">
+                <button
+                  type="button"
+                  onClick={() => navigate("/forgot-password")}
+                  className="text-white text-sm underline hover:text-white/80"
+                >
                   esqueceu sua senha ?
-                </a>
+                </button>
               </div>
 
               <Button

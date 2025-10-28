@@ -596,16 +596,6 @@ export default function Register() {
             </div>
           </div>
 
-          <div className="flex justify-end mt-2">
-            <button
-              type="button"
-              onClick={() => navigate("/forgot-password")}
-              className="text-white/90 hover:text-white text-sm underline"
-            >
-              esqueceu senha?
-            </button>
-          </div>
-
           <button
             type="submit"
             disabled={checkingEmail || !!emailError || !!passwordError || !!confirmPasswordError}
@@ -1111,16 +1101,6 @@ export default function Register() {
                 Não
               </label>
             </div>
-          </div>
-
-          <div className="flex justify-end mt-2">
-            <button
-              type="button"
-              onClick={() => navigate("/forgot-password")}
-              className="text-white/90 hover:text-white text-sm underline"
-            >
-              esqueceu senha?
-            </button>
           </div>
 
           <button
