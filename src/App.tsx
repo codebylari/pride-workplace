@@ -70,6 +70,12 @@ import DeleteAccount from "./pages/DeleteAccount";
 import EditCandidateProfile from "./pages/EditCandidateProfile";
 // Página de Editar Perfil do Candidato
 
+import JobDetails from "./pages/JobDetails";
+// Página de Detalhes da Vaga
+
+import JobApplication from "./pages/JobApplication";
+// Página de Candidatura à Vaga
+
 import ForgotPassword from "./pages/ForgotPassword";
 // Página de Recuperar Senha
 
@@ -145,6 +151,12 @@ const App = () => (
             
             <Route path="/edit-candidate-profile" element={<EditCandidateProfile />} />
             {/* Página de Editar Perfil do Candidato */}
+            
+            <Route path="/job/:id" element={<JobDetails />} />
+            {/* Página de Detalhes da Vaga */}
+            
+            <Route path="/job/:id/apply" element={<JobApplication />} />
+            {/* Página de Candidatura à Vaga */}
             
             <Route path="/forgot-password" element={<ForgotPassword />} />
             {/* Página de Recuperar Senha */}

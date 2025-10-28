@@ -298,6 +298,7 @@ export default function CandidateDashboard() {
 
               {/* View Details Button */}
               <Button
+                onClick={() => navigate(`/job/${job.id}`)}
                 variant="link"
                 className="text-blue-600 hover:text-blue-700 p-0 h-auto font-normal"
               >
