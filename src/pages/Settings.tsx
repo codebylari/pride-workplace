@@ -8,7 +8,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 
 export default function Settings() {
   const navigate = useNavigate();
-  const { user, signOut } = useAuth();
+  const { user, signOut, userRole } = useAuth();
   const [showSidebar, setShowSidebar] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   
@@ -17,7 +17,7 @@ export default function Settings() {
   const [emailNotifications, setEmailNotifications] = useState(true);
   const { darkMode, setDarkMode } = useTheme();
 
-  const isCompany = user?.user_metadata?.user_type === "company";
+  const isCompany = userRole ? userRole === "company" : Boolean(user?.user_metadata?.company_name || user?.user_metadata?.user_type === "company");
   const displayName = isCompany 
     ? user?.user_metadata?.company_name || "Nome da Empresa"
     : user?.user_metadata?.full_name || "Nome do Usuário";

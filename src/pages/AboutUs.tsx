@@ -13,7 +13,7 @@ export default function AboutUs() {
   const [showNotifications, setShowNotifications] = useState(false);
 
   const userName = user?.user_metadata?.full_name || user?.user_metadata?.company_name || "Usuário";
-  const isCompany = userRole === "company";
+  const isCompany = userRole ? userRole === "company" : Boolean(user?.user_metadata?.company_name || user?.user_metadata?.user_type === "company");
 
   const handleLogout = async () => {
     await signOut();
