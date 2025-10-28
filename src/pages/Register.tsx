@@ -486,18 +486,21 @@ export default function Register() {
 
             <div>
               <label className="block text-white mb-1">Telefone/WhatsApp (apenas números)</label>
-              <input
-                type="text"
-                value={phone}
-                onChange={(e) => {
-                  const value = e.target.value.replace(/\D/g, '');
-                  setPhone(value);
-                }}
-                required
-                maxLength={11}
-                placeholder="11999999999"
-                className="w-full p-3 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary"
-              />
+              <div className="relative">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600 font-medium">+55</span>
+                <input
+                  type="text"
+                  value={phone}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\D/g, '');
+                    setPhone(value);
+                  }}
+                  required
+                  maxLength={11}
+                  placeholder="11999999999"
+                  className="w-full p-3 pl-14 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary"
+                />
+              </div>
             </div>
           </div>
 
@@ -975,18 +978,21 @@ export default function Register() {
 
             <div>
               <label className="block text-white mb-1">Telefone/WhatsApp (apenas números)</label>
-              <input
-                type="text"
-                value={phone}
-                onChange={(e) => {
-                  const value = e.target.value.replace(/\D/g, '');
-                  setPhone(value);
-                }}
-                required
-                maxLength={11}
-                placeholder="11999999999"
-                className="w-full p-3 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary"
-              />
+              <div className="relative">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600 font-medium">+55</span>
+                <input
+                  type="text"
+                  value={phone}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\D/g, '');
+                    setPhone(value);
+                  }}
+                  required
+                  maxLength={11}
+                  placeholder="11999999999"
+                  className="w-full p-3 pl-14 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary"
+                />
+              </div>
             </div>
           </div>
 
