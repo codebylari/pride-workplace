@@ -62,16 +62,22 @@ export default function Auth() {
   return (
     <div className="min-h-screen relative overflow-hidden flex items-center justify-center p-4 bg-gradient-to-br from-[#6E4062] via-[#5a3452] to-[#6E4062]">
       {/* Elementos decorativos geométricos */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
-        {/* Círculos grandes */}
-        <div className="absolute top-20 left-20 w-64 h-64 rounded-full bg-purple-400/30 blur-3xl"></div>
-        <div className="absolute bottom-32 right-32 w-96 h-96 rounded-full bg-pink-400/20 blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/3 w-72 h-72 rounded-full bg-blue-400/20 blur-3xl"></div>
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Círculos grandes com blur */}
+        <div className="absolute top-20 left-20 w-96 h-96 rounded-full bg-purple-500/20 blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-32 right-32 w-[500px] h-[500px] rounded-full bg-pink-500/15 blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/3 w-80 h-80 rounded-full bg-blue-500/15 blur-3xl"></div>
         
-        {/* Elementos geométricos menores */}
-        <div className="absolute top-40 right-1/4 w-32 h-32 bg-white/10 rounded-lg rotate-45"></div>
-        <div className="absolute bottom-40 left-1/4 w-24 h-24 bg-white/10 rounded-full"></div>
-        <div className="absolute top-1/3 right-1/3 w-16 h-48 bg-white/5 rounded-lg"></div>
+        {/* Formas geométricas decorativas */}
+        <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-white/5 rounded-2xl rotate-45 backdrop-blur-sm"></div>
+        <div className="absolute top-1/3 right-1/3 w-24 h-24 bg-white/5 rounded-full backdrop-blur-sm"></div>
+        <div className="absolute bottom-1/3 left-1/2 w-16 h-40 bg-white/5 rounded-xl rotate-12 backdrop-blur-sm"></div>
+        <div className="absolute top-1/2 right-1/4 w-28 h-28 bg-white/5 rounded-2xl -rotate-12 backdrop-blur-sm"></div>
+        <div className="absolute bottom-1/4 right-1/3 w-20 h-20 bg-white/5 rounded-full backdrop-blur-sm"></div>
+        
+        {/* Linhas decorativas */}
+        <div className="absolute top-40 left-1/3 w-48 h-0.5 bg-white/10 rotate-45"></div>
+        <div className="absolute bottom-40 right-1/4 w-64 h-0.5 bg-white/10 -rotate-12"></div>
       </div>
 
       <div className="w-full max-w-6xl grid md:grid-cols-2 gap-8 relative z-10 px-4">
@@ -104,26 +110,29 @@ export default function Auth() {
 
         {/* Right side - Login form */}
         <div className="flex items-center justify-center">
-          <div className="w-full max-w-md bg-gray-100/95 backdrop-blur-lg rounded-3xl p-10 space-y-8 shadow-2xl border border-gray-300/50">
-            <div className="text-center space-y-2">
-              <h2 className="text-3xl font-bold text-gray-800">Sign in</h2>
+          <div className="w-full max-w-md bg-white/10 backdrop-blur-xl rounded-3xl p-10 space-y-8 shadow-2xl border border-white/20 relative">
+            {/* Efeito de brilho/reflexo de vidro */}
+            <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-50 pointer-events-none"></div>
+            
+            <div className="text-center space-y-2 relative z-10">
+              <h2 className="text-3xl font-bold text-white">Sign in</h2>
             </div>
             
-            <form onSubmit={handleLogin} className="space-y-6">
+            <form onSubmit={handleLogin} className="space-y-6 relative z-10">
               <div className="space-y-2">
-                <label className="text-gray-700 text-sm font-medium">Email</label>
+                <label className="text-white text-sm font-medium">Email</label>
                 <Input
                   type="email"
                   placeholder="Digite seu email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="bg-white/80 backdrop-blur-sm rounded-lg py-6 text-gray-800 placeholder:text-gray-400 border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                  className="bg-white/20 backdrop-blur-sm rounded-lg py-6 text-white placeholder:text-white/60 border border-white/30 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-gray-700 text-sm font-medium">Senha</label>
+                <label className="text-white text-sm font-medium">Senha</label>
                 <div className="relative">
                   <Input
                     type={showPassword ? "text" : "password"}
@@ -131,12 +140,12 @@ export default function Auth() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="bg-white/80 backdrop-blur-sm rounded-lg py-6 text-gray-800 placeholder:text-gray-400 pr-12 border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                    className="bg-white/20 backdrop-blur-sm rounded-lg py-6 text-white placeholder:text-white/60 pr-12 border border-white/30 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800 transition-colors"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white transition-colors"
                   >
                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
@@ -147,7 +156,7 @@ export default function Auth() {
                 <button
                   type="button"
                   onClick={() => navigate("/forgot-password")}
-                  className="text-gray-600 text-sm hover:text-gray-800 transition-colors"
+                  className="text-white/80 text-sm hover:text-white transition-colors"
                 >
                   Esqueceu sua senha?
                 </button>
