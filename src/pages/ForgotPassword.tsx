@@ -41,7 +41,7 @@ export default function ForgotPassword() {
 
   if (emailSent) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary via-primary/90 to-secondary p-6">
+      <div className="min-h-screen flex items-center justify-center p-6" style={{ background: 'linear-gradient(to bottom right, hsl(315, 26%, 40%), hsl(315, 30%, 50%), hsl(320, 30%, 50%))' }}>
         <div className="w-full max-w-2xl bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl p-12">
           <div className="text-center space-y-6">
             <h1 className="text-3xl font-bold text-gray-900">
@@ -69,7 +69,7 @@ export default function ForgotPassword() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary via-primary/90 to-secondary p-6">
+    <div className="min-h-screen flex items-center justify-center p-6" style={{ background: 'linear-gradient(to bottom right, hsl(315, 26%, 40%), hsl(315, 30%, 50%), hsl(320, 30%, 50%))' }}>
       <div className="w-full max-w-md bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl p-8">
         <div className="flex flex-col items-center space-y-6">
           <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center">
