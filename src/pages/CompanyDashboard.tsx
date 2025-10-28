@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, Bell, Bot, Briefcase, PlusCircle, User, Settings, Headset, Info, FileText, LogOut } from "lucide-react";
+import { Menu, Bell, Bot, Briefcase, PlusCircle, User, Settings, Headset, Info, FileText, LogOut, List } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
@@ -94,6 +94,17 @@ export default function CompanyDashboard() {
               >
                 <PlusCircle size={24} />
                 <span className="text-lg">Cadastrar Vagas</span>
+              </button>
+              
+              <button 
+                onClick={() => {
+                  setShowSidebar(false);
+                  navigate("/company-jobs");
+                }}
+                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
+              >
+                <List size={24} />
+                <span className="text-lg">Minhas Vagas</span>
               </button>
               
               <button 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Menu, Bell, Star, Briefcase, User, Settings, Headset, Info, FileText, LogOut, ChevronUp, ChevronDown, ClipboardList } from "lucide-react";
+import { Menu, Bell, Star, Briefcase, User, Settings, Headset, Info, FileText, LogOut, ChevronUp, ChevronDown, ClipboardList, PlusCircle, List } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
