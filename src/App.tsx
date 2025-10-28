@@ -76,6 +76,9 @@ import JobDetails from "./pages/JobDetails";
 import JobApplication from "./pages/JobApplication";
 // Página de Candidatura à Vaga
 
+import MyApplications from "./pages/MyApplications";
+// Página de Minhas Candidaturas
+
 import ForgotPassword from "./pages/ForgotPassword";
 // Página de Recuperar Senha
 
@@ -157,6 +160,9 @@ const App = () => (
             
             <Route path="/job/:id/apply" element={<JobApplication />} />
             {/* Página de Candidatura à Vaga */}
+            
+            <Route path="/my-applications" element={<MyApplications />} />
+            {/* Página de Minhas Candidaturas */}
             
             <Route path="/forgot-password" element={<ForgotPassword />} />
             {/* Página de Recuperar Senha */}

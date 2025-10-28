@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, Bell, MapPin, Users, Briefcase, User, Settings, Headset, Info, FileText, LogOut } from "lucide-react";
+import { Menu, Bell, MapPin, Users, Briefcase, User, Settings, Headset, Info, FileText, LogOut, ClipboardList } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/useAuth";
@@ -173,8 +173,19 @@ export default function CandidateDashboard() {
                 <Briefcase size={24} />
                 <span className="text-lg">Vagas</span>
               </button>
-              
+
               <button 
+                onClick={() => {
+                  setShowSidebar(false);
+                  navigate("/my-applications");
+                }}
+                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
+              >
+                <ClipboardList size={24} />
+                <span className="text-lg">Minhas Candidaturas</span>
+              </button>
+              
+              <button
                 onClick={() => {
                   setShowSidebar(false);
                   navigate("/candidate-profile");

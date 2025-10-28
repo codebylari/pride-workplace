@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, Bell, Star, Edit2, Briefcase, User, Settings, Headset, Info, FileText, LogOut, ChevronDown, ChevronUp } from "lucide-react";
+import { Menu, Bell, Star, Edit2, Briefcase, User, Settings, Headset, Info, FileText, LogOut, ChevronDown, ChevronUp, ClipboardList } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
@@ -173,8 +173,19 @@ Busco oportunidades como freelancer para ganhar experiência prática, contribui
                 <Briefcase size={24} />
                 <span className="text-lg">Vagas</span>
               </button>
-              
+
               <button 
+                onClick={() => {
+                  setShowSidebar(false);
+                  navigate("/my-applications");
+                }}
+                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
+              >
+                <ClipboardList size={24} />
+                <span className="text-lg">Minhas Candidaturas</span>
+              </button>
+              
+              <button
                 onClick={() => {
                   setShowSidebar(false);
                   navigate("/candidate-profile");
