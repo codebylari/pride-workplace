@@ -88,7 +88,10 @@ export default function CompanyDashboard() {
                 <span className="text-lg">Vagas</span>
               </button>
               
-              <button className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left">
+              <button 
+                onClick={() => navigate("/create-job")}
+                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
+              >
                 <PlusCircle size={24} />
                 <span className="text-lg">Cadastrar Vagas</span>
               </button>

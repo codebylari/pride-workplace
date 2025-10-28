@@ -73,6 +73,9 @@ import EditCandidateProfile from "./pages/EditCandidateProfile";
 import EditCompanyProfile from "./pages/EditCompanyProfile";
 // Página de Editar Perfil da Empresa
 
+import CreateJob from "./pages/CreateJob";
+// Página de Cadastrar Vagas
+
 import JobDetails from "./pages/JobDetails";
 // Página de Detalhes da Vaga
 
@@ -163,6 +166,9 @@ const App = () => (
             
             <Route path="/edit-company-profile" element={<EditCompanyProfile />} />
             {/* Página de Editar Perfil da Empresa */}
+            
+            <Route path="/create-job" element={<CreateJob />} />
+            {/* Página de Cadastrar Vagas */}
             
             <Route path="/job/:id" element={<JobDetails />} />
             {/* Página de Detalhes da Vaga */}
