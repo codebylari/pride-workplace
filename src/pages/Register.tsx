@@ -417,7 +417,7 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1">CPF (apenas números)</label>
+              <label className="block text-white mb-1">CPF</label>
               <input
                 type="text"
                 value={cpf}
@@ -432,7 +432,7 @@ export default function Register() {
               />
             </div>
             <div>
-              <label className="block text-white mb-1">RG (apenas números)</label>
+              <label className="block text-white mb-1">RG</label>
               <input
                 type="text"
                 value={rg}
@@ -485,7 +485,7 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1">Telefone/WhatsApp (apenas números)</label>
+              <label className="block text-white mb-1">Telefone/WhatsApp</label>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600 font-medium">+55</span>
                 <input
@@ -913,7 +913,7 @@ export default function Register() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-white mb-1">CNPJ (apenas números)</label>
+              <label className="block text-white mb-1">CNPJ</label>
               <input
                 type="text"
                 value={cnpj}
@@ -977,7 +977,7 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1">Telefone/WhatsApp (apenas números)</label>
+              <label className="block text-white mb-1">Telefone/WhatsApp</label>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600 font-medium">+55</span>
                 <input
