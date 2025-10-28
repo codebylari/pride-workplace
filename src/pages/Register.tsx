@@ -377,14 +377,14 @@ export default function Register() {
 
     return (
       <form onSubmit={handleSubmit} className="space-y-6 max-w-4xl mx-auto">
-        <h2 className="text-3xl font-bold text-center text-white mb-6">
+        <h2 className="text-3xl font-bold text-center text-white mb-6 drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]">
           Cadastramento de Dados
         </h2>
 
         <div className="bg-white/20 backdrop-blur-md rounded-2xl p-6 space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-white mb-1">Nome</label>
+              <label className="block text-white mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">Nome</label>
               <input
                 type="text"
                 value={fullName}
@@ -394,7 +394,7 @@ export default function Register() {
               />
             </div>
             <div>
-              <label className="block text-white mb-1">Sobrenome</label>
+              <label className="block text-white mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">Sobrenome</label>
               <input
                 type="text"
                 value={lastName}
@@ -404,7 +404,7 @@ export default function Register() {
               />
             </div>
             <div>
-              <label className="block text-white mb-1">Data de Nascimento</label>
+              <label className="block text-white mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">Data de Nascimento</label>
               <input
                 type="date"
                 value={birthDate}
@@ -415,7 +415,7 @@ export default function Register() {
             </div>
 
             <div className="col-span-1 md:col-span-3">
-              <label className="block text-white mb-1">Nome Social (se tiver)</label>
+              <label className="block text-white mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">Nome Social (se tiver)</label>
               <input
                 type="text"
                 value={socialName}
@@ -425,7 +425,7 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1">CPF</label>
+              <label className="block text-white mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">CPF</label>
               <input
                 type="text"
                 value={cpf}
@@ -447,7 +447,7 @@ export default function Register() {
               />
             </div>
             <div>
-              <label className="block text-white mb-1">RG</label>
+              <label className="block text-white mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">RG</label>
               <input
                 type="text"
                 value={rg}
@@ -470,7 +470,7 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1">Estado (UF)</label>
+              <label className="block text-white mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">Estado (UF)</label>
               <select
                 value={state}
                 onChange={(e) => setState(e.target.value)}
@@ -487,7 +487,7 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1">Cidade</label>
+              <label className="block text-white mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">Cidade</label>
               <select
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
@@ -507,7 +507,7 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1">Telefone/WhatsApp</label>
+              <label className="block text-white mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">Telefone/WhatsApp</label>
               <input
                 type="text"
                 value={phone}
@@ -530,7 +530,7 @@ export default function Register() {
           </div>
 
           <div className="mt-4">
-            <label className="block text-white mb-2">Email</label>
+            <label className="block text-white mb-2 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">Email</label>
             <input
               type="email"
               placeholder="Digite seu email"
@@ -555,8 +555,8 @@ export default function Register() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <div>
-              <label className="block text-white mb-1 min-h-[3rem] flex items-end">Digite sua Senha</label>
-              <p className="text-white/80 text-xs mb-1">(deve conter pelo menos uma letra)</p>
+              <label className="block text-white mb-1 min-h-[3rem] flex items-end drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">Digite sua Senha</label>
+              <p className="text-white/90 text-xs mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">(deve conter pelo menos uma letra)</p>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -613,8 +613,8 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1 min-h-[3rem] flex items-end">Repita sua Senha</label>
-              <p className="text-white/80 text-xs mb-1 invisible">(espaço reservado)</p>
+              <label className="block text-white mb-1 min-h-[3rem] flex items-end drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">Repita sua Senha</label>
+              <p className="text-white/90 text-xs mb-1 invisible drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">(espaço reservado)</p>
               <div className="relative">
                 <input
                   type={showConfirmPassword ? "text" : "password"}
@@ -943,14 +943,14 @@ export default function Register() {
 
     return (
       <form onSubmit={handleSubmit} className="space-y-6 max-w-4xl mx-auto">
-        <h2 className="text-3xl font-bold text-center text-white mb-6">
+        <h2 className="text-3xl font-bold text-center text-white mb-6 drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]">
           Cadastramento de Empresa
         </h2>
 
         <div className="bg-white/20 backdrop-blur-md rounded-2xl p-6 space-y-4">
           <div className="grid grid-cols-1 gap-4">
             <div>
-              <label className="block text-white mb-1">Nome da Empresa</label>
+              <label className="block text-white mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">Nome da Empresa</label>
               <input
                 type="text"
                 value={companyName}
@@ -963,7 +963,7 @@ export default function Register() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-white mb-1">Seu Nome</label>
+              <label className="block text-white mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">Seu Nome</label>
               <input
                 type="text"
                 value={fullName}
@@ -974,7 +974,7 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1">Sobrenome</label>
+              <label className="block text-white mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">Sobrenome</label>
               <input
                 type="text"
                 value={companyContactLastName}
@@ -987,7 +987,7 @@ export default function Register() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-white mb-1">CNPJ</label>
+              <label className="block text-white mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">CNPJ</label>
               <input
                 type="text"
                 value={cnpj}
@@ -1011,7 +1011,7 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1">Cargo</label>
+              <label className="block text-white mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">Cargo</label>
               <input
                 type="text"
                 value={position}
@@ -1022,7 +1022,7 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1">Estado (UF)</label>
+              <label className="block text-white mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">Estado (UF)</label>
               <select
                 value={state}
                 onChange={(e) => setState(e.target.value)}
@@ -1039,7 +1039,7 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1">Cidade</label>
+              <label className="block text-white mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">Cidade</label>
               <select
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
@@ -1059,7 +1059,7 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1">Telefone/WhatsApp</label>
+              <label className="block text-white mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">Telefone/WhatsApp</label>
               <input
                 type="text"
                 value={phone}
@@ -1083,7 +1083,7 @@ export default function Register() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <div className="col-span-1 md:col-span-2">
-              <label className="block text-white mb-1">Email</label>
+              <label className="block text-white mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">Email</label>
               <input
                 type="email"
                 value={email}
@@ -1106,8 +1106,8 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1 min-h-[3rem] flex items-end">Senha</label>
-              <p className="text-white/80 text-xs mb-1">(deve conter pelo menos uma letra)</p>
+              <label className="block text-white mb-1 min-h-[3rem] flex items-end drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">Senha</label>
+              <p className="text-white/90 text-xs mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">(deve conter pelo menos uma letra)</p>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -1164,8 +1164,8 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1 min-h-[3rem] flex items-end">Confirmar Senha</label>
-              <p className="text-white/80 text-xs mb-1 invisible">(espaço reservado)</p>
+              <label className="block text-white mb-1 min-h-[3rem] flex items-end drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">Confirmar Senha</label>
+              <p className="text-white/90 text-xs mb-1 invisible drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">(espaço reservado)</p>
               <div className="relative">
                 <input
                   type={showConfirmPassword ? "text" : "password"}
