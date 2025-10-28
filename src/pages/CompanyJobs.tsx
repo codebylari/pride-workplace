@@ -29,6 +29,7 @@ export default function CompanyJobs() {
   const fetchJobs = async () => {
     try {
       setLoading(true);
+      console.log("Current user ID:", user?.id);
       const { data, error } = await supabase
         .from("jobs")
         .select("*")
