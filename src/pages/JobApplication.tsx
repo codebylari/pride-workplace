@@ -138,7 +138,7 @@ export default function JobApplication() {
             <div className="p-4 border-t border-white/20 mt-auto">
               <button 
                 onClick={handleLogout}
-                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
+                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left text-red-500"
               >
                 <span className="text-lg">Sair</span>
               </button>

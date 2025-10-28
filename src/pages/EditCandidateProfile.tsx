@@ -241,7 +241,7 @@ export default function EditCandidateProfile() {
             <div className="p-4 border-t border-white/20">
               <button 
                 onClick={handleLogout}
-                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
+                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left text-red-500"
               >
                 <LogOut size={24} />
                 <span className="text-lg">Sair</span>
