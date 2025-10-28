@@ -43,7 +43,7 @@ export default function Register() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState("+55 ");
   const [state, setState] = useState("");
   const [city, setCity] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -485,17 +485,23 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1">Telefone/WhatsApp (apenas números)</label>
+              <label className="block text-white mb-1">Telefone/WhatsApp</label>
               <input
                 type="text"
                 value={phone}
                 onChange={(e) => {
-                  const value = e.target.value.replace(/\D/g, '');
+                  let value = e.target.value;
+                  // Sempre mantém o prefixo +55
+                  if (!value.startsWith('+55 ')) {
+                    value = '+55 ' + value.replace(/\D/g, '');
+                  } else {
+                    value = '+55 ' + value.slice(4).replace(/\D/g, '');
+                  }
                   setPhone(value);
                 }}
                 required
-                maxLength={11}
-                placeholder="11999999999"
+                maxLength={16}
+                placeholder="+55 11999999999"
                 className="w-full p-3 rounded-lg border border-gray-300 text-black"
               />
             </div>
@@ -1000,17 +1006,23 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1">Telefone/WhatsApp (apenas números)</label>
+              <label className="block text-white mb-1">Telefone/WhatsApp</label>
               <input
                 type="text"
                 value={phone}
                 onChange={(e) => {
-                  const value = e.target.value.replace(/\D/g, '');
+                  let value = e.target.value;
+                  // Sempre mantém o prefixo +55
+                  if (!value.startsWith('+55 ')) {
+                    value = '+55 ' + value.replace(/\D/g, '');
+                  } else {
+                    value = '+55 ' + value.slice(4).replace(/\D/g, '');
+                  }
                   setPhone(value);
                 }}
                 required
-                maxLength={11}
-                placeholder="11999999999"
+                maxLength={16}
+                placeholder="+55 11999999999"
                 className="w-full p-3 rounded-lg border border-gray-300 text-black"
               />
             </div>
