@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
+// Interface para definir a estrutura de uma mensagem no chat
 interface Message {
   role: "user" | "assistant";
   content: string;
@@ -74,7 +75,7 @@ export function ChatBot() {
 
   return (
     <>
-      {/* Chat Button */}
+      {/* Botão do Chat */}
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
@@ -84,10 +85,10 @@ export function ChatBot() {
         </button>
       )}
 
-      {/* Chat Window */}
+      {/* Janela do Chat */}
       {isOpen && (
         <div className="fixed bottom-8 right-8 w-[500px] h-[600px] bg-white rounded-3xl shadow-2xl z-50 flex flex-col animate-fade-in">
-          {/* Header */}
+          {/* Cabeçalho */}
           <div className="bg-gradient-to-r from-purple-700 to-purple-600 rounded-t-3xl p-6 flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="w-16 h-16 bg-pink-300 rounded-full flex items-center justify-center">
@@ -106,7 +107,7 @@ export function ChatBot() {
             </button>
           </div>
 
-          {/* Messages */}
+          {/* Mensagens */}
           <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50">
             {messages.map((message, index) => (
               <div
@@ -158,7 +159,7 @@ export function ChatBot() {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Input */}
+          {/* Campo de Entrada */}
           <div className="p-4 border-t bg-white rounded-b-3xl">
             <div className="flex gap-2">
               <Input

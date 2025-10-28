@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, Bell, Bot, Briefcase, PlusCircle, User, Settings, Headset, Info, FileText, LogOut, List } from "lucide-react";
+import { Menu, Bell, Briefcase, PlusCircle, User, Settings, Headset, Info, FileText, LogOut, List } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
@@ -13,7 +13,7 @@ export default function CompanyDashboard() {
   const [showSidebar, setShowSidebar] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
 
-  // Extract company name from user metadata
+  // Extrai o nome da empresa dos metadados do usuário
   const companyName = user?.user_metadata?.company_name || "Empresa";
 
   const handleLogout = async () => {
@@ -22,8 +22,31 @@ export default function CompanyDashboard() {
   };
 
   return (
-    <div className={`min-h-screen ${darkMode ? "bg-gray-800" : "bg-gray-50"}`}>
-      {/* Header */}
+    <div className={`min-h-screen relative overflow-hidden ${darkMode ? "bg-gray-800" : "bg-gray-50"}`}>
+      {/* Formas tecnológicas de fundo */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
+        {/* Círculo superior esquerdo */}
+        <div className="absolute -top-20 -left-20 w-64 h-64 border-4 border-gray-400 rounded-full" />
+        
+        {/* Hexágono superior direito */}
+        <svg className="absolute top-10 right-32 w-48 h-48" viewBox="0 0 100 100">
+          <polygon points="50,5 90,27.5 90,72.5 50,95 10,72.5 10,27.5" fill="none" stroke="rgb(156, 163, 175)" strokeWidth="2" />
+        </svg>
+        
+        {/* Triângulo inferior esquerdo */}
+        <svg className="absolute bottom-32 left-40 w-40 h-40" viewBox="0 0 100 100">
+          <polygon points="50,10 90,90 10,90" fill="none" stroke="rgb(156, 163, 175)" strokeWidth="2" />
+        </svg>
+        
+        {/* Retângulo rotacionado inferior direito */}
+        <div className="absolute bottom-20 right-20 w-56 h-56 border-4 border-gray-400 transform rotate-45" />
+        
+        {/* Pequenos círculos decorativos */}
+        <div className="absolute top-1/3 left-1/4 w-16 h-16 border-2 border-gray-300 rounded-full" />
+        <div className="absolute bottom-1/3 right-1/3 w-12 h-12 border-2 border-gray-300 rounded-full" />
+      </div>
+
+      {/* Cabeçalho */}
       <header style={{ background: 'linear-gradient(to right, hsl(315, 26%, 40%), hsl(320, 30%, 50%))' }} className="text-white p-4 flex justify-between items-center">
         <button
           onClick={() => setShowSidebar(!showSidebar)}
@@ -60,7 +83,7 @@ export default function CompanyDashboard() {
         </div>
       </header>
 
-      {/* Sidebar */}
+      {/* Menu Lateral */}
       {showSidebar && (
         <div className="fixed inset-0 z-50 bg-black/50" onClick={() => setShowSidebar(false)}>
           <div 
@@ -68,7 +91,7 @@ export default function CompanyDashboard() {
             className="absolute left-0 top-0 h-full w-80 shadow-xl text-white flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Profile Section */}
+            {/* Seção de Perfil */}
             <div className="p-6 space-y-2 border-b border-white/20">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center">
@@ -81,7 +104,7 @@ export default function CompanyDashboard() {
               </div>
             </div>
 
-            {/* Menu Items */}
+            {/* Itens do Menu */}
             <nav className="flex-1 py-6 px-4 space-y-2">
               <button className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left">
                 <Briefcase size={24} />
@@ -160,7 +183,7 @@ export default function CompanyDashboard() {
               </button>
             </nav>
 
-            {/* Logout Button at Bottom */}
+            {/* Botão de Sair no Final */}
             <div className="p-4 border-t border-white/20">
               <button 
                 onClick={handleLogout}
@@ -174,11 +197,11 @@ export default function CompanyDashboard() {
         </div>
       )}
 
-      {/* Main Content */}
-      <main className="container mx-auto px-4 py-12">
+      {/* Conteúdo Principal */}
+      <main className="container mx-auto px-4 py-12 relative z-10">
         <div className="max-w-4xl mx-auto">
-          {/* Welcome Card */}
-          <div className={`rounded-2xl p-12 shadow-lg mb-8 relative ${darkMode ? "bg-gray-700" : "bg-white"}`}>
+          {/* Card de Boas-vindas */}
+          <div className={`rounded-2xl p-12 shadow-lg mb-8 ${darkMode ? "bg-gray-700" : "bg-white"}`}>
             <div className="text-center space-y-8">
               <h1 className={`text-4xl font-bold ${darkMode ? "text-white" : "text-gray-800"}`}>
                 Bem-vindo, {companyName}!
@@ -190,30 +213,23 @@ export default function CompanyDashboard() {
 
               <div className="flex flex-col sm:flex-row gap-6 justify-center items-center pt-6">
                 <Button
-                  onClick={() => navigate("/")}
-                  className="bg-green-300/80 hover:bg-green-400/80 text-green-900 px-12 py-6 rounded-xl text-lg font-semibold"
+                  onClick={() => navigate("/create-job")}
+                  className="bg-green-300 hover:bg-green-400 text-green-900 px-12 py-6 rounded-xl text-lg font-semibold"
                 >
                   Cadastre sua vaga
                 </Button>
                 
                 <Button
-                  onClick={() => navigate("/")}
-                  className="bg-green-200/80 hover:bg-green-300/80 text-green-900 px-12 py-6 rounded-xl text-lg font-semibold"
+                  onClick={() => navigate("/company-jobs")}
+                  className="bg-green-300 hover:bg-green-400 text-green-900 px-12 py-6 rounded-xl text-lg font-semibold"
                 >
                   Acesse suas vagas
                 </Button>
               </div>
             </div>
-
-            {/* Chatbot Icon */}
-            <div className="absolute bottom-4 right-4">
-              <div className="w-20 h-20 bg-gradient-to-br from-pink-300 to-pink-200 rounded-full flex items-center justify-center shadow-lg cursor-pointer hover:scale-110 transition">
-                <Bot size={40} className="text-purple-600" />
-              </div>
-            </div>
           </div>
 
-          {/* Quick Stats */}
+          {/* Estatísticas Rápidas */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className={`rounded-xl p-6 shadow-md ${darkMode ? "bg-gray-700" : "bg-white"}`}>
               <h3 className={`text-sm font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>Vagas Ativas</h3>
