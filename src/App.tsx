@@ -38,10 +38,22 @@ import CompanyProfile from "./pages/CompanyProfile";
 // Perfil da empresa
 
 import AboutUs from "./pages/AboutUs";
-// Página Quem Somos
+// Página Quem Somos (redireciona baseado no tipo de usuário)
+
+import CompanyAbout from "./pages/CompanyAbout";
+// Página Quem Somos - Empresa
+
+import CandidateAbout from "./pages/CandidateAbout";
+// Página Quem Somos - Candidato
 
 import Support from "./pages/Support";
-// Página de Suporte
+// Página de Suporte (redireciona baseado no tipo de usuário)
+
+import CompanySupport from "./pages/CompanySupport";
+// Página de Suporte - Empresa
+
+import CandidateSupport from "./pages/CandidateSupport";
+// Página de Suporte - Candidato
 
 import TermsCandidate from "./pages/TermsCandidate";
 // Termos de Uso - Candidatos
@@ -137,10 +149,22 @@ const App = () => (
             {/* Perfil da empresa */}
             
             <Route path="/about" element={<AboutUs />} />
-            {/* Página Quem Somos */}
+            {/* Página Quem Somos (redireciona baseado no tipo de usuário) */}
+            
+            <Route path="/company-about" element={<CompanyAbout />} />
+            {/* Página Quem Somos - Empresa */}
+            
+            <Route path="/candidate-about" element={<CandidateAbout />} />
+            {/* Página Quem Somos - Candidato */}
             
             <Route path="/support" element={<Support />} />
-            {/* Página de Suporte */}
+            {/* Página de Suporte (redireciona baseado no tipo de usuário) */}
+            
+            <Route path="/company-support" element={<CompanySupport />} />
+            {/* Página de Suporte - Empresa */}
+            
+            <Route path="/candidate-support" element={<CandidateSupport />} />
+            {/* Página de Suporte - Candidato */}
             
             <Route path="/terms-candidate" element={<TermsCandidate />} />
             {/* Termos de Uso - Candidatos */}
