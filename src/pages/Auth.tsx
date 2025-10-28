@@ -64,13 +64,13 @@ export default function Auth() {
       <div className="w-full max-w-7xl grid md:grid-cols-2 gap-12 lg:gap-16 bg-white/10 backdrop-blur-xl rounded-3xl p-8 md:p-16 shadow-2xl border border-white/20">
         {/* Left side - Welcome */}
         <div className="flex flex-col justify-center items-start text-white space-y-10">
-          <img src={logo} alt="QueerCode Logo" className="w-56 md:w-72 h-auto" />
+          <img src={logo} alt="QueerCode Logo" className="w-56 md:w-72 h-auto drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)]" />
           <div className="space-y-4">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">Bem vindos à plataforma!</h1>
-            <p className="text-lg md:text-xl text-white/90">Conectando talentos com oportunidades</p>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">Bem vindos à plataforma!</h1>
+            <p className="text-lg md:text-xl text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">Conectando talentos com oportunidades</p>
           </div>
           <div className="space-y-5 pt-4">
-            <p className="text-xl text-white/95">Não possui conta?</p>
+            <p className="text-xl text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">Não possui conta?</p>
             <Button
               onClick={() => navigate("/register")}
               className="bg-green-300/90 hover:bg-green-400 text-green-900 px-10 py-6 rounded-full text-lg font-semibold shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300"
@@ -82,15 +82,15 @@ export default function Auth() {
 
         {/* Right side - Login form */}
         <div className="flex items-center justify-center">
-          <div className="w-full max-w-md bg-white/15 backdrop-blur-lg rounded-3xl p-10 space-y-8 border border-white/20 shadow-xl">
+          <div className="w-full max-w-md bg-white/25 backdrop-blur-lg rounded-3xl p-10 space-y-8 border-2 border-white/30 shadow-xl">
             <div className="text-center space-y-2">
-              <h2 className="text-3xl font-bold text-white">Login</h2>
-              <p className="text-white/80">Entre com suas credenciais</p>
+              <h2 className="text-3xl font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">Login</h2>
+              <p className="text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">Entre com suas credenciais</p>
             </div>
             
             <form onSubmit={handleLogin} className="space-y-6">
               <div className="space-y-3">
-                <label className="text-white text-sm font-medium">Email</label>
+                <label className="text-white text-sm font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">Email</label>
                 <Input
                   type="email"
                   placeholder="seu.email@exemplo.com"
@@ -102,7 +102,7 @@ export default function Auth() {
               </div>
 
               <div className="space-y-3">
-                <label className="text-white text-sm font-medium">Senha</label>
+                <label className="text-white text-sm font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">Senha</label>
                 <div className="relative">
                   <Input
                     type={showPassword ? "text" : "password"}
@@ -126,7 +126,7 @@ export default function Auth() {
                 <button
                   type="button"
                   onClick={() => navigate("/forgot-password")}
-                  className="text-white/90 text-sm underline hover:text-white transition-colors"
+                  className="text-white text-sm underline hover:text-white/90 transition-colors drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
                 >
                   Esqueceu sua senha?
                 </button>
