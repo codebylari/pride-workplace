@@ -91,6 +91,14 @@ export default function Auth() {
         <div className="absolute top-1/2 right-1/6 w-26 h-26 bg-white/5 rounded-2xl rotate-12"></div>
         <div className="absolute bottom-1/2 right-1/3 w-20 h-36 bg-white/5 rounded-lg -rotate-12"></div>
         
+        {/* Mais formas no lado direito (lado do sign in) */}
+        <div className="absolute top-1/4 right-10 w-24 h-24 bg-white/5 rounded-xl -rotate-45"></div>
+        <div className="absolute top-2/3 right-20 w-18 h-18 bg-white/5 rounded-full"></div>
+        <div className="absolute bottom-1/4 right-12 w-20 h-28 bg-white/5 rounded-lg rotate-45"></div>
+        <div className="absolute top-1/3 right-1/12 w-22 h-22 bg-white/5 rounded-2xl rotate-12"></div>
+        <div className="absolute bottom-1/3 right-1/8 w-16 h-40 bg-white/5 rounded-xl -rotate-12"></div>
+        <div className="absolute top-1/2 right-8 w-14 h-14 bg-white/5 rounded-full"></div>
+        
         {/* Linhas decorativas */}
         <div className="absolute top-40 left-1/3 w-48 h-0.5 bg-white/10 rotate-45"></div>
         <div className="absolute bottom-40 right-1/4 w-64 h-0.5 bg-white/10 -rotate-12"></div>
