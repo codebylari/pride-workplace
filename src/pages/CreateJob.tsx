@@ -8,6 +8,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function CreateJob() {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ export default function CreateJob() {
     navigate("/auth");
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Validação de campos obrigatórios
@@ -48,23 +49,44 @@ export default function CreateJob() {
       return;
     }
 
-    // Aqui você salvaria no banco de dados
-    // Por enquanto, apenas mostra mensagem de sucesso
-    toast({
-      title: "Vaga cadastrada!",
-      description: "A vaga foi cadastrada com sucesso.",
-    });
+    try {
+      const { error } = await supabase.from("jobs").insert({
+        company_id: user?.id,
+        title,
+        description: `${description}\n\nÁrea: ${area}\nBenefícios: ${benefits}\nExperiência: ${experience}\nPeríodo: ${period}`,
+        job_type: workModel,
+        location: city,
+        salary,
+        requirements: benefits,
+      });
 
-    // Limpar formulário
-    setTitle("");
-    setDescription("");
-    setArea("");
-    setBenefits("");
-    setSalary("");
-    setWorkModel("");
-    setCity("");
-    setExperience("");
-    setPeriod("");
+      if (error) throw error;
+
+      toast({
+        title: "Vaga cadastrada!",
+        description: "A vaga foi cadastrada com sucesso.",
+      });
+
+      // Limpar formulário
+      setTitle("");
+      setDescription("");
+      setArea("");
+      setBenefits("");
+      setSalary("");
+      setWorkModel("");
+      setCity("");
+      setExperience("");
+      setPeriod("");
+
+      // Redirecionar para lista de vagas
+      setTimeout(() => navigate("/company-jobs"), 1500);
+    } catch (error: any) {
+      toast({
+        title: "Erro ao cadastrar vaga",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
   };
 
   return (

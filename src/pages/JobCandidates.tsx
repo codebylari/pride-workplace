@@ -1,45 +1,67 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { Menu, Bell, Briefcase, PlusCircle, User, Settings, Headset, Info, FileText, LogOut, List, ChevronRight } from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
+import { Menu, Bell, Briefcase, PlusCircle, User, Settings, Headset, Info, FileText, LogOut, List } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
 import { useTheme } from "@/contexts/ThemeContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export default function CompanyJobs() {
+export default function JobCandidates() {
   const navigate = useNavigate();
+  const { jobId } = useParams();
   const { user, signOut } = useAuth();
   const { darkMode } = useTheme();
   const { toast } = useToast();
   const [showSidebar, setShowSidebar] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
-  const [jobs, setJobs] = useState<any[]>([]);
+  const [job, setJob] = useState<any>(null);
+  const [applications, setApplications] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   const companyName = user?.user_metadata?.company_name || "Empresa";
 
   useEffect(() => {
-    if (user) {
-      fetchJobs();
+    if (jobId && user) {
+      fetchJobAndCandidates();
     }
-  }, [user]);
+  }, [jobId, user]);
 
-  const fetchJobs = async () => {
+  const fetchJobAndCandidates = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
+      
+      // Fetch job details
+      const { data: jobData, error: jobError } = await supabase
         .from("jobs")
         .select("*")
+        .eq("id", jobId)
         .eq("company_id", user?.id)
-        .order("created_at", { ascending: false });
+        .single();
 
-      if (error) throw error;
-      setJobs(data || []);
+      if (jobError) throw jobError;
+      setJob(jobData);
+
+      // Fetch applications for this job
+      const { data: applicationsData, error: applicationsError } = await supabase
+        .from("applications")
+        .select(`
+          *,
+          profiles:candidate_id (
+            full_name,
+            city,
+            state
+          )
+        `)
+        .eq("job_id", jobId);
+
+      if (applicationsError) throw applicationsError;
+      setApplications(applicationsData || []);
     } catch (error: any) {
       toast({
-        title: "Erro ao carregar vagas",
+        title: "Erro ao carregar candidatos",
         description: error.message,
         variant: "destructive",
       });
@@ -142,7 +164,7 @@ export default function CompanyJobs() {
                   setShowSidebar(false);
                   navigate("/company-jobs");
                 }}
-                className="w-full flex items-center gap-4 p-4 bg-white/10 rounded-lg transition text-left"
+                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
                 <List size={24} />
                 <span className="text-lg">Minhas Vagas</span>
@@ -219,52 +241,71 @@ export default function CompanyJobs() {
 
       {/* Main Content */}
       <main className="container mx-auto px-6 py-16 max-w-6xl">
-        <h1 className={`text-4xl font-bold text-center mb-16 ${darkMode ? "text-white" : "text-gray-800"}`}>
-          Minhas Vagas
+        <h1 className={`text-4xl font-bold text-center mb-8 ${darkMode ? "text-white" : "text-gray-800"}`}>
+          Candidatos a Vaga
         </h1>
 
         {loading ? (
           <div className="space-y-4">
-            {[1, 2, 3].map((i) => (
-              <Skeleton key={i} className="h-24 w-full" />
-            ))}
-          </div>
-        ) : jobs.length === 0 ? (
-          <div className={`rounded-2xl shadow-sm p-12 mb-12 animate-fade-in ${darkMode ? "bg-gray-700" : "bg-white"}`}>
-            <p className={`text-center leading-relaxed ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-              Você ainda não cadastrou nenhuma vaga.
-            </p>
-            <div className="mt-8 text-center">
-              <button
-                onClick={() => navigate("/create-job")}
-                className="px-8 py-3 bg-green-300 hover:bg-green-400 text-green-900 font-semibold rounded-full transition"
-              >
-                Cadastrar Primeira Vaga
-              </button>
-            </div>
+            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-32 w-full" />
           </div>
         ) : (
-          <div className="space-y-4">
-            {jobs.map((job) => (
-              <button
-                key={job.id}
-                onClick={() => navigate(`/company-job/${job.id}`)}
-                className={`w-full p-6 rounded-xl shadow-sm hover:shadow-md transition flex items-center justify-between ${
-                  darkMode ? "bg-gray-700 hover:bg-gray-600" : "bg-white hover:bg-gray-50"
-                }`}
-              >
-                <div className="text-left">
-                  <h3 className={`text-xl font-semibold mb-2 ${darkMode ? "text-white" : "text-gray-900"}`}>
-                    {job.title}
-                  </h3>
-                  <p className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    {job.job_type} • {job.location}
-                  </p>
-                </div>
-                <ChevronRight className={darkMode ? "text-gray-400" : "text-gray-600"} size={24} />
-              </button>
-            ))}
-          </div>
+          <>
+            {job && (
+              <h2 className={`text-2xl font-semibold mb-8 text-center ${darkMode ? "text-white" : "text-gray-900"}`}>
+                {job.title}
+              </h2>
+            )}
+
+            {applications.length === 0 ? (
+              <div className={`rounded-2xl shadow-sm p-12 mb-12 animate-fade-in ${darkMode ? "bg-gray-700" : "bg-white"}`}>
+                <p className={`text-center leading-relaxed ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+                  Ainda não há candidatos para esta vaga.
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {applications.map((application) => (
+                  <div
+                    key={application.id}
+                    className={`p-6 rounded-xl shadow-sm ${darkMode ? "bg-gray-700" : "bg-white"}`}
+                  >
+                    <div className="flex items-center gap-6">
+                      <div className="w-24 h-24 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full flex items-center justify-center">
+                        <span className="text-2xl font-bold text-white">
+                          {application.profiles?.full_name?.substring(0, 2).toUpperCase() || "??"}
+                        </span>
+                      </div>
+                      
+                      <div className="flex-1">
+                        <h3 className={`text-2xl font-bold mb-2 ${darkMode ? "text-white" : "text-gray-900"}`}>
+                          {application.profiles?.full_name || "Nome não disponível"}
+                        </h3>
+                        <p className={`${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+                          Possui interesse na vaga
+                        </p>
+                      </div>
+
+                      <div className="flex gap-3">
+                        <Button
+                          onClick={() => navigate(`/candidate-profile/${application.candidate_id}`)}
+                          className="px-6 py-2 bg-green-300 hover:bg-green-400 text-green-900 font-semibold rounded-full"
+                        >
+                          PERFIL
+                        </Button>
+                        <Button
+                          className="px-6 py-2 bg-green-300 hover:bg-green-400 text-green-900 font-semibold rounded-full"
+                        >
+                          CONTATO
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </>
         )}
       </main>
       

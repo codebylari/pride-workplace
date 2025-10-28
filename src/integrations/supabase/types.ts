@@ -14,6 +14,38 @@ export type Database = {
   }
   public: {
     Tables: {
+      applications: {
+        Row: {
+          candidate_id: string
+          created_at: string
+          id: string
+          job_id: string
+          status: string
+        }
+        Insert: {
+          candidate_id: string
+          created_at?: string
+          id?: string
+          job_id: string
+          status?: string
+        }
+        Update: {
+          candidate_id?: string
+          created_at?: string
+          id?: string
+          job_id?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "applications_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       company_profiles: {
         Row: {
           city: string | null
@@ -50,6 +82,45 @@ export type Database = {
           state?: string | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      jobs: {
+        Row: {
+          company_id: string
+          created_at: string
+          description: string
+          id: string
+          job_type: string
+          location: string
+          requirements: string | null
+          salary: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          description: string
+          id?: string
+          job_type: string
+          location: string
+          requirements?: string | null
+          salary?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          description?: string
+          id?: string
+          job_type?: string
+          location?: string
+          requirements?: string | null
+          salary?: string | null
+          title?: string
+          updated_at?: string
         }
         Relationships: []
       }

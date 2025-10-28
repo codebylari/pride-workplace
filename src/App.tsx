@@ -93,6 +93,12 @@ import CreateJob from "./pages/CreateJob";
 import CompanyJobs from "./pages/CompanyJobs";
 // Página de Minhas Vagas (Empresa)
 
+import CompanyJobDetails from "./pages/CompanyJobDetails";
+// Página de Detalhes da Vaga (Empresa)
+
+import JobCandidates from "./pages/JobCandidates";
+// Página de Candidatos da Vaga
+
 import JobDetails from "./pages/JobDetails";
 // Página de Detalhes da Vaga
 
@@ -207,6 +213,12 @@ const App = () => (
             
             <Route path="/company-jobs" element={<CompanyJobs />} />
             {/* Página de Minhas Vagas (Empresa) */}
+            
+            <Route path="/company-job/:jobId" element={<CompanyJobDetails />} />
+            {/* Página de Detalhes da Vaga (Empresa) */}
+            
+            <Route path="/job-candidates/:jobId" element={<JobCandidates />} />
+            {/* Página de Candidatos da Vaga */}
             
             <Route path="/job/:id" element={<JobDetails />} />
             {/* Página de Detalhes da Vaga */}
