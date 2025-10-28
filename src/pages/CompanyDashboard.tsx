@@ -129,7 +129,7 @@ export default function CompanyDashboard() {
               <button 
                 onClick={() => {
                   setShowSidebar(false);
-                  navigate("/support");
+                  navigate("/company-support");
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
@@ -140,7 +140,7 @@ export default function CompanyDashboard() {
               <button 
                 onClick={() => {
                   setShowSidebar(false);
-                  navigate("/about");
+                  navigate("/company-about");
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >

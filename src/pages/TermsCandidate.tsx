@@ -115,7 +115,7 @@ export default function TermsCandidate() {
               <button 
                 onClick={() => {
                   setShowSidebar(false);
-                  navigate("/support");
+                  navigate("/candidate-support");
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
@@ -126,7 +126,7 @@ export default function TermsCandidate() {
               <button 
                 onClick={() => {
                   setShowSidebar(false);
-                  navigate("/about");
+                  navigate("/candidate-about");
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
