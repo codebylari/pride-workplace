@@ -381,7 +381,7 @@ export default function Register() {
           Cadastramento de Dados
         </h2>
 
-        <div className="bg-white/30 backdrop-blur-md rounded-2xl p-6 space-y-4">
+        <div className="rounded-2xl p-6 space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="block text-white mb-1 font-medium">Nome</label>
@@ -947,7 +947,7 @@ export default function Register() {
           Cadastramento de Empresa
         </h2>
 
-        <div className="bg-white/30 backdrop-blur-md rounded-2xl p-6 space-y-4">
+        <div className="rounded-2xl p-6 space-y-4">
           <div className="grid grid-cols-1 gap-4">
             <div>
               <label className="block text-white mb-1 font-medium">Nome da Empresa</label>
