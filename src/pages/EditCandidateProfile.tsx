@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, Bell, Camera, Upload, X } from "lucide-react";
+import { Menu, Bell, Camera, Upload, X, Briefcase, User, Settings, Headset, Info, FileText, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -147,25 +147,79 @@ export default function EditCandidateProfile() {
 
             <nav className="flex-1 py-6 px-4 space-y-2 overflow-y-auto">
               <button 
-                onClick={() => navigate("/candidate-dashboard")}
+                onClick={() => {
+                  setShowSidebar(false);
+                  navigate("/candidate-dashboard");
+                }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
+                <Briefcase size={24} />
                 <span className="text-lg">Vagas</span>
               </button>
               
               <button 
-                onClick={() => navigate("/candidate-profile")}
+                onClick={() => {
+                  setShowSidebar(false);
+                  navigate("/candidate-profile");
+                }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
-                <span className="text-lg">Perfil</span>
+                <User size={24} />
+                <span className="text-lg">Meu Perfil</span>
+              </button>
+              
+              <button 
+                onClick={() => {
+                  setShowSidebar(false);
+                  navigate("/settings");
+                }}
+                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
+              >
+                <Settings size={24} />
+                <span className="text-lg">Configurações</span>
+              </button>
+              
+              <button 
+                onClick={() => {
+                  setShowSidebar(false);
+                  navigate("/support");
+                }}
+                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
+              >
+                <Headset size={24} />
+                <span className="text-lg">Suporte</span>
+              </button>
+              
+              <button 
+                onClick={() => {
+                  setShowSidebar(false);
+                  navigate("/about");
+                }}
+                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
+              >
+                <Info size={24} />
+                <span className="text-lg">Quem Somos</span>
+              </button>
+              
+              <button 
+                onClick={() => {
+                  setShowSidebar(false);
+                  navigate("/terms-candidate");
+                }}
+                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
+              >
+                <FileText size={24} />
+                <span className="text-lg">Termos de Uso</span>
               </button>
             </nav>
 
+            {/* Logout Button at Bottom */}
             <div className="p-4 border-t border-white/20">
               <button 
                 onClick={handleLogout}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
+                <LogOut size={24} />
                 <span className="text-lg">Sair</span>
               </button>
             </div>
