@@ -28,6 +28,9 @@
 
     --accent: 200 90% 55%; /* Cor de destaque (azul). */
     --accent-foreground: 0 0% 100%; /* Texto sobre cor de destaque. */
+    
+    --success: 120 35% 80%; /* Cor de sucesso/registro (verde claro #C1E1C1). */
+    --success-foreground: 120 60% 20%; /* Texto sobre cor de sucesso (verde escuro). */
 
     --destructive: 0 84.2% 60.2%; /* Cor de erro (vermelho). */
     --destructive-foreground: 0 0% 100%; /* Texto sobre cor de erro. */
@@ -69,6 +72,9 @@
 
     --accent: 200 90% 60%; /* Cor de destaque (azul). */
     --accent-foreground: 0 0% 100%; /* Texto branco sobre destaque. */
+    
+    --success: 120 35% 75%; /* Cor de sucesso/registro no dark mode. */
+    --success-foreground: 120 60% 15%; /* Texto sobre cor de sucesso no dark mode. */
 
     --destructive: 0 62.8% 50%; /* Cor de erro (vermelho escuro). */
     --destructive-foreground: 0 0% 100%; /* Texto branco sobre erro. */

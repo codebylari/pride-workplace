@@ -179,40 +179,40 @@ export default function Register() {
 
   // ------------------- STEP 1 -------------------
   const Step1 = () => (
-    <div className="flex flex-col items-center space-y-8">
-      <h2 className="text-3xl font-bold text-center text-white">
+    <div className="flex flex-col items-center space-y-6 md:space-y-8 px-4">
+      <h2 className="text-2xl md:text-3xl font-bold text-center text-white">
         Quem é você na nossa plataforma?
       </h2>
-      <div className="flex flex-col md:flex-row gap-6">
+      <div className="flex flex-col md:flex-row gap-4 md:gap-6 w-full md:w-auto">
         <div
           onClick={() => setRole("candidate")}
-          className={`cursor-pointer p-6 rounded-2xl text-center w-56 transition ${
+          className={`cursor-pointer p-6 rounded-2xl text-center w-full md:w-56 transition ${
             role === "candidate"
               ? "bg-primary/30 text-white border-2 border-primary"
               : "bg-white/20 text-white"
           }`}
         >
-          <p className="text-5xl mb-2">👩‍💻</p>
-          <p className="font-semibold">Sou um(a) candidato(a)</p>
+          <p className="text-4xl md:text-5xl mb-2">👩‍💻</p>
+          <p className="font-semibold text-sm md:text-base">Sou um(a) candidato(a)</p>
         </div>
 
         <div
           onClick={() => setRole("company")}
-          className={`cursor-pointer p-6 rounded-2xl text-center w-56 transition ${
+          className={`cursor-pointer p-6 rounded-2xl text-center w-full md:w-56 transition ${
             role === "company"
               ? "bg-primary/30 text-white border-2 border-primary"
               : "bg-white/20 text-white"
           }`}
         >
-          <p className="text-5xl mb-2">🏢</p>
-          <p className="font-semibold">Sou uma empresa</p>
+          <p className="text-4xl md:text-5xl mb-2">🏢</p>
+          <p className="font-semibold text-sm md:text-base">Sou uma empresa</p>
         </div>
       </div>
 
       <Button
         onClick={() => role && setStep(2)}
         disabled={!role}
-        className="mt-8 bg-primary hover:bg-primary/80 text-white py-6 rounded-full text-lg font-semibold px-10"
+        className="mt-4 md:mt-8 bg-success hover:bg-success/90 text-success-foreground py-5 md:py-6 rounded-full text-base md:text-lg font-semibold px-8 md:px-10 w-full md:w-auto"
       >
         PRÓXIMO
       </Button>
@@ -221,8 +221,8 @@ export default function Register() {
 
   // ------------------- FLUXO CANDIDATO -------------------
   const Step2Candidate = () => (
-    <div className="flex flex-col items-center space-y-6 text-center text-white">
-      <h2 className="text-3xl font-bold">Em qual área você atua?</h2>
+    <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
+      <h2 className="text-2xl md:text-3xl font-bold">Em qual área você atua?</h2>
       {[
         "Desenvolvimento de Software",
         "Design",
@@ -236,7 +236,7 @@ export default function Register() {
         <Button
           key={option}
           onClick={() => setStep(3)}
-          className="w-80 py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-lg"
+          className="w-full md:w-80 py-5 md:py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-base md:text-lg"
         >
           {option}
         </Button>
@@ -245,13 +245,13 @@ export default function Register() {
   );
 
   const Step3Candidate = () => (
-    <div className="flex flex-col items-center space-y-6 text-center text-white">
-      <h2 className="text-3xl font-bold">Qual o seu nível de experiência?</h2>
+    <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
+      <h2 className="text-2xl md:text-3xl font-bold">Qual o seu nível de experiência?</h2>
       {["Júnior", "Pleno", "Sênior", "Especialista"].map((option) => (
         <Button
           key={option}
           onClick={() => setStep(4)}
-          className="w-80 py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-lg"
+          className="w-full md:w-80 py-5 md:py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-base md:text-lg"
         >
           {option}
         </Button>
@@ -260,14 +260,14 @@ export default function Register() {
   );
 
   const Step4Candidate = () => (
-    <div className="flex flex-col items-center space-y-6 text-center text-white">
-      <h2 className="text-3xl font-bold">Qual tipo de oportunidade procura?</h2>
+    <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
+      <h2 className="text-2xl md:text-3xl font-bold">Qual tipo de oportunidade procura?</h2>
       {["Estágio", "CLT", "Freelancer", "Trainee", "Temporário", "Aprendiz"].map(
         (option) => (
           <Button
             key={option}
             onClick={() => setStep(5)}
-            className="w-80 py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-lg"
+            className="w-full md:w-80 py-5 md:py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-base md:text-lg"
           >
             {option}
           </Button>
@@ -277,8 +277,8 @@ export default function Register() {
   );
 
   const Step5Candidate = () => (
-    <div className="flex flex-col items-center space-y-6 text-center text-white">
-      <h2 className="text-3xl font-bold">
+    <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
+      <h2 className="text-2xl md:text-3xl font-bold">
         Qual é o seu nível de conhecimento em Git?
       </h2>
       {["Básico", "Intermediário", "Avançado", "Nenhum conhecimento"].map(
@@ -286,7 +286,7 @@ export default function Register() {
           <Button
             key={option}
             onClick={() => setStep(6)}
-            className="w-80 py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-lg"
+            className="w-full md:w-80 py-5 md:py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-base md:text-lg"
           >
             {option}
           </Button>
@@ -368,12 +368,12 @@ export default function Register() {
     };
 
     return (
-      <form onSubmit={handleSubmit} className="space-y-6 max-w-4xl mx-auto">
-        <h2 className="text-3xl font-bold text-center text-white mb-6">
+      <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6 max-w-4xl mx-auto px-4">
+        <h2 className="text-2xl md:text-3xl font-bold text-center text-white mb-4 md:mb-6">
           Cadastramento de Dados
         </h2>
 
-        <div className="bg-white/20 backdrop-blur-md rounded-2xl p-6 space-y-4">
+        <div className="bg-white/20 backdrop-blur-md rounded-2xl p-4 md:p-6 space-y-3 md:space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="block text-white mb-1">Nome</label>
@@ -600,7 +600,7 @@ export default function Register() {
           <button
             type="submit"
             disabled={checkingEmail || !!emailError || !!passwordError || !!confirmPasswordError}
-            className="w-full bg-primary hover:bg-primary/80 text-white py-4 rounded-full mt-4 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-success hover:bg-success/90 text-success-foreground py-4 rounded-full mt-4 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {checkingEmail ? "VERIFICANDO..." : "CONTINUAR E ENVIAR OS DADOS"}
           </button>
@@ -656,10 +656,10 @@ export default function Register() {
         Ao continuar, você declara estar de acordo com os termos acima e reafirma seu compromisso com uma comunidade inclusiva e respeitosa.
       </p>
 
-      <div className="text-center">
+      <div className="text-center px-4">
         <Button
           onClick={() => setStep(8)}
-          className="bg-primary hover:bg-primary/80 text-white py-4 px-10 rounded-full font-semibold mt-4"
+          className="bg-success hover:bg-success/90 text-success-foreground py-4 px-8 md:px-10 rounded-full font-semibold mt-4 w-full md:w-auto"
         >
           Li e aceito os termos para continuar
         </Button>
@@ -701,7 +701,7 @@ export default function Register() {
           <Button
             disabled={!photo}
             onClick={handleRegister}
-            className="bg-primary hover:bg-primary/80 text-white py-3 px-8 rounded-full font-semibold"
+            className="bg-success hover:bg-success/90 text-success-foreground py-3 px-8 rounded-full font-semibold w-full md:w-auto"
           >
             {photo ? "Cadastrar" : "Selecione uma foto primeiro"}
           </Button>
@@ -719,7 +719,7 @@ export default function Register() {
       </p>
       <Button
         onClick={() => navigate("/auth")}
-        className="bg-primary hover:bg-primary/80 text-white py-4 px-10 rounded-full font-semibold"
+        className="bg-success hover:bg-success/90 text-success-foreground py-4 px-8 md:px-10 rounded-full font-semibold w-full md:w-auto"
       >
         Ir para página inicial
       </Button>
@@ -1107,7 +1107,7 @@ export default function Register() {
           <button
             type="submit"
             disabled={checkingEmail || !!emailError || !!passwordError || !!confirmPasswordError}
-            className="w-full bg-primary hover:bg-primary/80 text-white py-4 rounded-full mt-4 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-success hover:bg-success/90 text-success-foreground py-4 rounded-full mt-4 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {checkingEmail ? "VERIFICANDO..." : "CONTINUAR E ENVIAR OS DADOS"}
           </button>
@@ -1139,10 +1139,10 @@ export default function Register() {
         Ao prosseguir, a empresa declara ter lido e aceitado todos os termos acima.
       </p>
 
-      <div className="text-center">
+      <div className="text-center px-4">
         <Button
           onClick={() => setStep(8)}
-          className="bg-primary hover:bg-primary/80 text-white py-4 px-10 rounded-full font-semibold mt-4 transition-all"
+          className="bg-success hover:bg-success/90 text-success-foreground py-4 px-8 md:px-10 rounded-full font-semibold mt-4 transition-all w-full md:w-auto"
         >
           Concordo com os termos e quero apoiar
         </Button>
@@ -1184,7 +1184,7 @@ export default function Register() {
           <Button
             disabled={!logo}
             onClick={handleRegister}
-            className="bg-primary hover:bg-primary/80 text-white py-3 px-8 rounded-full font-semibold"
+            className="bg-success hover:bg-success/90 text-success-foreground py-3 px-8 rounded-full font-semibold w-full md:w-auto"
           >
             {logo ? "Finalizar cadastro" : "Selecione uma logo"}
           </Button>
@@ -1202,7 +1202,7 @@ export default function Register() {
       </p>
       <Button
         onClick={() => navigate("/auth")}
-        className="bg-primary hover:bg-primary/80 text-white py-4 px-10 rounded-full font-semibold"
+        className="bg-success hover:bg-success/90 text-success-foreground py-4 px-8 md:px-10 rounded-full font-semibold w-full md:w-auto"
       >
         Ir para login
       </Button>
@@ -1212,8 +1212,8 @@ export default function Register() {
   // ------------------- RENDER -------------------
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#6E4062] via-[#5a3452] to-[#6E4062] p-4">
-      <div className="w-full max-w-4xl bg-white/10 backdrop-blur-lg rounded-3xl p-12 shadow-2xl">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#6E4062] via-[#5a3452] to-[#6E4062] p-3 md:p-4">
+      <div className="w-full max-w-4xl bg-white/10 backdrop-blur-lg rounded-2xl md:rounded-3xl p-6 md:p-12 shadow-2xl">
         {step === 1 && <Step1 />}
         {role === "candidate" && step === 2 && <Step2Candidate />}
         {role === "candidate" && step === 3 && <Step3Candidate />}
