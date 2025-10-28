@@ -47,6 +47,25 @@ export default function EditCandidateProfile() {
   };
 
   const handleSaveChanges = () => {
+    // Verifica se alguma alteração foi feita
+    const hasChanges = 
+      displayName.trim() !== "" || 
+      aboutMe.trim() !== "" || 
+      experience.trim() !== "" || 
+      education.trim() !== "" || 
+      myJourney.trim() !== "" || 
+      profilePhoto !== null || 
+      resume !== null;
+
+    if (!hasChanges) {
+      toast({
+        title: "Nenhuma alteração foi modificada",
+        description: "Preencha pelo menos um campo para atualizar seu perfil.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     toast({
       title: "Alterações salvas!",
       description: "Seu perfil foi atualizado com sucesso.",
