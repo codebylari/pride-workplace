@@ -60,17 +60,20 @@ export default function Auth() {
   };
 
   return (
-    <div style={{ background: 'linear-gradient(to bottom right, hsl(315, 26%, 40%), hsl(315, 30%, 50%), hsl(320, 30%, 50%))' }} className="min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-6xl grid md:grid-cols-2 gap-8 bg-white/10 backdrop-blur-lg rounded-3xl p-12 shadow-2xl">
+    <div className="min-h-screen flex items-center justify-center p-6 md:p-8 bg-gradient-to-br from-primary/80 via-primary to-primary/90">
+      <div className="w-full max-w-7xl grid md:grid-cols-2 gap-12 lg:gap-16 bg-white/10 backdrop-blur-xl rounded-3xl p-8 md:p-16 shadow-2xl border border-white/20">
         {/* Left side - Welcome */}
-        <div className="flex flex-col justify-center items-start text-white space-y-8">
-          <img src={logo} alt="QueerCode Logo" className="w-64 h-auto" />
-          <h1 className="text-5xl font-bold">Bem vindos a plataforma!</h1>
+        <div className="flex flex-col justify-center items-start text-white space-y-10">
+          <img src={logo} alt="QueerCode Logo" className="w-56 md:w-72 h-auto" />
           <div className="space-y-4">
-            <p className="text-xl">Não possui conta ?</p>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">Bem vindos à plataforma!</h1>
+            <p className="text-lg md:text-xl text-white/90">Conectando talentos com oportunidades</p>
+          </div>
+          <div className="space-y-5 pt-4">
+            <p className="text-xl text-white/95">Não possui conta?</p>
             <Button
               onClick={() => navigate("/register")}
-              className="bg-green-300/80 hover:bg-green-400/80 text-green-900 px-12 py-6 rounded-full text-lg font-semibold"
+              className="bg-white/90 hover:bg-white text-primary px-10 py-6 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
             >
               CADASTRAR-SE
             </Button>
@@ -79,35 +82,40 @@ export default function Auth() {
 
         {/* Right side - Login form */}
         <div className="flex items-center justify-center">
-          <div className="w-full max-w-md bg-white/20 backdrop-blur-md rounded-3xl p-8 space-y-6">
+          <div className="w-full max-w-md bg-white/15 backdrop-blur-lg rounded-3xl p-10 space-y-8 border border-white/20 shadow-xl">
+            <div className="text-center space-y-2">
+              <h2 className="text-3xl font-bold text-white">Login</h2>
+              <p className="text-white/80">Entre com suas credenciais</p>
+            </div>
+            
             <form onSubmit={handleLogin} className="space-y-6">
-              <div className="space-y-2">
-                <label className="text-white text-sm">Digite seu email</label>
+              <div className="space-y-3">
+                <label className="text-white text-sm font-medium">Email</label>
                 <Input
                   type="email"
-                  placeholder="renata.silva@gmail.com"
+                  placeholder="seu.email@exemplo.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="bg-white/90 rounded-xl py-6 text-gray-800"
+                  className="bg-white/95 rounded-xl py-6 text-gray-800 border-0 focus:ring-2 focus:ring-white/50"
                 />
               </div>
 
-              <div className="space-y-2">
-                <label className="text-white text-sm">Digite sua nova senha</label>
+              <div className="space-y-3">
+                <label className="text-white text-sm font-medium">Senha</label>
                 <div className="relative">
                   <Input
                     type={showPassword ? "text" : "password"}
-                    placeholder="**********"
+                    placeholder="••••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="bg-white/90 rounded-xl py-6 text-gray-800 pr-10"
+                    className="bg-white/95 rounded-xl py-6 text-gray-800 pr-12 border-0 focus:ring-2 focus:ring-white/50"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800 transition-colors"
                   >
                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
@@ -118,18 +126,18 @@ export default function Auth() {
                 <button
                   type="button"
                   onClick={() => navigate("/forgot-password")}
-                  className="text-white text-sm underline hover:text-white/80"
+                  className="text-white/90 text-sm underline hover:text-white transition-colors"
                 >
-                  esqueceu sua senha ?
+                  Esqueceu sua senha?
                 </button>
               </div>
 
               <Button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-pink-300/80 hover:bg-pink-400/80 text-pink-900 py-6 rounded-full text-lg font-semibold"
+                className="w-full bg-white/90 hover:bg-white text-primary py-6 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50"
               >
-                {loading ? "Entrando..." : "LOGIN"}
+                {loading ? "Entrando..." : "ENTRAR"}
               </Button>
             </form>
           </div>
