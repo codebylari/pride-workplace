@@ -1,6 +1,4 @@
-import { useState, useCallback } from "react";
-import Cropper from "react-easy-crop";
-import "react-easy-crop/react-easy-crop.css";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { X, ZoomIn, ZoomOut } from "lucide-react";
@@ -12,22 +10,11 @@ interface PhotoEditorProps {
   onCancel: () => void;
 }
 
-interface CroppedArea {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
+// Using simplified centered crop - external types removed
 
 export function PhotoEditor({ image, onSave, onCancel }: PhotoEditorProps) {
   const { darkMode } = useTheme();
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<CroppedArea | null>(null);
-
-  const onCropComplete = useCallback((_: any, croppedAreaPixels: CroppedArea) => {
-    setCroppedAreaPixels(croppedAreaPixels);
-  }, []);
 
   const createImage = (url: string): Promise<HTMLImageElement> =>
     new Promise((resolve, reject) => {
@@ -37,51 +24,41 @@ export function PhotoEditor({ image, onSave, onCancel }: PhotoEditorProps) {
       image.src = url;
     });
 
-  const getCroppedImg = async (imageSrc: string, pixelCrop: CroppedArea): Promise<Blob> => {
-    const image = await createImage(imageSrc);
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
+const getCenteredCroppedBlob = async (imageSrc: string, zoom: number): Promise<Blob> => {
+  const img = await createImage(imageSrc);
+  const size = 384; // 384px square output
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error("No 2d context");
 
-    if (!ctx) {
-      throw new Error("No 2d context");
-    }
+  canvas.width = size;
+  canvas.height = size;
 
-    canvas.width = pixelCrop.width;
-    canvas.height = pixelCrop.height;
+  const baseScale = Math.max(size / img.width, size / img.height);
+  const scale = baseScale * zoom;
+  const drawW = img.width * scale;
+  const drawH = img.height * scale;
+  const dx = (size - drawW) / 2;
+  const dy = (size - drawH) / 2;
 
-    ctx.drawImage(
-      image,
-      pixelCrop.x,
-      pixelCrop.y,
-      pixelCrop.width,
-      pixelCrop.height,
-      0,
-      0,
-      pixelCrop.width,
-      pixelCrop.height
-    );
+  ctx.drawImage(img, 0, 0, img.width, img.height, dx, dy, drawW, drawH);
 
-    return new Promise((resolve, reject) => {
-      canvas.toBlob((blob) => {
-        if (blob) {
-          resolve(blob);
-        } else {
-          reject(new Error("Canvas is empty"));
-        }
-      }, "image/jpeg");
-    });
-  };
+  return new Promise((resolve, reject) => {
+    canvas.toBlob((blob) => {
+      if (blob) resolve(blob);
+      else reject(new Error("Failed to create blob"));
+    }, "image/png");
+  });
+};
 
-  const handleSave = async () => {
-    if (!croppedAreaPixels) return;
-
-    try {
-      const croppedImage = await getCroppedImg(image, croppedAreaPixels);
-      onSave(croppedImage);
-    } catch (e) {
-      console.error("Error cropping image:", e);
-    }
-  };
+const handleSave = async () => {
+  try {
+    const cropped = await getCenteredCroppedBlob(image, zoom);
+    onSave(cropped);
+  } catch (e) {
+    console.error("Error cropping image:", e);
+  }
+};
 
   return (
     <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
@@ -99,19 +76,16 @@ export function PhotoEditor({ image, onSave, onCancel }: PhotoEditorProps) {
           </button>
         </div>
 
-        {/* Cropper */}
-        <div className="relative h-96 bg-gray-900">
-          <Cropper
-            image={image}
-            crop={crop}
-            zoom={zoom}
-            aspect={1}
-            cropShape="round"
-            showGrid={false}
-            onCropChange={setCrop}
-            onCropComplete={onCropComplete}
-            onZoomChange={setZoom}
-          />
+{/* Preview with round mask */}
+        <div className="relative h-96 flex items-center justify-center bg-gray-900">
+          <div className="rounded-full overflow-hidden w-80 h-80 shadow-inner">
+            <img
+              src={image}
+              alt="Pré-visualização"
+              className="w-full h-full object-cover"
+              style={{ transform: `scale(${zoom})`, transformOrigin: "center center" }}
+            />
+          </div>
         </div>
 
         {/* Controls */}
@@ -137,7 +111,7 @@ export function PhotoEditor({ image, onSave, onCancel }: PhotoEditorProps) {
           </div>
 
           <p className={`text-sm text-center ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
-            Arraste para posicionar a foto e use o controle de zoom para ajustar
+            Use o controle de zoom para ajustar o enquadramento
           </p>
 
           {/* Action Buttons */}
