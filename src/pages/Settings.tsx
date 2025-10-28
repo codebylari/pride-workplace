@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, Bell } from "lucide-react";
+import { Menu, Bell, Briefcase, PlusCircle, User, Settings as SettingsIcon, Headset, Info, FileText, LogOut } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
@@ -100,8 +100,22 @@ export default function Settings() {
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
+                <Briefcase size={24} />
                 <span className="text-lg">Dashboard</span>
               </button>
+              
+              {isCompany && (
+                <button 
+                  onClick={() => {
+                    setShowSidebar(false);
+                    navigate("/create-job");
+                  }}
+                  className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
+                >
+                  <PlusCircle size={24} />
+                  <span className="text-lg">Cadastrar Vagas</span>
+                </button>
+              )}
               
               <button 
                 onClick={() => {
@@ -110,6 +124,7 @@ export default function Settings() {
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
+                <User size={24} />
                 <span className="text-lg">Meu Perfil</span>
               </button>
               
@@ -120,6 +135,7 @@ export default function Settings() {
                 }}
                 className="w-full flex items-center gap-4 p-4 bg-white/10 rounded-lg transition text-left"
               >
+                <SettingsIcon size={24} />
                 <span className="text-lg">Configurações</span>
               </button>
               
@@ -130,6 +146,7 @@ export default function Settings() {
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
+                <Headset size={24} />
                 <span className="text-lg">Suporte</span>
               </button>
               
@@ -140,6 +157,7 @@ export default function Settings() {
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
+                <Info size={24} />
                 <span className="text-lg">Quem Somos</span>
               </button>
               
@@ -150,6 +168,7 @@ export default function Settings() {
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
+                <FileText size={24} />
                 <span className="text-lg">Termos de Uso</span>
               </button>
             </nav>
@@ -159,6 +178,7 @@ export default function Settings() {
                 onClick={handleLogout}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
+                <LogOut size={24} />
                 <span className="text-lg">Sair</span>
               </button>
             </div>
