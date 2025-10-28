@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, Bell, Star, Edit2, Briefcase, User, Settings, Headset, Info, FileText, LogOut } from "lucide-react";
+import { Menu, Bell, Star, Edit2, Briefcase, User, Settings, Headset, Info, FileText, LogOut, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
@@ -12,6 +12,7 @@ export default function CandidateProfile() {
   const { darkMode } = useTheme();
   const [showSidebar, setShowSidebar] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [expandedSection, setExpandedSection] = useState<string | null>(null);
 
   // Get user data
   const userName = user?.user_metadata?.full_name?.split(" ")[0] || "Usuário";
@@ -21,6 +22,83 @@ export default function CandidateProfile() {
   const handleLogout = async () => {
     await signOut();
     navigate("/auth");
+  };
+
+  const toggleSection = (section: string) => {
+    setExpandedSection(expandedSection === section ? null : section);
+  };
+
+  const sections = {
+    "sobre-mim": {
+      title: "Sobre Mim",
+      content: `Olá, me chamo Renata e sou uma mulher cis apaixonada por tecnologia. Atualmente atuo como desenvolvedora web júnior em uma faculdade reconhecida, onde tenho desenvolvido habilidades em programação e criação de soluções digitais.
+
+Busco constantemente oportunidades para trabalhar em projetos reais e expandir minha rede de contatos na área. Sou dedicada, organizada e gosto de aprender coisas novas todos os dias. Meu objetivo é unir criatividade e lógica e prático, aplicando minha paixão pela tecnologia.`
+    },
+    "experiencia": {
+      title: "Experiência",
+      content: `Estágio em Desenvolvimento Web – Pequena Startup de Tecnologia | jan 2025
+• Desenvolvimento front-end com React e CSS
+• Auxílio no desenvolvimento front-end usando React + JS
+• Participação na criação de dashboards internos
+
+Projetos Acadêmicos:
+• Sistema de gerenciamento de biblioteca (Python + PostgreSQL)
+• Aplicativo mobile de lista de tarefas (Flutter)`
+    },
+    "formacao": {
+      title: "Formação",
+      content: `Bacharelado em Ciência da Computação
+Universidade X | 2023 – Presente
+Principais disciplinas: Algoritmos, Banco de Dados, Desenvolvimento Web
+
+Cursos complementares:
+• JavaScript com React (Curso Online)
+• Introdução ao UX/UI Design (Plataforma de cursos)`
+    },
+    "minha-jornada": {
+      title: "Minha Jornada",
+      content: `Minha trajetória na tecnologia começou na faculdade, onde me apaixonei pelos fundamentos da programação. Desde então, venho buscando unir teoria e prática por meio de projetos pessoais e estágio. Dentro do aplicativo, já participei de desafios freelas que me ensinaram a lidar com prazos, feedbacks e entrega.
+
+Crio soluções para projetos do sistema acadêmico → pequenos ajustes em banco de dados e interface em React.
+
+Cada experiência me trouxe novos aprendizados e reforçou meu objetivo de construir ferramentas que facilitem a vida de pessoas. Hoje sigo em busca de novos freelas que me desafiem e ampliem minha rede de contatos.`
+    },
+    "curriculo": {
+      title: "Currículo",
+      content: `Nome: Renata Silva
+Idade: 22 anos
+
+Gênero: Mulher cis
+
+Área: Tecnologia / Desenvolvimento Web e Mobile
+
+Formação
+• Bacharelado em Ciência da Computação – Universidade X | 2023 – Presente
+• Principais disciplinas: Algoritmos, Banco de Dados, Desenvolvimento Web
+
+Cursos complementares:
+• Front-end com React
+• Introdução a UX/UI Design
+
+Experiências
+• Estágio em Desenvolvimento Web – Startup Tech | Jan 2025 – Presente
+  - Desenvolvimento front-end com React
+  - Criação de dashboards internos e manutenção de sistemas
+
+Projetos Acadêmicos:
+• Sistema de gerenciamento de biblioteca (Python + PostgreSQL)
+• Aplicativo mobile de lista de tarefas (Flutter)
+
+Habilidades
+• Linguagens: Python, JavaScript, HTML/ CSS, SQL
+• Frameworks / Ferramentas: React, Flutter, Git
+• Soft skills: Trabalho em equipe, organização, aprendizado rápido
+
+Objetivo
+
+Busco oportunidades como freelancer para ganhar experiência prática, contribuir com projetos reais e expandir minha rede de contatos na área de tecnologia. Sou dedicada, organizada e apaixonada por aprender e aplicar novos conhecimentos em desenvolvimento web e mobile.`
+    }
   };
 
   return (
@@ -206,26 +284,35 @@ export default function CandidateProfile() {
             </div>
 
             {/* Action Buttons */}
-            <div className="space-y-3 max-w-md mx-auto">
-              <Button className="w-full bg-pink-300 hover:bg-pink-400 text-white py-6 rounded-full text-lg font-medium shadow-md">
-                Sobre mim
-              </Button>
-              
-              <Button className="w-full bg-pink-300 hover:bg-pink-400 text-white py-6 rounded-full text-lg font-medium shadow-md">
-                Experiências
-              </Button>
-              
-              <Button className="w-full bg-pink-300 hover:bg-pink-400 text-white py-6 rounded-full text-lg font-medium shadow-md">
-                Formação
-              </Button>
-              
-              <Button className="w-full bg-pink-300 hover:bg-pink-400 text-white py-6 rounded-full text-lg font-medium shadow-md">
-                Minha Jornada
-              </Button>
-              
-              <Button className="w-full bg-pink-300 hover:bg-pink-400 text-white py-6 rounded-full text-lg font-medium shadow-md">
-                Currículo
-              </Button>
+            <div className="space-y-3 max-w-3xl mx-auto">
+              {Object.entries(sections).map(([key, section]) => (
+                <div key={key} className="space-y-2">
+                  <Button
+                    onClick={() => toggleSection(key)}
+                    className="w-full bg-pink-300 hover:bg-pink-400 text-white py-6 rounded-full text-lg font-medium shadow-md flex items-center justify-between"
+                  >
+                    <span>{section.title}</span>
+                    {expandedSection === key ? <ChevronUp size={24} /> : <ChevronDown size={24} />}
+                  </Button>
+                  
+                  {expandedSection === key && (
+                    <div className={`relative rounded-2xl p-6 shadow-lg ${darkMode ? "bg-gray-600" : "bg-white"} border border-gray-200`}>
+                      <button
+                        onClick={() => setExpandedSection(null)}
+                        className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-3xl leading-none"
+                      >
+                        ×
+                      </button>
+                      <h3 className={`text-xl font-bold mb-4 pr-8 ${darkMode ? "text-white" : "text-gray-800"}`}>
+                        {section.title}
+                      </h3>
+                      <div className={`whitespace-pre-line text-sm leading-relaxed ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+                        {section.content}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
         </div>
