@@ -382,7 +382,7 @@ export default function Register() {
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 required
-                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+                className="w-full p-3 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary"
               />
             </div>
             <div>
@@ -392,7 +392,7 @@ export default function Register() {
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
                 required
-                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+                className="w-full p-3 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary"
               />
             </div>
             <div>
@@ -402,7 +402,7 @@ export default function Register() {
                 value={birthDate}
                 onChange={(e) => setBirthDate(e.target.value)}
                 required
-                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+                className="w-full p-3 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary"
               />
             </div>
 
@@ -412,7 +412,7 @@ export default function Register() {
                 type="text"
                 value={socialName}
                 onChange={(e) => setSocialName(e.target.value)}
-                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+                className="w-full p-3 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary"
               />
             </div>
 
@@ -428,7 +428,7 @@ export default function Register() {
                 required
                 maxLength={11}
                 placeholder="00000000000"
-                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+                className="w-full p-3 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary"
               />
             </div>
             <div>
@@ -443,7 +443,7 @@ export default function Register() {
                 required
                 maxLength={15}
                 placeholder="000000000"
-                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+                className="w-full p-3 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary"
               />
             </div>
 
@@ -453,7 +453,7 @@ export default function Register() {
                 value={state}
                 onChange={(e) => setState(e.target.value)}
                 required
-                className="w-full p-3 rounded-lg border border-gray-300 bg-white text-black"
+                className="w-full p-3 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary"
               >
                 <option value="">Selecione seu estado</option>
                 {states.map((st) => (
@@ -471,7 +471,7 @@ export default function Register() {
                 onChange={(e) => setCity(e.target.value)}
                 required
                 disabled={!state || loadingCities}
-                className="w-full p-3 rounded-lg border border-gray-300 bg-white text-black disabled:opacity-50"
+                className="w-full p-3 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary disabled:opacity-50"
               >
                 <option value="">
                   {loadingCities ? "Carregando..." : !state ? "Selecione o estado primeiro" : "Selecione sua cidade"}
@@ -496,7 +496,7 @@ export default function Register() {
                 required
                 maxLength={11}
                 placeholder="11999999999"
-                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+                className="w-full p-3 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary"
               />
             </div>
           </div>
@@ -513,9 +513,9 @@ export default function Register() {
               }}
               onBlur={(e) => checkEmailAvailability(e.target.value)}
               required
-              className={`w-full p-3 rounded-lg border ${
-                emailError ? "border-red-500" : "border-gray-300"
-              } text-black`}
+              className={`w-full p-3 rounded-lg bg-white text-black focus:ring-2 ${
+                emailError ? "ring-2 ring-red-500" : "focus:ring-primary"
+              }`}
             />
             {checkingEmail && (
               <p className="text-yellow-300 text-sm mt-1">Verificando email...</p>
@@ -527,8 +527,7 @@ export default function Register() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <div>
-              <label className="block text-white mb-1 min-h-[3rem] flex items-end">Digite sua Senha</label>
-              <p className="text-white/80 text-xs mb-1">(deve conter pelo menos uma letra)</p>
+              <label className="block text-white mb-1">Digite sua Senha</label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -539,9 +538,9 @@ export default function Register() {
                   }}
                   required
                   minLength={6}
-                  className={`w-full p-3 pr-10 rounded-lg border ${
-                    passwordError ? "border-red-500" : "border-gray-300"
-                  } text-black`}
+                  className={`w-full p-3 pr-10 rounded-lg bg-white text-black focus:ring-2 ${
+                    passwordError ? "ring-2 ring-red-500" : "focus:ring-primary"
+                  }`}
                 />
                 <button
                   type="button"
@@ -556,14 +555,23 @@ export default function Register() {
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
+              <ul className="text-white/80 text-xs mt-2 space-y-1">
+                <li className="flex items-center gap-1">
+                  <span className={password.length >= 6 ? "text-green-300" : "text-white/60"}>✓</span>
+                  Mínimo 6 caracteres
+                </li>
+                <li className="flex items-center gap-1">
+                  <span className={/[a-zA-Z]/.test(password) ? "text-green-300" : "text-white/60"}>✓</span>
+                  Pelo menos uma letra
+                </li>
+              </ul>
               {passwordError && (
                 <p className="text-red-300 text-sm mt-1 font-semibold">{passwordError}</p>
               )}
             </div>
 
             <div>
-              <label className="block text-white mb-1 min-h-[3rem] flex items-end">Repita sua Senha</label>
-              <p className="text-white/80 text-xs mb-1 invisible">(espaço reservado)</p>
+              <label className="block text-white mb-1">Repita sua Senha</label>
               <div className="relative">
                 <input
                   type={showConfirmPassword ? "text" : "password"}
@@ -574,9 +582,9 @@ export default function Register() {
                   }}
                   required
                   minLength={6}
-                  className={`w-full p-3 pr-10 rounded-lg border ${
-                    confirmPasswordError ? "border-red-500" : "border-gray-300"
-                  } text-black`}
+                  className={`w-full p-3 pr-10 rounded-lg bg-white text-black focus:ring-2 ${
+                    confirmPasswordError ? "ring-2 ring-red-500" : "focus:ring-primary"
+                  }`}
                 />
                 <button
                   type="button"
@@ -591,6 +599,11 @@ export default function Register() {
                   {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
+              {confirmPassword && (
+                <p className={`text-xs mt-2 ${password === confirmPassword ? "text-green-300" : "text-red-300"}`}>
+                  {password === confirmPassword ? "✓ Senhas coincidem" : "✗ Senhas não coincidem"}
+                </p>
+              )}
               {confirmPasswordError && (
                 <p className="text-red-300 text-sm mt-1 font-semibold">{confirmPasswordError}</p>
               )}
@@ -866,7 +879,7 @@ export default function Register() {
                 value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
                 required
-                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+                className="w-full p-3 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary"
               />
             </div>
           </div>
@@ -879,7 +892,7 @@ export default function Register() {
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 required
-                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+                className="w-full p-3 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary"
               />
             </div>
 
@@ -890,7 +903,7 @@ export default function Register() {
                 value={companyContactLastName}
                 onChange={(e) => setCompanyContactLastName(e.target.value)}
                 required
-                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+                className="w-full p-3 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary"
               />
             </div>
           </div>
@@ -908,7 +921,7 @@ export default function Register() {
                 required
                 maxLength={14}
                 placeholder="00000000000000"
-                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+                className="w-full p-3 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary"
               />
             </div>
 
@@ -919,7 +932,7 @@ export default function Register() {
                 value={position}
                 onChange={(e) => setPosition(e.target.value)}
                 required
-                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+                className="w-full p-3 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary"
               />
             </div>
 
@@ -929,7 +942,7 @@ export default function Register() {
                 value={state}
                 onChange={(e) => setState(e.target.value)}
                 required
-                className="w-full p-3 rounded-lg border border-gray-300 bg-white text-black"
+                className="w-full p-3 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary"
               >
                 <option value="">Selecione o estado da empresa</option>
                 {states.map((st) => (
@@ -947,7 +960,7 @@ export default function Register() {
                 onChange={(e) => setCity(e.target.value)}
                 required
                 disabled={!state || loadingCities}
-                className="w-full p-3 rounded-lg border border-gray-300 bg-white text-black disabled:opacity-50"
+                className="w-full p-3 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary disabled:opacity-50"
               >
                 <option value="">
                   {loadingCities ? "Carregando..." : !state ? "Selecione o estado primeiro" : "Selecione a cidade"}
@@ -972,7 +985,7 @@ export default function Register() {
                 required
                 maxLength={11}
                 placeholder="11999999999"
-                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+                className="w-full p-3 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary"
               />
             </div>
           </div>
@@ -989,9 +1002,9 @@ export default function Register() {
                 }}
                 onBlur={(e) => checkEmailAvailability(e.target.value)}
                 required
-                className={`w-full p-3 rounded-lg border ${
-                  emailError ? "border-red-500" : "border-gray-300"
-                } text-black`}
+                className={`w-full p-3 rounded-lg bg-white text-black focus:ring-2 ${
+                  emailError ? "ring-2 ring-red-500" : "focus:ring-primary"
+                }`}
               />
               {checkingEmail && (
                 <p className="text-yellow-300 text-sm mt-1">Verificando email...</p>
@@ -1002,8 +1015,7 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1 min-h-[3rem] flex items-end">Senha</label>
-              <p className="text-white/80 text-xs mb-1">(deve conter pelo menos uma letra)</p>
+              <label className="block text-white mb-1">Senha</label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -1014,9 +1026,9 @@ export default function Register() {
                   }}
                   required
                   minLength={6}
-                  className={`w-full p-3 pr-10 rounded-lg border ${
-                    passwordError ? "border-red-500" : "border-gray-300"
-                  } text-black`}
+                  className={`w-full p-3 pr-10 rounded-lg bg-white text-black focus:ring-2 ${
+                    passwordError ? "ring-2 ring-red-500" : "focus:ring-primary"
+                  }`}
                 />
                 <button
                   type="button"
@@ -1031,14 +1043,23 @@ export default function Register() {
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
+              <ul className="text-white/80 text-xs mt-2 space-y-1">
+                <li className="flex items-center gap-1">
+                  <span className={password.length >= 6 ? "text-green-300" : "text-white/60"}>✓</span>
+                  Mínimo 6 caracteres
+                </li>
+                <li className="flex items-center gap-1">
+                  <span className={/[a-zA-Z]/.test(password) ? "text-green-300" : "text-white/60"}>✓</span>
+                  Pelo menos uma letra
+                </li>
+              </ul>
               {passwordError && (
                 <p className="text-red-300 text-sm mt-1 font-semibold">{passwordError}</p>
               )}
             </div>
 
             <div>
-              <label className="block text-white mb-1 min-h-[3rem] flex items-end">Confirmar Senha</label>
-              <p className="text-white/80 text-xs mb-1 invisible">(espaço reservado)</p>
+              <label className="block text-white mb-1">Confirmar Senha</label>
               <div className="relative">
                 <input
                   type={showConfirmPassword ? "text" : "password"}
@@ -1049,9 +1070,9 @@ export default function Register() {
                   }}
                   required
                   minLength={6}
-                  className={`w-full p-3 pr-10 rounded-lg border ${
-                    confirmPasswordError ? "border-red-500" : "border-gray-300"
-                  } text-black`}
+                  className={`w-full p-3 pr-10 rounded-lg bg-white text-black focus:ring-2 ${
+                    confirmPasswordError ? "ring-2 ring-red-500" : "focus:ring-primary"
+                  }`}
                 />
                 <button
                   type="button"
@@ -1066,6 +1087,11 @@ export default function Register() {
                   {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
+              {confirmPassword && (
+                <p className={`text-xs mt-2 ${password === confirmPassword ? "text-green-300" : "text-red-300"}`}>
+                  {password === confirmPassword ? "✓ Senhas coincidem" : "✗ Senhas não coincidem"}
+                </p>
+              )}
               {confirmPasswordError && (
                 <p className="text-red-300 text-sm mt-1 font-semibold">{confirmPasswordError}</p>
               )}
