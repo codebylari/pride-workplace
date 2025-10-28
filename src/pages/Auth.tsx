@@ -61,6 +61,11 @@ export default function Auth() {
 
   return (
     <div className="min-h-screen relative overflow-hidden flex items-center justify-center p-4 bg-gradient-to-br from-[#6E4062] via-[#5a3452] to-[#6E4062]">
+      {/* Logo no topo centralizado */}
+      <div className="absolute top-8 left-1/2 -translate-x-1/2 z-20">
+        <img src={logo} alt="QueerCode Logo" className="w-32 h-auto" />
+      </div>
+
       {/* Elementos decorativos geométricos */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Círculos grandes com blur */}
@@ -68,23 +73,32 @@ export default function Auth() {
         <div className="absolute bottom-32 right-32 w-[500px] h-[500px] rounded-full bg-pink-500/15 blur-3xl"></div>
         <div className="absolute top-1/2 left-1/3 w-80 h-80 rounded-full bg-blue-500/15 blur-3xl"></div>
         
-        {/* Formas geométricas decorativas */}
+        {/* Formas geométricas decorativas - quadrados e retângulos */}
         <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-white/5 rounded-2xl rotate-45"></div>
         <div className="absolute top-1/3 right-1/3 w-24 h-24 bg-white/5 rounded-full"></div>
         <div className="absolute bottom-1/3 left-1/2 w-16 h-40 bg-white/5 rounded-xl rotate-12"></div>
         <div className="absolute top-1/2 right-1/4 w-28 h-28 bg-white/5 rounded-2xl -rotate-12"></div>
         <div className="absolute bottom-1/4 right-1/3 w-20 h-20 bg-white/5 rounded-full"></div>
         
+        {/* Mais formas geométricas distribuídas */}
+        <div className="absolute top-20 right-1/4 w-20 h-20 bg-white/5 rounded-xl rotate-45"></div>
+        <div className="absolute top-1/3 left-1/5 w-16 h-16 bg-white/5 rounded-full"></div>
+        <div className="absolute bottom-1/4 left-1/3 w-24 h-24 bg-white/5 rounded-2xl -rotate-12"></div>
+        <div className="absolute bottom-20 right-1/5 w-28 h-28 bg-white/5 rounded-xl rotate-12"></div>
+        <div className="absolute top-1/4 right-1/5 w-12 h-32 bg-white/5 rounded-lg rotate-45"></div>
+        <div className="absolute bottom-1/3 right-1/2 w-18 h-18 bg-white/5 rounded-full"></div>
+        <div className="absolute top-2/3 left-1/4 w-22 h-22 bg-white/5 rounded-xl -rotate-45"></div>
+        
         {/* Linhas decorativas */}
         <div className="absolute top-40 left-1/3 w-48 h-0.5 bg-white/10 rotate-45"></div>
         <div className="absolute bottom-40 right-1/4 w-64 h-0.5 bg-white/10 -rotate-12"></div>
+        <div className="absolute top-1/3 right-1/5 w-40 h-0.5 bg-white/10 rotate-12"></div>
+        <div className="absolute bottom-1/3 left-1/5 w-56 h-0.5 bg-white/10 -rotate-45"></div>
       </div>
 
       <div className="w-full max-w-6xl grid md:grid-cols-2 gap-8 relative z-10 px-4">
         {/* Left side - Welcome */}
         <div className="flex flex-col justify-center items-start space-y-8 text-white">
-          <img src={logo} alt="QueerCode Logo" className="w-48 md:w-64 h-auto" />
-          
           <div className="space-y-4">
             <h1 className="text-5xl md:text-6xl font-bold leading-tight">
               Bem-vindo!
