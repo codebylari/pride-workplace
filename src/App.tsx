@@ -67,6 +67,9 @@ import DeactivateAccount from "./pages/DeactivateAccount";
 import DeleteAccount from "./pages/DeleteAccount";
 // Página de Deletar Conta
 
+import EditCandidateProfile from "./pages/EditCandidateProfile";
+// Página de Editar Perfil do Candidato
+
 import ForgotPassword from "./pages/ForgotPassword";
 // Página de Recuperar Senha
 
@@ -139,6 +142,9 @@ const App = () => (
             
             <Route path="/delete-account" element={<DeleteAccount />} />
             {/* Página de Deletar Conta */}
+            
+            <Route path="/edit-candidate-profile" element={<EditCandidateProfile />} />
+            {/* Página de Editar Perfil do Candidato */}
             
             <Route path="/forgot-password" element={<ForgotPassword />} />
             {/* Página de Recuperar Senha */}

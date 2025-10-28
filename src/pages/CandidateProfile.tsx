@@ -258,7 +258,10 @@ Busco oportunidades como freelancer para ganhar experiência prática, contribui
                 <div className={`w-32 h-32 rounded-full bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center text-4xl font-bold text-white border-4 shadow-xl ${darkMode ? "border-gray-700" : "border-white"}`}>
                   {userName.charAt(0).toUpperCase()}
                 </div>
-                <button className="absolute bottom-0 right-0 w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white hover:bg-blue-600 transition shadow-lg">
+                <button 
+                  onClick={() => navigate("/edit-candidate-profile")}
+                  className="absolute bottom-0 right-0 w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white hover:bg-blue-600 transition shadow-lg"
+                >
                   <Edit2 size={18} />
                 </button>
               </div>
