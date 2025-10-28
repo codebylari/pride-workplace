@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Eye, EyeOff, Check, ArrowLeft } from "lucide-react";
+import { PhotoEditor } from "@/components/PhotoEditor";
 
 interface City {
   id: number;
@@ -668,44 +669,77 @@ export default function Register() {
 
   const Step8Photo = () => {
     const [photo, setPhoto] = useState<File | null>(null);
+    const [showPhotoEditor, setShowPhotoEditor] = useState(false);
+    const [tempPhotoUrl, setTempPhotoUrl] = useState<string | null>(null);
 
     const handlePhotoSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
       if (event.target.files && event.target.files[0]) {
-        setPhoto(event.target.files[0]);
+        const file = event.target.files[0];
+        const url = URL.createObjectURL(file);
+        setTempPhotoUrl(url);
+        setShowPhotoEditor(true);
+      }
+    };
+
+    const handlePhotoSave = (croppedImage: Blob) => {
+      const file = new File([croppedImage], "profile-photo.jpg", { type: "image/jpeg" });
+      setPhoto(file);
+      setShowPhotoEditor(false);
+      if (tempPhotoUrl) {
+        URL.revokeObjectURL(tempPhotoUrl);
+        setTempPhotoUrl(null);
+      }
+    };
+
+    const handlePhotoCancel = () => {
+      setShowPhotoEditor(false);
+      if (tempPhotoUrl) {
+        URL.revokeObjectURL(tempPhotoUrl);
+        setTempPhotoUrl(null);
       }
     };
 
     return (
-      <div className="flex flex-col items-center text-white space-y-6">
-        <h2 className="text-3xl font-bold">Escolha sua foto</h2>
+      <>
+        <div className="flex flex-col items-center text-white space-y-6">
+          <h2 className="text-3xl font-bold">Escolha sua foto</h2>
 
-        {photo ? (
-          <img
-            src={URL.createObjectURL(photo)}
-            alt="Prévia da foto"
-            className="w-40 h-40 rounded-full object-cover border-4 border-green-300 shadow-lg"
-          />
-        ) : (
-          <div className="w-40 h-40 rounded-full bg-white/10 flex items-center justify-center text-4xl border-2 border-white/30">
-            📷
+          {photo ? (
+            <img
+              src={URL.createObjectURL(photo)}
+              alt="Prévia da foto"
+              className="w-40 h-40 rounded-full object-cover border-4 border-green-300 shadow-lg"
+            />
+          ) : (
+            <div className="w-40 h-40 rounded-full bg-white/10 flex items-center justify-center text-4xl border-2 border-white/30">
+              📷
+            </div>
+          )}
+
+          <div className="flex flex-col items-center gap-4">
+            <label className="cursor-pointer bg-white/20 hover:bg-white/30 px-6 py-3 rounded-full">
+              🖼️ Escolher da galeria
+              <input type="file" accept="image/*" onChange={handlePhotoSelect} className="hidden" />
+            </label>
+
+            <Button
+              disabled={!photo}
+              onClick={handleRegister}
+              className="bg-green-300/80 hover:bg-green-400/80 text-green-900 py-3 px-8 rounded-full font-semibold"
+            >
+              {photo ? "Cadastrar" : "Selecione uma foto primeiro"}
+            </Button>
           </div>
-        )}
-
-        <div className="flex flex-col items-center gap-4">
-          <label className="cursor-pointer bg-white/20 hover:bg-white/30 px-6 py-3 rounded-full">
-            🖼️ Escolher da galeria
-            <input type="file" accept="image/*" onChange={handlePhotoSelect} className="hidden" />
-          </label>
-
-          <Button
-            disabled={!photo}
-            onClick={handleRegister}
-            className="bg-green-300/80 hover:bg-green-400/80 text-green-900 py-3 px-8 rounded-full font-semibold"
-          >
-            {photo ? "Cadastrar" : "Selecione uma foto primeiro"}
-          </Button>
         </div>
-      </div>
+
+        {showPhotoEditor && tempPhotoUrl && (
+          <PhotoEditor
+            image={tempPhotoUrl}
+            onSave={handlePhotoSave}
+            onCancel={handlePhotoCancel}
+          />
+        )}
+      </>
     );
   };
 
@@ -1157,44 +1191,77 @@ export default function Register() {
 
   const Step8Company = () => {
     const [logo, setLogo] = useState<File | null>(null);
+    const [showLogoEditor, setShowLogoEditor] = useState(false);
+    const [tempLogoUrl, setTempLogoUrl] = useState<string | null>(null);
 
     const handleLogoSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
       if (event.target.files && event.target.files[0]) {
-        setLogo(event.target.files[0]);
+        const file = event.target.files[0];
+        const url = URL.createObjectURL(file);
+        setTempLogoUrl(url);
+        setShowLogoEditor(true);
+      }
+    };
+
+    const handleLogoSave = (croppedImage: Blob) => {
+      const file = new File([croppedImage], "company-logo.jpg", { type: "image/jpeg" });
+      setLogo(file);
+      setShowLogoEditor(false);
+      if (tempLogoUrl) {
+        URL.revokeObjectURL(tempLogoUrl);
+        setTempLogoUrl(null);
+      }
+    };
+
+    const handleLogoCancel = () => {
+      setShowLogoEditor(false);
+      if (tempLogoUrl) {
+        URL.revokeObjectURL(tempLogoUrl);
+        setTempLogoUrl(null);
       }
     };
 
     return (
-      <div className="flex flex-col items-center text-white space-y-6">
-        <h2 className="text-3xl font-bold">Envie o logo da sua empresa</h2>
+      <>
+        <div className="flex flex-col items-center text-white space-y-6">
+          <h2 className="text-3xl font-bold">Envie o logo da sua empresa</h2>
 
-        {logo ? (
-          <img
-            src={URL.createObjectURL(logo)}
-            alt="Prévia da logo"
-            className="w-40 h-40 rounded-full object-cover border-4 border-green-300 shadow-lg"
-          />
-        ) : (
-          <div className="w-40 h-40 rounded-full bg-white/10 flex items-center justify-center text-4xl border-2 border-white/30">
-            🏢
+          {logo ? (
+            <img
+              src={URL.createObjectURL(logo)}
+              alt="Prévia da logo"
+              className="w-40 h-40 rounded-full object-cover border-4 border-green-300 shadow-lg"
+            />
+          ) : (
+            <div className="w-40 h-40 rounded-full bg-white/10 flex items-center justify-center text-4xl border-2 border-white/30">
+              🏢
+            </div>
+          )}
+
+          <div className="flex flex-col items-center gap-4">
+            <label className="cursor-pointer bg-white/20 hover:bg-white/30 px-6 py-3 rounded-full">
+              🖼️ Escolher logo
+              <input type="file" accept="image/*" onChange={handleLogoSelect} className="hidden" />
+            </label>
+
+            <Button
+              disabled={!logo}
+              onClick={handleRegister}
+              className="bg-green-300/80 hover:bg-green-400/80 text-green-900 py-3 px-8 rounded-full font-semibold"
+            >
+              {logo ? "Finalizar cadastro" : "Selecione uma logo"}
+            </Button>
           </div>
-        )}
-
-        <div className="flex flex-col items-center gap-4">
-          <label className="cursor-pointer bg-white/20 hover:bg-white/30 px-6 py-3 rounded-full">
-            🖼️ Escolher logo
-            <input type="file" accept="image/*" onChange={handleLogoSelect} className="hidden" />
-          </label>
-
-          <Button
-            disabled={!logo}
-            onClick={handleRegister}
-            className="bg-green-300/80 hover:bg-green-400/80 text-green-900 py-3 px-8 rounded-full font-semibold"
-          >
-            {logo ? "Finalizar cadastro" : "Selecione uma logo"}
-          </Button>
         </div>
-      </div>
+
+        {showLogoEditor && tempLogoUrl && (
+          <PhotoEditor
+            image={tempLogoUrl}
+            onSave={handleLogoSave}
+            onCancel={handleLogoCancel}
+          />
+        )}
+      </>
     );
   };
 
