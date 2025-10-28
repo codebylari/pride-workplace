@@ -73,7 +73,7 @@ export default function Auth() {
             <p className="text-xl text-white/95">Não possui conta?</p>
             <Button
               onClick={() => navigate("/register")}
-              className="bg-white/90 hover:bg-white text-primary px-10 py-6 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+              className="bg-gradient-to-r from-green-400 to-green-500 hover:from-green-500 hover:to-green-600 text-white px-10 py-6 rounded-full text-lg font-semibold shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300"
             >
               CADASTRAR-SE
             </Button>
@@ -135,7 +135,7 @@ export default function Auth() {
               <Button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-white/90 hover:bg-white text-primary py-6 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50"
+                className="w-full bg-gradient-to-r from-pink-400 to-pink-500 hover:from-pink-500 hover:to-pink-600 text-white py-6 rounded-full text-lg font-semibold shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 disabled:opacity-50"
               >
                 {loading ? "Entrando..." : "ENTRAR"}
               </Button>
