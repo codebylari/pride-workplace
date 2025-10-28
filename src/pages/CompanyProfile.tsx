@@ -266,7 +266,10 @@ export default function CompanyProfile() {
                     {companyName.substring(0, 2).toUpperCase()}
                   </span>
                 </div>
-                <button className={`absolute bottom-0 right-0 p-2 rounded-full shadow-md transition ${darkMode ? "bg-gray-600 hover:bg-gray-500" : "bg-white hover:bg-gray-100"}`}>
+                <button 
+                  onClick={() => navigate("/edit-company-profile")}
+                  className={`absolute bottom-0 right-0 p-2 rounded-full shadow-md transition ${darkMode ? "bg-gray-600 hover:bg-gray-500" : "bg-white hover:bg-gray-100"}`}
+                >
                   <Edit size={20} className={darkMode ? "text-gray-300" : "text-gray-600"} />
                 </button>
               </div>

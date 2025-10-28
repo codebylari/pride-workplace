@@ -70,6 +70,9 @@ import DeleteAccount from "./pages/DeleteAccount";
 import EditCandidateProfile from "./pages/EditCandidateProfile";
 // Página de Editar Perfil do Candidato
 
+import EditCompanyProfile from "./pages/EditCompanyProfile";
+// Página de Editar Perfil da Empresa
+
 import JobDetails from "./pages/JobDetails";
 // Página de Detalhes da Vaga
 
@@ -157,6 +160,9 @@ const App = () => (
             
             <Route path="/edit-candidate-profile" element={<EditCandidateProfile />} />
             {/* Página de Editar Perfil do Candidato */}
+            
+            <Route path="/edit-company-profile" element={<EditCompanyProfile />} />
+            {/* Página de Editar Perfil da Empresa */}
             
             <Route path="/job/:id" element={<JobDetails />} />
             {/* Página de Detalhes da Vaga */}
