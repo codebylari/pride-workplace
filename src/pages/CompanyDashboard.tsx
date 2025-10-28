@@ -23,27 +23,59 @@ export default function CompanyDashboard() {
 
   return (
     <div className={`min-h-screen relative overflow-hidden ${darkMode ? "bg-gray-800" : "bg-gray-50"}`}>
-      {/* Formas tecnológicas de fundo */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
-        {/* Círculo superior esquerdo */}
-        <div className="absolute -top-20 -left-20 w-64 h-64 border-4 border-gray-400 rounded-full" />
-        
-        {/* Hexágono superior direito */}
-        <svg className="absolute top-10 right-32 w-48 h-48" viewBox="0 0 100 100">
-          <polygon points="50,5 90,27.5 90,72.5 50,95 10,72.5 10,27.5" fill="none" stroke="rgb(156, 163, 175)" strokeWidth="2" />
+      {/* Conexões tecnológicas no lado esquerdo */}
+      <div className="absolute left-0 top-0 bottom-0 w-1/3 overflow-hidden pointer-events-none opacity-10">
+        <svg className="w-full h-full" viewBox="0 0 400 800" preserveAspectRatio="xMinYMid slice">
+          {/* Pontos (nós da rede) */}
+          <circle cx="50" cy="100" r="4" fill="#9ca3af" />
+          <circle cx="150" cy="80" r="4" fill="#9ca3af" />
+          <circle cx="280" cy="120" r="4" fill="#9ca3af" />
+          <circle cx="100" cy="200" r="4" fill="#9ca3af" />
+          <circle cx="220" cy="220" r="4" fill="#9ca3af" />
+          <circle cx="320" cy="180" r="4" fill="#9ca3af" />
+          <circle cx="80" cy="320" r="4" fill="#9ca3af" />
+          <circle cx="180" cy="340" r="4" fill="#9ca3af" />
+          <circle cx="300" cy="300" r="4" fill="#9ca3af" />
+          <circle cx="120" cy="440" r="4" fill="#9ca3af" />
+          <circle cx="240" cy="420" r="4" fill="#9ca3af" />
+          <circle cx="340" cy="460" r="4" fill="#9ca3af" />
+          <circle cx="60" cy="560" r="4" fill="#9ca3af" />
+          <circle cx="160" cy="540" r="4" fill="#9ca3af" />
+          <circle cx="280" cy="580" r="4" fill="#9ca3af" />
+          <circle cx="140" cy="680" r="4" fill="#9ca3af" />
+          <circle cx="260" cy="700" r="4" fill="#9ca3af" />
+          <circle cx="360" cy="660" r="4" fill="#9ca3af" />
+          
+          {/* Linhas conectando os pontos */}
+          <line x1="50" y1="100" x2="150" y2="80" stroke="#9ca3af" strokeWidth="1" />
+          <line x1="150" y1="80" x2="280" y2="120" stroke="#9ca3af" strokeWidth="1" />
+          <line x1="50" y1="100" x2="100" y2="200" stroke="#9ca3af" strokeWidth="1" />
+          <line x1="150" y1="80" x2="100" y2="200" stroke="#9ca3af" strokeWidth="1" />
+          <line x1="280" y1="120" x2="220" y2="220" stroke="#9ca3af" strokeWidth="1" />
+          <line x1="280" y1="120" x2="320" y2="180" stroke="#9ca3af" strokeWidth="1" />
+          <line x1="100" y1="200" x2="220" y2="220" stroke="#9ca3af" strokeWidth="1" />
+          <line x1="220" y1="220" x2="320" y2="180" stroke="#9ca3af" strokeWidth="1" />
+          <line x1="100" y1="200" x2="80" y2="320" stroke="#9ca3af" strokeWidth="1" />
+          <line x1="220" y1="220" x2="180" y2="340" stroke="#9ca3af" strokeWidth="1" />
+          <line x1="320" y1="180" x2="300" y2="300" stroke="#9ca3af" strokeWidth="1" />
+          <line x1="80" y1="320" x2="180" y2="340" stroke="#9ca3af" strokeWidth="1" />
+          <line x1="180" y1="340" x2="300" y2="300" stroke="#9ca3af" strokeWidth="1" />
+          <line x1="80" y1="320" x2="120" y2="440" stroke="#9ca3af" strokeWidth="1" />
+          <line x1="180" y1="340" x2="240" y2="420" stroke="#9ca3af" strokeWidth="1" />
+          <line x1="300" y1="300" x2="340" y2="460" stroke="#9ca3af" strokeWidth="1" />
+          <line x1="120" y1="440" x2="240" y2="420" stroke="#9ca3af" strokeWidth="1" />
+          <line x1="240" y1="420" x2="340" y2="460" stroke="#9ca3af" strokeWidth="1" />
+          <line x1="120" y1="440" x2="60" y2="560" stroke="#9ca3af" strokeWidth="1" />
+          <line x1="120" y1="440" x2="160" y2="540" stroke="#9ca3af" strokeWidth="1" />
+          <line x1="240" y1="420" x2="280" y2="580" stroke="#9ca3af" strokeWidth="1" />
+          <line x1="60" y1="560" x2="160" y2="540" stroke="#9ca3af" strokeWidth="1" />
+          <line x1="160" y1="540" x2="280" y2="580" stroke="#9ca3af" strokeWidth="1" />
+          <line x1="160" y1="540" x2="140" y2="680" stroke="#9ca3af" strokeWidth="1" />
+          <line x1="280" y1="580" x2="260" y2="700" stroke="#9ca3af" strokeWidth="1" />
+          <line x1="280" y1="580" x2="360" y2="660" stroke="#9ca3af" strokeWidth="1" />
+          <line x1="140" y1="680" x2="260" y2="700" stroke="#9ca3af" strokeWidth="1" />
+          <line x1="260" y1="700" x2="360" y2="660" stroke="#9ca3af" strokeWidth="1" />
         </svg>
-        
-        {/* Triângulo inferior esquerdo */}
-        <svg className="absolute bottom-32 left-40 w-40 h-40" viewBox="0 0 100 100">
-          <polygon points="50,10 90,90 10,90" fill="none" stroke="rgb(156, 163, 175)" strokeWidth="2" />
-        </svg>
-        
-        {/* Retângulo rotacionado inferior direito */}
-        <div className="absolute bottom-20 right-20 w-56 h-56 border-4 border-gray-400 transform rotate-45" />
-        
-        {/* Pequenos círculos decorativos */}
-        <div className="absolute top-1/3 left-1/4 w-16 h-16 border-2 border-gray-300 rounded-full" />
-        <div className="absolute bottom-1/3 right-1/3 w-12 h-12 border-2 border-gray-300 rounded-full" />
       </div>
 
       {/* Cabeçalho */}
