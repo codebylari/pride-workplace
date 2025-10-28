@@ -287,7 +287,7 @@ Busco oportunidades como freelancer para ganhar experiência prática, contribui
             </div>
 
             {/* Action Buttons */}
-            <div className="space-y-3 max-w-3xl mx-auto">
+            <div className="space-y-3 max-w-2xl mx-auto px-4">
               {Object.entries(sections).map(([key, section]) => (
                 <div key={key} className="space-y-2">
                   <Button
