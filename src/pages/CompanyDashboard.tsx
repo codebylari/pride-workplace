@@ -23,58 +23,111 @@ export default function CompanyDashboard() {
 
   return (
     <div className={`min-h-screen relative overflow-hidden ${darkMode ? "bg-gray-800" : "bg-gray-50"}`}>
-      {/* Conexões tecnológicas no lado esquerdo */}
-      <div className="absolute left-0 top-[72px] bottom-0 w-1/3 overflow-hidden pointer-events-none opacity-25">
-        <svg className="w-full h-full" viewBox="0 0 400 800" preserveAspectRatio="xMinYMid slice">
-          {/* Pontos (nós da rede) */}
-          <circle cx="50" cy="100" r="4" fill="#6b7280" />
-          <circle cx="150" cy="80" r="4" fill="#6b7280" />
-          <circle cx="280" cy="120" r="4" fill="#6b7280" />
-          <circle cx="100" cy="200" r="4" fill="#6b7280" />
-          <circle cx="220" cy="220" r="4" fill="#6b7280" />
-          <circle cx="320" cy="180" r="4" fill="#6b7280" />
-          <circle cx="80" cy="320" r="4" fill="#6b7280" />
-          <circle cx="180" cy="340" r="4" fill="#6b7280" />
-          <circle cx="300" cy="300" r="4" fill="#6b7280" />
-          <circle cx="120" cy="440" r="4" fill="#6b7280" />
-          <circle cx="240" cy="420" r="4" fill="#6b7280" />
-          <circle cx="340" cy="460" r="4" fill="#6b7280" />
-          <circle cx="60" cy="560" r="4" fill="#6b7280" />
-          <circle cx="160" cy="540" r="4" fill="#6b7280" />
-          <circle cx="280" cy="580" r="4" fill="#6b7280" />
-          <circle cx="140" cy="680" r="4" fill="#6b7280" />
-          <circle cx="260" cy="700" r="4" fill="#6b7280" />
-          <circle cx="360" cy="660" r="4" fill="#6b7280" />
+      {/* Conexões tecnológicas com brilho em todo o fundo */}
+      <div className="absolute left-0 top-[72px] right-0 bottom-0 overflow-hidden pointer-events-none opacity-20">
+        <svg className="w-full h-full" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            {/* Filtro de brilho para os pontos */}
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+              <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
           
-          {/* Linhas conectando os pontos */}
-          <line x1="50" y1="100" x2="150" y2="80" stroke="#6b7280" strokeWidth="1.5" />
-          <line x1="150" y1="80" x2="280" y2="120" stroke="#6b7280" strokeWidth="1.5" />
-          <line x1="50" y1="100" x2="100" y2="200" stroke="#6b7280" strokeWidth="1.5" />
-          <line x1="150" y1="80" x2="100" y2="200" stroke="#6b7280" strokeWidth="1.5" />
-          <line x1="280" y1="120" x2="220" y2="220" stroke="#6b7280" strokeWidth="1.5" />
-          <line x1="280" y1="120" x2="320" y2="180" stroke="#6b7280" strokeWidth="1.5" />
-          <line x1="100" y1="200" x2="220" y2="220" stroke="#6b7280" strokeWidth="1.5" />
-          <line x1="220" y1="220" x2="320" y2="180" stroke="#6b7280" strokeWidth="1.5" />
-          <line x1="100" y1="200" x2="80" y2="320" stroke="#6b7280" strokeWidth="1.5" />
-          <line x1="220" y1="220" x2="180" y2="340" stroke="#6b7280" strokeWidth="1.5" />
-          <line x1="320" y1="180" x2="300" y2="300" stroke="#6b7280" strokeWidth="1.5" />
-          <line x1="80" y1="320" x2="180" y2="340" stroke="#6b7280" strokeWidth="1.5" />
-          <line x1="180" y1="340" x2="300" y2="300" stroke="#6b7280" strokeWidth="1.5" />
-          <line x1="80" y1="320" x2="120" y2="440" stroke="#6b7280" strokeWidth="1.5" />
-          <line x1="180" y1="340" x2="240" y2="420" stroke="#6b7280" strokeWidth="1.5" />
-          <line x1="300" y1="300" x2="340" y2="460" stroke="#6b7280" strokeWidth="1.5" />
-          <line x1="120" y1="440" x2="240" y2="420" stroke="#6b7280" strokeWidth="1.5" />
-          <line x1="240" y1="420" x2="340" y2="460" stroke="#6b7280" strokeWidth="1.5" />
-          <line x1="120" y1="440" x2="60" y2="560" stroke="#6b7280" strokeWidth="1.5" />
-          <line x1="120" y1="440" x2="160" y2="540" stroke="#6b7280" strokeWidth="1.5" />
-          <line x1="240" y1="420" x2="280" y2="580" stroke="#6b7280" strokeWidth="1.5" />
-          <line x1="60" y1="560" x2="160" y2="540" stroke="#6b7280" strokeWidth="1.5" />
-          <line x1="160" y1="540" x2="280" y2="580" stroke="#6b7280" strokeWidth="1.5" />
-          <line x1="160" y1="540" x2="140" y2="680" stroke="#6b7280" strokeWidth="1.5" />
-          <line x1="280" y1="580" x2="260" y2="700" stroke="#6b7280" strokeWidth="1.5" />
-          <line x1="280" y1="580" x2="360" y2="660" stroke="#6b7280" strokeWidth="1.5" />
-          <line x1="140" y1="680" x2="260" y2="700" stroke="#6b7280" strokeWidth="1.5" />
-          <line x1="260" y1="700" x2="360" y2="660" stroke="#6b7280" strokeWidth="1.5" />
+          {/* Pontos com brilho */}
+          <circle cx="10%" cy="15%" r="3" fill="#6b7280" filter="url(#glow)" />
+          <circle cx="25%" cy="12%" r="2" fill="#9ca3af" />
+          <circle cx="40%" cy="18%" r="4" fill="#6b7280" filter="url(#glow)" />
+          <circle cx="55%" cy="10%" r="2" fill="#9ca3af" />
+          <circle cx="70%" cy="20%" r="3" fill="#6b7280" filter="url(#glow)" />
+          <circle cx="85%" cy="15%" r="2" fill="#9ca3af" />
+          
+          <circle cx="15%" cy="30%" r="2" fill="#9ca3af" />
+          <circle cx="32%" cy="35%" r="4" fill="#6b7280" filter="url(#glow)" />
+          <circle cx="48%" cy="28%" r="2" fill="#9ca3af" />
+          <circle cx="62%" cy="38%" r="3" fill="#6b7280" filter="url(#glow)" />
+          <circle cx="78%" cy="32%" r="2" fill="#9ca3af" />
+          <circle cx="90%" cy="35%" r="4" fill="#6b7280" filter="url(#glow)" />
+          
+          <circle cx="8%" cy="50%" r="3" fill="#6b7280" filter="url(#glow)" />
+          <circle cx="22%" cy="48%" r="2" fill="#9ca3af" />
+          <circle cx="38%" cy="52%" r="4" fill="#6b7280" filter="url(#glow)" />
+          <circle cx="52%" cy="45%" r="2" fill="#9ca3af" />
+          <circle cx="68%" cy="55%" r="3" fill="#6b7280" filter="url(#glow)" />
+          <circle cx="82%" cy="48%" r="2" fill="#9ca3af" />
+          
+          <circle cx="12%" cy="68%" r="2" fill="#9ca3af" />
+          <circle cx="28%" cy="65%" r="4" fill="#6b7280" filter="url(#glow)" />
+          <circle cx="45%" cy="70%" r="2" fill="#9ca3af" />
+          <circle cx="60%" cy="68%" r="3" fill="#6b7280" filter="url(#glow)" />
+          <circle cx="75%" cy="72%" r="2" fill="#9ca3af" />
+          <circle cx="88%" cy="65%" r="4" fill="#6b7280" filter="url(#glow)" />
+          
+          <circle cx="18%" cy="85%" r="3" fill="#6b7280" filter="url(#glow)" />
+          <circle cx="35%" cy="88%" r="2" fill="#9ca3af" />
+          <circle cx="50%" cy="82%" r="4" fill="#6b7280" filter="url(#glow)" />
+          <circle cx="65%" cy="90%" r="2" fill="#9ca3af" />
+          <circle cx="80%" cy="85%" r="3" fill="#6b7280" filter="url(#glow)" />
+          
+          {/* Linhas de conexão */}
+          <line x1="10%" y1="15%" x2="25%" y2="12%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="25%" y1="12%" x2="40%" y2="18%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="40%" y1="18%" x2="55%" y2="10%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="55%" y1="10%" x2="70%" y2="20%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="70%" y1="20%" x2="85%" y2="15%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          
+          <line x1="10%" y1="15%" x2="15%" y2="30%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="25%" y1="12%" x2="32%" y2="35%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="40%" y1="18%" x2="48%" y2="28%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="55%" y1="10%" x2="62%" y2="38%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="70%" y1="20%" x2="78%" y2="32%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="85%" y1="15%" x2="90%" y2="35%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          
+          <line x1="15%" y1="30%" x2="32%" y2="35%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="32%" y1="35%" x2="48%" y2="28%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="48%" y1="28%" x2="62%" y2="38%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="62%" y1="38%" x2="78%" y2="32%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="78%" y1="32%" x2="90%" y2="35%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          
+          <line x1="15%" y1="30%" x2="8%" y2="50%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="32%" y1="35%" x2="22%" y2="48%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="48%" y1="28%" x2="38%" y2="52%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="62%" y1="38%" x2="52%" y2="45%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="78%" y1="32%" x2="68%" y2="55%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="90%" y1="35%" x2="82%" y2="48%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          
+          <line x1="8%" y1="50%" x2="22%" y2="48%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="22%" y1="48%" x2="38%" y2="52%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="38%" y1="52%" x2="52%" y2="45%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="52%" y1="45%" x2="68%" y2="55%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="68%" y1="55%" x2="82%" y2="48%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          
+          <line x1="8%" y1="50%" x2="12%" y2="68%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="22%" y1="48%" x2="28%" y2="65%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="38%" y1="52%" x2="45%" y2="70%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="52%" y1="45%" x2="60%" y2="68%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="68%" y1="55%" x2="75%" y2="72%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="82%" y1="48%" x2="88%" y2="65%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          
+          <line x1="12%" y1="68%" x2="28%" y2="65%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="28%" y1="65%" x2="45%" y2="70%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="45%" y1="70%" x2="60%" y2="68%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="60%" y1="68%" x2="75%" y2="72%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="75%" y1="72%" x2="88%" y2="65%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          
+          <line x1="12%" y1="68%" x2="18%" y2="85%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="28%" y1="65%" x2="35%" y2="88%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="45%" y1="70%" x2="50%" y2="82%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="60%" y1="68%" x2="65%" y2="90%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="75%" y1="72%" x2="80%" y2="85%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          
+          <line x1="18%" y1="85%" x2="35%" y2="88%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="35%" y1="88%" x2="50%" y2="82%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="50%" y1="82%" x2="65%" y2="90%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
+          <line x1="65%" y1="90%" x2="80%" y2="85%" stroke="#6b7280" strokeWidth="0.5" opacity="0.6" />
         </svg>
       </div>
 
