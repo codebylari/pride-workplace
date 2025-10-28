@@ -82,7 +82,7 @@ export default function Auth() {
 
         {/* Right side - Login form */}
         <div className="flex items-center justify-center">
-          <div className="w-full max-w-md bg-white/25 backdrop-blur-lg rounded-3xl p-10 space-y-8 border-2 border-white/30 shadow-xl">
+          <div className="w-full max-w-md bg-white/40 backdrop-blur-lg rounded-3xl p-10 space-y-8 border-2 border-white/50 shadow-2xl relative z-10">
             <div className="text-center space-y-2">
               <h2 className="text-3xl font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">Login</h2>
               <p className="text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">Entre com suas credenciais</p>
