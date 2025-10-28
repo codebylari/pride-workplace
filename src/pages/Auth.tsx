@@ -63,7 +63,7 @@ export default function Auth() {
     <div className="min-h-screen relative overflow-hidden flex items-center justify-center p-4 bg-gradient-to-br from-[#6E4062] via-[#5a3452] to-[#6E4062]">
       {/* Logo no topo centralizado */}
       <div className="absolute top-8 left-1/2 -translate-x-1/2 z-20">
-        <img src={logo} alt="QueerCode Logo" className="w-32 h-auto brightness-0 invert opacity-80" />
+        <img src={logo} alt="QueerCode Logo" className="w-40 h-auto brightness-0 invert opacity-80" />
       </div>
 
       {/* Elementos decorativos geométricos */}
@@ -88,6 +88,8 @@ export default function Auth() {
         <div className="absolute top-1/4 right-1/5 w-12 h-32 bg-white/5 rounded-lg rotate-45"></div>
         <div className="absolute bottom-1/3 right-1/2 w-18 h-18 bg-white/5 rounded-full"></div>
         <div className="absolute top-2/3 left-1/4 w-22 h-22 bg-white/5 rounded-xl -rotate-45"></div>
+        <div className="absolute top-1/2 right-1/6 w-26 h-26 bg-white/5 rounded-2xl rotate-12"></div>
+        <div className="absolute bottom-1/2 right-1/3 w-20 h-36 bg-white/5 rounded-lg -rotate-12"></div>
         
         {/* Linhas decorativas */}
         <div className="absolute top-40 left-1/3 w-48 h-0.5 bg-white/10 rotate-45"></div>
