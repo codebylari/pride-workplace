@@ -136,12 +136,12 @@ export default function JobDetails() {
                 <h1 className={`text-3xl font-bold mb-2 ${darkMode ? "text-white" : "text-gray-800"}`}>
                   {job.company}
                 </h1>
-                <Button
-                  onClick={() => navigate("/company-profile")}
-                  className="bg-pink-300 hover:bg-pink-400 text-white rounded-full px-6"
-                >
-                  Ver perfil da Empresa
-                </Button>
+              <Button
+                onClick={() => navigate("/company/1/profile")}
+                className="bg-pink-300 hover:bg-pink-400 text-white rounded-full px-6"
+              >
+                Ver perfil da Empresa
+              </Button>
               </div>
             </div>
             <button
