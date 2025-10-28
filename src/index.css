@@ -18,9 +18,9 @@
 
     --primary: 315 26% 40%; /* Cor principal (roxo #6E4062). */
     --primary-foreground: 0 0% 100%; /* Texto sobre cor primária (branco). */
-    --primary-glow: 315 35% 55%; /* Efeito de brilho para cor primária. */
+    --primary-glow: 315 26% 55%; /* Efeito de brilho para cor primária. */
 
-    --secondary: 320 30% 50%; /* Cor secundária (tons de roxo). */
+    --secondary: 315 26% 50%; /* Cor secundária (baseada em #6E4062). */
     --secondary-foreground: 0 0% 100%; /* Texto sobre cor secundária. */
 
     --muted: 250 40% 95%; /* Fundo de áreas suaves (cinza claro). */
@@ -39,9 +39,9 @@
     --radius: 0.75rem; /* Raio padrão de bordas arredondadas. */
 
     /* Gradientes */
-    --gradient-primary: linear-gradient(135deg, hsl(315 26% 40%), hsl(320 30% 50%)); /* Gradiente roxo. */
-    --gradient-accent: linear-gradient(135deg, hsl(315 35% 55%), hsl(315 26% 40%)); /* Gradiente roxo claro-escuro. */
-    --gradient-hero: linear-gradient(135deg, hsla(315, 26%, 40%, 0.1), hsl(320 30% 50% / 0.1)); /* Gradiente leve para seções de destaque. */
+    --gradient-primary: linear-gradient(135deg, hsl(315 26% 40%), hsl(315 26% 50%)); /* Gradiente roxo. */
+    --gradient-accent: linear-gradient(135deg, hsl(315 26% 55%), hsl(315 26% 40%)); /* Gradiente roxo claro-escuro. */
+    --gradient-hero: linear-gradient(135deg, hsla(315, 26%, 40%, 0.1), hsl(315 26% 50% / 0.1)); /* Gradiente leve para seções de destaque. */
 
     /* Transições */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Transição suave padrão para animações. */
@@ -57,11 +57,11 @@
     --popover: 260 60% 12%; /* Fundo dos popovers (escuro). */
     --popover-foreground: 250 40% 95%; /* Texto dos popovers (claro). */
 
-    --primary: 315 30% 50%; /* Cor primária no modo escuro (roxo mais claro). */
+    --primary: 315 26% 50%; /* Cor primária no modo escuro (baseada em #6E4062). */
     --primary-foreground: 0 0% 100%; /* Texto branco sobre cor primária. */
-    --primary-glow: 315 40% 60%; /* Efeito de brilho mais intenso no dark mode. */
+    --primary-glow: 315 26% 60%; /* Efeito de brilho mais intenso no dark mode. */
 
-    --secondary: 320 35% 55%; /* Cor secundária (roxo mais claro). */
+    --secondary: 315 26% 55%; /* Cor secundária (baseada em #6E4062). */
     --secondary-foreground: 0 0% 100%; /* Texto sobre cor secundária. */
 
     --muted: 260 50% 15%; /* Fundo de áreas suaves (quase preto). */
@@ -77,12 +77,12 @@
     --input: 260 40% 20%; /* Fundo dos inputs no modo escuro. */
     --ring: 315 30% 50%; /* Cor de foco no modo escuro. */
 
-    --gradient-primary: linear-gradient(135deg, hsl(315 30% 50%), hsl(320 35% 55%)); /* Gradiente roxo (versão escura). */
-    --gradient-accent: linear-gradient(135deg, hsl(315 40% 60%), hsl(315 30% 50%)); /* Gradiente roxo claro-escuro. */
-    --gradient-hero: linear-gradient(135deg, hsl(315 30% 50% / 0.15), hsl(320 35% 55% / 0.15)); /* Gradiente sutil de fundo no dark mode. */
+    --gradient-primary: linear-gradient(135deg, hsl(315 26% 50%), hsl(315 26% 55%)); /* Gradiente roxo (versão escura). */
+    --gradient-accent: linear-gradient(135deg, hsl(315 26% 60%), hsl(315 26% 50%)); /* Gradiente roxo claro-escuro. */
+    --gradient-hero: linear-gradient(135deg, hsl(315 26% 50% / 0.15), hsl(315 26% 55% / 0.15)); /* Gradiente sutil de fundo no dark mode. */
     
-    --shadow-glow: 0 0 40px hsl(315 30% 50% / 0.4); /* Efeito de brilho ao redor (roxo translúcido). */
-    --shadow-card: 0 10px 30px -10px hsl(315 30% 50% / 0.3); /* Sombra dos cartões no modo escuro. */
+    --shadow-glow: 0 0 40px hsl(315 26% 50% / 0.4); /* Efeito de brilho ao redor (roxo translúcido). */
+    --shadow-card: 0 10px 30px -10px hsl(315 26% 50% / 0.3); /* Sombra dos cartões no modo escuro. */
   }
 }
 
