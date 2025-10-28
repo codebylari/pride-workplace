@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Eye, EyeOff, Check } from "lucide-react";
+import { Eye, EyeOff, Check, ArrowLeft } from "lucide-react";
 
 interface City {
   id: number;
@@ -1216,9 +1216,21 @@ export default function Register() {
 
   // ------------------- RENDER -------------------
 
+  const canGoBack = step > 1 && step < 9;
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-purple-700 to-purple-600 p-4">
-      <div className="w-full max-w-4xl bg-white/10 backdrop-blur-lg rounded-3xl p-12 shadow-2xl">
+      <div className="w-full max-w-4xl bg-white/10 backdrop-blur-lg rounded-3xl p-12 shadow-2xl relative">
+        {canGoBack && (
+          <button
+            onClick={() => setStep(step - 1)}
+            className="absolute top-8 left-8 text-white hover:text-white/80 flex items-center gap-2 transition-colors"
+          >
+            <ArrowLeft className="w-5 h-5" />
+            <span className="text-sm font-medium">Voltar</span>
+          </button>
+        )}
+        
         {step === 1 && <Step1 />}
         {role === "candidate" && step === 2 && <Step2Candidate />}
         {role === "candidate" && step === 3 && <Step3Candidate />}

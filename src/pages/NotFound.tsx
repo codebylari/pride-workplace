@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
 
@@ -16,9 +16,9 @@ const NotFound = () => {
       <div className="text-center">
         <h1 className={`mb-4 text-4xl font-bold ${darkMode ? "text-white" : "text-gray-900"}`}>404</h1>
         <p className={`mb-4 text-xl ${darkMode ? "text-gray-300" : "text-gray-600"}`}>Oops! Page not found</p>
-        <a href="/" className="text-blue-500 underline hover:text-blue-700">
+        <Link to="/" className="text-blue-500 underline hover:text-blue-700">
           Return to Home
-        </a>
+        </Link>
       </div>
     </div>
   );
