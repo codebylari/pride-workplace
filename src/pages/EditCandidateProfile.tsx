@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useToast } from "@/hooks/use-toast";
+import { PhotoEditor } from "@/components/PhotoEditor";
 
 export default function EditCandidateProfile() {
   const navigate = useNavigate();
@@ -15,6 +16,8 @@ export default function EditCandidateProfile() {
   const [showSidebar, setShowSidebar] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showPhotoOptions, setShowPhotoOptions] = useState(false);
+  const [showPhotoEditor, setShowPhotoEditor] = useState(false);
+  const [tempPhotoUrl, setTempPhotoUrl] = useState<string | null>(null);
 
   // Form fields
   const [displayName, setDisplayName] = useState("");
@@ -35,8 +38,29 @@ export default function EditCandidateProfile() {
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setProfilePhoto(e.target.files[0]);
+      const file = e.target.files[0];
+      const url = URL.createObjectURL(file);
+      setTempPhotoUrl(url);
       setShowPhotoOptions(false);
+      setShowPhotoEditor(true);
+    }
+  };
+
+  const handlePhotoSave = (croppedImage: Blob) => {
+    const file = new File([croppedImage], "profile-photo.jpg", { type: "image/jpeg" });
+    setProfilePhoto(file);
+    setShowPhotoEditor(false);
+    if (tempPhotoUrl) {
+      URL.revokeObjectURL(tempPhotoUrl);
+      setTempPhotoUrl(null);
+    }
+  };
+
+  const handlePhotoCancel = () => {
+    setShowPhotoEditor(false);
+    if (tempPhotoUrl) {
+      URL.revokeObjectURL(tempPhotoUrl);
+      setTempPhotoUrl(null);
     }
   };
 
@@ -411,6 +435,15 @@ export default function EditCandidateProfile() {
           </div>
         </div>
       </main>
+
+      {/* Photo Editor Modal */}
+      {showPhotoEditor && tempPhotoUrl && (
+        <PhotoEditor
+          image={tempPhotoUrl}
+          onSave={handlePhotoSave}
+          onCancel={handlePhotoCancel}
+        />
+      )}
     </div>
   );
 }
