@@ -246,14 +246,14 @@ export default function CompanyDashboard() {
               <div className="flex flex-col sm:flex-row gap-6 justify-center items-center pt-6">
                 <Button
                   onClick={() => navigate("/create-job")}
-                  className="bg-green-300 hover:bg-green-400 text-green-900 px-12 py-6 rounded-xl text-lg font-semibold"
+                  className="bg-[#C1E1C1] hover:bg-[#B0D5B0] text-gray-900 px-12 py-6 rounded-xl text-lg font-semibold"
                 >
                   Cadastre sua vaga
                 </Button>
                 
                 <Button
                   onClick={() => navigate("/company-jobs")}
-                  className="bg-green-300 hover:bg-green-400 text-green-900 px-12 py-6 rounded-xl text-lg font-semibold"
+                  className="bg-[#C1E1C1] hover:bg-[#B0D5B0] text-gray-900 px-12 py-6 rounded-xl text-lg font-semibold"
                 >
                   Acesse suas vagas
                 </Button>
