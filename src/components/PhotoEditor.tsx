@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import Cropper from "react-easy-crop";
+import "react-easy-crop/react-easy-crop.css";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { X, ZoomIn, ZoomOut } from "lucide-react";
