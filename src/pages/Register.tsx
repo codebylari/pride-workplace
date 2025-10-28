@@ -137,17 +137,17 @@ export default function Register() {
             city,
             ...(role === "company" && {
               company_name: companyName,
-              cnpj,
-              phone,
+              cnpj: cnpj.replace(/\D/g, ''),
+              phone: phone.replace(/\D/g, ''),
               position,
               diversity,
             }),
             ...(role === "candidate" && {
               birth_date: birthDate,
               social_name: socialName,
-              cpf,
-              rg,
-              phone,
+              cpf: cpf.replace(/\D/g, ''),
+              rg: rg.replace(/\D/g, ''),
+              phone: phone.replace(/\D/g, ''),
             }),
           },
         },
@@ -417,32 +417,46 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1">CPF (apenas números)</label>
+              <label className="block text-white mb-1">CPF</label>
               <input
                 type="text"
                 value={cpf}
                 onChange={(e) => {
                   const value = e.target.value.replace(/\D/g, '');
-                  setCpf(value);
+                  let formatted = value;
+                  if (value.length <= 11) {
+                    formatted = value
+                      .replace(/(\d{3})(\d)/, '$1.$2')
+                      .replace(/(\d{3})(\d)/, '$1.$2')
+                      .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+                  }
+                  setCpf(formatted);
                 }}
                 required
-                maxLength={11}
-                placeholder="00000000000"
+                maxLength={14}
+                placeholder="000.000.000-00"
                 className="w-full p-3 rounded-lg border border-gray-300 text-black"
               />
             </div>
             <div>
-              <label className="block text-white mb-1">RG (apenas números)</label>
+              <label className="block text-white mb-1">RG</label>
               <input
                 type="text"
                 value={rg}
                 onChange={(e) => {
                   const value = e.target.value.replace(/\D/g, '');
-                  setRg(value);
+                  let formatted = value;
+                  if (value.length <= 9) {
+                    formatted = value
+                      .replace(/(\d{2})(\d)/, '$1.$2')
+                      .replace(/(\d{3})(\d)/, '$1.$2')
+                      .replace(/(\d{3})(\d{1})$/, '$1-$2');
+                  }
+                  setRg(formatted);
                 }}
                 required
-                maxLength={15}
-                placeholder="000000000"
+                maxLength={12}
+                placeholder="00.000.000-0"
                 className="w-full p-3 rounded-lg border border-gray-300 text-black"
               />
             </div>
@@ -942,17 +956,25 @@ export default function Register() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-white mb-1">CNPJ (apenas números)</label>
+              <label className="block text-white mb-1">CNPJ</label>
               <input
                 type="text"
                 value={cnpj}
                 onChange={(e) => {
                   const value = e.target.value.replace(/\D/g, '');
-                  setCnpj(value);
+                  let formatted = value;
+                  if (value.length <= 14) {
+                    formatted = value
+                      .replace(/(\d{2})(\d)/, '$1.$2')
+                      .replace(/(\d{3})(\d)/, '$1.$2')
+                      .replace(/(\d{3})(\d)/, '$1/$2')
+                      .replace(/(\d{4})(\d{1,2})$/, '$1-$2');
+                  }
+                  setCnpj(formatted);
                 }}
                 required
-                maxLength={14}
-                placeholder="00000000000000"
+                maxLength={18}
+                placeholder="00.000.000/0000-00"
                 className="w-full p-3 rounded-lg border border-gray-300 text-black"
               />
             </div>
