@@ -164,7 +164,7 @@ export default function CompanyDashboard() {
       <main className="container mx-auto px-4 py-12">
         <div className="max-w-4xl mx-auto">
           {/* Welcome Card */}
-          <div className={`border-4 border-blue-500 rounded-2xl p-12 shadow-lg mb-8 relative ${darkMode ? "bg-gray-700" : "bg-white"}`}>
+          <div className={`rounded-2xl p-12 shadow-lg mb-8 relative ${darkMode ? "bg-gray-700" : "bg-white"}`}>
             <div className="text-center space-y-8">
               <h1 className={`text-4xl font-bold ${darkMode ? "text-white" : "text-gray-800"}`}>
                 Bem-vindo, {companyName}!
