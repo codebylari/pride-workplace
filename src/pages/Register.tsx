@@ -48,6 +48,14 @@ export default function Register() {
   const [city, setCity] = useState("");
   const [emailError, setEmailError] = useState("");
   const [checkingEmail, setCheckingEmail] = useState(false);
+
+  // Password validation
+  const passwordValidation = {
+    minLength: password.length >= 6,
+    hasUpperCase: /[A-Z]/.test(password),
+    hasLowerCase: /[a-z]/.test(password),
+    hasNumber: /[0-9]/.test(password),
+  };
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
@@ -579,6 +587,29 @@ export default function Register() {
               {passwordError && (
                 <p className="text-red-300 text-sm mt-1 font-semibold">{passwordError}</p>
               )}
+              
+              {/* Password Requirements */}
+              <div className="mt-3 space-y-1 text-sm text-white/90">
+                <p className="font-medium">Sua senha deve conter:</p>
+                <div className="space-y-1">
+                  <div className={`flex items-center gap-2 ${passwordValidation.minLength ? "text-green-300" : ""}`}>
+                    <span>{passwordValidation.minLength ? "✓" : "○"}</span>
+                    <span>Mínimo de 6 caracteres</span>
+                  </div>
+                  <div className={`flex items-center gap-2 ${passwordValidation.hasUpperCase ? "text-green-300" : ""}`}>
+                    <span>{passwordValidation.hasUpperCase ? "✓" : "○"}</span>
+                    <span>Pelo menos 1 letra maiúscula</span>
+                  </div>
+                  <div className={`flex items-center gap-2 ${passwordValidation.hasLowerCase ? "text-green-300" : ""}`}>
+                    <span>{passwordValidation.hasLowerCase ? "✓" : "○"}</span>
+                    <span>Pelo menos 1 letra minúscula</span>
+                  </div>
+                  <div className={`flex items-center gap-2 ${passwordValidation.hasNumber ? "text-green-300" : ""}`}>
+                    <span>{passwordValidation.hasNumber ? "✓" : "○"}</span>
+                    <span>Pelo menos 1 número</span>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div>
@@ -1107,6 +1138,29 @@ export default function Register() {
               {passwordError && (
                 <p className="text-red-300 text-sm mt-1 font-semibold">{passwordError}</p>
               )}
+              
+              {/* Password Requirements */}
+              <div className="mt-3 space-y-1 text-sm text-white/90">
+                <p className="font-medium">Sua senha deve conter:</p>
+                <div className="space-y-1">
+                  <div className={`flex items-center gap-2 ${passwordValidation.minLength ? "text-green-300" : ""}`}>
+                    <span>{passwordValidation.minLength ? "✓" : "○"}</span>
+                    <span>Mínimo de 6 caracteres</span>
+                  </div>
+                  <div className={`flex items-center gap-2 ${passwordValidation.hasUpperCase ? "text-green-300" : ""}`}>
+                    <span>{passwordValidation.hasUpperCase ? "✓" : "○"}</span>
+                    <span>Pelo menos 1 letra maiúscula</span>
+                  </div>
+                  <div className={`flex items-center gap-2 ${passwordValidation.hasLowerCase ? "text-green-300" : ""}`}>
+                    <span>{passwordValidation.hasLowerCase ? "✓" : "○"}</span>
+                    <span>Pelo menos 1 letra minúscula</span>
+                  </div>
+                  <div className={`flex items-center gap-2 ${passwordValidation.hasNumber ? "text-green-300" : ""}`}>
+                    <span>{passwordValidation.hasNumber ? "✓" : "○"}</span>
+                    <span>Pelo menos 1 número</span>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div>
