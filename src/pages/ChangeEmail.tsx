@@ -87,7 +87,7 @@ export default function ChangeEmail() {
   return (
     <div className={`min-h-screen ${darkMode ? "bg-gray-800" : "bg-gray-50"}`}>
       {/* Header */}
-      <header className="bg-gradient-to-r from-purple-800 to-purple-600 text-white p-4 flex justify-between items-center">
+      <header style={{ background: 'linear-gradient(to right, hsl(315, 26%, 40%), hsl(320, 30%, 50%))' }} className="text-white p-4 flex justify-between items-center">
         <button
           onClick={() => setShowSidebar(!showSidebar)}
           className="p-2 hover:bg-white/10 rounded-lg transition"
@@ -127,7 +127,8 @@ export default function ChangeEmail() {
       {showSidebar && (
         <div className="fixed inset-0 z-50 bg-black/50" onClick={() => setShowSidebar(false)}>
           <div 
-            className="absolute left-0 top-0 h-full w-80 bg-gradient-to-b from-purple-400 via-purple-500 to-purple-600 shadow-xl text-white flex flex-col"
+            style={{ background: 'linear-gradient(to bottom, hsl(315, 35%, 55%), hsl(315, 30%, 50%), hsl(320, 30%, 50%))' }}
+            className="absolute left-0 top-0 h-full w-80 shadow-xl text-white flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="p-6 space-y-2 border-b border-white/20">

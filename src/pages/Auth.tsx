@@ -60,7 +60,7 @@ export default function Auth() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-purple-700 to-purple-600 p-4">
+    <div style={{ background: 'linear-gradient(to bottom right, hsl(315, 26%, 40%), hsl(315, 30%, 50%), hsl(320, 30%, 50%))' }} className="min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-6xl grid md:grid-cols-2 gap-8 bg-white/10 backdrop-blur-lg rounded-3xl p-12 shadow-2xl">
         {/* Left side - Welcome */}
         <div className="flex flex-col justify-center items-start text-white space-y-8">

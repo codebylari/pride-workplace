@@ -1219,7 +1219,7 @@ export default function Register() {
   const canGoBack = step > 1 && step < 9;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-purple-700 to-purple-600 p-4">
+    <div style={{ background: 'linear-gradient(to bottom right, hsl(315, 26%, 40%), hsl(315, 30%, 50%), hsl(320, 30%, 50%))' }} className="min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-4xl bg-white/10 backdrop-blur-lg rounded-3xl p-12 shadow-2xl relative">
         {canGoBack && (
           <button
