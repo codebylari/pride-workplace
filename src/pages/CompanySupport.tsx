@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, Bell, Briefcase, PlusCircle, User, Settings, Headset, Info, FileText, LogOut, List } from "lucide-react";
+import { Menu, Bell, Briefcase, PlusCircle, User, Settings, Headset, Info, FileText, LogOut, List, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
@@ -156,6 +156,17 @@ export default function CompanySupport() {
               >
                 <Info size={24} />
                 <span className="text-lg">Quem Somos</span>
+              </button>
+              
+              <button 
+                onClick={() => {
+                  setShowSidebar(false);
+                  navigate("/company-community-rules");
+                }}
+                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
+              >
+                <Shield size={24} />
+                <span className="text-lg">Regras da Comunidade</span>
               </button>
               
               <button 
