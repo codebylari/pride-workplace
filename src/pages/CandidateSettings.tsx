@@ -75,7 +75,7 @@ export default function CandidateSettings() {
         <div className="fixed inset-0 z-50 bg-black/50" onClick={() => setShowSidebar(false)}>
           <div 
             style={{ background: 'linear-gradient(to bottom, hsl(315, 35%, 55%), hsl(315, 30%, 50%), hsl(320, 30%, 50%))' }}
-            className="absolute left-0 top-0 h-full w-80 shadow-xl text-white flex flex-col"
+            className="absolute left-0 top-0 h-full w-64 shadow-xl text-white flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="p-6 space-y-2 border-b border-white/20">
