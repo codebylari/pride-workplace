@@ -1,34 +1,87 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, Bell, Briefcase, PlusCircle, User, Settings as SettingsIcon, Headset, Info, FileText, LogOut, List } from "lucide-react";
-import { Switch } from "@/components/ui/switch";
+import { Menu, Bell, CheckCircle2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
 import { useTheme } from "@/contexts/ThemeContext";
+import { supabase } from "@/integrations/supabase/client";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
 
-export default function CompanySettings() {
+export default function ChangeEmail() {
   const navigate = useNavigate();
-  const { user, signOut, userRole } = useAuth();
+  const { user, signOut } = useAuth();
   const [showSidebar, setShowSidebar] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
-  
-  // Settings state
-  const [notifications, setNotifications] = useState(true);
-  const [emailNotifications, setEmailNotifications] = useState(true);
-  const { darkMode, setDarkMode } = useTheme();
+  const { darkMode } = useTheme();
+  const { toast } = useToast();
 
-  const isCompany = (userRole ? userRole === "company" : Boolean(user?.user_metadata?.company_name || user?.user_metadata?.user_type === "company"));
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  const [currentEmail, setCurrentEmail] = useState("");
+  const [newEmail, setNewEmail] = useState("");
+  const [confirmNewEmail, setConfirmNewEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const isCompany = user?.user_metadata?.user_type === "company";
   const displayName = isCompany 
     ? user?.user_metadata?.company_name || "Nome da Empresa"
     : user?.user_metadata?.full_name || "Nome do Usuário";
 
-  // Toggle dark mode via global ThemeContext
-  const handleDarkModeToggle = (checked: boolean) => {
-    setDarkMode(checked);
-  };
   const handleLogout = async () => {
     await signOut();
     navigate("/");
+  };
+
+  const handleChangeEmail = async () => {
+    if (!currentEmail || !newEmail || !confirmNewEmail) {
+      toast({
+        title: "Erro",
+        description: "Por favor, preencha todos os campos",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (newEmail !== confirmNewEmail) {
+      toast({
+        title: "Erro",
+        description: "Os emails não coincidem",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (currentEmail !== user?.email) {
+      toast({
+        title: "Erro",
+        description: "O email atual está incorreto",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const { error } = await supabase.auth.updateUser({
+        email: newEmail,
+      });
+
+      if (error) throw error;
+
+      setCurrentEmail("");
+      setNewEmail("");
+      setConfirmNewEmail("");
+      setShowSuccessDialog(true);
+    } catch (error: any) {
+      toast({
+        title: "Erro",
+        description: error.message || "Não foi possível alterar o email",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -87,7 +140,7 @@ export default function CompanySettings() {
                 </div>
                 <div>
                   <h2 className="text-xl font-semibold">{displayName}</h2>
-                  <p className="text-sm text-white/80">empresa</p>
+                  <p className="text-sm text-white/80">{isCompany ? "empresa" : "candidato"}</p>
                 </div>
               </div>
             </div>
@@ -96,92 +149,60 @@ export default function CompanySettings() {
               <button 
                 onClick={() => {
                   setShowSidebar(false);
-                  navigate("/company-dashboard");
+                  navigate(isCompany ? "/company-dashboard" : "/candidate-dashboard");
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
-                <Briefcase size={24} />
                 <span className="text-lg">Dashboard</span>
               </button>
-              
-              {isCompany && (
-                <>
-                  <button 
-                    onClick={() => {
-                      setShowSidebar(false);
-                      navigate("/create-job");
-                    }}
-                    className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
-                  >
-                    <PlusCircle size={24} />
-                    <span className="text-lg">Cadastrar Vagas</span>
-                  </button>
-                  
-                  <button 
-                    onClick={() => {
-                      setShowSidebar(false);
-                      navigate("/company-jobs");
-                    }}
-                    className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
-                  >
-                    <List size={24} />
-                    <span className="text-lg">Minhas Vagas</span>
-                  </button>
-                </>
-              )}
               
               <button 
                 onClick={() => {
                   setShowSidebar(false);
-                  navigate("/company-profile");
+                  navigate(isCompany ? "/company-profile" : "/candidate-profile");
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
-                <User size={24} />
                 <span className="text-lg">Meu Perfil</span>
               </button>
               
               <button 
                 onClick={() => {
                   setShowSidebar(false);
-                  navigate("/company-settings");
+                  navigate(isCompany ? "/company-settings" : "/candidate-settings");
                 }}
-                className="w-full flex items-center gap-4 p-4 bg-white/10 rounded-lg transition text-left"
+                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
-                <SettingsIcon size={24} />
                 <span className="text-lg">Configurações</span>
               </button>
               
               <button 
                 onClick={() => {
                   setShowSidebar(false);
-                  navigate("/company-support");
+                  navigate("/support");
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
-                <Headset size={24} />
                 <span className="text-lg">Suporte</span>
               </button>
               
               <button 
                 onClick={() => {
                   setShowSidebar(false);
-                  navigate("/company-about");
+                  navigate("/about");
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
-                <Info size={24} />
                 <span className="text-lg">Quem Somos</span>
               </button>
               
               <button 
                 onClick={() => {
                   setShowSidebar(false);
-                  navigate("/terms-company");
+                  navigate(isCompany ? "/terms-company" : "/terms-candidate");
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
-                <FileText size={24} />
                 <span className="text-lg">Termos de Uso</span>
               </button>
             </nav>
@@ -191,7 +212,6 @@ export default function CompanySettings() {
                 onClick={handleLogout}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left text-red-500"
               >
-                <LogOut size={24} />
                 <span className="text-lg">Sair</span>
               </button>
             </div>
@@ -202,56 +222,86 @@ export default function CompanySettings() {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto">
-          <h1 className={`text-3xl font-bold text-center mb-12 ${darkMode ? "text-white" : "text-gray-900"}`}>
-            Configurações
+          <h1 className={`text-3xl font-bold text-center mb-8 ${darkMode ? "text-white" : "text-gray-900"}`}>
+            Alterar email
           </h1>
 
-          <div className="space-y-6">
-            {/* Notificações */}
-            <div className={`flex justify-between items-center py-4 border-b ${darkMode ? "border-gray-600" : "border-gray-200"}`}>
-              <span className={`text-lg ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-                Notificações
-              </span>
-              <Switch
-                checked={notifications}
-                onCheckedChange={setNotifications}
+          <div className={`${darkMode ? "bg-gray-700" : "bg-white"} rounded-2xl p-8 shadow-lg space-y-6`}>
+            <p className={`text-center ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+              Atualize suas credenciais quando precisar.
+            </p>
+
+            <div>
+              <label className={`block text-sm mb-2 ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+                Digite seu email cadastrado
+              </label>
+              <input
+                type="email"
+                value={currentEmail}
+                onChange={(e) => setCurrentEmail(e.target.value)}
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+                placeholder="Email atual"
               />
             </div>
 
-            {/* Notificações Email */}
-            <div className={`flex justify-between items-center py-4 border-b ${darkMode ? "border-gray-600" : "border-gray-200"}`}>
-              <span className={`text-lg ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-                Notificações Email
-              </span>
-              <Switch
-                checked={emailNotifications}
-                onCheckedChange={setEmailNotifications}
+            <div>
+              <label className={`block text-sm mb-2 ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+                Digite o seu novo email
+              </label>
+              <input
+                type="email"
+                value={newEmail}
+                onChange={(e) => setNewEmail(e.target.value)}
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+                placeholder="Novo email"
               />
             </div>
 
-            {/* Dark Mode */}
-            <div className={`flex justify-between items-center py-4 border-b ${darkMode ? "border-gray-600" : "border-gray-200"}`}>
-              <span className={`text-lg ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-                Dark mode
-              </span>
-              <Switch
-                checked={darkMode}
-                onCheckedChange={handleDarkModeToggle}
+            <div>
+              <label className={`block text-sm mb-2 ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+                Confirme seu novo email
+              </label>
+              <input
+                type="email"
+                value={confirmNewEmail}
+                onChange={(e) => setConfirmNewEmail(e.target.value)}
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+                placeholder="Confirme o novo email"
               />
             </div>
 
-            {/* Conta */}
-            <button 
-              onClick={() => navigate("/company-account")}
-              className={`w-full flex justify-between items-center py-4 border-b ${darkMode ? "border-gray-600 hover:bg-gray-700" : "border-gray-200 hover:bg-gray-100"} transition text-left`}
+            <button
+              onClick={handleChangeEmail}
+              disabled={loading}
+              className="w-full py-3 bg-green-400 hover:bg-green-500 text-white rounded-lg transition disabled:opacity-50 font-medium"
             >
-              <span className={`text-lg ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-                Conta
-              </span>
+              {loading ? "Alterando..." : "Confirmar"}
             </button>
           </div>
         </div>
       </main>
+
+      {/* Dialog de Sucesso */}
+      <Dialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>
+        <DialogContent className="sm:max-w-md">
+          <div className="flex flex-col items-center justify-center space-y-4 py-6">
+            <div className="w-16 h-16 bg-green-400 rounded-full flex items-center justify-center">
+              <CheckCircle2 className="w-10 h-10 text-white" />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900">SUCESSO!</h2>
+            <p className="text-center text-gray-600">Seu email foi alterado com Sucesso!</p>
+            <button
+              onClick={() => {
+                setShowSuccessDialog(false);
+                navigate("/account");
+              }}
+              className="w-full max-w-xs py-3 bg-[#FFF8D6] hover:bg-[#FFF2A9] text-gray-800 rounded-lg transition"
+            >
+              Ok
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
       
       <ChatBot />
     </div>

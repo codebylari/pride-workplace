@@ -64,7 +64,10 @@ import CompanySettings from "./pages/CompanySettings";
 import CandidateSettings from "./pages/CandidateSettings";
 
 import Account from "./pages/Account";
-// Página de Conta
+// Página de Conta - Candidato
+
+import CompanyAccount from "./pages/CompanyAccount";
+// Página de Conta - Empresa
 
 import ChangePassword from "./pages/ChangePassword";
 // Página de Alterar Senha
@@ -185,19 +188,19 @@ const App = () => (
             {/* Página de Configurações do Candidato */}
             
             <Route path="/account" element={<Account />} />
-            {/* Página de Conta */}
+            <Route path="/company-account" element={<CompanyAccount />} />
             
             <Route path="/change-password" element={<ChangePassword />} />
-            {/* Página de Alterar Senha */}
+            <Route path="/company-change-password" element={<ChangePassword />} />
             
             <Route path="/change-email" element={<ChangeEmail />} />
-            {/* Página de Alterar Email */}
+            <Route path="/company-change-email" element={<ChangeEmail />} />
             
             <Route path="/deactivate-account" element={<DeactivateAccount />} />
-            {/* Página de Desativar Conta */}
+            <Route path="/company-deactivate-account" element={<DeactivateAccount />} />
             
             <Route path="/delete-account" element={<DeleteAccount />} />
-            {/* Página de Deletar Conta */}
+            <Route path="/company-delete-account" element={<DeleteAccount />} />
             
             <Route path="/edit-candidate-profile" element={<EditCandidateProfile />} />
             {/* Página de Editar Perfil do Candidato */}

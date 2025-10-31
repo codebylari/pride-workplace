@@ -1,31 +1,22 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, Bell, Briefcase, PlusCircle, User, Settings as SettingsIcon, Headset, Info, FileText, LogOut, List } from "lucide-react";
-import { Switch } from "@/components/ui/switch";
+import { Menu, Bell } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
 import { useTheme } from "@/contexts/ThemeContext";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
-export default function CompanySettings() {
+export default function CompanyAccount() {
   const navigate = useNavigate();
-  const { user, signOut, userRole } = useAuth();
+  const { user, signOut } = useAuth();
   const [showSidebar, setShowSidebar] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
-  
-  // Settings state
-  const [notifications, setNotifications] = useState(true);
-  const [emailNotifications, setEmailNotifications] = useState(true);
-  const { darkMode, setDarkMode } = useTheme();
+  const { darkMode } = useTheme();
+  const [showDeactivateDialog, setShowDeactivateDialog] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
-  const isCompany = (userRole ? userRole === "company" : Boolean(user?.user_metadata?.company_name || user?.user_metadata?.user_type === "company"));
-  const displayName = isCompany 
-    ? user?.user_metadata?.company_name || "Nome da Empresa"
-    : user?.user_metadata?.full_name || "Nome do Usuário";
+  const displayName = user?.user_metadata?.company_name || "Nome da Empresa";
 
-  // Toggle dark mode via global ThemeContext
-  const handleDarkModeToggle = (checked: boolean) => {
-    setDarkMode(checked);
-  };
   const handleLogout = async () => {
     await signOut();
     navigate("/");
@@ -100,35 +91,8 @@ export default function CompanySettings() {
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
-                <Briefcase size={24} />
                 <span className="text-lg">Dashboard</span>
               </button>
-              
-              {isCompany && (
-                <>
-                  <button 
-                    onClick={() => {
-                      setShowSidebar(false);
-                      navigate("/create-job");
-                    }}
-                    className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
-                  >
-                    <PlusCircle size={24} />
-                    <span className="text-lg">Cadastrar Vagas</span>
-                  </button>
-                  
-                  <button 
-                    onClick={() => {
-                      setShowSidebar(false);
-                      navigate("/company-jobs");
-                    }}
-                    className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
-                  >
-                    <List size={24} />
-                    <span className="text-lg">Minhas Vagas</span>
-                  </button>
-                </>
-              )}
               
               <button 
                 onClick={() => {
@@ -137,7 +101,6 @@ export default function CompanySettings() {
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
-                <User size={24} />
                 <span className="text-lg">Meu Perfil</span>
               </button>
               
@@ -146,9 +109,8 @@ export default function CompanySettings() {
                   setShowSidebar(false);
                   navigate("/company-settings");
                 }}
-                className="w-full flex items-center gap-4 p-4 bg-white/10 rounded-lg transition text-left"
+                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
-                <SettingsIcon size={24} />
                 <span className="text-lg">Configurações</span>
               </button>
               
@@ -159,7 +121,6 @@ export default function CompanySettings() {
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
-                <Headset size={24} />
                 <span className="text-lg">Suporte</span>
               </button>
               
@@ -170,7 +131,6 @@ export default function CompanySettings() {
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
-                <Info size={24} />
                 <span className="text-lg">Quem Somos</span>
               </button>
               
@@ -181,7 +141,6 @@ export default function CompanySettings() {
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
-                <FileText size={24} />
                 <span className="text-lg">Termos de Uso</span>
               </button>
             </nav>
@@ -191,7 +150,6 @@ export default function CompanySettings() {
                 onClick={handleLogout}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left text-red-500"
               >
-                <LogOut size={24} />
                 <span className="text-lg">Sair</span>
               </button>
             </div>
@@ -203,55 +161,104 @@ export default function CompanySettings() {
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto">
           <h1 className={`text-3xl font-bold text-center mb-12 ${darkMode ? "text-white" : "text-gray-900"}`}>
-            Configurações
+            Conta
           </h1>
 
           <div className="space-y-6">
-            {/* Notificações */}
-            <div className={`flex justify-between items-center py-4 border-b ${darkMode ? "border-gray-600" : "border-gray-200"}`}>
-              <span className={`text-lg ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-                Notificações
-              </span>
-              <Switch
-                checked={notifications}
-                onCheckedChange={setNotifications}
-              />
-            </div>
-
-            {/* Notificações Email */}
-            <div className={`flex justify-between items-center py-4 border-b ${darkMode ? "border-gray-600" : "border-gray-200"}`}>
-              <span className={`text-lg ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-                Notificações Email
-              </span>
-              <Switch
-                checked={emailNotifications}
-                onCheckedChange={setEmailNotifications}
-              />
-            </div>
-
-            {/* Dark Mode */}
-            <div className={`flex justify-between items-center py-4 border-b ${darkMode ? "border-gray-600" : "border-gray-200"}`}>
-              <span className={`text-lg ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-                Dark mode
-              </span>
-              <Switch
-                checked={darkMode}
-                onCheckedChange={handleDarkModeToggle}
-              />
-            </div>
-
-            {/* Conta */}
+            {/* Alterar senha */}
             <button 
-              onClick={() => navigate("/company-account")}
-              className={`w-full flex justify-between items-center py-4 border-b ${darkMode ? "border-gray-600 hover:bg-gray-700" : "border-gray-200 hover:bg-gray-100"} transition text-left`}
+              className={`w-full flex justify-between items-center py-4 border-b ${darkMode ? "border-gray-600 text-gray-300 hover:text-white" : "border-gray-200 text-gray-700 hover:text-gray-900"} transition text-left`}
+              onClick={() => navigate("/company-change-password")}
             >
-              <span className={`text-lg ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-                Conta
-              </span>
+              <span className="text-lg">Alterar senha</span>
+            </button>
+
+            {/* Alterar email */}
+            <button 
+              className={`w-full flex justify-between items-center py-4 border-b ${darkMode ? "border-gray-600 text-gray-300 hover:text-white" : "border-gray-200 text-gray-700 hover:text-gray-900"} transition text-left`}
+              onClick={() => navigate("/company-change-email")}
+            >
+              <span className="text-lg">Alterar email</span>
+            </button>
+
+            {/* Desativar conta */}
+            <button 
+              className={`w-full flex justify-between items-center py-4 border-b ${darkMode ? "border-gray-600 text-gray-300 hover:text-white" : "border-gray-200 text-gray-700 hover:text-gray-900"} transition text-left`}
+              onClick={() => setShowDeactivateDialog(true)}
+            >
+              <span className="text-lg">Desativar conta</span>
+            </button>
+          </div>
+
+          {/* Deletar conta */}
+          <div className="mt-12 pt-12 border-t border-gray-300">
+            <button 
+              className="text-red-600 hover:text-red-700 transition font-medium"
+              onClick={() => setShowDeleteDialog(true)}
+            >
+              Deletar conta
             </button>
           </div>
         </div>
       </main>
+
+      {/* Dialog de Confirmação de Desativação */}
+      <Dialog open={showDeactivateDialog} onOpenChange={setShowDeactivateDialog}>
+        <DialogContent className="sm:max-w-md">
+          <div className="flex flex-col items-center justify-center space-y-6 py-6">
+            <h2 className="text-2xl font-bold text-gray-900">Desativar conta</h2>
+            <p className="text-center text-gray-600">
+              Você tem certeza que deseja desativar sua conta?
+            </p>
+            <div className="flex gap-4 w-full">
+              <button
+                onClick={() => setShowDeactivateDialog(false)}
+                className="flex-1 py-3 bg-green-400 hover:bg-green-500 text-white rounded-lg transition font-medium"
+              >
+                Voltar
+              </button>
+              <button
+                onClick={() => {
+                  setShowDeactivateDialog(false);
+                  navigate("/company-deactivate-account");
+                }}
+                className="flex-1 py-3 bg-green-400 hover:bg-green-500 text-white rounded-lg transition font-medium"
+              >
+                Continuar
+              </button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Dialog de Confirmação de Deletar */}
+      <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <DialogContent className="sm:max-w-md">
+          <div className="flex flex-col items-center justify-center space-y-6 py-6">
+            <h2 className="text-2xl font-bold text-gray-900">Deletar conta</h2>
+            <p className="text-center text-gray-600">
+              Tem certeza que deseja deletar sua conta?
+            </p>
+            <div className="flex gap-4 w-full">
+              <button
+                onClick={() => setShowDeleteDialog(false)}
+                className="flex-1 py-3 bg-green-400 hover:bg-green-500 text-white rounded-lg transition font-medium"
+              >
+                Voltar
+              </button>
+              <button
+                onClick={() => {
+                  setShowDeleteDialog(false);
+                  navigate("/company-delete-account");
+                }}
+                className="flex-1 py-3 bg-green-400 hover:bg-green-500 text-white rounded-lg transition font-medium"
+              >
+                Continuar
+              </button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
       
       <ChatBot />
     </div>
