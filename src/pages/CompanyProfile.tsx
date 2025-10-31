@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Menu, Bell, Star, Edit, Briefcase, PlusCircle, User, Settings, Headset, Info, FileText, LogOut, ChevronUp, ChevronDown, Heart, List } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
 import { useTheme } from "@/contexts/ThemeContext";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function CompanyProfile() {
   const navigate = useNavigate();
@@ -14,20 +15,8 @@ export default function CompanyProfile() {
   const [showSidebar, setShowSidebar] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
-
-  const companyName = user?.user_metadata?.company_name || user?.user_metadata?.fantasy_name || "Empresa";
-
-  const handleLogout = async () => {
-    await signOut();
-    navigate("/auth");
-  };
-
-  const toggleSection = (section: string) => {
-    setExpandedSection(expandedSection === section ? null : section);
-  };
-
-  // Company data - starts empty
-  const companyData = {
+  const [logoUrl, setLogoUrl] = useState<string | null>(null);
+  const [companyData, setCompanyData] = useState({
     about: "",
     seeking: [] as string[],
     training: {
@@ -49,6 +38,48 @@ export default function CompanyProfile() {
       type: string;
       applicants: number;
     }>
+  });
+
+  const companyName = user?.user_metadata?.company_name || user?.user_metadata?.fantasy_name || "Empresa";
+
+  useEffect(() => {
+    const loadProfile = async () => {
+      if (!user?.id) return;
+      
+      const { data } = await supabase
+        .from("company_profiles")
+        .select("logo_url, about, seeking, training")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      
+      if (data) {
+        setLogoUrl(data.logo_url || null);
+        setCompanyData({
+          about: data.about || "",
+          seeking: data.seeking ? data.seeking.split('\n').filter(s => s.trim()) : [],
+          training: {
+            name: "",
+            fantasyName: "",
+            foundingDate: "",
+            location: "",
+            founder: ""
+          },
+          testimonials: [],
+          jobs: []
+        });
+      }
+    };
+    
+    loadProfile();
+  }, [user?.id]);
+
+  const toggleSection = (section: string) => {
+    setExpandedSection(expandedSection === section ? null : section);
+  };
+
+  const handleLogout = async () => {
+    await signOut();
+    navigate("/auth");
   };
 
   return (
@@ -226,11 +257,20 @@ export default function CompanyProfile() {
             {/* Logo Section */}
             <div className="flex justify-center mb-6">
               <div className="relative">
-                <div className="w-32 h-32 bg-yellow-400 rounded-full flex items-center justify-center shadow-lg">
-                  <span className="text-4xl font-bold text-white">
-                    {companyName.substring(0, 2).toUpperCase()}
-                  </span>
-                </div>
+                {logoUrl ? (
+                  <img
+                    src={logoUrl}
+                    alt={`Logo de ${companyName}`}
+                    className="w-32 h-32 rounded-full object-cover shadow-lg"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="w-32 h-32 bg-yellow-400 rounded-full flex items-center justify-center shadow-lg">
+                    <span className="text-4xl font-bold text-white">
+                      {companyName.substring(0, 2).toUpperCase()}
+                    </span>
+                  </div>
+                )}
                 <button 
                   onClick={() => navigate("/edit-company-profile")}
                   className={`absolute bottom-0 right-0 p-2 rounded-full shadow-md transition ${darkMode ? "bg-gray-600 hover:bg-gray-500" : "bg-white hover:bg-gray-100"}`}

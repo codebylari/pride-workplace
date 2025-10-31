@@ -48,6 +48,7 @@ export type Database = {
       }
       company_profiles: {
         Row: {
+          about: string | null
           city: string | null
           cnpj: string
           created_at: string
@@ -56,11 +57,15 @@ export type Database = {
           id: string
           logo_url: string | null
           sector: string | null
+          seeking: string | null
           state: string | null
+          testimonials: Json | null
+          training: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
+          about?: string | null
           city?: string | null
           cnpj: string
           created_at?: string
@@ -69,11 +74,15 @@ export type Database = {
           id?: string
           logo_url?: string | null
           sector?: string | null
+          seeking?: string | null
           state?: string | null
+          testimonials?: Json | null
+          training?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
+          about?: string | null
           city?: string | null
           cnpj?: string
           created_at?: string
@@ -82,7 +91,10 @@ export type Database = {
           id?: string
           logo_url?: string | null
           sector?: string | null
+          seeking?: string | null
           state?: string | null
+          testimonials?: Json | null
+          training?: string | null
           updated_at?: string
           user_id?: string
         }

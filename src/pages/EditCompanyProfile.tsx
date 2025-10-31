@@ -9,6 +9,7 @@ import { ChatBot } from "@/components/ChatBot";
 import { useTheme } from "@/contexts/ThemeContext";
 import { PhotoEditor } from "@/components/PhotoEditor";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function EditCompanyProfile() {
   const navigate = useNavigate();
@@ -39,22 +40,33 @@ export default function EditCompanyProfile() {
   });
 
   useEffect(() => {
-    // Load existing data (mock data for now)
-    const mockData = {
-      displayName: companyName,
-      about: "O Mercado Livre Tech é uma unidade fictícia de tecnologia do Mercado Livre.",
-      seeking: "Pessoas apaixonadas por tecnologia\nVontade de aprender e crescer junto",
-      training: "Razão Social: Mercado Livre Tech Soluções em Tecnologia LTDA\nNome Fantasia: Mercado Livre Tech",
-      logo: null
-    };
+    const loadProfile = async () => {
+      if (!user?.id) return;
+      
+      const { data } = await supabase
+        .from("company_profiles")
+        .select("logo_url, about, seeking, training")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      
+      const initialData = {
+        displayName: companyName,
+        about: data?.about || "",
+        seeking: data?.seeking || "",
+        training: data?.training || "",
+        logo: data?.logo_url || null
+      };
 
-    setDisplayName(mockData.displayName);
-    setAbout(mockData.about);
-    setSeeking(mockData.seeking);
-    setTraining(mockData.training);
-    setLogo(mockData.logo);
-    setOriginalValues(mockData);
-  }, [companyName]);
+      setDisplayName(initialData.displayName);
+      setAbout(initialData.about);
+      setSeeking(initialData.seeking);
+      setTraining(initialData.training);
+      setLogo(initialData.logo);
+      setOriginalValues(initialData);
+    };
+    
+    loadProfile();
+  }, [companyName, user?.id]);
 
   const handleLogout = async () => {
     await signOut();
@@ -90,7 +102,7 @@ export default function EditCompanyProfile() {
     );
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (!hasChanges()) {
       toast({
         title: "Nenhuma alteração",
@@ -100,21 +112,75 @@ export default function EditCompanyProfile() {
       return;
     }
 
-    // Here you would save to the database
-    toast({
-      title: "Sucesso!",
-      description: "Suas alterações foram salvas com sucesso.",
-      variant: "default",
-    });
+    try {
+      const updates: any = {};
 
-    // Update original values
-    setOriginalValues({
-      displayName,
-      about,
-      seeking,
-      training,
-      logo
-    });
+      if (about !== originalValues.about) {
+        updates.about = about;
+      }
+      if (seeking !== originalValues.seeking) {
+        updates.seeking = seeking;
+      }
+      if (training !== originalValues.training) {
+        updates.training = training;
+      }
+
+      // Handle logo upload if there's a new one
+      if (logo && logo !== originalValues.logo) {
+        if (!user?.id) throw new Error("Usuário não autenticado.");
+
+        // Convert blob URL to actual blob
+        const response = await fetch(logo);
+        const blob = await response.blob();
+        const file = new File([blob], "logo.jpg", { type: "image/jpeg" });
+
+        const ext = "jpg";
+        const path = `${user.id}/logo.${ext}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from("profile-photos")
+          .upload(path, file, { upsert: true, contentType: file.type });
+
+        if (uploadError) throw uploadError;
+
+        const { data: urlData } = supabase.storage.from("profile-photos").getPublicUrl(path);
+        updates.logo_url = urlData.publicUrl;
+      }
+
+      // Update company profile
+      if (Object.keys(updates).length > 0) {
+        const { error: updateError } = await supabase
+          .from("company_profiles")
+          .update(updates)
+          .eq("user_id", user?.id);
+
+        if (updateError) throw updateError;
+      }
+
+      toast({
+        title: "Sucesso!",
+        description: "Suas alterações foram salvas com sucesso.",
+        variant: "default",
+      });
+
+      // Update original values
+      setOriginalValues({
+        displayName,
+        about,
+        seeking,
+        training,
+        logo
+      });
+
+      navigate("/company-profile");
+    } catch (err: any) {
+      console.error("Erro ao salvar alterações:", err);
+      toast({
+        title: "Erro ao salvar",
+        description: err.message || "Não foi possível salvar as alterações.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
