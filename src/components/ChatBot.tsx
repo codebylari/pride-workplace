@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Bot, X, Send, User } from "lucide-react";
+import { Bot, X, Send, User, Paperclip, Image as ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
@@ -21,7 +21,9 @@ export function ChatBot() {
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
   const scrollToBottom = () => {
@@ -73,6 +75,32 @@ export function ChatBot() {
     }
   };
 
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        toast({
+          title: "Erro",
+          description: "A imagem deve ter no máximo 5MB",
+          variant: "destructive",
+        });
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSelectedImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const removeImage = () => {
+    setSelectedImage(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
   return (
     <>
       {/* Botão do Chat */}
@@ -89,14 +117,20 @@ export function ChatBot() {
       {isOpen && (
         <div className="fixed bottom-8 right-8 w-[500px] h-[600px] bg-white rounded-3xl shadow-2xl z-50 flex flex-col animate-fade-in">
           {/* Cabeçalho */}
-          <div className="bg-gradient-to-r from-purple-700 to-purple-600 rounded-t-3xl p-6 flex items-center justify-between">
+          <div style={{ background: 'linear-gradient(to right, hsl(315, 26%, 40%), hsl(320, 30%, 50%))' }} className="rounded-t-3xl p-6 flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="w-16 h-16 bg-pink-300 rounded-full flex items-center justify-center">
                 <Bot size={32} className="text-white" />
               </div>
               <div className="text-white">
                 <h3 className="font-semibold text-lg">Nina</h3>
-                <p className="text-sm text-white/80">Assistente Virtual</p>
+                <div className="flex items-center gap-2">
+                  <p className="text-sm text-white/80">Assistente Virtual</p>
+                  <div className="flex items-center gap-1">
+                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                    <span className="text-xs text-green-400">Online</span>
+                  </div>
+                </div>
               </div>
             </div>
             <button
@@ -161,7 +195,33 @@ export function ChatBot() {
 
           {/* Campo de Entrada */}
           <div className="p-4 border-t bg-white rounded-b-3xl">
-            <div className="flex gap-2">
+            {selectedImage && (
+              <div className="mb-3 relative inline-block">
+                <img src={selectedImage} alt="Preview" className="max-h-32 rounded-lg" />
+                <button
+                  onClick={removeImage}
+                  className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
+                >
+                  <X size={14} />
+                </button>
+              </div>
+            )}
+            <div className="flex gap-2 items-center">
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleImageSelect}
+                className="hidden"
+              />
+              <Button
+                onClick={() => fileInputRef.current?.click()}
+                variant="ghost"
+                className="rounded-full w-12 h-12 p-0 hover:bg-gray-100"
+                disabled={isLoading}
+              >
+                <Paperclip size={20} className="text-gray-600" />
+              </Button>
               <Input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
