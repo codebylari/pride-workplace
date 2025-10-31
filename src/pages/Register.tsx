@@ -38,6 +38,8 @@ export default function Register() {
   const [loadingCities, setLoadingCities] = useState(false);
 
   // ------------------- CAMPOS CANDIDATO -------------------
+  const [gender, setGender] = useState<"feminino" | "masculino" | "outros" | "">("");
+  const [customGender, setCustomGender] = useState("");
   const [fullName, setFullName] = useState("");
   const [lastName, setLastName] = useState("");
   const [birthDate, setBirthDate] = useState("");
@@ -228,6 +230,66 @@ export default function Register() {
   // ------------------- FLUXO CANDIDATO -------------------
   const Step2Candidate = () => (
     <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
+      <h2 className="text-2xl md:text-3xl font-bold">Qual é o seu gênero?</h2>
+      
+      <Button
+        onClick={() => {
+          setGender("feminino");
+          setCustomGender("");
+          setStep(3);
+        }}
+        className="w-full md:w-80 py-5 md:py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-base md:text-lg"
+      >
+        Feminino
+      </Button>
+      
+      <Button
+        onClick={() => {
+          setGender("masculino");
+          setCustomGender("");
+          setStep(3);
+        }}
+        className="w-full md:w-80 py-5 md:py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-base md:text-lg"
+      >
+        Masculino
+      </Button>
+      
+      <div className="w-full md:w-80 space-y-3">
+        <Button
+          onClick={() => setGender("outros")}
+          className={`w-full py-5 md:py-6 rounded-full text-base md:text-lg ${
+            gender === "outros"
+              ? "bg-primary/50 text-white"
+              : "bg-white/20 hover:bg-white/30 text-white"
+          }`}
+        >
+          Outros
+        </Button>
+        
+        {gender === "outros" && (
+          <div className="space-y-2">
+            <input
+              type="text"
+              value={customGender}
+              onChange={(e) => setCustomGender(e.target.value)}
+              placeholder="Especifique seu gênero"
+              className="w-full p-3 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary"
+            />
+            <Button
+              onClick={() => setStep(3)}
+              disabled={!customGender.trim()}
+              className="w-full bg-success hover:bg-success/90 text-success-foreground py-3 rounded-full font-semibold disabled:opacity-50"
+            >
+              CONTINUAR
+            </Button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  const Step3Candidate = () => (
+    <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
       <h2 className="text-2xl md:text-3xl font-bold">Em qual área você atua?</h2>
       {[
         "Desenvolvimento de Software",
@@ -241,21 +303,6 @@ export default function Register() {
       ].map((option) => (
         <Button
           key={option}
-          onClick={() => setStep(3)}
-          className="w-full md:w-80 py-5 md:py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-base md:text-lg"
-        >
-          {option}
-        </Button>
-      ))}
-    </div>
-  );
-
-  const Step3Candidate = () => (
-    <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
-      <h2 className="text-2xl md:text-3xl font-bold">Qual o seu nível de experiência?</h2>
-      {["Júnior", "Pleno", "Sênior", "Especialista"].map((option) => (
-        <Button
-          key={option}
           onClick={() => setStep(4)}
           className="w-full md:w-80 py-5 md:py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-base md:text-lg"
         >
@@ -267,12 +314,27 @@ export default function Register() {
 
   const Step4Candidate = () => (
     <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
+      <h2 className="text-2xl md:text-3xl font-bold">Qual o seu nível de experiência?</h2>
+      {["Júnior", "Pleno", "Sênior", "Especialista"].map((option) => (
+        <Button
+          key={option}
+          onClick={() => setStep(5)}
+          className="w-full md:w-80 py-5 md:py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-base md:text-lg"
+        >
+          {option}
+        </Button>
+      ))}
+    </div>
+  );
+
+  const Step5Candidate = () => (
+    <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
       <h2 className="text-2xl md:text-3xl font-bold">Qual tipo de oportunidade procura?</h2>
       {["Estágio", "CLT", "Freelancer", "Trainee", "Temporário", "Aprendiz"].map(
         (option) => (
           <Button
             key={option}
-            onClick={() => setStep(5)}
+            onClick={() => setStep(6)}
             className="w-full md:w-80 py-5 md:py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-base md:text-lg"
           >
             {option}
@@ -282,7 +344,7 @@ export default function Register() {
     </div>
   );
 
-  const Step5Candidate = () => (
+  const Step6Candidate = () => (
     <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
       <h2 className="text-2xl md:text-3xl font-bold">
         Qual é o seu nível de conhecimento em Git?
@@ -291,7 +353,7 @@ export default function Register() {
         (option) => (
           <Button
             key={option}
-            onClick={() => setStep(6)}
+            onClick={() => setStep(7)}
             className="w-full md:w-80 py-5 md:py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-base md:text-lg"
           >
             {option}
@@ -331,7 +393,7 @@ export default function Register() {
     }
   };
 
-  const Step6Candidate = React.useMemo(() => {
+  const Step7Candidate = React.useMemo(() => {
     const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
       
@@ -370,7 +432,7 @@ export default function Register() {
         return;
       }
       
-      setStep(7);
+      setStep(8);
     };
 
     return (
@@ -631,7 +693,7 @@ export default function Register() {
     );
   }, [fullName, lastName, birthDate, socialName, cpf, rg, email, password, confirmPassword, phone, state, city, states, cities, loadingCities, checkingEmail, emailError, passwordError, confirmPasswordError, showPassword, showConfirmPassword]);
 
-  const Step7Terms = () => (
+  const Step8Terms = () => (
     <div className="text-white space-y-6 max-w-3xl mx-auto text-justify">
       <h2 className="text-3xl font-bold text-center mb-6">
         📌 Termos e Condições – Candidatos
@@ -680,7 +742,7 @@ export default function Register() {
 
       <div className="text-center px-4">
         <Button
-          onClick={() => setStep(8)}
+          onClick={() => setStep(9)}
           className="bg-success hover:bg-success/90 text-success-foreground py-4 px-8 md:px-10 rounded-full font-semibold mt-4 w-full md:w-auto"
         >
           Li e aceito os termos para continuar
@@ -689,7 +751,7 @@ export default function Register() {
     </div>
   );
 
-  const Step8Photo = () => {
+  const Step9Photo = () => {
     const [photo, setPhoto] = useState<File | null>(null);
     const [uploadingPhoto, setUploadingPhoto] = useState(false);
 
@@ -772,7 +834,7 @@ export default function Register() {
 
         if (updateError) throw updateError;
 
-        setStep(9);
+        setStep(10);
 
         toast({
           title: "Cadastro realizado!",
@@ -824,7 +886,7 @@ export default function Register() {
     );
   };
 
-  const Step9Success = () => (
+  const Step10Success = () => (
     <div className="flex flex-col items-center text-white space-y-6 text-center">
       <h2 className="text-4xl font-bold text-green-300">SUCESSO!</h2>
       <p className="text-lg max-w-md">
@@ -1432,10 +1494,11 @@ export default function Register() {
         {role === "candidate" && step === 3 && <Step3Candidate />}
         {role === "candidate" && step === 4 && <Step4Candidate />}
         {role === "candidate" && step === 5 && <Step5Candidate />}
-        {role === "candidate" && step === 6 && Step6Candidate}
-        {role === "candidate" && step === 7 && <Step7Terms />}
-        {role === "candidate" && step === 8 && <Step8Photo />}
-        {role === "candidate" && step === 9 && <Step9Success />}
+        {role === "candidate" && step === 6 && <Step6Candidate />}
+        {role === "candidate" && step === 7 && Step7Candidate}
+        {role === "candidate" && step === 8 && <Step8Terms />}
+        {role === "candidate" && step === 9 && <Step9Photo />}
+        {role === "candidate" && step === 10 && <Step10Success />}
 
         {role === "company" && step === 2 && <Step2Company />}
         {role === "company" && step === 3 && <Step3Company />}
