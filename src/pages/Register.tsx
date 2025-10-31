@@ -337,9 +337,9 @@ export default function Register() {
         
         <div className="grid grid-cols-2 gap-4 w-full max-w-2xl">
           {[
-            { emoji: "👨‍💻", label: "4 ano de Experiência", value: "4-anos" },
             { emoji: "👨‍💻", label: "1 a 2 anos de Experiência", value: "1-2-anos" },
             { emoji: "👨‍💻", label: "3 a 5 anos de Experiência", value: "3-5-anos" },
+            { emoji: "👨‍💻", label: "4 ano de Experiência", value: "4-anos" },
             { emoji: "👨‍💻", label: "+6 anos de Experiência", value: "6-mais-anos" },
           ].map((option) => (
             <button
