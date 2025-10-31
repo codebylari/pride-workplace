@@ -228,65 +228,79 @@ export default function Register() {
   );
 
   // ------------------- FLUXO CANDIDATO -------------------
-  const Step2Candidate = () => (
-    <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
-      <h2 className="text-2xl md:text-3xl font-bold">Qual é o seu gênero?</h2>
-      
-      <Button
-        onClick={() => {
-          setGender("feminino");
-          setCustomGender("");
-          setStep(3);
-        }}
-        className="w-full md:w-80 py-5 md:py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-base md:text-lg"
-      >
-        Feminino
-      </Button>
-      
-      <Button
-        onClick={() => {
-          setGender("masculino");
-          setCustomGender("");
-          setStep(3);
-        }}
-        className="w-full md:w-80 py-5 md:py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-base md:text-lg"
-      >
-        Masculino
-      </Button>
-      
-      <div className="w-full md:w-80 space-y-3">
+  const Step2Candidate = () => {
+    const [localGender, setLocalGender] = useState<"feminino" | "masculino" | "outros" | "">(gender);
+    const [localCustomGender, setLocalCustomGender] = useState(customGender);
+
+    const handleGenderSelect = (selectedGender: "feminino" | "masculino") => {
+      setGender(selectedGender);
+      setCustomGender("");
+      setStep(3);
+    };
+
+    const handleOthersClick = () => {
+      setLocalGender("outros");
+      setGender("outros");
+    };
+
+    const handleContinue = () => {
+      setCustomGender(localCustomGender);
+      setStep(3);
+    };
+
+    return (
+      <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
+        <h2 className="text-2xl md:text-3xl font-bold">Qual é o seu gênero?</h2>
+        
         <Button
-          onClick={() => setGender("outros")}
-          className={`w-full py-5 md:py-6 rounded-full text-base md:text-lg ${
-            gender === "outros"
-              ? "bg-primary/50 text-white"
-              : "bg-white/20 hover:bg-white/30 text-white"
-          }`}
+          onClick={() => handleGenderSelect("feminino")}
+          className="w-full md:w-80 py-5 md:py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-base md:text-lg"
         >
-          Outros
+          Feminino
         </Button>
         
-        {gender === "outros" && (
-          <div className="space-y-2">
-            <input
-              type="text"
-              value={customGender}
-              onChange={(e) => setCustomGender(e.target.value)}
-              placeholder="Especifique seu gênero"
-              className="w-full p-3 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary"
-            />
-            <Button
-              onClick={() => setStep(3)}
-              disabled={!customGender.trim()}
-              className="w-full bg-success hover:bg-success/90 text-success-foreground py-3 rounded-full font-semibold disabled:opacity-50"
-            >
-              CONTINUAR
-            </Button>
-          </div>
-        )}
+        <Button
+          onClick={() => handleGenderSelect("masculino")}
+          className="w-full md:w-80 py-5 md:py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-base md:text-lg"
+        >
+          Masculino
+        </Button>
+        
+        <div className="w-full md:w-80 space-y-3">
+          <Button
+            onClick={handleOthersClick}
+            className={`w-full py-5 md:py-6 rounded-full text-base md:text-lg ${
+              localGender === "outros"
+                ? "bg-primary/50 text-white"
+                : "bg-white/20 hover:bg-white/30 text-white"
+            }`}
+          >
+            Outros
+          </Button>
+          
+          {localGender === "outros" && (
+            <div className="space-y-3 animate-fade-in">
+              <input
+                type="text"
+                value={localCustomGender}
+                onChange={(e) => setLocalCustomGender(e.target.value)}
+                placeholder="Especifique seu gênero"
+                autoFocus
+                className="w-full py-4 px-6 rounded-full bg-white/20 text-white placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white/30 text-base md:text-lg transition-all"
+              />
+              <Button
+                onClick={handleContinue}
+                disabled={!localCustomGender.trim()}
+                className="w-full bg-success hover:bg-success/90 text-success-foreground py-5 md:py-6 rounded-full font-semibold text-base md:text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                CONTINUAR
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   const Step3Candidate = () => (
     <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
