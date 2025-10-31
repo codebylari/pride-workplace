@@ -250,6 +250,13 @@ export default function Register() {
 
     return (
       <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
+        <button
+          onClick={() => setStep(1)}
+          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+        >
+          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+          <span className="font-medium">Voltar</span>
+        </button>
         <h2 className="text-2xl md:text-3xl font-bold">Qual é o seu gênero?</h2>
         
         <Button
@@ -304,6 +311,13 @@ export default function Register() {
 
   const Step3Candidate = () => (
     <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
+      <button
+        onClick={() => setStep(2)}
+        className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+      >
+        <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+        <span className="font-medium">Voltar</span>
+      </button>
       <h2 className="text-2xl md:text-3xl font-bold">Em qual área você atua?</h2>
       {[
         "Desenvolvimento de Software",
@@ -328,6 +342,13 @@ export default function Register() {
 
   const Step4Candidate = () => (
     <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
+      <button
+        onClick={() => setStep(3)}
+        className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+      >
+        <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+        <span className="font-medium">Voltar</span>
+      </button>
       <h2 className="text-2xl md:text-3xl font-bold">Qual o seu nível de experiência?</h2>
       {["Júnior", "Pleno", "Sênior", "Especialista"].map((option) => (
         <Button
@@ -343,6 +364,13 @@ export default function Register() {
 
   const Step5Candidate = () => (
     <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
+      <button
+        onClick={() => setStep(4)}
+        className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+      >
+        <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+        <span className="font-medium">Voltar</span>
+      </button>
       <h2 className="text-2xl md:text-3xl font-bold">Qual tipo de oportunidade procura?</h2>
       {["Estágio", "CLT", "Freelancer", "Trainee", "Temporário", "Aprendiz"].map(
         (option) => (
@@ -360,6 +388,13 @@ export default function Register() {
 
   const Step6Candidate = () => (
     <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
+      <button
+        onClick={() => setStep(5)}
+        className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+      >
+        <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+        <span className="font-medium">Voltar</span>
+      </button>
       <h2 className="text-2xl md:text-3xl font-bold">
         Qual é o seu nível de conhecimento em Git?
       </h2>
@@ -438,6 +473,14 @@ export default function Register() {
 
     return (
       <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6 max-w-4xl mx-auto px-4">
+        <button
+          type="button"
+          onClick={() => setStep(6)}
+          className="flex items-center gap-2 text-white/80 hover:text-white transition-colors group mb-4"
+        >
+          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+          <span className="font-medium">Voltar</span>
+        </button>
         <h2 className="text-2xl md:text-3xl font-bold text-center text-white mb-4 md:mb-6">
           Cadastramento de Dados
         </h2>
@@ -695,7 +738,14 @@ export default function Register() {
   }, [fullName, lastName, birthDate, socialName, cpf, rg, email, password, confirmPassword, phone, state, city, states, cities, loadingCities, checkingEmail, emailError, passwordError, confirmPasswordError, showPassword, showConfirmPassword]);
 
   const Step8Terms = () => (
-    <div className="text-white space-y-6 max-w-3xl mx-auto text-justify">
+    <div className="text-white space-y-6 max-w-3xl mx-auto text-justify px-4">
+      <button
+        onClick={() => setStep(7)}
+        className="flex items-center gap-2 text-white/80 hover:text-white transition-colors group mb-4"
+      >
+        <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+        <span className="font-medium">Voltar</span>
+      </button>
       <h2 className="text-3xl font-bold text-center mb-6">
         📌 Termos e Condições – Candidatos
       </h2>
@@ -862,7 +912,14 @@ export default function Register() {
     };
 
     return (
-      <div className="flex flex-col items-center text-white space-y-6">
+      <div className="flex flex-col items-center text-white space-y-6 px-4">
+        <button
+          onClick={() => setStep(8)}
+          className="self-start flex items-center gap-2 text-white/80 hover:text-white transition-colors group mb-2"
+        >
+          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+          <span className="font-medium">Voltar</span>
+        </button>
         <h2 className="text-3xl font-bold">Escolha sua foto</h2>
 
         {photo ? (
@@ -914,7 +971,14 @@ export default function Register() {
   // ------------------- FLUXO EMPRESA -------------------
 
   const Step2Company = () => (
-    <div className="flex flex-col items-center space-y-6 text-center text-white">
+    <div className="flex flex-col items-center space-y-6 text-center text-white px-4">
+      <button
+        onClick={() => setStep(1)}
+        className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+      >
+        <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+        <span className="font-medium">Voltar</span>
+      </button>
       <h2 className="text-3xl font-bold">Tipo de projeto</h2>
       {[
         "Novas ideias/projeto",
@@ -935,7 +999,14 @@ export default function Register() {
   );
 
   const Step3Company = () => (
-    <div className="flex flex-col items-center space-y-6 text-center text-white">
+    <div className="flex flex-col items-center space-y-6 text-center text-white px-4">
+      <button
+        onClick={() => setStep(2)}
+        className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+      >
+        <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+        <span className="font-medium">Voltar</span>
+      </button>
       <h2 className="text-3xl font-bold">Competências essenciais</h2>
       {[
         "Ciência de Dados",
@@ -965,7 +1036,14 @@ export default function Register() {
   );
 
   const Step4Company = () => (
-    <div className="flex flex-col items-center space-y-6 text-center text-white">
+    <div className="flex flex-col items-center space-y-6 text-center text-white px-4">
+      <button
+        onClick={() => setStep(3)}
+        className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+      >
+        <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+        <span className="font-medium">Voltar</span>
+      </button>
       <h2 className="text-3xl font-bold">Quanto tempo precisa do profissional?</h2>
       {["Decidir mais tarde", "< 1 semana", "1 semana - 6 meses", "+ 6 meses"].map((option) => (
         <Button
@@ -980,7 +1058,14 @@ export default function Register() {
   );
 
   const Step5Company = () => (
-    <div className="flex flex-col items-center space-y-6 text-center text-white">
+    <div className="flex flex-col items-center space-y-6 text-center text-white px-4">
+      <button
+        onClick={() => setStep(4)}
+        className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+      >
+        <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+        <span className="font-medium">Voltar</span>
+      </button>
       <h2 className="text-3xl font-bold">Experiência em Git?</h2>
       {["Sim, básico", "Sim, avançado", "Conhecimento teórico", "Não necessário"].map((option) => (
         <Button
@@ -1037,7 +1122,15 @@ export default function Register() {
     };
 
     return (
-      <form onSubmit={handleSubmit} className="space-y-6 max-w-4xl mx-auto">
+      <form onSubmit={handleSubmit} className="space-y-6 max-w-4xl mx-auto px-4">
+        <button
+          type="button"
+          onClick={() => setStep(5)}
+          className="flex items-center gap-2 text-white/80 hover:text-white transition-colors group mb-4"
+        >
+          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+          <span className="font-medium">Voltar</span>
+        </button>
         <h2 className="text-3xl font-bold text-center text-white mb-6">
           Cadastramento de Empresa
         </h2>
@@ -1318,7 +1411,14 @@ export default function Register() {
   }, [companyName, fullName, companyContactLastName, cnpj, position, state, city, phone, email, password, confirmPassword, diversity, states, cities, loadingCities, checkingEmail, emailError, passwordError, confirmPasswordError, showPassword, showConfirmPassword]);
 
   const Step7Company = () => (
-    <div className="text-white space-y-6 max-w-3xl mx-auto text-justify">
+    <div className="text-white space-y-6 max-w-3xl mx-auto text-justify px-4">
+      <button
+        onClick={() => setStep(6)}
+        className="flex items-center gap-2 text-white/80 hover:text-white transition-colors group mb-4"
+      >
+        <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+        <span className="font-medium">Voltar</span>
+      </button>
       <h2 className="text-3xl font-bold text-center mb-6">
         📌 Termos e Condições – Empresas Apoiadoras
       </h2>
@@ -1444,7 +1544,14 @@ export default function Register() {
     };
 
     return (
-      <div className="flex flex-col items-center text-white space-y-6">
+      <div className="flex flex-col items-center text-white space-y-6 px-4">
+        <button
+          onClick={() => setStep(7)}
+          className="self-start flex items-center gap-2 text-white/80 hover:text-white transition-colors group mb-2"
+        >
+          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+          <span className="font-medium">Voltar</span>
+        </button>
         <h2 className="text-3xl font-bold">Envie o logo da sua empresa</h2>
 
         {logo ? (
