@@ -295,13 +295,13 @@ export default function CandidateProfile() {
       )}
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8 max-w-4xl">
+      <main className="container mx-auto px-3 sm:px-4 py-6 sm:py-8 max-w-4xl">
         <div className={`rounded-2xl shadow-lg overflow-hidden ${darkMode ? "bg-gray-700" : "bg-white"}`}>
           {/* Profile Header Background */}
           <div className="h-32 bg-gradient-to-r from-gray-200 to-gray-300"></div>
 
           {/* Profile Content */}
-          <div className="relative px-8 pb-8">
+          <div className="relative px-4 sm:px-8 pb-6 sm:pb-8">
             {/* Profile Photo with Progress */}
             <div className="relative -mt-20 mb-6 flex justify-center">
               <div className="relative">
@@ -391,15 +391,15 @@ export default function CandidateProfile() {
             )}
 
             {/* Action Buttons */}
-            <div className="space-y-3 max-w-2xl mx-auto px-4">
+            <div className="space-y-3 max-w-2xl mx-auto px-2 sm:px-4">
               {Object.entries(sections).map(([key, section]) => (
                 <div key={key} className="space-y-2">
                   <Button
                     onClick={() => toggleSection(key)}
-                    className="w-full bg-pink-300 hover:bg-pink-400 text-white py-6 rounded-full text-lg font-medium shadow-md flex items-center justify-center gap-2"
+                    className="w-full bg-pink-300 hover:bg-pink-400 text-white py-4 sm:py-6 rounded-full text-base sm:text-lg font-medium shadow-md flex items-center justify-center gap-2"
                   >
                     <span>{section.title}</span>
-                    {expandedSection === key ? <ChevronUp size={24} /> : <ChevronDown size={24} />}
+                    {expandedSection === key ? <ChevronUp size={20} className="sm:w-6 sm:h-6" /> : <ChevronDown size={20} className="sm:w-6 sm:h-6" />}
                   </Button>
                   
                   {expandedSection === key && (

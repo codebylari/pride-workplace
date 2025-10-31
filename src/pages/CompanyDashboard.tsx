@@ -283,30 +283,30 @@ export default function CompanyDashboard() {
       )}
 
       {/* Conteúdo Principal */}
-      <main className="container mx-auto px-4 py-12 relative z-10">
+      <main className="container mx-auto px-3 sm:px-4 py-6 sm:py-12 relative z-10">
         <div className="max-w-4xl mx-auto">
           {/* Card de Boas-vindas */}
-          <div className={`rounded-2xl p-12 shadow-lg mb-8 ${darkMode ? "bg-gray-700" : "bg-white"}`}>
-            <div className="text-center space-y-8">
-              <h1 className={`text-4xl font-bold ${darkMode ? "text-white" : "text-gray-800"}`}>
+          <div className={`rounded-2xl p-6 sm:p-12 shadow-lg mb-6 sm:mb-8 ${darkMode ? "bg-gray-700" : "bg-white"}`}>
+            <div className="text-center space-y-4 sm:space-y-8">
+              <h1 className={`text-2xl sm:text-3xl md:text-4xl font-bold ${darkMode ? "text-white" : "text-gray-800"}`}>
                 Bem-vindo, {companyName}!
               </h1>
               
-              <p className={`text-xl ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+              <p className={`text-base sm:text-lg md:text-xl ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
                 "Gerencie suas oportunidades de forma simples e rápida."
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-6 justify-center items-center pt-6">
+              <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center pt-4 sm:pt-6">
                 <Button
                   onClick={() => navigate("/create-job")}
-                  className="bg-[#C1E1C1] hover:bg-[#B0D5B0] text-gray-900 px-12 py-6 rounded-xl text-lg font-semibold"
+                  className="w-full sm:w-auto bg-[#C1E1C1] hover:bg-[#B0D5B0] text-gray-900 px-8 sm:px-12 py-4 sm:py-6 rounded-xl text-base sm:text-lg font-semibold"
                 >
                   Cadastre sua vaga
                 </Button>
                 
                 <Button
                   onClick={() => navigate("/company-jobs")}
-                  className="bg-[#C1E1C1] hover:bg-[#B0D5B0] text-gray-900 px-12 py-6 rounded-xl text-lg font-semibold"
+                  className="w-full sm:w-auto bg-[#C1E1C1] hover:bg-[#B0D5B0] text-gray-900 px-8 sm:px-12 py-4 sm:py-6 rounded-xl text-base sm:text-lg font-semibold"
                 >
                   Acesse suas vagas
                 </Button>
@@ -315,20 +315,20 @@ export default function CompanyDashboard() {
           </div>
 
           {/* Estatísticas Rápidas */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className={`rounded-xl p-6 shadow-md ${darkMode ? "bg-gray-700" : "bg-white"}`}>
-              <h3 className={`text-sm font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>Vagas Ativas</h3>
-              <p className="text-3xl font-bold text-purple-600">0</p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+            <div className={`rounded-xl p-4 sm:p-6 shadow-md ${darkMode ? "bg-gray-700" : "bg-white"}`}>
+              <h3 className={`text-xs sm:text-sm font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>Vagas Ativas</h3>
+              <p className="text-2xl sm:text-3xl font-bold text-purple-600">0</p>
             </div>
             
-            <div className={`rounded-xl p-6 shadow-md ${darkMode ? "bg-gray-700" : "bg-white"}`}>
-              <h3 className={`text-sm font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>Candidaturas</h3>
-              <p className="text-3xl font-bold text-green-600">0</p>
+            <div className={`rounded-xl p-4 sm:p-6 shadow-md ${darkMode ? "bg-gray-700" : "bg-white"}`}>
+              <h3 className={`text-xs sm:text-sm font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>Candidaturas</h3>
+              <p className="text-2xl sm:text-3xl font-bold text-green-600">0</p>
             </div>
             
-            <div className={`rounded-xl p-6 shadow-md ${darkMode ? "bg-gray-700" : "bg-white"}`}>
-              <h3 className={`text-sm font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>Em Análise</h3>
-              <p className="text-3xl font-bold text-blue-600">0</p>
+            <div className={`rounded-xl p-4 sm:p-6 shadow-md ${darkMode ? "bg-gray-700" : "bg-white"}`}>
+              <h3 className={`text-xs sm:text-sm font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>Em Análise</h3>
+              <p className="text-2xl sm:text-3xl font-bold text-blue-600">0</p>
             </div>
           </div>
         </div>

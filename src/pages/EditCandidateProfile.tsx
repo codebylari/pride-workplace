@@ -371,12 +371,12 @@ export default function EditCandidateProfile() {
       )}
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8 max-w-4xl">
+      <main className="container mx-auto px-3 sm:px-4 py-6 sm:py-8 max-w-4xl">
         <h1 className={`text-3xl font-bold mb-8 ${darkMode ? "text-white" : "text-gray-800"}`}>
           Edite seu perfil
         </h1>
 
-        <div className={`rounded-2xl shadow-lg p-8 space-y-6 ${darkMode ? "bg-gray-700" : "bg-white"}`}>
+        <div className={`rounded-2xl shadow-lg p-4 sm:p-8 space-y-4 sm:space-y-6 ${darkMode ? "bg-gray-700" : "bg-white"}`}>
           {/* Photo Section */}
           <div className="flex flex-col md:flex-row gap-8 items-start">
             <div className="flex-1 space-y-4">

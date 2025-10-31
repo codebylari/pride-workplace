@@ -250,10 +250,10 @@ export default function CompanyProfile() {
       )}
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-3 sm:px-4 py-6 sm:py-8">
         <div className="max-w-4xl mx-auto">
           {/* Profile Card */}
-          <div className={`rounded-3xl shadow-lg p-8 ${darkMode ? "bg-gray-700" : "bg-white"}`}>
+          <div className={`rounded-3xl shadow-lg p-4 sm:p-8 ${darkMode ? "bg-gray-700" : "bg-white"}`}>
             {/* Logo Section */}
             <div className="flex justify-center mb-6">
               <div className="relative">
@@ -295,7 +295,7 @@ export default function CompanyProfile() {
             </h1>
 
             {/* Action Buttons and Expandable Sections */}
-            <div className="space-y-3 max-w-2xl mx-auto px-4">
+            <div className="space-y-3 max-w-2xl mx-auto px-2 sm:px-4">
               {/* Conheça a Empresa */}
               <div>
                 <Button
