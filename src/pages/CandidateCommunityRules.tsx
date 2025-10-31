@@ -142,13 +142,6 @@ export default function CandidateCommunityRules() {
                 <span className="text-base sm:text-lg">Quem Somos</span>
               </button>
               <button
-                onClick={() => navigate("/candidate-community-rules")}
-                className="w-full flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-white/20 rounded-lg transition text-left text-white"
-              >
-                <Shield size={20} className="sm:w-6 sm:h-6 flex-shrink-0" />
-                <span className="text-base sm:text-lg">Regras da Comunidade</span>
-              </button>
-              <button
                 onClick={() => navigate("/terms-candidate")}
                 className="w-full flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-white/10 rounded-lg transition text-left text-white"
               >

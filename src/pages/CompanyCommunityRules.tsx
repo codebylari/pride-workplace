@@ -159,13 +159,6 @@ export default function CompanyCommunityRules() {
                 <span className="text-lg">Quem Somos</span>
               </button>
               <button
-                onClick={() => navigate("/company-community-rules")}
-                className="w-full flex items-center gap-4 p-4 bg-white/20 rounded-lg transition text-left text-white"
-              >
-                <Shield size={24} />
-                <span className="text-lg">Regras da Comunidade</span>
-              </button>
-              <button
                 onClick={() => {
                   setShowSidebar(false);
                   navigate("/terms-company");

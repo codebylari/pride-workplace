@@ -158,18 +158,7 @@ export default function CompanySupport() {
                 <span className="text-lg">Quem Somos</span>
               </button>
               
-              <button 
-                onClick={() => {
-                  setShowSidebar(false);
-                  navigate("/company-community-rules");
-                }}
-                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
-              >
-                <Shield size={24} />
-                <span className="text-lg">Regras da Comunidade</span>
-              </button>
-              
-              <button 
+              <button
                 onClick={() => {
                   setShowSidebar(false);
                   navigate("/terms-company");
@@ -206,13 +195,6 @@ export default function CompanySupport() {
         <div className="space-y-6 mb-16">
           <Button className="w-full bg-[#FFF8D6] hover:bg-[#FFF2A9] text-gray-800 py-8 rounded-full text-xl font-semibold shadow-lg">
             Chat/Suporte
-          </Button>
-
-          <Button 
-            onClick={() => navigate("/company-community-rules")}
-            className="w-full bg-[#FFF8D6] hover:bg-[#FFF2A9] text-gray-800 py-8 rounded-full text-xl font-semibold shadow-lg"
-          >
-            Regras da Comunidade
           </Button>
         </div>
       </main>
