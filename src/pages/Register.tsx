@@ -1276,10 +1276,93 @@ export default function Register() {
 
   const Step8Company = () => {
     const [logo, setLogo] = useState<File | null>(null);
+    const [uploadingLogo, setUploadingLogo] = useState(false);
 
     const handleLogoSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
       if (event.target.files && event.target.files[0]) {
         setLogo(event.target.files[0]);
+      }
+    };
+
+    const handleRegisterWithLogo = async () => {
+      if (!logo) {
+        toast({
+          title: "Logo obrigatório",
+          description: "Por favor, selecione um logo antes de continuar.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      setUploadingLogo(true);
+
+      try {
+        // First, register the user
+        const { data: authData, error: authError } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: `${window.location.origin}/`,
+            data: {
+              full_name: `${fullName} ${companyContactLastName}`,
+              role,
+              state,
+              city,
+              company_name: companyName,
+              cnpj,
+              phone,
+              position,
+              diversity,
+            },
+          },
+        });
+
+        if (authError) throw authError;
+
+        const userId = authData.user?.id;
+        if (!userId) throw new Error("Erro ao obter ID do usuário");
+
+        // Upload logo to storage
+        const fileExt = logo.name.split('.').pop();
+        const fileName = `${userId}/logo.${fileExt}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('profile-photos')
+          .upload(fileName, logo, {
+            upsert: true,
+            contentType: logo.type
+          });
+
+        if (uploadError) throw uploadError;
+
+        // Get public URL
+        const { data: { publicUrl } } = supabase.storage
+          .from('profile-photos')
+          .getPublicUrl(fileName);
+
+        // Update company profile with logo URL
+        const { error: updateError } = await supabase
+          .from('company_profiles')
+          .update({ logo_url: publicUrl })
+          .eq('user_id', userId);
+
+        if (updateError) throw updateError;
+
+        setStep(9);
+
+        toast({
+          title: "Cadastro realizado!",
+          description: "Sua empresa agora faz parte da plataforma.",
+        });
+
+      } catch (error: any) {
+        toast({
+          title: "Erro no cadastro",
+          description: error.message || "Ocorreu um erro ao realizar o cadastro.",
+          variant: "destructive",
+        });
+      } finally {
+        setUploadingLogo(false);
       }
     };
 
@@ -1306,11 +1389,11 @@ export default function Register() {
           </label>
 
           <Button
-            disabled={!logo}
-            onClick={handleRegister}
+            disabled={!logo || uploadingLogo}
+            onClick={handleRegisterWithLogo}
             className="bg-success hover:bg-success/90 text-success-foreground py-3 px-8 rounded-full font-semibold w-full md:w-auto"
           >
-            {logo ? "Finalizar cadastro" : "Selecione uma logo"}
+            {uploadingLogo ? "Cadastrando..." : logo ? "Finalizar cadastro" : "Selecione uma logo"}
           </Button>
         </div>
       </div>

@@ -54,6 +54,7 @@ export type Database = {
           description: string | null
           fantasy_name: string
           id: string
+          logo_url: string | null
           sector: string | null
           state: string | null
           updated_at: string
@@ -66,6 +67,7 @@ export type Database = {
           description?: string | null
           fantasy_name: string
           id?: string
+          logo_url?: string | null
           sector?: string | null
           state?: string | null
           updated_at?: string
@@ -78,6 +80,7 @@ export type Database = {
           description?: string | null
           fantasy_name?: string
           id?: string
+          logo_url?: string | null
           sector?: string | null
           state?: string | null
           updated_at?: string
