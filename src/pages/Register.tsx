@@ -24,6 +24,12 @@ export default function Register() {
   // ------------------- ESTADOS GERAIS -------------------
   const [step, setStep] = useState(1);
   const [role, setRole] = useState<"candidate" | "company" | "">("");
+  
+  // Debug logs
+  useEffect(() => {
+    console.log("Current step:", step);
+    console.log("Current role:", role);
+  }, [step, role]);
   const [loading, setLoading] = useState(false);
 
   // ------------------- API IBGE -------------------
