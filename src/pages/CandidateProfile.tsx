@@ -413,9 +413,15 @@ export default function CandidateProfile() {
                       <h3 className={`text-xl font-bold mb-4 pr-8 ${darkMode ? "text-white" : "text-gray-800"}`}>
                         {section.title}
                       </h3>
-                      <div className={`whitespace-pre-line text-sm leading-relaxed ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-                        {section.content}
-                      </div>
+                      {section.content.trim() ? (
+                        <div className={`whitespace-pre-line text-sm leading-relaxed ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+                          {section.content}
+                        </div>
+                      ) : (
+                        <p className={`text-center py-4 ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+                          Nenhuma informação adicionada ainda
+                        </p>
+                      )}
                     </div>
                   )}
                 </div>
