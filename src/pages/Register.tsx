@@ -1592,7 +1592,15 @@ export default function Register() {
   };
 
   const Step5_5Company = () => {
-    const [selectedValue, setSelectedValue] = useState("");
+    const [selectedValues, setSelectedValues] = useState<string[]>([]);
+    
+    const toggleValue = (value: string) => {
+      setSelectedValues(prev => 
+        prev.includes(value) 
+          ? prev.filter(v => v !== value)
+          : [...prev, value]
+      );
+    };
     
     return (
       <div className="flex flex-col items-center space-y-6 text-center text-white px-4">
@@ -1604,8 +1612,9 @@ export default function Register() {
           <span className="font-medium">Voltar</span>
         </button>
         <h2 className="text-2xl md:text-3xl font-bold max-w-2xl">O que vocês valorizam mais em um candidato a longo prazo?</h2>
+        <p className="text-white/80 text-sm">Selecione uma ou mais opções</p>
         
-        <div className="flex flex-col space-y-4 w-full max-w-2xl">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-3xl">
           {[
             "Potencial de crescimento e aprendizado",
             "Especialização técnica em determinada área",
@@ -1614,10 +1623,10 @@ export default function Register() {
           ].map((option) => (
             <Button
               key={option}
-              onClick={() => setSelectedValue(option)}
-              className={`py-6 rounded-full text-base md:text-lg transition-all ${
-                selectedValue === option
-                  ? "bg-success hover:bg-success/90 text-success-foreground"
+              onClick={() => toggleValue(option)}
+              className={`py-6 rounded-2xl text-base transition-all ${
+                selectedValues.includes(option)
+                  ? "bg-success hover:bg-success/90 text-success-foreground scale-105"
                   : "bg-white/20 hover:bg-white/30 text-white"
               }`}
             >
@@ -1626,10 +1635,10 @@ export default function Register() {
           ))}
         </div>
         
-        {selectedValue && (
+        {selectedValues.length > 0 && (
           <Button
             onClick={() => {
-              setCandidateValue(selectedValue);
+              setCandidateValue(selectedValues.join(", "));
               setStep(6);
             }}
             className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-6 rounded-full text-lg font-semibold px-10 w-80"
