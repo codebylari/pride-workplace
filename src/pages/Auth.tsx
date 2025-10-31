@@ -60,7 +60,7 @@ export default function Auth() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden flex items-center justify-center p-2 sm:p-4 bg-gradient-to-br from-[#6E4062] via-[#5a3452] to-[#6E4062]">
+    <div className="min-h-screen relative overflow-hidden flex items-center justify-center p-2 sm:p-8 lg:p-12 bg-gradient-to-br from-[#6E4062] via-[#5a3452] to-[#6E4062]">
       {/* Logo no topo centralizado */}
       <div className="absolute top-4 sm:top-8 left-1/2 -translate-x-1/2 z-20">
         <img src={logo} alt="QueerCode Logo" className="w-24 sm:w-40 h-auto brightness-0 invert opacity-80" />
