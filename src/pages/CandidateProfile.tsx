@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, Bell, Star, Edit2, Briefcase, User, Settings, Headset, Info, FileText, LogOut, ChevronDown, ChevronUp, ClipboardList } from "lucide-react";
+import { Menu, Bell, Star, Edit2, Briefcase, User, Settings, Headset, Info, FileText, LogOut, ChevronDown, ChevronUp, ClipboardList, StarHalf } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
 import { useTheme } from "@/contexts/ThemeContext";
 import { supabase } from "@/integrations/supabase/client";
+import { CircularProgress } from "@/components/CircularProgress";
 
 export default function CandidateProfile() {
   const navigate = useNavigate();
@@ -20,19 +21,84 @@ export default function CandidateProfile() {
   const fullName = user?.user_metadata?.full_name || "Usuário";
   const rating = 4.5;
   const [photoUrl, setPhotoUrl] = useState<string | null>(null);
+  const [profileData, setProfileData] = useState<{
+    about_me?: string;
+    experience?: string;
+    education?: string;
+    journey?: string;
+    resume_url?: string;
+  }>({});
 
   useEffect(() => {
     const load = async () => {
       if (!user?.id) return;
       const { data } = await supabase
         .from("profiles")
-        .select("photo_url")
+        .select("photo_url, full_name")
         .eq("id", user.id)
         .single();
       setPhotoUrl(data?.photo_url ?? null);
+      
+      // Mock data for now - replace with actual fields when they exist in DB
+      setProfileData({
+        about_me: sections["sobre-mim"].content.trim() ? sections["sobre-mim"].content : undefined,
+        experience: sections["experiencia"].content.trim() ? sections["experiencia"].content : undefined,
+        education: sections["formacao"].content.trim() ? sections["formacao"].content : undefined,
+        journey: sections["minha-jornada"].content.trim() ? sections["minha-jornada"].content : undefined,
+        resume_url: sections["curriculo"].content.trim() ? "has_resume" : undefined,
+      });
     };
     load();
   }, [user?.id]);
+
+  // Calculate profile completion percentage
+  const calculateCompletion = () => {
+    const fields = [
+      profileData.about_me,
+      profileData.experience,
+      profileData.education,
+      profileData.journey,
+      profileData.resume_url,
+    ];
+    const filledFields = fields.filter(field => field !== undefined && field !== "").length;
+    return (filledFields / 5) * 100;
+  };
+
+  const completionPercentage = calculateCompletion();
+  const showProgress = completionPercentage < 100;
+
+  // Render stars with half-star support
+  const renderStars = (rating: number) => {
+    const stars = [];
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+
+    for (let i = 0; i < fullStars; i++) {
+      stars.push(
+        <Star key={`full-${i}`} size={24} fill="#22c55e" className="text-green-500" />
+      );
+    }
+
+    if (hasHalfStar) {
+      stars.push(
+        <div key="half" className="relative">
+          <Star size={24} className="text-green-500" />
+          <div className="absolute inset-0 overflow-hidden" style={{ width: '50%' }}>
+            <Star size={24} fill="#22c55e" className="text-green-500" />
+          </div>
+        </div>
+      );
+    }
+
+    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+    for (let i = 0; i < emptyStars; i++) {
+      stars.push(
+        <Star key={`empty-${i}`} size={24} className="text-green-500" />
+      );
+    }
+
+    return stars;
+  };
   const handleLogout = async () => {
     await signOut();
     navigate("/auth");
@@ -281,36 +347,60 @@ Busco oportunidades como freelancer para ganhar experiência prática, contribui
 
           {/* Profile Content */}
           <div className="relative px-8 pb-8">
-            {/* Profile Photo */}
-            <div className="relative -mt-16 mb-6 flex justify-center">
+            {/* Profile Photo with Progress */}
+            <div className="relative -mt-20 mb-6 flex justify-center">
               <div className="relative">
-                {photoUrl ? (
-                  <img
-                    src={photoUrl}
-                    alt={`Foto de ${fullName}`}
-                    className={`w-32 h-32 rounded-full object-cover border-4 shadow-xl ${darkMode ? "border-gray-700" : "border-white"}`}
-                    loading="lazy"
-                  />
+                {showProgress ? (
+                  <CircularProgress percentage={completionPercentage} size={160} strokeWidth={8}>
+                    <div className="relative">
+                      {photoUrl ? (
+                        <img
+                          src={photoUrl}
+                          alt={`Foto de ${fullName}`}
+                          className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-xl"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="w-32 h-32 rounded-full bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center text-4xl font-bold text-white border-4 border-white shadow-xl">
+                          {userName.charAt(0).toUpperCase()}
+                        </div>
+                      )}
+                      <button 
+                        onClick={() => navigate("/edit-candidate-profile")}
+                        className="absolute bottom-0 right-0 w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white hover:bg-blue-600 transition shadow-lg"
+                      >
+                        <Edit2 size={18} />
+                      </button>
+                    </div>
+                  </CircularProgress>
                 ) : (
-                  <div className={`w-32 h-32 rounded-full bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center text-4xl font-bold text-white border-4 shadow-xl ${darkMode ? "border-gray-700" : "border-white"}`}>
-                    {userName.charAt(0).toUpperCase()}
+                  <div className="relative">
+                    {photoUrl ? (
+                      <img
+                        src={photoUrl}
+                        alt={`Foto de ${fullName}`}
+                        className={`w-32 h-32 rounded-full object-cover border-4 shadow-xl ${darkMode ? "border-gray-700" : "border-white"}`}
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className={`w-32 h-32 rounded-full bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center text-4xl font-bold text-white border-4 shadow-xl ${darkMode ? "border-gray-700" : "border-white"}`}>
+                        {userName.charAt(0).toUpperCase()}
+                      </div>
+                    )}
+                    <button 
+                      onClick={() => navigate("/edit-candidate-profile")}
+                      className="absolute bottom-0 right-0 w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white hover:bg-blue-600 transition shadow-lg"
+                    >
+                      <Edit2 size={18} />
+                    </button>
                   </div>
                 )}
-                <button 
-                  onClick={() => navigate("/edit-candidate-profile")}
-                  className="absolute bottom-0 right-0 w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white hover:bg-blue-600 transition shadow-lg"
-                >
-                  <Edit2 size={18} />
-                </button>
               </div>
             </div>
 
             {/* Rating */}
             <div className="flex justify-center items-center gap-2 mb-4">
-              {[1, 2, 3, 4].map((star) => (
-                <Star key={star} size={24} fill="#22c55e" className="text-green-500" />
-              ))}
-              <Star size={24} fill="#22c55e" className="text-green-500" fillOpacity={0.5} />
+              {renderStars(rating)}
               <span className={`ml-2 font-semibold ${darkMode ? "text-gray-300" : "text-gray-600"}`}>{rating}</span>
             </div>
 
