@@ -117,7 +117,16 @@ import ForgotPassword from "./pages/ForgotPassword";
 import NotFound from "./pages/NotFound";
 // Página exibida quando a rota não existe (erro 404)
 
-const queryClient = new QueryClient(); 
+import CommunityRules from "./pages/CommunityRules";
+// Página de Regras da Comunidade (geral)
+
+import CandidateCommunityRules from "./pages/CandidateCommunityRules";
+// Página de Regras da Comunidade - Candidato
+
+import CompanyCommunityRules from "./pages/CompanyCommunityRules";
+// Página de Regras da Comunidade - Empresa
+
+const queryClient = new QueryClient();
 // Cria uma instância do cliente React Query (gerencia cache e estado das requisições)
 
 const App = () => (
@@ -234,6 +243,15 @@ const App = () => (
             
             <Route path="/forgot-password" element={<ForgotPassword />} />
             {/* Página de Recuperar Senha */}
+            
+            <Route path="/community-rules" element={<CommunityRules />} />
+            {/* Página de Regras da Comunidade (geral) */}
+            
+            <Route path="/candidate-community-rules" element={<CandidateCommunityRules />} />
+            {/* Página de Regras da Comunidade - Candidato */}
+            
+            <Route path="/company-community-rules" element={<CompanyCommunityRules />} />
+            {/* Página de Regras da Comunidade - Empresa */}
             
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             {/* Comentário lembrando que novas rotas devem vir antes da rota coringa */}

@@ -411,12 +411,7 @@ export default function Register() {
             Voltar ao Início
           </Button>
           <Button
-            onClick={() => {
-              setStep(1);
-              setGender("");
-              setOrientation("");
-              setRole("");
-            }}
+            onClick={() => navigate("/community-rules")}
             className="bg-success hover:bg-success/90 text-success-foreground py-5 md:py-6 rounded-full text-base md:text-lg font-semibold px-8 md:px-10"
           >
             Compreendo
