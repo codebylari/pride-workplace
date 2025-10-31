@@ -40,6 +40,7 @@ export default function Register() {
   // ------------------- CAMPOS CANDIDATO -------------------
   const [gender, setGender] = useState<"feminino" | "masculino" | "outros" | "">("");
   const [customGender, setCustomGender] = useState("");
+  const [orientation, setOrientation] = useState<"heterossexual" | "lgbt" | "">("");
   const [fullName, setFullName] = useState("");
   const [lastName, setLastName] = useState("");
   const [birthDate, setBirthDate] = useState("");
@@ -247,7 +248,12 @@ export default function Register() {
       if (localGender === "outros") {
         setCustomGender(localCustomGender);
       }
-      setStep(2.5);
+      // Se for masculino, ir para pergunta de orientação sexual
+      if (localGender === "masculino") {
+        setStep(2.3);
+      } else {
+        setStep(2.5);
+      }
     };
 
     return (
@@ -321,13 +327,121 @@ export default function Register() {
     );
   };
 
+  // ------------------- STEP 2.3 - ORIENTAÇÃO SEXUAL (APENAS MASCULINO) -------------------
+  const Step2_3Candidate = () => {
+    const [localOrientation, setLocalOrientation] = useState(orientation);
+    
+    const handleOrientationSelect = (selected: "heterossexual" | "lgbt") => {
+      setLocalOrientation(selected);
+      setOrientation(selected);
+    };
+    
+    const handleContinue = () => {
+      if (localOrientation === "heterossexual") {
+        // Mostrar mensagem de restrição
+        setStep(2.4);
+      } else {
+        // Continuar para próximo passo
+        setStep(2.5);
+      }
+    };
+    
+    return (
+      <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
+        <button
+          onClick={() => setStep(2)}
+          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+        >
+          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+          <span className="font-medium">Voltar</span>
+        </button>
+        <h2 className="text-2xl md:text-3xl font-bold">Qual é a sua orientação sexual?</h2>
+        
+        <Button
+          onClick={() => handleOrientationSelect("lgbt")}
+          className={`w-full md:w-80 py-5 md:py-6 rounded-full text-base md:text-lg transition-all ${
+            localOrientation === "lgbt"
+              ? "bg-success hover:bg-success/90 text-success-foreground"
+              : "bg-white/20 hover:bg-white/30 text-white"
+          }`}
+        >
+          LGBTQIA+
+        </Button>
+        
+        <Button
+          onClick={() => handleOrientationSelect("heterossexual")}
+          className={`w-full md:w-80 py-5 md:py-6 rounded-full text-base md:text-lg transition-all ${
+            localOrientation === "heterossexual"
+              ? "bg-success hover:bg-success/90 text-success-foreground"
+              : "bg-white/20 hover:bg-white/30 text-white"
+          }`}
+        >
+          Heterossexual
+        </Button>
+        
+        {localOrientation && (
+          <Button
+            onClick={handleContinue}
+            className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-5 md:py-6 rounded-full text-base md:text-lg font-semibold px-8 md:px-10 w-full md:w-80"
+          >
+            PRÓXIMO
+          </Button>
+        )}
+      </div>
+    );
+  };
+
+  // ------------------- STEP 2.4 - MENSAGEM DE RESTRIÇÃO -------------------
+  const Step2_4Candidate = () => {
+    return (
+      <div className="flex flex-col items-center justify-center space-y-6 md:space-y-8 text-center text-white px-4 min-h-[400px]">
+        <div className="text-6xl md:text-7xl mb-4">🌈</div>
+        <h2 className="text-2xl md:text-3xl font-bold max-w-2xl">
+          Nossa plataforma é dedicada a mulheres e à comunidade LGBTQIA+
+        </h2>
+        <p className="text-lg md:text-xl text-white/80 max-w-xl">
+          Trabalhamos para promover a inclusão e diversidade no mercado de tecnologia, 
+          oferecendo oportunidades especialmente para grupos historicamente sub-representados.
+        </p>
+        <div className="flex flex-col md:flex-row gap-4 mt-8">
+          <Button
+            onClick={() => navigate("/")}
+            className="bg-white/20 hover:bg-white/30 text-white py-5 md:py-6 rounded-full text-base md:text-lg font-semibold px-8 md:px-10"
+          >
+            Voltar ao Início
+          </Button>
+          <Button
+            onClick={() => {
+              setStep(1);
+              setGender("");
+              setOrientation("");
+              setRole("");
+            }}
+            className="bg-success hover:bg-success/90 text-success-foreground py-5 md:py-6 rounded-full text-base md:text-lg font-semibold px-8 md:px-10"
+          >
+            Recomeçar Cadastro
+          </Button>
+        </div>
+      </div>
+    );
+  };
+
   const Step2_5Candidate = () => {
     const [selectedExperience, setSelectedExperience] = useState("");
+    
+    const getPreviousStep = () => {
+      // Se veio do step de orientação sexual (masculino), voltar para 2.3
+      if (gender === "masculino") {
+        return 2.3;
+      }
+      // Senão, voltar para step 2 (seleção de gênero)
+      return 2;
+    };
     
     return (
       <div className="flex flex-col items-center space-y-6 md:space-y-8 text-center text-white px-4">
         <button
-          onClick={() => setStep(2)}
+          onClick={() => setStep(getPreviousStep())}
           className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
         >
           <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
@@ -2006,6 +2120,8 @@ export default function Register() {
       <div className="w-full max-w-4xl bg-white/10 backdrop-blur-lg rounded-2xl md:rounded-3xl p-6 md:p-12 shadow-2xl">
       {step === 1 && <Step1 />}
       {role === "candidate" && step === 2 && <Step2Candidate />}
+      {role === "candidate" && step === 2.3 && <Step2_3Candidate />}
+      {role === "candidate" && step === 2.4 && <Step2_4Candidate />}
       {role === "candidate" && step === 2.5 && <Step2_5Candidate />}
       {role === "candidate" && step === 2.7 && <Step2_7Candidate />}
       {role === "candidate" && step === 3 && <Step3Candidate />}
