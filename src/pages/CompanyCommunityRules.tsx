@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Button } from "@/components/ui/button";
-import { Menu, Shield, Users, Heart, AlertCircle, HandshakeIcon, Briefcase, UserCheck, PlusCircle, List, User, Settings, Headset, Info, FileText } from "lucide-react";
+import { Menu, Shield, Users, Heart, AlertCircle, HandshakeIcon, Briefcase, UserCheck, PlusCircle, List, User, Settings, Headset, Info, FileText, LogOut } from "lucide-react";
 import { NotificationsPanel } from "@/components/NotificationsPanel";
 
 export default function CompanyCommunityRules() {
@@ -58,21 +58,15 @@ export default function CompanyCommunityRules() {
   return (
     <div className={`min-h-screen ${darkMode ? "bg-background" : "bg-gradient-primary"}`}>
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-primary backdrop-blur-lg border-b border-border shadow-lg">
-        <div className="flex items-center justify-between p-4">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setShowSidebar(!showSidebar)}
-            className="text-primary-foreground hover:bg-primary-foreground/20"
-          >
-            <Menu size={24} />
-          </Button>
+      <header style={{ background: 'linear-gradient(to right, hsl(315, 26%, 40%), hsl(320, 30%, 50%))' }} className="text-white p-4 flex justify-between items-center sticky top-0 z-40">
+        <button
+          onClick={() => setShowSidebar(!showSidebar)}
+          className="p-2 hover:bg-white/10 rounded-lg transition"
+        >
+          <Menu size={24} />
+        </button>
 
-          <div className="text-primary-foreground">
-            <NotificationsPanel />
-          </div>
-        </div>
+        <NotificationsPanel />
       </header>
 
       {/* Sidebar */}
@@ -82,92 +76,114 @@ export default function CompanyCommunityRules() {
           onClick={() => setShowSidebar(false)}
         >
           <div
-            className="fixed left-0 top-0 h-full w-80 bg-primary shadow-2xl p-6 overflow-y-auto"
+            style={{ background: 'linear-gradient(to bottom, hsl(315, 35%, 55%), hsl(315, 30%, 50%), hsl(320, 30%, 50%))' }}
+            className="fixed left-0 top-0 h-full w-64 shadow-xl text-white flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center gap-3 mb-8 pb-6 border-b border-border">
-              <div className="w-16 h-16 rounded-full bg-primary-foreground/20 flex items-center justify-center text-2xl">
-                🏢
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="font-semibold text-primary-foreground text-lg truncate">
-                  {user?.user_metadata?.company_name || "Empresa"}
-                </p>
+            <div className="p-6 space-y-2 border-b border-white/20">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center">
+                  <span className="text-xs font-bold text-black">
+                    {user?.user_metadata?.company_name?.substring(0, 2).toUpperCase() || "ML"}
+                  </span>
+                </div>
+                <div>
+                  <h2 className="text-xl font-semibold text-white">{user?.user_metadata?.company_name || "Empresa"}</h2>
+                  <p className="text-sm text-white/80">empresa</p>
+                </div>
               </div>
             </div>
 
-            <nav className="space-y-2">
+            <nav className="flex-1 py-6 px-4 space-y-2">
               <button
                 onClick={() => navigate("/company-dashboard")}
-                className="w-full text-left px-4 py-3 text-primary-foreground hover:bg-primary-foreground/20 rounded-lg transition-smooth"
+                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left text-white"
               >
-                <Briefcase className="inline-block mr-3" size={20} />
-                Vagas
+                <Briefcase size={24} />
+                <span className="text-lg">Vagas</span>
               </button>
               <button
                 onClick={() => navigate("/create-job")}
-                className="w-full text-left px-4 py-3 text-primary-foreground hover:bg-primary-foreground/20 rounded-lg transition-smooth"
+                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left text-white"
               >
-                <PlusCircle className="inline-block mr-3" size={20} />
-                Cadastrar Vagas
+                <PlusCircle size={24} />
+                <span className="text-lg">Cadastrar Vagas</span>
               </button>
               <button
-                onClick={() => navigate("/company-jobs")}
-                className="w-full text-left px-4 py-3 text-primary-foreground hover:bg-primary-foreground/20 rounded-lg transition-smooth"
+                onClick={() => {
+                  setShowSidebar(false);
+                  navigate("/company-jobs");
+                }}
+                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left text-white"
               >
-                <List className="inline-block mr-3" size={20} />
-                Minhas Vagas
+                <List size={24} />
+                <span className="text-lg">Minhas Vagas</span>
               </button>
               <button
                 onClick={() => navigate("/company-profile")}
-                className="w-full text-left px-4 py-3 text-primary-foreground hover:bg-primary-foreground/20 rounded-lg transition-smooth"
+                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left text-white"
               >
-                <User className="inline-block mr-3" size={20} />
-                Meu Perfil
+                <User size={24} />
+                <span className="text-lg">Meu Perfil</span>
               </button>
               <button
-                onClick={() => navigate("/company-settings")}
-                className="w-full text-left px-4 py-3 text-primary-foreground hover:bg-primary-foreground/20 rounded-lg transition-smooth"
+                onClick={() => {
+                  setShowSidebar(false);
+                  navigate("/company-settings");
+                }}
+                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left text-white"
               >
-                <Settings className="inline-block mr-3" size={20} />
-                Configurações
+                <Settings size={24} />
+                <span className="text-lg">Configurações</span>
               </button>
               <button
-                onClick={() => navigate("/company-support")}
-                className="w-full text-left px-4 py-3 text-primary-foreground hover:bg-primary-foreground/20 rounded-lg transition-smooth"
+                onClick={() => {
+                  setShowSidebar(false);
+                  navigate("/company-support");
+                }}
+                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left text-white"
               >
-                <Headset className="inline-block mr-3" size={20} />
-                Suporte
+                <Headset size={24} />
+                <span className="text-lg">Suporte</span>
               </button>
               <button
-                onClick={() => navigate("/company-about")}
-                className="w-full text-left px-4 py-3 text-primary-foreground hover:bg-primary-foreground/20 rounded-lg transition-smooth"
+                onClick={() => {
+                  setShowSidebar(false);
+                  navigate("/company-about");
+                }}
+                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left text-white"
               >
-                <Info className="inline-block mr-3" size={20} />
-                Quem Somos
+                <Info size={24} />
+                <span className="text-lg">Quem Somos</span>
               </button>
               <button
                 onClick={() => navigate("/company-community-rules")}
-                className="w-full text-left px-4 py-3 bg-primary-foreground/20 text-primary-foreground rounded-lg transition-smooth"
+                className="w-full flex items-center gap-4 p-4 bg-white/20 rounded-lg transition text-left text-white"
               >
-                <Shield className="inline-block mr-3" size={20} />
-                Regras da Comunidade
+                <Shield size={24} />
+                <span className="text-lg">Regras da Comunidade</span>
               </button>
               <button
-                onClick={() => navigate("/terms-company")}
-                className="w-full text-left px-4 py-3 text-primary-foreground hover:bg-primary-foreground/20 rounded-lg transition-smooth"
+                onClick={() => {
+                  setShowSidebar(false);
+                  navigate("/terms-company");
+                }}
+                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left text-white"
               >
-                <FileText className="inline-block mr-3" size={20} />
-                Termos de Uso
+                <FileText size={24} />
+                <span className="text-lg">Termos de Uso</span>
               </button>
             </nav>
 
-            <button
-              onClick={handleLogout}
-              className="w-full mt-8 px-4 py-3 bg-destructive/20 text-primary-foreground hover:bg-destructive/30 rounded-lg transition-smooth"
-            >
-              Sair
-            </button>
+            <div className="p-4 border-t border-white/20">
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left text-red-500"
+              >
+                <LogOut size={24} />
+                <span className="text-lg">Sair</span>
+              </button>
+            </div>
           </div>
         </div>
       )}

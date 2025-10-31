@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Button } from "@/components/ui/button";
-import { Menu, Shield, Users, Heart, AlertCircle, HandshakeIcon, CheckCircle, UserCheck, Briefcase, User, Settings, Headset, Info, FileText, ClipboardList } from "lucide-react";
+import { Menu, Shield, Users, Heart, AlertCircle, HandshakeIcon, CheckCircle, UserCheck, Briefcase, User, Settings, Headset, Info, FileText, ClipboardList, LogOut } from "lucide-react";
 import { NotificationsPanel } from "@/components/NotificationsPanel";
 
 export default function CandidateCommunityRules() {
@@ -58,21 +58,17 @@ export default function CandidateCommunityRules() {
   return (
     <div className={`min-h-screen ${darkMode ? "bg-background" : "bg-gradient-primary"}`}>
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-primary backdrop-blur-lg border-b border-border shadow-lg">
-        <div className="flex items-center justify-between p-4">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setShowSidebar(!showSidebar)}
-            className="text-primary-foreground hover:bg-primary-foreground/20"
-          >
-            <Menu size={24} />
-          </Button>
+      <header style={{ background: 'linear-gradient(to right, hsl(315, 26%, 40%), hsl(320, 30%, 50%))' }} className="text-white p-4 flex justify-between items-center sticky top-0 z-40">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setShowSidebar(!showSidebar)}
+          className="text-white hover:bg-white/10 p-2"
+        >
+          <Menu size={24} />
+        </Button>
 
-          <div className="text-primary-foreground">
-            <NotificationsPanel />
-          </div>
-        </div>
+        <NotificationsPanel />
       </header>
 
       {/* Sidebar */}
@@ -82,85 +78,92 @@ export default function CandidateCommunityRules() {
           onClick={() => setShowSidebar(false)}
         >
           <div
-            className="fixed left-0 top-0 h-full w-80 bg-primary shadow-2xl p-6 overflow-y-auto"
+            style={{ background: 'linear-gradient(to bottom, hsl(315, 35%, 55%), hsl(315, 30%, 50%), hsl(320, 30%, 50%))' }}
+            className="fixed left-0 top-0 h-full w-[min(80vw,320px)] shadow-xl text-white flex flex-col overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center gap-3 mb-8 pb-6 border-b border-border">
-              <div className="w-16 h-16 rounded-full bg-primary-foreground/20 flex items-center justify-center text-2xl">
-                👤
+            <div className="p-4 sm:p-6 flex items-center gap-3 sm:gap-4 border-b border-white/20 flex-shrink-0">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gray-300 overflow-hidden border-4 border-white/30 flex-shrink-0">
+                <div className="w-full h-full bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center text-xl sm:text-2xl font-bold text-white">
+                  {user?.user_metadata?.full_name?.charAt(0).toUpperCase() || "C"}
+                </div>
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="font-semibold text-primary-foreground text-lg truncate">
+              <div className="min-w-0">
+                <h2 className="text-lg sm:text-xl font-semibold truncate text-white">
                   {user?.user_metadata?.full_name || "Candidato"}
-                </p>
+                </h2>
+                <p className="text-xs sm:text-sm text-white/80">candidato (a)</p>
               </div>
             </div>
 
-            <nav className="space-y-2">
+            <nav className="flex-1 py-4 sm:py-6 px-3 sm:px-4 space-y-1 sm:space-y-2 overflow-y-auto">
               <button
                 onClick={() => navigate("/candidate-dashboard")}
-                className="w-full text-left px-4 py-3 text-primary-foreground hover:bg-primary-foreground/20 rounded-lg transition-smooth"
+                className="w-full flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-white/10 rounded-lg transition text-left text-white"
               >
-                <Briefcase className="inline-block mr-3" size={20} />
-                Vagas
+                <Briefcase size={20} className="sm:w-6 sm:h-6 flex-shrink-0" />
+                <span className="text-base sm:text-lg">Vagas</span>
               </button>
               <button
                 onClick={() => navigate("/my-applications")}
-                className="w-full text-left px-4 py-3 text-primary-foreground hover:bg-primary-foreground/20 rounded-lg transition-smooth"
+                className="w-full flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-white/10 rounded-lg transition text-left text-white"
               >
-                <ClipboardList className="inline-block mr-3" size={20} />
-                Minhas Candidaturas
+                <ClipboardList size={20} className="sm:w-6 sm:h-6 flex-shrink-0" />
+                <span className="text-base sm:text-lg">Minhas Candidaturas</span>
               </button>
               <button
                 onClick={() => navigate("/candidate-profile")}
-                className="w-full text-left px-4 py-3 text-primary-foreground hover:bg-primary-foreground/20 rounded-lg transition-smooth"
+                className="w-full flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-white/10 rounded-lg transition text-left text-white"
               >
-                <User className="inline-block mr-3" size={20} />
-                Meu Perfil
+                <User size={20} className="sm:w-6 sm:h-6 flex-shrink-0" />
+                <span className="text-base sm:text-lg">Meu Perfil</span>
               </button>
               <button
                 onClick={() => navigate("/candidate-settings")}
-                className="w-full text-left px-4 py-3 text-primary-foreground hover:bg-primary-foreground/20 rounded-lg transition-smooth"
+                className="w-full flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-white/10 rounded-lg transition text-left text-white"
               >
-                <Settings className="inline-block mr-3" size={20} />
-                Configurações
+                <Settings size={20} className="sm:w-6 sm:h-6 flex-shrink-0" />
+                <span className="text-base sm:text-lg">Configurações</span>
               </button>
               <button
                 onClick={() => navigate("/candidate-support")}
-                className="w-full text-left px-4 py-3 text-primary-foreground hover:bg-primary-foreground/20 rounded-lg transition-smooth"
+                className="w-full flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-white/10 rounded-lg transition text-left text-white"
               >
-                <Headset className="inline-block mr-3" size={20} />
-                Suporte
+                <Headset size={20} className="sm:w-6 sm:h-6 flex-shrink-0" />
+                <span className="text-base sm:text-lg">Suporte</span>
               </button>
               <button
                 onClick={() => navigate("/candidate-about")}
-                className="w-full text-left px-4 py-3 text-primary-foreground hover:bg-primary-foreground/20 rounded-lg transition-smooth"
+                className="w-full flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-white/10 rounded-lg transition text-left text-white"
               >
-                <Info className="inline-block mr-3" size={20} />
-                Quem Somos
+                <Info size={20} className="sm:w-6 sm:h-6 flex-shrink-0" />
+                <span className="text-base sm:text-lg">Quem Somos</span>
               </button>
               <button
                 onClick={() => navigate("/candidate-community-rules")}
-                className="w-full text-left px-4 py-3 bg-primary-foreground/20 text-primary-foreground rounded-lg transition-smooth"
+                className="w-full flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-white/20 rounded-lg transition text-left text-white"
               >
-                <Shield className="inline-block mr-3" size={20} />
-                Regras da Comunidade
+                <Shield size={20} className="sm:w-6 sm:h-6 flex-shrink-0" />
+                <span className="text-base sm:text-lg">Regras da Comunidade</span>
               </button>
               <button
                 onClick={() => navigate("/terms-candidate")}
-                className="w-full text-left px-4 py-3 text-primary-foreground hover:bg-primary-foreground/20 rounded-lg transition-smooth"
+                className="w-full flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-white/10 rounded-lg transition text-left text-white"
               >
-                <FileText className="inline-block mr-3" size={20} />
-                Termos de Uso
+                <FileText size={20} className="sm:w-6 sm:h-6 flex-shrink-0" />
+                <span className="text-base sm:text-lg">Termos de Uso</span>
               </button>
             </nav>
 
-            <button
-              onClick={handleLogout}
-              className="w-full mt-8 px-4 py-3 bg-destructive/20 text-primary-foreground hover:bg-destructive/30 rounded-lg transition-smooth"
-            >
-              Sair
-            </button>
+            <div className="p-3 sm:p-4 border-t border-white/20 flex-shrink-0">
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-white/10 rounded-lg transition text-left text-red-500"
+              >
+                <LogOut size={20} className="sm:w-6 sm:h-6 flex-shrink-0" />
+                <span className="text-base sm:text-lg">Sair</span>
+              </button>
+            </div>
           </div>
         </div>
       )}
