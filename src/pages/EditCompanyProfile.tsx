@@ -103,6 +103,16 @@ export default function EditCompanyProfile() {
   };
 
   const handleConfirm = async () => {
+    // Verificar autenticação primeiro
+    if (!user?.id) {
+      toast({
+        title: "Erro de autenticação",
+        description: "Você precisa estar logado para salvar alterações.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (!hasChanges()) {
       toast({
         title: "Nenhuma alteração",
@@ -127,8 +137,6 @@ export default function EditCompanyProfile() {
 
       // Handle logo upload if there's a new one
       if (logo && logo !== originalValues.logo) {
-        if (!user?.id) throw new Error("Usuário não autenticado.");
-
         // Convert blob URL to actual blob
         const response = await fetch(logo);
         const blob = await response.blob();
@@ -152,7 +160,7 @@ export default function EditCompanyProfile() {
         const { error: updateError } = await supabase
           .from("company_profiles")
           .update(updates)
-          .eq("user_id", user?.id);
+          .eq("user_id", user.id);
 
         if (updateError) throw updateError;
       }

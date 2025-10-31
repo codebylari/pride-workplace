@@ -118,6 +118,16 @@ export default function EditCandidateProfile() {
   };
 
   const handleSaveChanges = async () => {
+    // Verificar autenticação primeiro
+    if (!user?.id) {
+      toast({
+        title: "Erro de autenticação",
+        description: "Você precisa estar logado para salvar alterações.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const hasGenderChange =
       genderEdit && (genderEdit as string) !== ""
         ? ((genderEdit as string) === "outros" ? customGenderEdit.trim() !== "" : true)
@@ -172,8 +182,6 @@ export default function EditCandidateProfile() {
 
       // Handle resume upload
       if (resume) {
-        if (!user?.id) throw new Error("Usuário não autenticado.");
-
         const ext = resume.name.split(".").pop() || "pdf";
         const path = `${user.id}/resume.${ext}`;
 
@@ -189,8 +197,6 @@ export default function EditCandidateProfile() {
 
       // Handle photo upload
       if (profilePhoto) {
-        if (!user?.id) throw new Error("Usuário não autenticado.");
-
         const ext = profilePhoto.name.split(".").pop() || "jpg";
         const path = `${user.id}/profile.${ext}`;
 
@@ -209,7 +215,7 @@ export default function EditCandidateProfile() {
         const { error: updateError } = await supabase
           .from("profiles")
           .update(updates)
-          .eq("id", user?.id);
+          .eq("id", user.id);
 
         if (updateError) throw updateError;
       }
