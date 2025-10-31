@@ -108,7 +108,7 @@ export function ChatBot() {
         <button
           onClick={() => setIsOpen(true)}
           className="fixed bottom-8 right-8 w-20 h-20 rounded-full flex items-center justify-center shadow-xl hover:scale-110 transition-transform z-50"
-          style={{ background: '#F86999', boxShadow: '0 0 30px rgba(248, 105, 153, 0.6)' }}
+          style={{ background: '#F86999' }}
         >
           <Bot size={40} className="text-white" />
         </button>
@@ -120,7 +120,7 @@ export function ChatBot() {
           {/* Cabeçalho */}
           <div style={{ background: 'linear-gradient(to right, hsl(315, 26%, 40%), hsl(320, 30%, 50%))' }} className="rounded-t-3xl p-6 flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ background: '#F86999', boxShadow: '0 0 20px rgba(248, 105, 153, 0.5)' }}>
+              <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ background: '#F86999' }}>
                 <Bot size={32} className="text-white" />
               </div>
               <div className="text-white">
@@ -155,7 +155,7 @@ export function ChatBot() {
                   className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
                     message.role === "user" ? "bg-blue-400" : ""
                   }`}
-                  style={message.role === "assistant" ? { background: '#F86999', boxShadow: '0 0 15px rgba(248, 105, 153, 0.4)' } : {}}
+                  style={message.role === "assistant" ? { background: '#F86999' } : {}}
                 >
                   {message.role === "assistant" ? (
                     <Bot size={20} className="text-white" />
@@ -178,7 +178,7 @@ export function ChatBot() {
             ))}
             {isLoading && (
               <div className="flex gap-3">
-                <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: '#F86999', boxShadow: '0 0 15px rgba(248, 105, 153, 0.4)' }}>
+                <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: '#F86999' }}>
                   <Bot size={20} className="text-white" />
                 </div>
                 <div className="bg-white p-4 rounded-2xl">
