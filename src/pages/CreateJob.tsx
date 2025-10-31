@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, Bell, PlusCircle, List } from "lucide-react";
+import { Menu, Bell, PlusCircle, List, Briefcase, User, Settings, Headset, Info, FileText, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -158,6 +158,7 @@ export default function CreateJob() {
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
+                <Briefcase size={24} />
                 <span className="text-lg">Vagas</span>
               </button>
               
@@ -190,6 +191,7 @@ export default function CreateJob() {
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
+                <User size={24} />
                 <span className="text-lg">Meu Perfil</span>
               </button>
               
@@ -200,6 +202,7 @@ export default function CreateJob() {
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
+                <Settings size={24} />
                 <span className="text-lg">Configurações</span>
               </button>
               
@@ -210,6 +213,7 @@ export default function CreateJob() {
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
+                <Headset size={24} />
                 <span className="text-lg">Suporte</span>
               </button>
               
@@ -220,6 +224,7 @@ export default function CreateJob() {
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
+                <Info size={24} />
                 <span className="text-lg">Quem Somos</span>
               </button>
               
@@ -230,6 +235,7 @@ export default function CreateJob() {
                 }}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
               >
+                <FileText size={24} />
                 <span className="text-lg">Termos de Uso</span>
               </button>
             </nav>
@@ -239,6 +245,7 @@ export default function CreateJob() {
                 onClick={handleLogout}
                 className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left text-red-500"
               >
+                <LogOut size={24} />
                 <span className="text-lg">Sair</span>
               </button>
             </div>
