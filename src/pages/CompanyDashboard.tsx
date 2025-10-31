@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, Bell, Briefcase, PlusCircle, User, Settings, Headset, Info, FileText, LogOut, List } from "lucide-react";
+import { Menu, Briefcase, PlusCircle, User, Settings, Headset, Info, FileText, LogOut, List } from "lucide-react";
+import { NotificationsPanel } from "@/components/NotificationsPanel";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
@@ -11,7 +12,6 @@ export default function CompanyDashboard() {
   const { user, signOut } = useAuth();
   const { darkMode } = useTheme();
   const [showSidebar, setShowSidebar] = useState(false);
-  const [showNotifications, setShowNotifications] = useState(false);
 
   // Extrai o nome da empresa dos metadados do usuário
   const companyName = user?.user_metadata?.company_name || "Empresa";
@@ -140,32 +140,7 @@ export default function CompanyDashboard() {
           <Menu size={24} />
         </button>
         
-        <div className="relative">
-          <button 
-            onClick={() => setShowNotifications(!showNotifications)}
-            className="p-2 hover:bg-white/10 rounded-lg transition"
-          >
-            <Bell size={24} />
-          </button>
-          
-          {showNotifications && (
-            <>
-              <div 
-                className="fixed inset-0 z-40" 
-                onClick={() => setShowNotifications(false)}
-              />
-              <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl z-50 animate-fade-in">
-                <div className="p-4 border-b border-gray-200">
-                  <h3 className="font-semibold text-gray-800">Notificações</h3>
-                </div>
-                <div className="p-6 text-center text-gray-500">
-                  <Bell size={48} className="mx-auto mb-3 text-gray-300" />
-                  <p>Sem novas notificações</p>
-                </div>
-              </div>
-            </>
-          )}
-        </div>
+        <NotificationsPanel />
       </header>
 
       {/* Menu Lateral */}

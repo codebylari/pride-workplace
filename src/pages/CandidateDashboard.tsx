@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, Bell, MapPin, Users, Briefcase, User, Settings, Headset, Info, FileText, LogOut, ClipboardList } from "lucide-react";
+import { Menu, MapPin, Users, Briefcase, User, Settings, Headset, Info, FileText, LogOut, ClipboardList } from "lucide-react";
+import { NotificationsPanel } from "@/components/NotificationsPanel";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/useAuth";
@@ -88,7 +89,6 @@ export default function CandidateDashboard() {
   const { user, signOut } = useAuth();
   const { darkMode } = useTheme();
   const [showSidebar, setShowSidebar] = useState(false);
-  const [showNotifications, setShowNotifications] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const jobsPerPage = 9;
@@ -118,32 +118,7 @@ export default function CandidateDashboard() {
           <Menu size={24} />
         </button>
         
-        <div className="relative">
-          <button 
-            onClick={() => setShowNotifications(!showNotifications)}
-            className="p-2 hover:bg-white/10 rounded-lg transition"
-          >
-            <Bell size={24} />
-          </button>
-          
-          {showNotifications && (
-            <>
-              <div 
-                className="fixed inset-0 z-40" 
-                onClick={() => setShowNotifications(false)}
-              />
-              <div className="absolute right-0 mt-2 w-[calc(100vw-2rem)] sm:w-80 max-w-sm bg-white rounded-lg shadow-xl z-50 animate-fade-in">
-                <div className="p-4 border-b border-gray-200">
-                  <h3 className="font-semibold text-gray-800">Notificações</h3>
-                </div>
-                <div className="p-6 text-center text-gray-500">
-                  <Bell size={48} className="mx-auto mb-3 text-gray-300" />
-                  <p>Sem novas notificações</p>
-                </div>
-              </div>
-            </>
-          )}
-        </div>
+        <NotificationsPanel />
       </header>
 
       {/* Sidebar */}
