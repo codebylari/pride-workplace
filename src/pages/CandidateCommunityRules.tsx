@@ -68,7 +68,9 @@ export default function CandidateCommunityRules() {
           <Menu size={24} />
         </Button>
 
-        <NotificationsPanel />
+        <div className="[&_svg]:text-white [&_button]:hover:bg-white/10">
+          <NotificationsPanel />
+        </div>
       </header>
 
       {/* Sidebar */}

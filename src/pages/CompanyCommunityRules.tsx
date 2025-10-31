@@ -66,7 +66,9 @@ export default function CompanyCommunityRules() {
           <Menu size={24} />
         </button>
 
-        <NotificationsPanel />
+        <div className="[&_svg]:text-white [&_button]:hover:bg-white/10">
+          <NotificationsPanel />
+        </div>
       </header>
 
       {/* Sidebar */}
