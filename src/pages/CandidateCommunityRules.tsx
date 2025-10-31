@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Button } from "@/components/ui/button";
-import { Menu, Shield, Users, Heart, AlertCircle, HandshakeIcon, CheckCircle } from "lucide-react";
+import { Menu, Shield, Users, Heart, AlertCircle, HandshakeIcon, CheckCircle, UserCheck } from "lucide-react";
 import { NotificationsPanel } from "@/components/NotificationsPanel";
 
 export default function CandidateCommunityRules() {
@@ -18,6 +18,11 @@ export default function CandidateCommunityRules() {
   };
 
   const rules = [
+    {
+      icon: <UserCheck className="w-8 h-8" />,
+      title: "Quem Pode Participar",
+      description: "A comunidade é destinada apenas a mulheres e pessoas LGBT+. É necessário ter interesse ou atuação na área de TI (trabalhos, freelances ou projetos). Perfis que não se encaixarem nesses critérios não serão aceitos na plataforma."
+    },
     {
       icon: <Shield className="w-8 h-8" />,
       title: "Respeito e Inclusão",

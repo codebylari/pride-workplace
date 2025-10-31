@@ -1,11 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Shield, Users, Heart, AlertCircle, HandshakeIcon } from "lucide-react";
+import { ArrowLeft, Shield, Users, Heart, AlertCircle, HandshakeIcon, UserCheck } from "lucide-react";
 
 export default function CommunityRules() {
   const navigate = useNavigate();
 
   const rules = [
+    {
+      icon: <UserCheck className="w-8 h-8" />,
+      title: "Quem Pode Participar",
+      description: "A comunidade é destinada apenas a mulheres e pessoas LGBT+. É necessário ter interesse ou atuação na área de TI (trabalhos, freelances ou projetos). Perfis que não se encaixarem nesses critérios não serão aceitos na plataforma."
+    },
     {
       icon: <Shield className="w-8 h-8" />,
       title: "Respeito e Inclusão",
