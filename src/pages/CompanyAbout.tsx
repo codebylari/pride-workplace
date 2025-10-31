@@ -16,7 +16,7 @@ export default function CompanyAbout() {
 
   const handleLogout = async () => {
     await signOut();
-    navigate("/auth");
+    navigate("/");
   };
 
   return (

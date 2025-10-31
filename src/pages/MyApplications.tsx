@@ -30,7 +30,7 @@ export default function MyApplications() {
 
   const handleLogout = async () => {
     await signOut();
-    navigate("/auth");
+    navigate("/");
   };
 
   // Mock data - será substituído por dados reais do banco

@@ -28,7 +28,7 @@ export default function JobApplication() {
 
   const handleLogout = async () => {
     await signOut();
-    navigate("/auth");
+    navigate("/");
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -110,7 +110,7 @@ export default function CandidateProfile() {
   };
   const handleLogout = async () => {
     await signOut();
-    navigate("/auth");
+    navigate("/");
   };
 
   const toggleSection = (section: string) => {

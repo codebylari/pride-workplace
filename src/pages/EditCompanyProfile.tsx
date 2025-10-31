@@ -70,7 +70,7 @@ export default function EditCompanyProfile() {
 
   const handleLogout = async () => {
     await signOut();
-    navigate("/auth");
+    navigate("/");
   };
 
   const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {

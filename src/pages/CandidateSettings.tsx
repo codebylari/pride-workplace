@@ -28,7 +28,7 @@ export default function CandidateSettings() {
   };
   const handleLogout = async () => {
     await signOut();
-    navigate("/auth");
+    navigate("/");
   };
 
   return (

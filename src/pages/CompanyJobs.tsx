@@ -51,7 +51,7 @@ export default function CompanyJobs() {
 
   const handleLogout = async () => {
     await signOut();
-    navigate("/auth");
+    navigate("/");
   };
 
   return (

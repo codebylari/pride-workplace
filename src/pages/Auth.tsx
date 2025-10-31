@@ -20,7 +20,18 @@ export default function Auth() {
     const checkSession = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        navigate("/");
+        // Check user role to redirect appropriately
+        const { data: roleData } = await supabase
+          .from("user_roles")
+          .select("role")
+          .eq("user_id", session.user.id)
+          .single();
+
+        if (roleData?.role === "company") {
+          navigate("/company-dashboard");
+        } else {
+          navigate("/candidate-dashboard");
+        }
       }
     };
     checkSession();

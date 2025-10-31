@@ -136,8 +136,8 @@ const App = () => (
           {/* Habilita o roteamento baseado em URLs */}
           <Routes>
             {/* Define as rotas da aplicação */}
-            <Route path="/auth" element={<Auth />} />
-            {/* Página de login */}
+            <Route path="/" element={<Auth />} />
+            {/* Página de login inicial */}
             
             <Route path="/register" element={<Register />} />
             {/* Página de cadastro */}
@@ -234,9 +234,6 @@ const App = () => (
             
             <Route path="/forgot-password" element={<ForgotPassword />} />
             {/* Página de Recuperar Senha */}
-            
-            <Route path="/" element={<Index />} />
-            {/* Página inicial (protegida) */}
             
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             {/* Comentário lembrando que novas rotas devem vir antes da rota coringa */}

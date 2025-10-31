@@ -30,7 +30,7 @@ export default function DeactivateAccount() {
 
   const handleLogout = async () => {
     await signOut();
-    navigate("/auth");
+    navigate("/");
   };
 
   const handleDeactivate = async () => {
@@ -317,7 +317,7 @@ export default function DeactivateAccount() {
               onClick={async () => {
                 setShowSuccessDialog(false);
                 await signOut();
-                navigate("/auth");
+                navigate("/");
               }}
               className="w-full max-w-xs py-3 bg-pink-400 hover:bg-pink-500 text-white rounded-lg transition"
             >

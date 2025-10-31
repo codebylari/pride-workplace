@@ -20,7 +20,7 @@ export default function CompanyPublicProfile() {
 
   const handleLogout = async () => {
     await signOut();
-    navigate("/auth");
+    navigate("/");
   };
 
   const toggleSection = (section: string) => {

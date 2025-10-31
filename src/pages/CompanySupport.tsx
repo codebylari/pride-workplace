@@ -17,7 +17,7 @@ export default function CompanySupport() {
 
   const handleLogout = async () => {
     await signOut();
-    navigate("/auth");
+    navigate("/");
   };
 
   return (

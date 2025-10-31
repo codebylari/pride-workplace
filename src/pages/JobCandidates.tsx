@@ -72,7 +72,7 @@ export default function JobCandidates() {
 
   const handleLogout = async () => {
     await signOut();
-    navigate("/auth");
+    navigate("/");
   };
 
   return (

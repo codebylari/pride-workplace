@@ -104,7 +104,7 @@ export default function CandidateDashboard() {
 
   const handleLogout = async () => {
     await signOut();
-    navigate("/auth");
+    navigate("/");
   };
 
   return (

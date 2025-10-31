@@ -33,7 +33,7 @@ export default function CreateJob() {
 
   const handleLogout = async () => {
     await signOut();
-    navigate("/auth");
+    navigate("/");
   };
 
   const handleSubmit = async (e: React.FormEvent) => {

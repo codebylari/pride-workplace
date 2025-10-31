@@ -30,7 +30,7 @@ export default function DeleteAccount() {
 
   const handleLogout = async () => {
     await signOut();
-    navigate("/auth");
+    navigate("/");
   };
 
   const handleDelete = async () => {

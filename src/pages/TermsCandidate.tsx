@@ -16,7 +16,7 @@ export default function TermsCandidate() {
 
   const handleLogout = async () => {
     await signOut();
-    navigate("/auth");
+    navigate("/");
   };
 
   return (

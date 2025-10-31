@@ -42,7 +42,7 @@ export default function ChangePassword() {
 
   const handleLogout = async () => {
     await signOut();
-    navigate("/auth");
+    navigate("/");
   };
 
   const handleChangePassword = async () => {

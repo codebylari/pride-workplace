@@ -67,7 +67,7 @@ export default function EditCandidateProfile() {
 
   const handleLogout = async () => {
     await signOut();
-    navigate("/auth");
+    navigate("/");
   };
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -965,7 +965,7 @@ export default function Register() {
         Agradecemos a sua confiança em nossa plataforma!
       </p>
       <Button
-        onClick={() => navigate("/auth")}
+        onClick={() => navigate("/")}
         className="bg-success hover:bg-success/90 text-success-foreground py-4 px-8 md:px-10 rounded-full font-semibold w-full md:w-auto"
       >
         Ir para página inicial
@@ -1597,7 +1597,7 @@ export default function Register() {
         Obrigado por se juntar a nós 💜
       </p>
       <Button
-        onClick={() => navigate("/auth")}
+        onClick={() => navigate("/")}
         className="bg-success hover:bg-success/90 text-success-foreground py-4 px-8 md:px-10 rounded-full font-semibold w-full md:w-auto"
       >
         Ir para login

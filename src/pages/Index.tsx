@@ -25,7 +25,7 @@ const Index = () => {
 
   useEffect(() => {
     if (!loading && !user) {
-      navigate("/auth");
+      navigate("/");
     }
   }, [user, loading, navigate]);
   // Mock data - em uma aplicação real, isso viria de uma API/banco
@@ -111,7 +111,7 @@ const Index = () => {
                 className="w-full justify-start"
                 onClick={async () => {
                   await signOut();
-                  navigate("/auth");
+                  navigate("/");
                 }}
               >
                 <LogOut className="h-4 w-4 mr-2" />

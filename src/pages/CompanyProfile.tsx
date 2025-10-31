@@ -109,7 +109,7 @@ export default function CompanyProfile() {
 
   const handleLogout = async () => {
     await signOut();
-    navigate("/auth");
+    navigate("/");
   };
 
   return (

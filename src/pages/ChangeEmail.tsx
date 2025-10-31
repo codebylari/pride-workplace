@@ -29,7 +29,7 @@ export default function ChangeEmail() {
 
   const handleLogout = async () => {
     await signOut();
-    navigate("/auth");
+    navigate("/");
   };
 
   const handleChangeEmail = async () => {
