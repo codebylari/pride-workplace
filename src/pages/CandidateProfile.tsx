@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, Bell, Star, Edit2, Briefcase, User, Settings, Headset, Info, FileText, LogOut, ChevronDown, ChevronUp, ClipboardList, StarHalf } from "lucide-react";
+import { Menu, Bell, Star, Edit2, Briefcase, User, Settings, Headset, Info, FileText, LogOut, ChevronDown, ChevronUp, ClipboardList, Linkedin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
@@ -21,6 +21,8 @@ export default function CandidateProfile() {
   const fullName = user?.user_metadata?.full_name || "Usuário";
   const rating = 4.5;
   const [photoUrl, setPhotoUrl] = useState<string | null>(null);
+  const [userGender, setUserGender] = useState<string>("");
+  const [userLinkedin, setUserLinkedin] = useState<string>("");
   const [profileData, setProfileData] = useState<{
     about_me?: string;
     experience?: string;
@@ -34,10 +36,13 @@ export default function CandidateProfile() {
       if (!user?.id) return;
       const { data } = await supabase
         .from("profiles")
-        .select("photo_url, full_name")
+        .select("photo_url, full_name, gender, linkedin_url")
         .eq("id", user.id)
-        .single();
+        .maybeSingle();
+      
       setPhotoUrl(data?.photo_url ?? null);
+      setUserGender(data?.gender ?? "");
+      setUserLinkedin(data?.linkedin_url ?? "");
       
       // Mock data for now - replace with actual fields when they exist in DB
       setProfileData({
@@ -405,14 +410,35 @@ Busco oportunidades como freelancer para ganhar experiência prática, contribui
             </div>
 
             {/* Name and Gender */}
-            <div className="text-center mb-8 space-y-1">
+            <div className="text-center mb-4 space-y-1">
               <h1 className={`text-2xl font-bold ${darkMode ? "text-white" : "text-gray-800"}`}>
                 Nome: {userName}
               </h1>
-              <p className={`text-lg ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
-                Gênero: Feminino
-              </p>
+              {userGender && (
+                <p className={`text-lg ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+                  Gênero: {userGender.charAt(0).toUpperCase() + userGender.slice(1)}
+                </p>
+              )}
             </div>
+
+            {/* LinkedIn */}
+            {userLinkedin && (
+              <div className="text-center mb-6">
+                <a
+                  href={userLinkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+                    darkMode 
+                      ? "bg-gray-600 hover:bg-gray-500 text-white" 
+                      : "bg-gray-100 hover:bg-gray-200 text-gray-800"
+                  }`}
+                >
+                  <Linkedin size={20} className="text-blue-600" />
+                  <span className="font-medium">Ver LinkedIn</span>
+                </a>
+              </div>
+            )}
 
             {/* Action Buttons */}
             <div className="space-y-3 max-w-2xl mx-auto px-4">

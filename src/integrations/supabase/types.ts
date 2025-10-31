@@ -132,7 +132,9 @@ export type Database = {
           city: string | null
           created_at: string
           full_name: string
+          gender: string | null
           id: string
+          linkedin_url: string | null
           photo_url: string | null
           state: string | null
           updated_at: string
@@ -141,7 +143,9 @@ export type Database = {
           city?: string | null
           created_at?: string
           full_name: string
+          gender?: string | null
           id: string
+          linkedin_url?: string | null
           photo_url?: string | null
           state?: string | null
           updated_at?: string
@@ -150,7 +154,9 @@ export type Database = {
           city?: string | null
           created_at?: string
           full_name?: string
+          gender?: string | null
           id?: string
+          linkedin_url?: string | null
           photo_url?: string | null
           state?: string | null
           updated_at?: string

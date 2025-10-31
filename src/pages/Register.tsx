@@ -889,10 +889,15 @@ export default function Register() {
           .from('profile-photos')
           .getPublicUrl(fileName);
 
-        // 6) Salva URL na tabela de perfis
+        // 6) Salva URL e gênero na tabela de perfis
+        const finalGender = gender === 'outros' ? customGender : gender;
+        
         const { error: updateError } = await supabase
           .from('profiles')
-          .update({ photo_url: publicUrl })
+          .update({ 
+            photo_url: publicUrl,
+            gender: finalGender
+          })
           .eq('id', userId);
 
         if (updateError) throw updateError;

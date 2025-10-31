@@ -1,6 +1,6 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, Bell, Camera, Upload, X, Briefcase, User, Settings, Headset, Info, FileText, LogOut } from "lucide-react";
+import { Menu, Bell, Camera, Upload, X, Briefcase, User, Settings, Headset, Info, FileText, LogOut, Linkedin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -30,6 +30,33 @@ export default function EditCandidateProfile() {
   const [resume, setResume] = useState<File | null>(null);
   const [genderEdit, setGenderEdit] = useState<"feminino" | "masculino" | "outros" | "">("");
   const [customGenderEdit, setCustomGenderEdit] = useState("");
+  const [linkedinUrl, setLinkedinUrl] = useState("");
+
+  // Load existing data
+  useEffect(() => {
+    const loadProfile = async () => {
+      if (!user?.id) return;
+      
+      const { data } = await supabase
+        .from("profiles")
+        .select("gender, linkedin_url")
+        .eq("id", user.id)
+        .maybeSingle();
+      
+      if (data) {
+        if (data.gender) {
+          if (["feminino", "masculino"].includes(data.gender)) {
+            setGenderEdit(data.gender as "feminino" | "masculino");
+          } else {
+            setGenderEdit("outros");
+            setCustomGenderEdit(data.gender);
+          }
+        }
+        setLinkedinUrl(data.linkedin_url || "");
+      }
+    };
+    loadProfile();
+  }, [user?.id]);
 
   const userName = user?.user_metadata?.full_name?.split(" ")[0] || "Usuário";
   const fullName = user?.user_metadata?.full_name || "Usuário";
@@ -100,7 +127,8 @@ export default function EditCandidateProfile() {
       myJourney.trim() !== "" || 
       profilePhoto !== null || 
       resume !== null ||
-      hasGenderChange;
+      hasGenderChange ||
+      linkedinUrl.trim() !== "";
 
     if (!hasChanges) {
       toast({
@@ -112,6 +140,29 @@ export default function EditCandidateProfile() {
     }
 
     try {
+      const updates: any = {};
+
+      // Save gender
+      if (hasGenderChange) {
+        updates.gender = genderEdit === "outros" ? customGenderEdit : genderEdit;
+      }
+
+      // Save LinkedIn
+      if (linkedinUrl.trim() !== "") {
+        updates.linkedin_url = linkedinUrl;
+      }
+
+      // Update profile fields
+      if (Object.keys(updates).length > 0) {
+        const { error: updateError } = await supabase
+          .from("profiles")
+          .update(updates)
+          .eq("id", user?.id);
+
+        if (updateError) throw updateError;
+      }
+
+      // Handle photo upload
       if (profilePhoto) {
         if (!user?.id) throw new Error("Usuário não autenticado.");
 
@@ -127,12 +178,12 @@ export default function EditCandidateProfile() {
         const { data: urlData } = supabase.storage.from("profile-photos").getPublicUrl(path);
         const publicUrl = urlData.publicUrl;
 
-        const { error: updateError } = await supabase
+        const { error: photoUpdateError } = await supabase
           .from("profiles")
           .update({ photo_url: publicUrl })
           .eq("id", user.id);
 
-        if (updateError) throw updateError;
+        if (photoUpdateError) throw photoUpdateError;
       }
 
       toast({
@@ -473,6 +524,27 @@ export default function EditCandidateProfile() {
               className={`w-full p-3 rounded-lg border ${darkMode ? "bg-gray-600 text-white border-gray-500" : "bg-gray-100 text-gray-800 border-gray-300"}`}
               placeholder="Conte sua trajetória na tecnologia"
             />
+          </div>
+
+          {/* LinkedIn */}
+          <div>
+            <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-800"}`}>
+              LinkedIn (opcional)
+            </label>
+            <div className="relative">
+              <span className={`${darkMode ? "text-gray-400" : "text-gray-500"} absolute left-3 top-1/2 -translate-y-1/2`} aria-hidden="true">
+                <Linkedin size={20} />
+              </span>
+              <input
+                type="url"
+                value={linkedinUrl}
+                onChange={(e) => setLinkedinUrl(e.target.value)}
+                placeholder="https://www.linkedin.com/in/seu-perfil"
+                className={`w-full p-3 pl-12 rounded-lg border ${
+                  darkMode ? "bg-gray-600 text-white border-gray-500 placeholder:text-gray-300" : "bg-gray-100 text-gray-800 border-gray-300 placeholder:text-gray-500"
+                }`}
+              />
+            </div>
           </div>
 
           {/* Resume Upload */}
