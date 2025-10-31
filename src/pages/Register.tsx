@@ -1068,16 +1068,71 @@ export default function Register() {
       }
     };
 
-    const handleRegisterWithPhoto = async () => {
-      if (!photo) {
+    const handleRegisterWithoutPhoto = async () => {
+      setUploadingPhoto(true);
+
+      try {
+        // Cadastrar usuário sem foto
+        const { data: authData, error: authError } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: `${window.location.origin}/`,
+            data: {
+              full_name: `${fullName} ${lastName}`,
+              role,
+              state,
+              city,
+              birth_date: birthDate,
+              social_name: socialName,
+              cpf,
+              rg,
+              phone,
+              gender: gender === 'outros' ? customGender : gender,
+            },
+          },
+        });
+
+        if (authError && (authError.message?.includes('already') || authError.message?.includes('registered'))) {
+          const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+          if (signInError) throw signInError;
+        } else if (authError) {
+          throw authError;
+        }
+
+        const { data: sessionData } = await supabase.auth.getSession();
+        if (!sessionData.session) {
+          throw new Error("Não foi possível confirmar o login. Verifique seu email e tente novamente.");
+        }
+
+        const userId = sessionData.session.user.id;
+        const finalGender = gender === 'outros' ? customGender : gender;
+        
+        // Salva apenas o gênero, sem foto
+        const { error: updateError } = await supabase
+          .from('profiles')
+          .update({ 
+            gender: finalGender
+          })
+          .eq('id', userId);
+
+        if (updateError) throw updateError;
+
+        setStep(10);
+        toast({ title: "Cadastro realizado!", description: "Perfil criado com sucesso." });
+      } catch (error: any) {
+        console.error('Erro no cadastro:', error);
         toast({
-          title: "Foto obrigatória",
-          description: "Por favor, selecione uma foto antes de continuar.",
+          title: "Erro no cadastro",
+          description: error.message || "Ocorreu um erro ao realizar o cadastro.",
           variant: "destructive",
         });
-        return;
+      } finally {
+        setUploadingPhoto(false);
       }
+    };
 
+    const handleRegisterWithPhoto = async () => {
       setUploadingPhoto(true);
 
       try {
@@ -1088,25 +1143,16 @@ export default function Register() {
           options: {
             emailRedirectTo: `${window.location.origin}/`,
             data: {
-              full_name: role === "candidate" ? `${fullName} ${lastName}` : `${fullName} ${companyContactLastName}`,
+              full_name: `${fullName} ${lastName}`,
               role,
               state,
               city,
-              ...(role === "company" && {
-                company_name: companyName,
-                cnpj,
-                phone,
-                position,
-                diversity,
-              }),
-              ...(role === "candidate" && {
-                birth_date: birthDate,
-                social_name: socialName,
-                cpf,
-                rg,
-                phone,
-                gender: gender === 'outros' ? customGender : gender,
-              }),
+              birth_date: birthDate,
+              social_name: socialName,
+              cpf,
+              rg,
+              phone,
+              gender: gender === 'outros' ? customGender : gender,
             },
           },
         });
@@ -1128,14 +1174,14 @@ export default function Register() {
         const userId = sessionData.session.user.id;
 
         // 4) Upload da foto
-        const fileExt = photo.name.split('.').pop();
+        const fileExt = photo!.name.split('.').pop();
         const fileName = `${userId}/profile.${fileExt}`;
 
         const { error: uploadError } = await supabase.storage
           .from('profile-photos')
-          .upload(fileName, photo, {
+          .upload(fileName, photo!, {
             upsert: true,
-            contentType: photo.type
+            contentType: photo!.type
           });
 
         if (uploadError) throw uploadError;
@@ -1181,7 +1227,8 @@ export default function Register() {
           <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
           <span className="font-medium">Voltar</span>
         </button>
-        <h2 className="text-3xl font-bold">Escolha sua foto</h2>
+        <h2 className="text-3xl font-bold">Escolha sua foto (opcional)</h2>
+        <p className="text-white/80 text-center">Você pode adicionar uma foto agora ou pular esta etapa</p>
 
         {photo ? (
           <img
@@ -1201,13 +1248,24 @@ export default function Register() {
             <input type="file" accept="image/*" onChange={handlePhotoSelect} className="hidden" />
           </label>
 
-          <Button
-            disabled={!photo || uploadingPhoto}
-            onClick={handleRegisterWithPhoto}
-            className="bg-success hover:bg-success/90 text-success-foreground py-3 px-8 rounded-full font-semibold w-full md:w-auto"
-          >
-            {uploadingPhoto ? "Cadastrando..." : photo ? "Cadastrar" : "Selecione uma foto primeiro"}
-          </Button>
+          <div className="flex flex-col md:flex-row gap-3 w-full md:w-auto">
+            <Button
+              disabled={uploadingPhoto}
+              onClick={handleRegisterWithoutPhoto}
+              variant="outline"
+              className="py-3 px-8 rounded-full font-semibold text-white border-white/40 hover:bg-white/10"
+            >
+              Pular
+            </Button>
+            
+            <Button
+              disabled={!photo || uploadingPhoto}
+              onClick={handleRegisterWithPhoto}
+              className="bg-success hover:bg-success/90 text-success-foreground py-3 px-8 rounded-full font-semibold"
+            >
+              {uploadingPhoto ? "Cadastrando..." : "Cadastrar com foto"}
+            </Button>
+          </div>
         </div>
       </div>
     );
