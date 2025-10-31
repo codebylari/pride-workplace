@@ -552,7 +552,7 @@ export default function Register() {
     const [selectedArea, setSelectedArea] = useState("");
     
     return (
-      <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
+      <div className="flex flex-col items-center space-y-6 md:space-y-8 text-center text-white px-4">
         <button
           onClick={() => setStep(2.7)}
           className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
@@ -561,28 +561,31 @@ export default function Register() {
           <span className="font-medium">Voltar</span>
         </button>
         <h2 className="text-2xl md:text-3xl font-bold">Em qual área você atua?</h2>
-        {[
-          "Desenvolvimento de Software",
-          "Design",
-          "Ciência de Dados",
-          "Cibersegurança",
-          "Infraestrutura",
-          "Inteligência Artificial",
-          "Blockchain",
-          "Outros",
-        ].map((option) => (
-          <Button
-            key={option}
-            onClick={() => setSelectedArea(option)}
-            className={`w-full md:w-80 py-5 md:py-6 rounded-full text-base md:text-lg transition-all ${
-              selectedArea === option
-                ? "bg-success hover:bg-success/90 text-success-foreground"
-                : "bg-white/20 hover:bg-white/30 text-white"
-            }`}
-          >
-            {option}
-          </Button>
-        ))}
+        
+        <div className="grid grid-cols-2 gap-4 w-full max-w-2xl">
+          {[
+            "Desenvolvimento de Software",
+            "Design",
+            "Ciência de Dados",
+            "Cibersegurança",
+            "Infraestrutura",
+            "Inteligência Artificial",
+            "Blockchain",
+            "Outros",
+          ].map((option) => (
+            <Button
+              key={option}
+              onClick={() => setSelectedArea(option)}
+              className={`py-5 md:py-6 rounded-2xl text-sm md:text-base transition-all ${
+                selectedArea === option
+                  ? "bg-success hover:bg-success/90 text-success-foreground scale-105"
+                  : "bg-white/20 hover:bg-white/30 text-white"
+              }`}
+            >
+              {option}
+            </Button>
+          ))}
+        </div>
         
         {selectedArea && (
           <Button
