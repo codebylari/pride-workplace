@@ -16,9 +16,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "./contexts/ThemeContext";
 // Importa o provedor de tema para dark mode global
 
-import Index from "./pages/Index"; 
-// Página principal (rota "/")
-
 import Auth from "./pages/Auth";
 // Página de autenticação (login)
 
