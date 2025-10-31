@@ -191,7 +191,7 @@ export default function CompanyAccount() {
           </div>
 
           {/* Deletar conta */}
-          <div className="mt-12 pt-12 border-t border-gray-300">
+          <div className="mt-12 pt-12">
             <button 
               className="text-red-600 hover:text-red-700 transition font-medium"
               onClick={() => setShowDeleteDialog(true)}
