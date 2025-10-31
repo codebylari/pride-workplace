@@ -363,31 +363,18 @@ export default function Register() {
     </div>
   );
 
-  // Função para verificar se o email já está em uso
+  // Função para verificar se o email já está em uso (validação básica local)
   const checkEmailAvailability = async (emailToCheck: string) => {
-    if (!emailToCheck || !emailToCheck.includes("@")) return;
-    
     setCheckingEmail(true);
     setEmailError("");
-    
     try {
-      // Tenta fazer um signUp temporário para verificar se o email já existe
-      const { data, error } = await supabase.auth.signUp({
-        email: emailToCheck,
-        password: "temp_password_for_validation_12345",
-        options: {
-          data: { temp_validation: true }
-        }
-      });
-      
-      if (error) {
-        if (error.message.includes("already registered") || 
-            error.message.includes("User already registered")) {
-          setEmailError("Este email já está cadastrado. Por favor, use outro email ou faça login.");
-        }
+      if (!emailToCheck) return;
+      const basicEmailRegex = /.+@.+\..+/;
+      if (!basicEmailRegex.test(emailToCheck)) {
+        setEmailError("Email inválido. Verifique e tente novamente.");
       }
-    } catch (error: any) {
-      console.error("Erro ao verificar email:", error);
+    } catch (error) {
+      console.error("Erro ao validar email:", error);
     } finally {
       setCheckingEmail(false);
     }
@@ -774,7 +761,7 @@ export default function Register() {
       setUploadingPhoto(true);
 
       try {
-        // First, register the user
+        // 1) Tenta cadastrar usuário
         const { data: authData, error: authError } = await supabase.auth.signUp({
           email,
           password,
@@ -798,17 +785,29 @@ export default function Register() {
                 cpf,
                 rg,
                 phone,
+                gender: gender === 'outros' ? customGender : gender,
               }),
             },
           },
         });
 
-        if (authError) throw authError;
+        // 2) Se já for cadastrado, faz login para obter sessão
+        if (authError && (authError.message?.includes('already') || authError.message?.includes('registered'))) {
+          const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+          if (signInError) throw signInError;
+        } else if (authError) {
+          throw authError;
+        }
 
-        const userId = authData.user?.id;
-        if (!userId) throw new Error("Erro ao obter ID do usuário");
+        // 3) Garante que temos sessão antes de subir a foto
+        const { data: sessionData } = await supabase.auth.getSession();
+        if (!sessionData.session) {
+          throw new Error("Não foi possível confirmar o login. Verifique seu email e tente novamente.");
+        }
 
-        // Upload photo to storage
+        const userId = sessionData.session.user.id;
+
+        // 4) Upload da foto
         const fileExt = photo.name.split('.').pop();
         const fileName = `${userId}/profile.${fileExt}`;
 
@@ -821,12 +820,12 @@ export default function Register() {
 
         if (uploadError) throw uploadError;
 
-        // Get public URL
+        // 5) URL pública
         const { data: { publicUrl } } = supabase.storage
           .from('profile-photos')
           .getPublicUrl(fileName);
 
-        // Update profile with photo URL
+        // 6) Salva URL na tabela de perfis
         const { error: updateError } = await supabase
           .from('profiles')
           .update({ photo_url: publicUrl })
@@ -835,13 +834,9 @@ export default function Register() {
         if (updateError) throw updateError;
 
         setStep(10);
-
-        toast({
-          title: "Cadastro realizado!",
-          description: "Você já pode fazer login na plataforma.",
-        });
-
+        toast({ title: "Cadastro realizado!", description: "Foto salva com sucesso." });
       } catch (error: any) {
+        console.error('Erro no cadastro com foto:', error);
         toast({
           title: "Erro no cadastro",
           description: error.message || "Ocorreu um erro ao realizar o cadastro.",
