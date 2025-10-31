@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
 import { useTheme } from "@/contexts/ThemeContext";
 import { supabase } from "@/integrations/supabase/client";
+import { CircularProgress } from "@/components/CircularProgress";
 
 export default function CompanyProfile() {
   const navigate = useNavigate();
@@ -37,7 +38,12 @@ export default function CompanyProfile() {
       title: string;
       type: string;
       applicants: number;
-    }>
+    }>,
+    description: "",
+    sector: "",
+    city: "",
+    fantasy_name: "",
+    cnpj: ""
   });
 
   const companyName = user?.user_metadata?.company_name || user?.user_metadata?.fantasy_name || "Empresa";
@@ -48,7 +54,7 @@ export default function CompanyProfile() {
       
       const { data } = await supabase
         .from("company_profiles")
-        .select("logo_url, about, seeking, training")
+        .select("logo_url, about, seeking, training, description, sector, city, fantasy_name, cnpj")
         .eq("user_id", user.id)
         .maybeSingle();
       
@@ -65,13 +71,37 @@ export default function CompanyProfile() {
             founder: ""
           },
           testimonials: [],
-          jobs: []
+          jobs: [],
+          description: data.description || "",
+          sector: data.sector || "",
+          city: data.city || "",
+          fantasy_name: data.fantasy_name || "",
+          cnpj: data.cnpj || ""
         });
       }
     };
     
     loadProfile();
   }, [user?.id]);
+
+  const calculateCompletion = () => {
+    const fields = [
+      logoUrl,
+      companyData.about,
+      companyData.seeking.length > 0 ? "has_seeking" : null,
+      companyData.description,
+      companyData.sector,
+      companyData.city,
+      companyData.fantasy_name,
+      companyData.cnpj
+    ];
+    
+    const filledFields = fields.filter(field => field && field.toString().trim() !== "").length;
+    const totalFields = fields.length;
+    return Math.round((filledFields / totalFields) * 100);
+  };
+
+  const completionPercentage = calculateCompletion();
 
   const toggleSection = (section: string) => {
     setExpandedSection(expandedSection === section ? null : section);
@@ -257,20 +287,46 @@ export default function CompanyProfile() {
             {/* Logo Section */}
             <div className="flex justify-center mb-6">
               <div className="relative">
-                {logoUrl ? (
-                  <img
-                    src={logoUrl}
-                    alt={`Logo de ${companyName}`}
-                    className="w-32 h-32 rounded-full object-cover shadow-lg"
-                    loading="lazy"
-                  />
-                ) : (
-                  <div className="w-32 h-32 bg-yellow-400 rounded-full flex items-center justify-center shadow-lg">
-                    <span className="text-4xl font-bold text-white">
-                      {companyName.substring(0, 2).toUpperCase()}
-                    </span>
+                {completionPercentage < 100 && (
+                  <div className="absolute -top-8 left-1/2 -translate-x-1/2 z-10">
+                    <CircularProgress percentage={completionPercentage}>
+                      {logoUrl ? (
+                        <img
+                          src={logoUrl}
+                          alt={`Logo de ${companyName}`}
+                          className="w-24 h-24 rounded-full object-cover"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="w-24 h-24 bg-yellow-400 rounded-full flex items-center justify-center">
+                          <span className="text-2xl font-bold text-white">
+                            {companyName.substring(0, 2).toUpperCase()}
+                          </span>
+                        </div>
+                      )}
+                    </CircularProgress>
                   </div>
                 )}
+                
+                {completionPercentage === 100 && (
+                  <>
+                    {logoUrl ? (
+                      <img
+                        src={logoUrl}
+                        alt={`Logo de ${companyName}`}
+                        className="w-32 h-32 rounded-full object-cover shadow-lg"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="w-32 h-32 bg-yellow-400 rounded-full flex items-center justify-center shadow-lg">
+                        <span className="text-4xl font-bold text-white">
+                          {companyName.substring(0, 2).toUpperCase()}
+                        </span>
+                      </div>
+                    )}
+                  </>
+                )}
+                
                 <button 
                   onClick={() => navigate("/edit-company-profile")}
                   className={`absolute bottom-0 right-0 p-2 rounded-full shadow-md transition ${darkMode ? "bg-gray-600 hover:bg-gray-500" : "bg-white hover:bg-gray-100"}`}
@@ -279,6 +335,13 @@ export default function CompanyProfile() {
                 </button>
               </div>
             </div>
+            
+            {/* Profile Completion Text */}
+            {completionPercentage < 100 && (
+              <p className={`text-center mb-4 ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+                Perfil {completionPercentage}% completo
+              </p>
+            )}
 
             {/* Rating */}
             <div className="flex justify-center items-center gap-2 mb-4">
