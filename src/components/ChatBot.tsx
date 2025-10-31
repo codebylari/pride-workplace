@@ -227,7 +227,7 @@ export function ChatBot() {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Escreva aqui..."
-                className="flex-1 bg-green-100 border-green-300 rounded-full px-6 focus:outline-none focus:ring-0 focus:border-green-300"
+                className="flex-1 bg-green-100 border-green-300 rounded-full px-6 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-green-300"
                 disabled={isLoading}
               />
               <Button
