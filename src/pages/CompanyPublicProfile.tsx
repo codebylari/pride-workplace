@@ -292,7 +292,7 @@ export default function CompanyPublicProfile() {
               <div>
                 <Button
                   onClick={() => toggleSection("about")}
-                  className="w-full bg-[#FFF2A9] hover:bg-[#FFE580] text-gray-800 py-6 rounded-full text-lg font-medium shadow-md flex items-center justify-between"
+                  className="w-full bg-[#FFF8D6] hover:bg-[#FFF2A9] text-gray-800 py-6 rounded-full text-lg font-medium shadow-md flex items-center justify-between"
                 >
                   <span>Conheça a Empresa</span>
                   {expandedSection === "about" ? <ChevronUp size={24} /> : <ChevronDown size={24} />}
@@ -319,7 +319,7 @@ export default function CompanyPublicProfile() {
               <div>
                 <Button
                   onClick={() => toggleSection("seeking")}
-                  className="w-full bg-[#FFF2A9] hover:bg-[#FFE580] text-gray-800 py-6 rounded-full text-lg font-medium shadow-md flex items-center justify-between"
+                  className="w-full bg-[#FFF8D6] hover:bg-[#FFF2A9] text-gray-800 py-6 rounded-full text-lg font-medium shadow-md flex items-center justify-between"
                 >
                   <span>O que buscamos</span>
                   {expandedSection === "seeking" ? <ChevronUp size={24} /> : <ChevronDown size={24} />}
@@ -348,7 +348,7 @@ export default function CompanyPublicProfile() {
               <div>
                 <Button
                   onClick={() => toggleSection("testimonials")}
-                  className="w-full bg-[#FFF2A9] hover:bg-[#FFE580] text-gray-800 py-6 rounded-full text-lg font-medium shadow-md flex items-center justify-between"
+                  className="w-full bg-[#FFF8D6] hover:bg-[#FFF2A9] text-gray-800 py-6 rounded-full text-lg font-medium shadow-md flex items-center justify-between"
                 >
                   <span>Relatos</span>
                   {expandedSection === "testimonials" ? <ChevronUp size={24} /> : <ChevronDown size={24} />}
@@ -402,7 +402,7 @@ export default function CompanyPublicProfile() {
               <div>
                 <Button
                   onClick={() => toggleSection("training")}
-                  className="w-full bg-[#FFF2A9] hover:bg-[#FFE580] text-gray-800 py-6 rounded-full text-lg font-medium shadow-md flex items-center justify-between"
+                  className="w-full bg-[#FFF8D6] hover:bg-[#FFF2A9] text-gray-800 py-6 rounded-full text-lg font-medium shadow-md flex items-center justify-between"
                 >
                   <span>Formação</span>
                   {expandedSection === "training" ? <ChevronUp size={24} /> : <ChevronDown size={24} />}
@@ -433,7 +433,7 @@ export default function CompanyPublicProfile() {
               <div>
                 <Button
                   onClick={() => toggleSection("jobs")}
-                  className="w-full bg-[#FFF2A9] hover:bg-[#FFE580] text-gray-800 py-6 rounded-full text-lg font-medium shadow-md flex items-center justify-between"
+                  className="w-full bg-[#FFF8D6] hover:bg-[#FFF2A9] text-gray-800 py-6 rounded-full text-lg font-medium shadow-md flex items-center justify-between"
                 >
                   <span>Vagas Disponíveis</span>
                   {expandedSection === "jobs" ? <ChevronUp size={24} /> : <ChevronDown size={24} />}

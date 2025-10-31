@@ -407,7 +407,7 @@ export default function CandidateProfile() {
                 <div key={key} className="space-y-2">
                   <Button
                     onClick={() => toggleSection(key)}
-                    className="w-full bg-[#FFF2A9] hover:bg-[#FFE580] text-gray-800 py-4 sm:py-6 rounded-full text-base sm:text-lg font-medium shadow-md flex items-center justify-center gap-2"
+                    className="w-full bg-[#FFF8D6] hover:bg-[#FFF2A9] text-gray-800 py-4 sm:py-6 rounded-full text-base sm:text-lg font-medium shadow-md flex items-center justify-center gap-2"
                   >
                     <span>{section.title}</span>
                     {expandedSection === key ? <ChevronUp size={20} className="sm:w-6 sm:h-6" /> : <ChevronDown size={20} className="sm:w-6 sm:h-6" />}

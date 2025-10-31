@@ -275,7 +275,7 @@ export default function JobApplication() {
           {/* Submit Button */}
           <Button
             onClick={handleSubmit}
-            className="w-full bg-[#FFF2A9] hover:bg-[#FFE580] text-gray-800 py-6 rounded-full text-lg font-semibold"
+            className="w-full bg-[#FFF8D6] hover:bg-[#FFF2A9] text-gray-800 py-6 rounded-full text-lg font-semibold"
           >
             Enviar Candidatura
           </Button>

@@ -421,21 +421,21 @@ export default function EditCandidateProfile() {
                     <Button
                       type="button"
                       onClick={() => setGenderEdit("feminino")}
-                      className={`flex-1 py-3 rounded-full ${genderEdit === "feminino" ? "bg-[#FFF2A9] text-gray-800" : darkMode ? "bg-gray-600 text-white" : "bg-gray-100 text-gray-800"}`}
+                      className={`flex-1 py-3 rounded-full ${genderEdit === "feminino" ? "bg-[#FFF8D6] text-gray-800" : darkMode ? "bg-gray-600 text-white" : "bg-gray-100 text-gray-800"}`}
                     >
                       Feminino
                     </Button>
                     <Button
                       type="button"
                       onClick={() => setGenderEdit("masculino")}
-                      className={`flex-1 py-3 rounded-full ${genderEdit === "masculino" ? "bg-[#FFF2A9] text-gray-800" : darkMode ? "bg-gray-600 text-white" : "bg-gray-100 text-gray-800"}`}
+                      className={`flex-1 py-3 rounded-full ${genderEdit === "masculino" ? "bg-[#FFF8D6] text-gray-800" : darkMode ? "bg-gray-600 text-white" : "bg-gray-100 text-gray-800"}`}
                     >
                       Masculino
                     </Button>
                     <Button
                       type="button"
                       onClick={() => setGenderEdit("outros")}
-                      className={`flex-1 py-3 rounded-full ${genderEdit === "outros" ? "bg-[#FFF2A9] text-gray-800" : darkMode ? "bg-gray-600 text-white" : "bg-gray-100 text-gray-800"}`}
+                      className={`flex-1 py-3 rounded-full ${genderEdit === "outros" ? "bg-[#FFF8D6] text-gray-800" : darkMode ? "bg-gray-600 text-white" : "bg-gray-100 text-gray-800"}`}
                     >
                       Outros
                     </Button>

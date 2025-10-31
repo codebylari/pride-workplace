@@ -215,7 +215,7 @@ export default function MyApplications() {
             <p className="text-xl">Você ainda não se candidatou a nenhuma vaga</p>
             <Button
               onClick={() => navigate("/candidate-dashboard")}
-              className="mt-6 bg-[#FFF2A9] hover:bg-[#FFE580] text-gray-800"
+              className="mt-6 bg-[#FFF8D6] hover:bg-[#FFF2A9] text-gray-800"
             >
               Ver Vagas Disponíveis
             </Button>
