@@ -685,10 +685,102 @@ export default function Register() {
 
   const Step8Photo = () => {
     const [photo, setPhoto] = useState<File | null>(null);
+    const [uploadingPhoto, setUploadingPhoto] = useState(false);
 
     const handlePhotoSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
       if (event.target.files && event.target.files[0]) {
         setPhoto(event.target.files[0]);
+      }
+    };
+
+    const handleRegisterWithPhoto = async () => {
+      if (!photo) {
+        toast({
+          title: "Foto obrigatória",
+          description: "Por favor, selecione uma foto antes de continuar.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      setUploadingPhoto(true);
+
+      try {
+        // First, register the user
+        const { data: authData, error: authError } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: `${window.location.origin}/`,
+            data: {
+              full_name: role === "candidate" ? `${fullName} ${lastName}` : `${fullName} ${companyContactLastName}`,
+              role,
+              state,
+              city,
+              ...(role === "company" && {
+                company_name: companyName,
+                cnpj,
+                phone,
+                position,
+                diversity,
+              }),
+              ...(role === "candidate" && {
+                birth_date: birthDate,
+                social_name: socialName,
+                cpf,
+                rg,
+                phone,
+              }),
+            },
+          },
+        });
+
+        if (authError) throw authError;
+
+        const userId = authData.user?.id;
+        if (!userId) throw new Error("Erro ao obter ID do usuário");
+
+        // Upload photo to storage
+        const fileExt = photo.name.split('.').pop();
+        const fileName = `${userId}/profile.${fileExt}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('profile-photos')
+          .upload(fileName, photo, {
+            upsert: true,
+            contentType: photo.type
+          });
+
+        if (uploadError) throw uploadError;
+
+        // Get public URL
+        const { data: { publicUrl } } = supabase.storage
+          .from('profile-photos')
+          .getPublicUrl(fileName);
+
+        // Update profile with photo URL
+        const { error: updateError } = await supabase
+          .from('profiles')
+          .update({ photo_url: publicUrl })
+          .eq('id', userId);
+
+        if (updateError) throw updateError;
+
+        setStep(9);
+
+        toast({
+          title: "Cadastro realizado!",
+          description: "Você já pode fazer login na plataforma.",
+        });
+
+      } catch (error: any) {
+        toast({
+          title: "Erro no cadastro",
+          description: error.message || "Ocorreu um erro ao realizar o cadastro.",
+          variant: "destructive",
+        });
+      } finally {
+        setUploadingPhoto(false);
       }
     };
 
@@ -715,11 +807,11 @@ export default function Register() {
           </label>
 
           <Button
-            disabled={!photo}
-            onClick={handleRegister}
+            disabled={!photo || uploadingPhoto}
+            onClick={handleRegisterWithPhoto}
             className="bg-success hover:bg-success/90 text-success-foreground py-3 px-8 rounded-full font-semibold w-full md:w-auto"
           >
-            {photo ? "Cadastrar" : "Selecione uma foto primeiro"}
+            {uploadingPhoto ? "Cadastrando..." : photo ? "Cadastrar" : "Selecione uma foto primeiro"}
           </Button>
         </div>
       </div>

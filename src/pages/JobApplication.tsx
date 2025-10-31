@@ -19,6 +19,7 @@ export default function JobApplication() {
   const [useProfileResume, setUseProfileResume] = useState(true);
   const [customResume, setCustomResume] = useState<File | null>(null);
   const [coverLetter, setCoverLetter] = useState("");
+  const [linkedinUrl, setLinkedinUrl] = useState("");
 
   const userName = user?.user_metadata?.full_name?.split(" ")[0] || "Usuário";
   const fullName = user?.user_metadata?.full_name || "Usuário";
@@ -233,6 +234,24 @@ export default function JobApplication() {
                 darkMode 
                   ? "bg-gray-600 text-white border-gray-500" 
                   : "bg-gray-50 text-gray-800 border-gray-300"
+              }`}
+            />
+          </div>
+
+          {/* LinkedIn URL (Optional) */}
+          <div className="mb-6">
+            <label className={`block mb-3 font-semibold ${darkMode ? "text-white" : "text-gray-800"}`}>
+              LinkedIn (opcional)
+            </label>
+            <input
+              type="url"
+              value={linkedinUrl}
+              onChange={(e) => setLinkedinUrl(e.target.value)}
+              placeholder="https://www.linkedin.com/in/seu-perfil"
+              className={`w-full p-4 rounded-lg border ${
+                darkMode 
+                  ? "bg-gray-600 text-white border-gray-500 placeholder:text-gray-400" 
+                  : "bg-gray-50 text-gray-800 border-gray-300 placeholder:text-gray-500"
               }`}
             />
           </div>
