@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Button } from "@/components/ui/button";
-import { Menu, Shield, Users, Heart, AlertCircle, HandshakeIcon, Briefcase, UserCheck } from "lucide-react";
+import { Menu, Shield, Users, Heart, AlertCircle, HandshakeIcon, Briefcase, UserCheck, PlusCircle, List, User, Settings, Headset, Info, FileText } from "lucide-react";
 import { NotificationsPanel } from "@/components/NotificationsPanel";
 
 export default function CompanyCommunityRules() {
@@ -101,54 +101,63 @@ export default function CompanyCommunityRules() {
                 onClick={() => navigate("/company-dashboard")}
                 className="w-full text-left px-4 py-3 text-primary-foreground hover:bg-primary-foreground/20 rounded-lg transition-smooth"
               >
-                Dashboard
+                <Briefcase className="inline-block mr-3" size={20} />
+                Vagas
               </button>
               <button
                 onClick={() => navigate("/create-job")}
                 className="w-full text-left px-4 py-3 text-primary-foreground hover:bg-primary-foreground/20 rounded-lg transition-smooth"
               >
+                <PlusCircle className="inline-block mr-3" size={20} />
                 Cadastrar Vagas
               </button>
               <button
                 onClick={() => navigate("/company-jobs")}
                 className="w-full text-left px-4 py-3 text-primary-foreground hover:bg-primary-foreground/20 rounded-lg transition-smooth"
               >
+                <List className="inline-block mr-3" size={20} />
                 Minhas Vagas
               </button>
               <button
                 onClick={() => navigate("/company-profile")}
                 className="w-full text-left px-4 py-3 text-primary-foreground hover:bg-primary-foreground/20 rounded-lg transition-smooth"
               >
+                <User className="inline-block mr-3" size={20} />
                 Meu Perfil
               </button>
               <button
                 onClick={() => navigate("/company-settings")}
                 className="w-full text-left px-4 py-3 text-primary-foreground hover:bg-primary-foreground/20 rounded-lg transition-smooth"
               >
+                <Settings className="inline-block mr-3" size={20} />
                 Configurações
               </button>
               <button
                 onClick={() => navigate("/company-support")}
                 className="w-full text-left px-4 py-3 text-primary-foreground hover:bg-primary-foreground/20 rounded-lg transition-smooth"
               >
+                <Headset className="inline-block mr-3" size={20} />
                 Suporte
               </button>
               <button
                 onClick={() => navigate("/company-about")}
                 className="w-full text-left px-4 py-3 text-primary-foreground hover:bg-primary-foreground/20 rounded-lg transition-smooth"
               >
+                <Info className="inline-block mr-3" size={20} />
                 Quem Somos
               </button>
               <button
                 onClick={() => navigate("/company-community-rules")}
                 className="w-full text-left px-4 py-3 bg-primary-foreground/20 text-primary-foreground rounded-lg transition-smooth"
               >
+                <Shield className="inline-block mr-3" size={20} />
                 Regras da Comunidade
               </button>
               <button
                 onClick={() => navigate("/terms-company")}
                 className="w-full text-left px-4 py-3 text-primary-foreground hover:bg-primary-foreground/20 rounded-lg transition-smooth"
               >
+                <FileText className="inline-block mr-3" size={20} />
                 Termos de Uso
               </button>
             </nav>
