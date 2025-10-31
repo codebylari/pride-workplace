@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, Star, Edit2, Briefcase, User, Settings, Headset, Info, FileText, LogOut, ChevronDown, ChevronUp, ClipboardList, Linkedin } from "lucide-react";
+import { Menu, Star, Edit2, Briefcase, User, Settings, Headset, Info, FileText, LogOut, ChevronDown, ChevronUp, ClipboardList, Linkedin, HelpCircle } from "lucide-react";
 import { NotificationsPanel } from "@/components/NotificationsPanel";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
@@ -8,6 +8,12 @@ import { ChatBot } from "@/components/ChatBot";
 import { useTheme } from "@/contexts/ThemeContext";
 import { supabase } from "@/integrations/supabase/client";
 import { CircularProgress } from "@/components/CircularProgress";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function CandidateProfile() {
   const navigate = useNavigate();
@@ -349,6 +355,20 @@ export default function CandidateProfile() {
                 <span className={`ml-2 font-semibold ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
                   {rating.toFixed(1)}
                 </span>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button className={`ml-1 ${darkMode ? "text-gray-400 hover:text-gray-300" : "text-gray-500 hover:text-gray-700"}`}>
+                        <HelpCircle size={18} />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent className="max-w-xs">
+                      <p className="text-sm">
+                        Você começa com nota máxima 5.0 e após conclusão de cada serviço o candidato ou empresa te dão uma nota.
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
               {totalRatings > 0 && (
                 <span className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
