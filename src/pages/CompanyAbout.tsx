@@ -244,7 +244,7 @@ export default function CompanyAbout() {
           <div className="text-center py-8">
             <div className="text-7xl font-bold mb-3">
               <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-                QueerCode
+                Linka+
               </span>
             </div>
             <p className={`text-lg ${darkMode ? "text-gray-300" : "text-gray-600"}`}>

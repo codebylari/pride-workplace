@@ -60,7 +60,7 @@ export default function ForgotPassword() {
 
             <div className="pt-6">
               <p className="text-gray-600">Atenciosamente,</p>
-              <p className="text-2xl font-bold text-primary mt-2">QueerCode.</p>
+              <p className="text-2xl font-bold text-primary mt-2">Linka+.</p>
             </div>
           </div>
         </div>

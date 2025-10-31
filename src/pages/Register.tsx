@@ -595,6 +595,69 @@ export default function Register() {
         
         {selectedGit && (
           <Button
+            onClick={() => setStep(6.5)}
+            className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-5 md:py-6 rounded-full text-base md:text-lg font-semibold px-8 md:px-10 w-full md:w-80"
+          >
+            PRÓXIMO
+          </Button>
+        )}
+      </div>
+    );
+  };
+
+  const Step6_5Candidate = () => {
+    const [selectedRemote, setSelectedRemote] = useState("");
+    
+    return (
+      <div className="flex flex-col items-center space-y-6 md:space-y-8 text-center text-white px-4">
+        <button
+          onClick={() => setStep(6)}
+          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+        >
+          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+          <span className="font-medium">Voltar</span>
+        </button>
+        <h2 className="text-2xl md:text-3xl font-bold">
+          Busco oportunidades de projetos remotos ao redor do mundo.
+        </h2>
+        
+        <div className="flex gap-6 justify-center items-center">
+          <button
+            onClick={() => setSelectedRemote("sim")}
+            className={`p-8 rounded-2xl transition-all ${
+              selectedRemote === "sim"
+                ? "bg-success text-success-foreground scale-110"
+                : "bg-white/20 text-white hover:bg-white/30"
+            }`}
+          >
+            <div className="text-6xl">👍</div>
+          </button>
+          
+          <button
+            onClick={() => setSelectedRemote("talvez")}
+            className={`p-8 rounded-2xl transition-all ${
+              selectedRemote === "talvez"
+                ? "bg-success text-success-foreground scale-110"
+                : "bg-white/20 text-white hover:bg-white/30"
+            }`}
+          >
+            <div className="text-6xl">🙋</div>
+          </button>
+          
+          <button
+            onClick={() => setSelectedRemote("nao")}
+            className={`p-8 rounded-2xl transition-all ${
+              selectedRemote === "nao"
+                ? "bg-success text-success-foreground scale-110"
+                : "bg-white/20 text-white hover:bg-white/30"
+            }`}
+          >
+            <div className="text-6xl">👎</div>
+          </button>
+        </div>
+        
+        {selectedRemote && (
+          <Button
             onClick={() => setStep(7)}
             className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-5 md:py-6 rounded-full text-base md:text-lg font-semibold px-8 md:px-10 w-full md:w-80"
           >
@@ -1879,6 +1942,7 @@ export default function Register() {
       {role === "candidate" && step === 4 && <Step4Candidate />}
       {role === "candidate" && step === 5 && <Step5Candidate />}
       {role === "candidate" && step === 6 && <Step6Candidate />}
+      {role === "candidate" && step === 6.5 && <Step6_5Candidate />}
       {role === "candidate" && step === 7 && Step7Candidate}
       {role === "candidate" && step === 8 && <Step8Terms />}
       {role === "candidate" && step === 9 && <Step9Photo />}
