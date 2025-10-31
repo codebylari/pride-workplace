@@ -618,7 +618,7 @@ export default function Register() {
           <span className="font-medium">Voltar</span>
         </button>
         <h2 className="text-2xl md:text-3xl font-bold">
-          Busco oportunidades de projetos remotos ao redor do mundo.
+          Estou em busca de projetos remotos globais.
         </h2>
         
         <div className="flex gap-6 justify-center items-center">
