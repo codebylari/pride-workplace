@@ -17,6 +17,8 @@ export type Database = {
       applications: {
         Row: {
           candidate_id: string
+          completed_at: string | null
+          contract_status: Database["public"]["Enums"]["contract_status"] | null
           created_at: string
           id: string
           job_id: string
@@ -24,6 +26,10 @@ export type Database = {
         }
         Insert: {
           candidate_id: string
+          completed_at?: string | null
+          contract_status?:
+            | Database["public"]["Enums"]["contract_status"]
+            | null
           created_at?: string
           id?: string
           job_id: string
@@ -31,6 +37,10 @@ export type Database = {
         }
         Update: {
           candidate_id?: string
+          completed_at?: string | null
+          contract_status?:
+            | Database["public"]["Enums"]["contract_status"]
+            | null
           created_at?: string
           id?: string
           job_id?: string
@@ -56,10 +66,12 @@ export type Database = {
           fantasy_name: string
           id: string
           logo_url: string | null
+          rating: number | null
           sector: string | null
           seeking: string | null
           state: string | null
           testimonials: Json | null
+          total_ratings: number | null
           training: string | null
           updated_at: string
           user_id: string
@@ -73,10 +85,12 @@ export type Database = {
           fantasy_name: string
           id?: string
           logo_url?: string | null
+          rating?: number | null
           sector?: string | null
           seeking?: string | null
           state?: string | null
           testimonials?: Json | null
+          total_ratings?: number | null
           training?: string | null
           updated_at?: string
           user_id: string
@@ -90,10 +104,12 @@ export type Database = {
           fantasy_name?: string
           id?: string
           logo_url?: string | null
+          rating?: number | null
           sector?: string | null
           seeking?: string | null
           state?: string | null
           testimonials?: Json | null
+          total_ratings?: number | null
           training?: string | null
           updated_at?: string
           user_id?: string
@@ -185,8 +201,10 @@ export type Database = {
           journey: string | null
           linkedin_url: string | null
           photo_url: string | null
+          rating: number | null
           resume_url: string | null
           state: string | null
+          total_ratings: number | null
           updated_at: string
         }
         Insert: {
@@ -201,8 +219,10 @@ export type Database = {
           journey?: string | null
           linkedin_url?: string | null
           photo_url?: string | null
+          rating?: number | null
           resume_url?: string | null
           state?: string | null
+          total_ratings?: number | null
           updated_at?: string
         }
         Update: {
@@ -217,11 +237,51 @@ export type Database = {
           journey?: string | null
           linkedin_url?: string | null
           photo_url?: string | null
+          rating?: number | null
           resume_url?: string | null
           state?: string | null
+          total_ratings?: number | null
           updated_at?: string
         }
         Relationships: []
+      }
+      ratings: {
+        Row: {
+          application_id: string
+          comment: string | null
+          created_at: string | null
+          id: string
+          rated_user_id: string
+          rater_id: string
+          rating: number
+        }
+        Insert: {
+          application_id: string
+          comment?: string | null
+          created_at?: string | null
+          id?: string
+          rated_user_id: string
+          rater_id: string
+          rating: number
+        }
+        Update: {
+          application_id?: string
+          comment?: string | null
+          created_at?: string | null
+          id?: string
+          rated_user_id?: string
+          rater_id?: string
+          rating?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ratings_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "applications"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
@@ -259,6 +319,7 @@ export type Database = {
     }
     Enums: {
       app_role: "candidate" | "company"
+      contract_status: "pending" | "active" | "completed" | "cancelled"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -387,6 +448,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["candidate", "company"],
+      contract_status: ["pending", "active", "completed", "cancelled"],
     },
   },
 } as const

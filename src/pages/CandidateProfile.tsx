@@ -19,7 +19,8 @@ export default function CandidateProfile() {
   // Get user data
   const userName = user?.user_metadata?.full_name?.split(" ")[0] || "Usuário";
   const fullName = user?.user_metadata?.full_name || "Usuário";
-  const rating = 4.5;
+  const [rating, setRating] = useState(5.0);
+  const [totalRatings, setTotalRatings] = useState(0);
   const [photoUrl, setPhotoUrl] = useState<string | null>(null);
   const [userGender, setUserGender] = useState<string>("");
   const [userLinkedin, setUserLinkedin] = useState<string>("");
@@ -36,13 +37,15 @@ export default function CandidateProfile() {
       if (!user?.id) return;
       const { data } = await supabase
         .from("profiles")
-        .select("photo_url, full_name, gender, linkedin_url, about_me, experience, education, journey, resume_url")
+        .select("photo_url, full_name, gender, linkedin_url, about_me, experience, education, journey, resume_url, rating, total_ratings")
         .eq("id", user.id)
         .maybeSingle();
       
       setPhotoUrl(data?.photo_url ?? null);
       setUserGender(data?.gender ?? "");
       setUserLinkedin(data?.linkedin_url ?? "");
+      setRating(data?.rating ?? 5.0);
+      setTotalRatings(data?.total_ratings ?? 0);
       
       // Load actual data from database
       setProfileData({
@@ -340,9 +343,16 @@ export default function CandidateProfile() {
             </div>
 
             {/* Rating */}
-            <div className="flex justify-center items-center gap-2 mb-4">
-              {renderStars(rating)}
-              <span className={`ml-2 font-semibold ${darkMode ? "text-gray-300" : "text-gray-600"}`}>{rating}</span>
+            <div className="flex flex-col items-center gap-1 mb-4">
+              <div className="flex items-center gap-2">
+                {renderStars(rating)}
+                <span className={`ml-2 font-semibold ${darkMode ? "text-gray-300" : "text-gray-600"}`}>{rating}</span>
+              </div>
+              {totalRatings > 0 && (
+                <span className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+                  {totalRatings} {totalRatings === 1 ? "avaliação" : "avaliações"}
+                </span>
+              )}
             </div>
 
             {/* Name and Gender */}

@@ -17,6 +17,8 @@ export default function CompanyProfile() {
   const [showNotifications, setShowNotifications] = useState(false);
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
+  const [rating, setRating] = useState(5.0);
+  const [totalRatings, setTotalRatings] = useState(0);
   const [companyData, setCompanyData] = useState({
     about: "",
     seeking: [] as string[],
@@ -54,12 +56,14 @@ export default function CompanyProfile() {
       
       const { data } = await supabase
         .from("company_profiles")
-        .select("logo_url, about, seeking, training, description, sector, city, fantasy_name, cnpj")
+        .select("logo_url, about, seeking, training, description, sector, city, fantasy_name, cnpj, rating, total_ratings")
         .eq("user_id", user.id)
         .maybeSingle();
       
       if (data) {
         setLogoUrl(data.logo_url || null);
+        setRating(data.rating ?? 5.0);
+        setTotalRatings(data.total_ratings ?? 0);
         setCompanyData({
           about: data.about || "",
           seeking: data.seeking ? data.seeking.split('\n').filter(s => s.trim()) : [],
@@ -354,12 +358,22 @@ export default function CompanyProfile() {
             )}
 
             {/* Rating */}
-            <div className="flex justify-center items-center gap-2 mb-4">
-              {[1, 2, 3, 4].map((star) => (
-                <Star key={star} size={24} className="fill-green-400 text-green-400" />
-              ))}
-              <Star size={24} className="fill-gray-300 text-gray-300" />
-              <span className={`ml-2 font-semibold ${darkMode ? "text-gray-300" : "text-gray-600"}`}>4.5</span>
+            <div className="flex flex-col items-center gap-1 mb-4">
+              <div className="flex items-center gap-2">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Star 
+                    key={star} 
+                    size={24} 
+                    className={star <= Math.floor(rating) ? "fill-green-400 text-green-400" : "fill-gray-300 text-gray-300"}
+                  />
+                ))}
+                <span className={`ml-2 font-semibold ${darkMode ? "text-gray-300" : "text-gray-600"}`}>{rating}</span>
+              </div>
+              {totalRatings > 0 && (
+                <span className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+                  {totalRatings} {totalRatings === 1 ? "avaliação" : "avaliações"}
+                </span>
+              )}
             </div>
 
             {/* Company Name */}

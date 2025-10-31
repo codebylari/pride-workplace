@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Menu, Bell, Briefcase, PlusCircle, User, Settings, Headset, Info, FileText, LogOut, List } from "lucide-react";
+import { Menu, Bell, Briefcase, PlusCircle, User, Settings, Headset, Info, FileText, LogOut, List, Star } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -8,6 +8,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
+import { RatingDialog } from "@/components/RatingDialog";
 
 export default function JobCandidates() {
   const navigate = useNavigate();
@@ -20,6 +22,12 @@ export default function JobCandidates() {
   const [job, setJob] = useState<any>(null);
   const [applications, setApplications] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [ratingDialog, setRatingDialog] = useState<{
+    open: boolean;
+    applicationId: string;
+    candidateId: string;
+    candidateName: string;
+  } | null>(null);
 
   const companyName = user?.user_metadata?.company_name || "Empresa";
 
@@ -44,7 +52,7 @@ export default function JobCandidates() {
       if (jobError) throw jobError;
       setJob(jobData);
 
-      // Fetch applications for this job
+      // Fetch applications for this job with ratings info
       const { data: applicationsData, error: applicationsError } = await supabase
         .from("applications")
         .select(`
@@ -52,7 +60,13 @@ export default function JobCandidates() {
           profiles:candidate_id (
             full_name,
             city,
-            state
+            state,
+            rating
+          ),
+          ratings!ratings_application_id_fkey (
+            id,
+            rating,
+            rater_id
           )
         `)
         .eq("job_id", jobId);
@@ -68,6 +82,50 @@ export default function JobCandidates() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleUpdateContractStatus = async (applicationId: string, newStatus: string) => {
+    try {
+      const updateData: any = { contract_status: newStatus };
+      if (newStatus === 'completed') {
+        updateData.completed_at = new Date().toISOString();
+      }
+
+      const { error } = await supabase
+        .from("applications")
+        .update(updateData)
+        .eq("id", applicationId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Status atualizado",
+        description: `Contrato ${newStatus === 'active' ? 'iniciado' : 'finalizado'} com sucesso.`,
+      });
+
+      fetchJobAndCandidates();
+    } catch (error: any) {
+      toast({
+        title: "Erro ao atualizar status",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  };
+
+  const getStatusBadge = (status: string) => {
+    const statusMap: Record<string, { label: string; variant: "default" | "secondary" | "destructive" | "outline" }> = {
+      pending: { label: "Pendente", variant: "outline" },
+      active: { label: "Ativo", variant: "default" },
+      completed: { label: "Concluído", variant: "secondary" },
+      cancelled: { label: "Cancelado", variant: "destructive" },
+    };
+    const config = statusMap[status] || statusMap.pending;
+    return <Badge variant={config.variant}>{config.label}</Badge>;
+  };
+
+  const hasRated = (application: any) => {
+    return application.ratings?.some((r: any) => r.rater_id === user?.id);
   };
 
   const handleLogout = async () => {
@@ -271,34 +329,86 @@ export default function JobCandidates() {
                     key={application.id}
                     className={`p-6 rounded-xl shadow-sm ${darkMode ? "bg-gray-700" : "bg-white"}`}
                   >
-                    <div className="flex items-center gap-6">
-                      <div className="w-24 h-24 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full flex items-center justify-center">
+                    <div className="flex items-start gap-6">
+                      <div className="w-24 h-24 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
                         <span className="text-2xl font-bold text-white">
                           {application.profiles?.full_name?.substring(0, 2).toUpperCase() || "??"}
                         </span>
                       </div>
                       
                       <div className="flex-1">
-                        <h3 className={`text-2xl font-bold mb-2 ${darkMode ? "text-white" : "text-gray-900"}`}>
-                          {application.profiles?.full_name || "Nome não disponível"}
-                        </h3>
+                        <div className="flex items-center gap-3 mb-2">
+                          <h3 className={`text-2xl font-bold ${darkMode ? "text-white" : "text-gray-900"}`}>
+                            {application.profiles?.full_name || "Nome não disponível"}
+                          </h3>
+                          {getStatusBadge(application.contract_status || 'pending')}
+                        </div>
+                        
+                        <div className="flex items-center gap-2 mb-2">
+                          {[...Array(5)].map((_, i) => (
+                            <Star 
+                              key={i} 
+                              size={16} 
+                              className={i < Math.floor(application.profiles?.rating || 5) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}
+                            />
+                          ))}
+                          <span className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+                            {application.profiles?.rating || 5.0}
+                          </span>
+                        </div>
+                        
                         <p className={`${darkMode ? "text-gray-400" : "text-gray-600"}`}>
                           Possui interesse na vaga
                         </p>
-                      </div>
 
-                      <div className="flex gap-3">
-                        <Button
-                          onClick={() => navigate(`/candidate-profile/${application.candidate_id}`)}
-                          className="px-6 py-2 bg-green-300 hover:bg-green-400 text-green-900 font-semibold rounded-full"
-                        >
-                          PERFIL
-                        </Button>
-                        <Button
-                          className="px-6 py-2 bg-green-300 hover:bg-green-400 text-green-900 font-semibold rounded-full"
-                        >
-                          CONTATO
-                        </Button>
+                        <div className="flex gap-3 mt-4 flex-wrap">
+                          <Button
+                            onClick={() => navigate(`/candidate-profile/${application.candidate_id}`)}
+                            variant="outline"
+                            size="sm"
+                          >
+                            Ver Perfil
+                          </Button>
+                          
+                          {application.contract_status === 'pending' && (
+                            <Button
+                              onClick={() => handleUpdateContractStatus(application.id, 'active')}
+                              size="sm"
+                            >
+                              Iniciar Contrato
+                            </Button>
+                          )}
+                          
+                          {application.contract_status === 'active' && (
+                            <Button
+                              onClick={() => handleUpdateContractStatus(application.id, 'completed')}
+                              variant="secondary"
+                              size="sm"
+                            >
+                              Finalizar Contrato
+                            </Button>
+                          )}
+                          
+                          {application.contract_status === 'completed' && !hasRated(application) && (
+                            <Button
+                              onClick={() => setRatingDialog({
+                                open: true,
+                                applicationId: application.id,
+                                candidateId: application.candidate_id,
+                                candidateName: application.profiles?.full_name || "Candidato"
+                              })}
+                              className="bg-yellow-400 hover:bg-yellow-500 text-gray-900"
+                              size="sm"
+                            >
+                              <Star size={16} className="mr-1" />
+                              Avaliar Candidato
+                            </Button>
+                          )}
+                          
+                          {application.contract_status === 'completed' && hasRated(application) && (
+                            <Badge variant="secondary">✓ Avaliado</Badge>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -308,6 +418,21 @@ export default function JobCandidates() {
           </>
         )}
       </main>
+      
+      {ratingDialog && (
+        <RatingDialog
+          open={ratingDialog.open}
+          onOpenChange={(open) => !open && setRatingDialog(null)}
+          applicationId={ratingDialog.applicationId}
+          ratedUserId={ratingDialog.candidateId}
+          ratedUserName={ratingDialog.candidateName}
+          isRatingCandidate={true}
+          onSuccess={() => {
+            fetchJobAndCandidates();
+            setRatingDialog(null);
+          }}
+        />
+      )}
       
       <ChatBot />
     </div>
