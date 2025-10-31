@@ -1335,7 +1335,15 @@ export default function Register() {
   };
 
   const Step3Company = () => {
-    const [selectedSkill, setSelectedSkill] = useState("");
+    const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
+    
+    const toggleSkill = (skill: string) => {
+      setSelectedSkills(prev => 
+        prev.includes(skill) 
+          ? prev.filter(s => s !== skill)
+          : [...prev, skill]
+      );
+    };
     
     return (
       <div className="flex flex-col items-center space-y-6 text-center text-white px-4">
@@ -1347,36 +1355,40 @@ export default function Register() {
           <span className="font-medium">Voltar</span>
         </button>
         <h2 className="text-3xl font-bold">Competências essenciais</h2>
-        {[
-          "Ciência de Dados",
-          "Testes",
-          "Cibersegurança",
-          "Infraestrutura",
-          "Desenvolvimento de Software",
-          "Blockchain",
-          "Inteligência Artificial",
-          "Arquitetura",
-          "Engenharia de Dados",
-          "Suporte Técnico",
-          "Design",
-          "Análise de Dados",
-          "Nuvem",
-          "Outros",
-        ].map((option) => (
-          <Button
-            key={option}
-            onClick={() => setSelectedSkill(option)}
-            className={`w-80 py-6 rounded-full text-lg transition-all ${
-              selectedSkill === option
-                ? "bg-success hover:bg-success/90 text-success-foreground"
-                : "bg-white/20 hover:bg-white/30 text-white"
-            }`}
-          >
-            {option}
-          </Button>
-        ))}
+        <p className="text-white/80 text-sm">Selecione uma ou mais opções</p>
         
-        {selectedSkill && (
+        <div className="grid grid-cols-2 gap-4 w-full max-w-3xl">
+          {[
+            "Ciência de Dados",
+            "Testes",
+            "Cibersegurança",
+            "Infraestrutura",
+            "Desenvolvimento de Software",
+            "Blockchain",
+            "Inteligência Artificial",
+            "Arquitetura",
+            "Engenharia de Dados",
+            "Suporte Técnico",
+            "Design",
+            "Análise de Dados",
+            "Nuvem",
+            "Outros",
+          ].map((option) => (
+            <Button
+              key={option}
+              onClick={() => toggleSkill(option)}
+              className={`py-6 rounded-2xl text-base transition-all ${
+                selectedSkills.includes(option)
+                  ? "bg-success hover:bg-success/90 text-success-foreground scale-105"
+                  : "bg-white/20 hover:bg-white/30 text-white"
+              }`}
+            >
+              {option}
+            </Button>
+          ))}
+        </div>
+        
+        {selectedSkills.length > 0 && (
           <Button
             onClick={() => setStep(4)}
             className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-6 rounded-full text-lg font-semibold px-10 w-80"
