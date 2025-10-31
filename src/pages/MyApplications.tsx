@@ -335,7 +335,7 @@ export default function MyApplications() {
                           />
                         ))}
                         <span className={`text-xs ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
-                          {app.jobs.company_profiles.rating}
+                          {app.jobs.company_profiles.rating.toFixed(1)}
                         </span>
                       </div>
                     )}

@@ -367,7 +367,9 @@ export default function CompanyProfile() {
                     className={star <= Math.floor(rating) ? "fill-green-400 text-green-400" : "fill-gray-300 text-gray-300"}
                   />
                 ))}
-                <span className={`ml-2 font-semibold ${darkMode ? "text-gray-300" : "text-gray-600"}`}>{rating}</span>
+                <span className={`ml-2 font-semibold ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+                  {rating.toFixed(1)}
+                </span>
               </div>
               {totalRatings > 0 && (
                 <span className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-500"}`}>

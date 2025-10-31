@@ -346,7 +346,9 @@ export default function CandidateProfile() {
             <div className="flex flex-col items-center gap-1 mb-4">
               <div className="flex items-center gap-2">
                 {renderStars(rating)}
-                <span className={`ml-2 font-semibold ${darkMode ? "text-gray-300" : "text-gray-600"}`}>{rating}</span>
+                <span className={`ml-2 font-semibold ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+                  {rating.toFixed(1)}
+                </span>
               </div>
               {totalRatings > 0 && (
                 <span className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-500"}`}>

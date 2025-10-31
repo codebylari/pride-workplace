@@ -42,7 +42,7 @@ export function RatingDialog({
     if (rating === 0) {
       toast({
         title: "Avaliação obrigatória",
-        description: "Por favor, selecione uma avaliação de 1 a 5 estrelas.",
+        description: "Por favor, selecione uma avaliação.",
         variant: "destructive",
       });
       return;
@@ -82,7 +82,7 @@ export function RatingDialog({
 
       toast({
         title: "Avaliação enviada!",
-        description: `Você avaliou ${ratedUserName} com ${rating} estrela${rating > 1 ? "s" : ""}.`,
+        description: `Você avaliou ${ratedUserName} com ${rating.toFixed(1)} estrelas.`,
       });
 
       setRating(0);
@@ -101,6 +101,10 @@ export function RatingDialog({
     }
   };
 
+  const handleStarClick = (star: number, isHalf: boolean) => {
+    setRating(isHalf ? star - 0.5 : star);
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[500px]">
@@ -117,30 +121,40 @@ export function RatingDialog({
           {/* Star Rating */}
           <div className="flex flex-col items-center gap-3">
             <p className="text-sm font-medium">Selecione uma avaliação:</p>
-            <div className="flex gap-2">
+            <div className="flex gap-1">
               {[1, 2, 3, 4, 5].map((star) => (
-                <button
-                  key={star}
-                  type="button"
-                  onClick={() => setRating(star)}
-                  onMouseEnter={() => setHoveredRating(star)}
-                  onMouseLeave={() => setHoveredRating(0)}
-                  className="transition-transform hover:scale-110 focus:outline-none"
-                >
-                  <Star
-                    size={40}
-                    className={
-                      star <= (hoveredRating || rating)
-                        ? "fill-yellow-400 text-yellow-400"
-                        : "text-gray-300"
-                    }
+                <div key={star} className="relative">
+                  <button
+                    type="button"
+                    onClick={() => handleStarClick(star, false)}
+                    onMouseEnter={() => setHoveredRating(star)}
+                    onMouseLeave={() => setHoveredRating(0)}
+                    className="transition-transform hover:scale-110 focus:outline-none"
+                  >
+                    <Star
+                      size={40}
+                      className={
+                        star <= (hoveredRating || rating)
+                          ? "fill-yellow-400 text-yellow-400"
+                          : "text-gray-300"
+                      }
+                    />
+                  </button>
+                  {/* Half star button */}
+                  <button
+                    type="button"
+                    onClick={() => handleStarClick(star, true)}
+                    onMouseEnter={() => setHoveredRating(star - 0.5)}
+                    onMouseLeave={() => setHoveredRating(0)}
+                    className="absolute left-0 top-0 w-1/2 h-full transition-opacity hover:opacity-100 opacity-0 focus:outline-none"
+                    style={{ zIndex: 10 }}
                   />
-                </button>
+                </div>
               ))}
             </div>
             {rating > 0 && (
               <p className="text-sm text-gray-600">
-                {rating} estrela{rating > 1 ? "s" : ""}
+                {rating.toFixed(1)} estrelas
               </p>
             )}
           </div>

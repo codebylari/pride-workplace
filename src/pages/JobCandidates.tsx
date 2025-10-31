@@ -353,7 +353,7 @@ export default function JobCandidates() {
                             />
                           ))}
                           <span className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
-                            {application.profiles?.rating || 5.0}
+                            {(application.profiles?.rating || 5.0).toFixed(1)}
                           </span>
                         </div>
                         
