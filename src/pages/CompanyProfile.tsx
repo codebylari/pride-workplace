@@ -15,7 +15,7 @@ export default function CompanyProfile() {
   const [showNotifications, setShowNotifications] = useState(false);
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
 
-  const companyName = user?.user_metadata?.company_name || "Mercado Livre";
+  const companyName = user?.user_metadata?.company_name || user?.user_metadata?.fantasy_name || "Empresa";
 
   const handleLogout = async () => {
     await signOut();
