@@ -56,20 +56,20 @@ export default function CandidateCommunityRules() {
   ];
 
   return (
-    <div className={`min-h-screen ${darkMode ? "bg-gray-900" : "bg-gradient-to-br from-primary via-primary-dark to-accent"}`}>
+    <div className={`min-h-screen ${darkMode ? "bg-background" : "bg-gradient-primary"}`}>
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-gradient-to-r from-primary to-primary-dark backdrop-blur-lg border-b border-white/10 shadow-lg">
+      <header className="sticky top-0 z-40 bg-primary backdrop-blur-lg border-b border-border shadow-lg">
         <div className="flex items-center justify-between p-4">
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setShowSidebar(!showSidebar)}
-            className="text-white hover:bg-white/20"
+            className="text-primary-foreground hover:bg-primary-foreground/20"
           >
             <Menu size={24} />
           </Button>
 
-          <div className="text-white">
+          <div className="text-primary-foreground">
             <NotificationsPanel />
           </div>
         </div>
@@ -82,15 +82,15 @@ export default function CandidateCommunityRules() {
           onClick={() => setShowSidebar(false)}
         >
           <div
-            className="fixed left-0 top-0 h-full w-80 bg-gradient-to-b from-primary to-primary-dark shadow-2xl p-6 overflow-y-auto"
+            className="fixed left-0 top-0 h-full w-80 bg-primary shadow-2xl p-6 overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center gap-3 mb-8 pb-6 border-b border-white/20">
-              <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-2xl">
+            <div className="flex items-center gap-3 mb-8 pb-6 border-b border-border">
+              <div className="w-16 h-16 rounded-full bg-primary-foreground/20 flex items-center justify-center text-2xl">
                 👤
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-semibold text-white text-lg truncate">
+                <p className="font-semibold text-primary-foreground text-lg truncate">
                   {user?.user_metadata?.full_name || "Candidato"}
                 </p>
               </div>
@@ -99,43 +99,43 @@ export default function CandidateCommunityRules() {
             <nav className="space-y-2">
               <button
                 onClick={() => navigate("/candidate-dashboard")}
-                className="w-full text-left px-4 py-3 text-white hover:bg-white/20 rounded-lg transition-colors"
+                className="w-full text-left px-4 py-3 text-primary-foreground hover:bg-primary-foreground/20 rounded-lg transition-smooth"
               >
                 Dashboard
               </button>
               <button
                 onClick={() => navigate("/candidate-profile")}
-                className="w-full text-left px-4 py-3 text-white hover:bg-white/20 rounded-lg transition-colors"
+                className="w-full text-left px-4 py-3 text-primary-foreground hover:bg-primary-foreground/20 rounded-lg transition-smooth"
               >
                 Meu Perfil
               </button>
               <button
                 onClick={() => navigate("/candidate-settings")}
-                className="w-full text-left px-4 py-3 text-white hover:bg-white/20 rounded-lg transition-colors"
+                className="w-full text-left px-4 py-3 text-primary-foreground hover:bg-primary-foreground/20 rounded-lg transition-smooth"
               >
                 Configurações
               </button>
               <button
                 onClick={() => navigate("/candidate-support")}
-                className="w-full text-left px-4 py-3 text-white hover:bg-white/20 rounded-lg transition-colors"
+                className="w-full text-left px-4 py-3 text-primary-foreground hover:bg-primary-foreground/20 rounded-lg transition-smooth"
               >
                 Suporte
               </button>
               <button
                 onClick={() => navigate("/candidate-about")}
-                className="w-full text-left px-4 py-3 text-white hover:bg-white/20 rounded-lg transition-colors"
+                className="w-full text-left px-4 py-3 text-primary-foreground hover:bg-primary-foreground/20 rounded-lg transition-smooth"
               >
                 Quem Somos
               </button>
               <button
                 onClick={() => navigate("/candidate-community-rules")}
-                className="w-full text-left px-4 py-3 bg-white/20 text-white rounded-lg transition-colors"
+                className="w-full text-left px-4 py-3 bg-primary-foreground/20 text-primary-foreground rounded-lg transition-smooth"
               >
                 Regras da Comunidade
               </button>
               <button
                 onClick={() => navigate("/terms-candidate")}
-                className="w-full text-left px-4 py-3 text-white hover:bg-white/20 rounded-lg transition-colors"
+                className="w-full text-left px-4 py-3 text-primary-foreground hover:bg-primary-foreground/20 rounded-lg transition-smooth"
               >
                 Termos de Uso
               </button>
@@ -143,7 +143,7 @@ export default function CandidateCommunityRules() {
 
             <button
               onClick={handleLogout}
-              className="w-full mt-8 px-4 py-3 bg-red-500/20 text-white hover:bg-red-500/30 rounded-lg transition-colors"
+              className="w-full mt-8 px-4 py-3 bg-destructive/20 text-primary-foreground hover:bg-destructive/30 rounded-lg transition-smooth"
             >
               Sair
             </button>
@@ -153,13 +153,13 @@ export default function CandidateCommunityRules() {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8 max-w-4xl">
-        <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 md:p-12 shadow-2xl">
+        <div className="bg-card/10 backdrop-blur-lg rounded-3xl p-8 md:p-12 shadow-card">
           <div className="text-center mb-10">
             <div className="text-6xl mb-4">🌈</div>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold text-primary-foreground mb-4">
               Regras da Comunidade
             </h1>
-            <p className="text-xl text-white/80">
+            <p className="text-xl text-primary-foreground/80">
               Juntos construímos um espaço inclusivo e respeitoso
             </p>
           </div>
@@ -168,17 +168,17 @@ export default function CandidateCommunityRules() {
             {rules.map((rule, index) => (
               <div
                 key={index}
-                className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/20 transition-all"
+                className="bg-card/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-card/20 transition-smooth border border-border"
               >
                 <div className="flex items-start gap-4">
                   <div className="text-success flex-shrink-0">
                     {rule.icon}
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-white mb-2">
+                    <h3 className="text-xl font-semibold text-primary-foreground mb-2">
                       {rule.title}
                     </h3>
-                    <p className="text-white/80 leading-relaxed">
+                    <p className="text-primary-foreground/80 leading-relaxed">
                       {rule.description}
                     </p>
                   </div>
@@ -187,11 +187,11 @@ export default function CandidateCommunityRules() {
             ))}
           </div>
 
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 mb-8">
-            <h3 className="text-xl font-semibold text-white mb-3">
+          <div className="bg-card/10 backdrop-blur-sm rounded-2xl p-6 mb-8 border border-border">
+            <h3 className="text-xl font-semibold text-primary-foreground mb-3">
               ⚠️ Consequências de Violações
             </h3>
-            <ul className="text-white/80 space-y-2 list-disc list-inside">
+            <ul className="text-primary-foreground/80 space-y-2 list-disc list-inside">
               <li>Primeira violação: Aviso formal</li>
               <li>Segunda violação: Suspensão temporária da conta</li>
               <li>Violações graves ou repetidas: Banimento permanente</li>
@@ -199,10 +199,10 @@ export default function CandidateCommunityRules() {
           </div>
 
           <div className="bg-success/20 backdrop-blur-sm rounded-2xl p-6 border border-success/30">
-            <h3 className="text-xl font-semibold text-white mb-3">
+            <h3 className="text-xl font-semibold text-primary-foreground mb-3">
               💡 Dica para Candidatos
             </h3>
-            <p className="text-white/90">
+            <p className="text-primary-foreground/90">
               Mantenha seu perfil atualizado, seja proativo nas candidaturas e sempre 
               mantenha uma comunicação profissional. Sua reputação na plataforma é valiosa!
             </p>
