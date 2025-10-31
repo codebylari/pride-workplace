@@ -233,9 +233,9 @@ export default function Register() {
     const [localCustomGender, setLocalCustomGender] = useState(customGender);
 
     const handleGenderSelect = (selectedGender: "feminino" | "masculino") => {
+      setLocalGender(selectedGender);
       setGender(selectedGender);
       setCustomGender("");
-      setStep(3);
     };
 
     const handleOthersClick = () => {
@@ -244,7 +244,9 @@ export default function Register() {
     };
 
     const handleContinue = () => {
-      setCustomGender(localCustomGender);
+      if (localGender === "outros") {
+        setCustomGender(localCustomGender);
+      }
       setStep(3);
     };
 
@@ -261,14 +263,22 @@ export default function Register() {
         
         <Button
           onClick={() => handleGenderSelect("feminino")}
-          className="w-full md:w-80 py-5 md:py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-base md:text-lg"
+          className={`w-full md:w-80 py-5 md:py-6 rounded-full text-base md:text-lg transition-all ${
+            localGender === "feminino"
+              ? "bg-success hover:bg-success/90 text-success-foreground"
+              : "bg-white/20 hover:bg-white/30 text-white"
+          }`}
         >
           Feminino
         </Button>
         
         <Button
           onClick={() => handleGenderSelect("masculino")}
-          className="w-full md:w-80 py-5 md:py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-base md:text-lg"
+          className={`w-full md:w-80 py-5 md:py-6 rounded-full text-base md:text-lg transition-all ${
+            localGender === "masculino"
+              ? "bg-success hover:bg-success/90 text-success-foreground"
+              : "bg-white/20 hover:bg-white/30 text-white"
+          }`}
         >
           Masculino
         </Button>
@@ -276,9 +286,9 @@ export default function Register() {
         <div className="w-full md:w-80 space-y-3">
           <Button
             onClick={handleOthersClick}
-            className={`w-full py-5 md:py-6 rounded-full text-base md:text-lg ${
+            className={`w-full py-5 md:py-6 rounded-full text-base md:text-lg transition-all ${
               localGender === "outros"
-                ? "bg-primary/50 text-white"
+                ? "bg-success hover:bg-success/90 text-success-foreground"
                 : "bg-white/20 hover:bg-white/30 text-white"
             }`}
           >
@@ -293,124 +303,194 @@ export default function Register() {
                 onChange={(e) => setLocalCustomGender(e.target.value)}
                 placeholder="Especifique seu gênero"
                 autoFocus
-                className="w-full py-4 px-6 rounded-full bg-white/20 text-white placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white/30 text-base md:text-lg transition-all"
+                className="w-full py-4 px-6 rounded-full bg-white/20 text-white placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-success focus:bg-white/30 text-base md:text-lg transition-all"
               />
-              <Button
-                onClick={handleContinue}
-                disabled={!localCustomGender.trim()}
-                className="w-full bg-success hover:bg-success/90 text-success-foreground py-5 md:py-6 rounded-full font-semibold text-base md:text-lg disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                CONTINUAR
-              </Button>
             </div>
           )}
         </div>
+        
+        {localGender && (localGender !== "outros" || localCustomGender.trim()) && (
+          <Button
+            onClick={handleContinue}
+            className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-5 md:py-6 rounded-full text-base md:text-lg font-semibold px-8 md:px-10 w-full md:w-80"
+          >
+            PRÓXIMO
+          </Button>
+        )}
       </div>
     );
   };
 
-  const Step3Candidate = () => (
-    <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
-      <button
-        onClick={() => setStep(2)}
-        className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
-      >
-        <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-        <span className="font-medium">Voltar</span>
-      </button>
-      <h2 className="text-2xl md:text-3xl font-bold">Em qual área você atua?</h2>
-      {[
-        "Desenvolvimento de Software",
-        "Design",
-        "Ciência de Dados",
-        "Cibersegurança",
-        "Infraestrutura",
-        "Inteligência Artificial",
-        "Blockchain",
-        "Outros",
-      ].map((option) => (
-        <Button
-          key={option}
+  const Step3Candidate = () => {
+    const [selectedArea, setSelectedArea] = useState("");
+    
+    return (
+      <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
+        <button
+          onClick={() => setStep(2)}
+          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+        >
+          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+          <span className="font-medium">Voltar</span>
+        </button>
+        <h2 className="text-2xl md:text-3xl font-bold">Em qual área você atua?</h2>
+        {[
+          "Desenvolvimento de Software",
+          "Design",
+          "Ciência de Dados",
+          "Cibersegurança",
+          "Infraestrutura",
+          "Inteligência Artificial",
+          "Blockchain",
+          "Outros",
+        ].map((option) => (
+          <Button
+            key={option}
+            onClick={() => setSelectedArea(option)}
+            className={`w-full md:w-80 py-5 md:py-6 rounded-full text-base md:text-lg transition-all ${
+              selectedArea === option
+                ? "bg-success hover:bg-success/90 text-success-foreground"
+                : "bg-white/20 hover:bg-white/30 text-white"
+            }`}
+          >
+            {option}
+          </Button>
+        ))}
+        
+        {selectedArea && (
+          <Button
+            onClick={() => setStep(4)}
+            className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-5 md:py-6 rounded-full text-base md:text-lg font-semibold px-8 md:px-10 w-full md:w-80"
+          >
+            PRÓXIMO
+          </Button>
+        )}
+      </div>
+    );
+  };
+
+  const Step4Candidate = () => {
+    const [selectedLevel, setSelectedLevel] = useState("");
+    
+    return (
+      <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
+        <button
+          onClick={() => setStep(3)}
+          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+        >
+          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+          <span className="font-medium">Voltar</span>
+        </button>
+        <h2 className="text-2xl md:text-3xl font-bold">Qual o seu nível de experiência?</h2>
+        {["Júnior", "Pleno", "Sênior", "Especialista"].map((option) => (
+          <Button
+            key={option}
+            onClick={() => setSelectedLevel(option)}
+            className={`w-full md:w-80 py-5 md:py-6 rounded-full text-base md:text-lg transition-all ${
+              selectedLevel === option
+                ? "bg-success hover:bg-success/90 text-success-foreground"
+                : "bg-white/20 hover:bg-white/30 text-white"
+            }`}
+          >
+            {option}
+          </Button>
+        ))}
+        
+        {selectedLevel && (
+          <Button
+            onClick={() => setStep(5)}
+            className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-5 md:py-6 rounded-full text-base md:text-lg font-semibold px-8 md:px-10 w-full md:w-80"
+          >
+            PRÓXIMO
+          </Button>
+        )}
+      </div>
+    );
+  };
+
+  const Step5Candidate = () => {
+    const [selectedType, setSelectedType] = useState("");
+    
+    return (
+      <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
+        <button
           onClick={() => setStep(4)}
-          className="w-full md:w-80 py-5 md:py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-base md:text-lg"
+          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
         >
-          {option}
-        </Button>
-      ))}
-    </div>
-  );
-
-  const Step4Candidate = () => (
-    <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
-      <button
-        onClick={() => setStep(3)}
-        className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
-      >
-        <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-        <span className="font-medium">Voltar</span>
-      </button>
-      <h2 className="text-2xl md:text-3xl font-bold">Qual o seu nível de experiência?</h2>
-      {["Júnior", "Pleno", "Sênior", "Especialista"].map((option) => (
-        <Button
-          key={option}
-          onClick={() => setStep(5)}
-          className="w-full md:w-80 py-5 md:py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-base md:text-lg"
-        >
-          {option}
-        </Button>
-      ))}
-    </div>
-  );
-
-  const Step5Candidate = () => (
-    <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
-      <button
-        onClick={() => setStep(4)}
-        className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
-      >
-        <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-        <span className="font-medium">Voltar</span>
-      </button>
-      <h2 className="text-2xl md:text-3xl font-bold">Qual tipo de oportunidade procura?</h2>
-      {["Estágio", "CLT", "Freelancer", "Trainee", "Temporário", "Aprendiz"].map(
-        (option) => (
+          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+          <span className="font-medium">Voltar</span>
+        </button>
+        <h2 className="text-2xl md:text-3xl font-bold">Qual tipo de oportunidade procura?</h2>
+        {["Estágio", "CLT", "Freelancer", "Trainee", "Temporário", "Aprendiz"].map(
+          (option) => (
+            <Button
+              key={option}
+              onClick={() => setSelectedType(option)}
+              className={`w-full md:w-80 py-5 md:py-6 rounded-full text-base md:text-lg transition-all ${
+                selectedType === option
+                  ? "bg-success hover:bg-success/90 text-success-foreground"
+                  : "bg-white/20 hover:bg-white/30 text-white"
+              }`}
+            >
+              {option}
+            </Button>
+          )
+        )}
+        
+        {selectedType && (
           <Button
-            key={option}
             onClick={() => setStep(6)}
-            className="w-full md:w-80 py-5 md:py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-base md:text-lg"
+            className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-5 md:py-6 rounded-full text-base md:text-lg font-semibold px-8 md:px-10 w-full md:w-80"
           >
-            {option}
+            PRÓXIMO
           </Button>
-        )
-      )}
-    </div>
-  );
+        )}
+      </div>
+    );
+  };
 
-  const Step6Candidate = () => (
-    <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
-      <button
-        onClick={() => setStep(5)}
-        className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
-      >
-        <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-        <span className="font-medium">Voltar</span>
-      </button>
-      <h2 className="text-2xl md:text-3xl font-bold">
-        Qual é o seu nível de conhecimento em Git?
-      </h2>
-      {["Básico", "Intermediário", "Avançado", "Nenhum conhecimento"].map(
-        (option) => (
+  const Step6Candidate = () => {
+    const [selectedGit, setSelectedGit] = useState("");
+    
+    return (
+      <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
+        <button
+          onClick={() => setStep(5)}
+          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+        >
+          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+          <span className="font-medium">Voltar</span>
+        </button>
+        <h2 className="text-2xl md:text-3xl font-bold">
+          Qual é o seu nível de conhecimento em Git?
+        </h2>
+        {["Básico", "Intermediário", "Avançado", "Nenhum conhecimento"].map(
+          (option) => (
+            <Button
+              key={option}
+              onClick={() => setSelectedGit(option)}
+              className={`w-full md:w-80 py-5 md:py-6 rounded-full text-base md:text-lg transition-all ${
+                selectedGit === option
+                  ? "bg-success hover:bg-success/90 text-success-foreground"
+                  : "bg-white/20 hover:bg-white/30 text-white"
+              }`}
+            >
+              {option}
+            </Button>
+          )
+        )}
+        
+        {selectedGit && (
           <Button
-            key={option}
             onClick={() => setStep(7)}
-            className="w-full md:w-80 py-5 md:py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-base md:text-lg"
+            className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-5 md:py-6 rounded-full text-base md:text-lg font-semibold px-8 md:px-10 w-full md:w-80"
           >
-            {option}
+            PRÓXIMO
           </Button>
-        )
-      )}
-    </div>
-  );
+        )}
+      </div>
+    );
+  };
 
   // Função para verificar se o email já está em uso (validação básica local)
   const checkEmailAvailability = async (emailToCheck: string) => {
@@ -975,114 +1055,182 @@ export default function Register() {
 
   // ------------------- FLUXO EMPRESA -------------------
 
-  const Step2Company = () => (
-    <div className="flex flex-col items-center space-y-6 text-center text-white px-4">
-      <button
-        onClick={() => setStep(1)}
-        className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
-      >
-        <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-        <span className="font-medium">Voltar</span>
-      </button>
-      <h2 className="text-3xl font-bold">Tipo de projeto</h2>
-      {[
-        "Novas ideias/projeto",
-        "Reforçar equipe",
-        "Experiência específica",
-        "Novas competências",
-        "Outros",
-      ].map((option) => (
-        <Button
-          key={option}
+  const Step2Company = () => {
+    const [selectedProject, setSelectedProject] = useState("");
+    
+    return (
+      <div className="flex flex-col items-center space-y-6 text-center text-white px-4">
+        <button
+          onClick={() => setStep(1)}
+          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+        >
+          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+          <span className="font-medium">Voltar</span>
+        </button>
+        <h2 className="text-3xl font-bold">Tipo de projeto</h2>
+        {[
+          "Novas ideias/projeto",
+          "Reforçar equipe",
+          "Experiência específica",
+          "Novas competências",
+          "Outros",
+        ].map((option) => (
+          <Button
+            key={option}
+            onClick={() => setSelectedProject(option)}
+            className={`w-80 py-6 rounded-full text-lg transition-all ${
+              selectedProject === option
+                ? "bg-success hover:bg-success/90 text-success-foreground"
+                : "bg-white/20 hover:bg-white/30 text-white"
+            }`}
+          >
+            {option}
+          </Button>
+        ))}
+        
+        {selectedProject && (
+          <Button
+            onClick={() => setStep(3)}
+            className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-6 rounded-full text-lg font-semibold px-10 w-80"
+          >
+            PRÓXIMO
+          </Button>
+        )}
+      </div>
+    );
+  };
+
+  const Step3Company = () => {
+    const [selectedSkill, setSelectedSkill] = useState("");
+    
+    return (
+      <div className="flex flex-col items-center space-y-6 text-center text-white px-4">
+        <button
+          onClick={() => setStep(2)}
+          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+        >
+          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+          <span className="font-medium">Voltar</span>
+        </button>
+        <h2 className="text-3xl font-bold">Competências essenciais</h2>
+        {[
+          "Ciência de Dados",
+          "Testes",
+          "Cibersegurança",
+          "Infraestrutura",
+          "Desenvolvimento de Software",
+          "Blockchain",
+          "Inteligência Artificial",
+          "Arquitetura",
+          "Engenharia de Dados",
+          "Suporte Técnico",
+          "Design",
+          "Análise de Dados",
+          "Nuvem",
+          "Outros",
+        ].map((option) => (
+          <Button
+            key={option}
+            onClick={() => setSelectedSkill(option)}
+            className={`w-80 py-6 rounded-full text-lg transition-all ${
+              selectedSkill === option
+                ? "bg-success hover:bg-success/90 text-success-foreground"
+                : "bg-white/20 hover:bg-white/30 text-white"
+            }`}
+          >
+            {option}
+          </Button>
+        ))}
+        
+        {selectedSkill && (
+          <Button
+            onClick={() => setStep(4)}
+            className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-6 rounded-full text-lg font-semibold px-10 w-80"
+          >
+            PRÓXIMO
+          </Button>
+        )}
+      </div>
+    );
+  };
+
+  const Step4Company = () => {
+    const [selectedTime, setSelectedTime] = useState("");
+    
+    return (
+      <div className="flex flex-col items-center space-y-6 text-center text-white px-4">
+        <button
           onClick={() => setStep(3)}
-          className="w-80 py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-lg transition-all"
+          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
         >
-          {option}
-        </Button>
-      ))}
-    </div>
-  );
+          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+          <span className="font-medium">Voltar</span>
+        </button>
+        <h2 className="text-3xl font-bold">Quanto tempo precisa do profissional?</h2>
+        {["Decidir mais tarde", "< 1 semana", "1 semana - 6 meses", "+ 6 meses"].map((option) => (
+          <Button
+            key={option}
+            onClick={() => setSelectedTime(option)}
+            className={`w-80 py-6 rounded-full text-lg transition-all ${
+              selectedTime === option
+                ? "bg-success hover:bg-success/90 text-success-foreground"
+                : "bg-white/20 hover:bg-white/30 text-white"
+            }`}
+          >
+            {option}
+          </Button>
+        ))}
+        
+        {selectedTime && (
+          <Button
+            onClick={() => setStep(5)}
+            className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-6 rounded-full text-lg font-semibold px-10 w-80"
+          >
+            PRÓXIMO
+          </Button>
+        )}
+      </div>
+    );
+  };
 
-  const Step3Company = () => (
-    <div className="flex flex-col items-center space-y-6 text-center text-white px-4">
-      <button
-        onClick={() => setStep(2)}
-        className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
-      >
-        <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-        <span className="font-medium">Voltar</span>
-      </button>
-      <h2 className="text-3xl font-bold">Competências essenciais</h2>
-      {[
-        "Ciência de Dados",
-        "Testes",
-        "Cibersegurança",
-        "Infraestrutura",
-        "Desenvolvimento de Software",
-        "Blockchain",
-        "Inteligência Artificial",
-        "Arquitetura",
-        "Engenharia de Dados",
-        "Suporte Técnico",
-        "Design",
-        "Análise de Dados",
-        "Nuvem",
-        "Outros",
-      ].map((option) => (
-        <Button
-          key={option}
+  const Step5Company = () => {
+    const [selectedGit, setSelectedGit] = useState("");
+    
+    return (
+      <div className="flex flex-col items-center space-y-6 text-center text-white px-4">
+        <button
           onClick={() => setStep(4)}
-          className="w-80 py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-lg transition-all"
+          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
         >
-          {option}
-        </Button>
-      ))}
-    </div>
-  );
-
-  const Step4Company = () => (
-    <div className="flex flex-col items-center space-y-6 text-center text-white px-4">
-      <button
-        onClick={() => setStep(3)}
-        className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
-      >
-        <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-        <span className="font-medium">Voltar</span>
-      </button>
-      <h2 className="text-3xl font-bold">Quanto tempo precisa do profissional?</h2>
-      {["Decidir mais tarde", "< 1 semana", "1 semana - 6 meses", "+ 6 meses"].map((option) => (
-        <Button
-          key={option}
-          onClick={() => setStep(5)}
-          className="w-80 py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-lg transition-all"
-        >
-          {option}
-        </Button>
-      ))}
-    </div>
-  );
-
-  const Step5Company = () => (
-    <div className="flex flex-col items-center space-y-6 text-center text-white px-4">
-      <button
-        onClick={() => setStep(4)}
-        className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
-      >
-        <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-        <span className="font-medium">Voltar</span>
-      </button>
-      <h2 className="text-3xl font-bold">Experiência em Git?</h2>
-      {["Sim, básico", "Sim, avançado", "Conhecimento teórico", "Não necessário"].map((option) => (
-        <Button
-          key={option}
-          onClick={() => setStep(6)}
-          className="w-80 py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-lg transition-all"
-        >
-          {option}
-        </Button>
-      ))}
-    </div>
-  );
+          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+          <span className="font-medium">Voltar</span>
+        </button>
+        <h2 className="text-3xl font-bold">Experiência em Git?</h2>
+        {["Sim, básico", "Sim, avançado", "Conhecimento teórico", "Não necessário"].map((option) => (
+          <Button
+            key={option}
+            onClick={() => setSelectedGit(option)}
+            className={`w-80 py-6 rounded-full text-lg transition-all ${
+              selectedGit === option
+                ? "bg-success hover:bg-success/90 text-success-foreground"
+                : "bg-white/20 hover:bg-white/30 text-white"
+            }`}
+          >
+            {option}
+          </Button>
+        ))}
+        
+        {selectedGit && (
+          <Button
+            onClick={() => setStep(6)}
+            className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-6 rounded-full text-lg font-semibold px-10 w-80"
+          >
+            PRÓXIMO
+          </Button>
+        )}
+      </div>
+    );
+  };
 
   const Step6Company = React.useMemo(() => {
     const handleSubmit = async (e: React.FormEvent) => {
