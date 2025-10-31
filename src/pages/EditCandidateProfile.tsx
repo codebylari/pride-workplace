@@ -146,7 +146,7 @@ export default function EditCandidateProfile() {
 
     if (!hasChanges) {
       toast({
-        title: "Nenhuma alteração foi modificada",
+        title: "Nenhuma alteração feita",
         description: "Preencha pelo menos um campo para atualizar seu perfil.",
         variant: "destructive",
       });
@@ -290,7 +290,7 @@ export default function EditCandidateProfile() {
               </div>
               <div>
                 <h2 className="text-xl font-semibold">{fullName}</h2>
-                <p className="text-sm text-white/80">candidato (a)</p>
+                <p className="text-sm text-white/80">candidato(a)</p>
               </div>
             </div>
 
@@ -379,7 +379,7 @@ export default function EditCandidateProfile() {
       {/* Main Content */}
       <main className="container mx-auto px-3 sm:px-4 py-6 sm:py-8 max-w-4xl">
         <h1 className={`text-3xl font-bold mb-8 ${darkMode ? "text-white" : "text-gray-800"}`}>
-          Edite seu perfil
+          Editar Perfil
         </h1>
 
         <div className={`rounded-2xl shadow-lg p-4 sm:p-8 space-y-4 sm:space-y-6 ${darkMode ? "bg-gray-700" : "bg-white"}`}>
