@@ -295,7 +295,7 @@ export default function ChangeEmail() {
                 setShowSuccessDialog(false);
                 navigate("/account");
               }}
-              className="w-full max-w-xs py-3 bg-pink-400 hover:bg-pink-500 text-white rounded-lg transition"
+              className="w-full max-w-xs py-3 bg-[#FFF2A9] hover:bg-[#FFE580] text-gray-800 rounded-lg transition"
             >
               Ok
             </button>

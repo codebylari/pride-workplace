@@ -138,7 +138,7 @@ export default function JobDetails() {
                 </h1>
               <Button
                 onClick={() => navigate("/company/1/profile")}
-                className="bg-pink-300 hover:bg-pink-400 text-white rounded-full px-6"
+                className="bg-[#FFF2A9] hover:bg-[#FFE580] text-gray-800 rounded-full px-6"
               >
                 Ver perfil da Empresa
               </Button>
@@ -222,7 +222,7 @@ export default function JobDetails() {
           {/* Apply Button */}
           <Button
             onClick={() => navigate(`/job/${id}/apply`)}
-            className="w-full bg-pink-300 hover:bg-pink-400 text-white py-6 rounded-full text-lg font-semibold"
+            className="w-full bg-[#FFF2A9] hover:bg-[#FFE580] text-gray-800 py-6 rounded-full text-lg font-semibold"
           >
             Candidatar-se a vaga
           </Button>
