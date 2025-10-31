@@ -59,14 +59,18 @@ export default function CandidateProfile() {
   // Calculate profile completion percentage
   const calculateCompletion = () => {
     const fields = [
-      profileData.about_me,
-      profileData.experience,
-      profileData.education,
-      profileData.journey,
-      profileData.resume_url,
+      photoUrl, // Foto de perfil
+      userGender, // Gênero
+      userLinkedin, // LinkedIn
+      profileData.about_me, // Sobre Mim
+      profileData.experience, // Experiência
+      profileData.education, // Formação
+      profileData.journey, // Minha Jornada
+      profileData.resume_url, // Currículo
     ];
-    const filledFields = fields.filter(field => field !== undefined && field !== "").length;
-    return (filledFields / 5) * 100;
+    const filledFields = fields.filter(field => field !== undefined && field !== null && field !== "").length;
+    const percentage = (filledFields / fields.length) * 100;
+    return Math.round(percentage);
   };
 
   const completionPercentage = calculateCompletion();
@@ -303,7 +307,7 @@ export default function CandidateProfile() {
           {/* Profile Content */}
           <div className="relative px-4 sm:px-8 pb-6 sm:pb-8">
             {/* Profile Photo with Progress */}
-            <div className="relative -mt-20 mb-6 flex justify-center">
+            <div className="relative -mt-20 mb-6 flex flex-col items-center">
               <div className="relative">
                 {showProgress ? (
                   <CircularProgress percentage={completionPercentage} size={160} strokeWidth={8}>
@@ -351,6 +355,13 @@ export default function CandidateProfile() {
                   </div>
                 )}
               </div>
+              
+              {/* Completion Text */}
+              {showProgress && (
+                <p className={`mt-3 text-sm font-medium ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+                  Perfil {completionPercentage}% completo
+                </p>
+              )}
             </div>
 
             {/* Rating */}
