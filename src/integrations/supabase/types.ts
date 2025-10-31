@@ -65,6 +65,7 @@ export type Database = {
           description: string | null
           fantasy_name: string
           id: string
+          is_active: boolean
           logo_url: string | null
           rating: number | null
           sector: string | null
@@ -84,6 +85,7 @@ export type Database = {
           description?: string | null
           fantasy_name: string
           id?: string
+          is_active?: boolean
           logo_url?: string | null
           rating?: number | null
           sector?: string | null
@@ -103,6 +105,7 @@ export type Database = {
           description?: string | null
           fantasy_name?: string
           id?: string
+          is_active?: boolean
           logo_url?: string | null
           rating?: number | null
           sector?: string | null
@@ -198,6 +201,7 @@ export type Database = {
           full_name: string
           gender: string | null
           id: string
+          is_active: boolean
           journey: string | null
           linkedin_url: string | null
           photo_url: string | null
@@ -216,6 +220,7 @@ export type Database = {
           full_name: string
           gender?: string | null
           id: string
+          is_active?: boolean
           journey?: string | null
           linkedin_url?: string | null
           photo_url?: string | null
@@ -234,6 +239,7 @@ export type Database = {
           full_name?: string
           gender?: string | null
           id?: string
+          is_active?: boolean
           journey?: string | null
           linkedin_url?: string | null
           photo_url?: string | null

@@ -65,8 +65,30 @@ export default function DeleteAccount() {
         throw new Error("Senha incorreta");
       }
 
-      // Delete user account
-      const { error: deleteError } = await supabase.auth.admin.deleteUser(user?.id || "");
+      // First, delete all related data
+      if (isCompany) {
+        // Delete company-related data
+        await supabase.from('company_profiles').delete().eq('user_id', user?.id);
+        await supabase.from('jobs').delete().eq('company_id', user?.id);
+      } else {
+        // Delete candidate-related data
+        await supabase.from('profiles').delete().eq('id', user?.id);
+        await supabase.from('applications').delete().eq('candidate_id', user?.id);
+      }
+
+      // Delete notifications
+      await supabase.from('notifications').delete().eq('user_id', user?.id);
+      
+      // Delete user role
+      await supabase.from('user_roles').delete().eq('user_id', user?.id);
+
+      // Finally, delete the auth user using edge function (this allows re-registration with same email)
+      const { data: { session } } = await supabase.auth.getSession();
+      const { error: deleteError } = await supabase.functions.invoke('delete-user-account', {
+        headers: {
+          Authorization: `Bearer ${session?.access_token}`,
+        },
+      });
 
       if (deleteError) throw deleteError;
 
@@ -228,7 +250,7 @@ export default function DeleteAccount() {
 
           <div className={`${darkMode ? "bg-gray-700" : "bg-white"} rounded-2xl p-8 shadow-lg space-y-6`}>
             <p className={`text-center ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
-              Para deletar sua conta permanentemente, basta confirmar sua senha.
+              Para deletar sua conta <strong>permanentemente</strong>, basta confirmar sua senha. Esta ação não pode ser desfeita, mas você poderá criar uma nova conta usando o mesmo email no futuro, se desejar.
             </p>
 
             <div>
@@ -302,10 +324,13 @@ export default function DeleteAccount() {
           <div className="flex flex-col items-center justify-center space-y-6 py-8 px-4">
             <h2 className="text-3xl font-bold text-gray-900">Deletar conta</h2>
             <div className="text-center space-y-4 text-gray-700">
-              <p>Sinto muito em sabe que você decidiu deletar sua conta. 😔</p>
+              <p>Sua conta foi excluída permanentemente. 😔</p>
               <p>
-                Sua presença aqui fez diferença, e vamos sentir sua falta. Se houver algo que possamos fazer 
-                para melhorar sua experiência ou ajudá-lo(a) de alguma forma, por favor, nos avise.
+                Sinto muito em saber que você decidiu nos deixar. Sua presença aqui fez diferença, 
+                e vamos sentir sua falta.
+              </p>
+              <p>
+                Se mudar de ideia, você pode se cadastrar novamente a qualquer momento usando o mesmo email ou outro.
               </p>
               <p>Desejamos tudo de bom nos seus próximos passos! 💛</p>
             </div>

@@ -65,10 +65,22 @@ export default function DeactivateAccount() {
         throw new Error("Senha incorreta");
       }
 
-      // Delete user account
-      const { error: deleteError } = await supabase.auth.admin.deleteUser(user?.id || "");
+      // Deactivate account by updating is_active flag
+      if (isCompany) {
+        const { error: deactivateError } = await supabase
+          .from('company_profiles')
+          .update({ is_active: false })
+          .eq('user_id', user?.id);
 
-      if (deleteError) throw deleteError;
+        if (deactivateError) throw deactivateError;
+      } else {
+        const { error: deactivateError } = await supabase
+          .from('profiles')
+          .update({ is_active: false })
+          .eq('id', user?.id);
+
+        if (deactivateError) throw deactivateError;
+      }
 
       setPassword("");
       setConfirmPassword("");
@@ -227,8 +239,13 @@ export default function DeactivateAccount() {
           </h1>
 
           <div className={`${darkMode ? "bg-gray-700" : "bg-white"} rounded-2xl p-8 shadow-lg space-y-6`}>
+            <div className={`${darkMode ? "bg-yellow-400/10 border-yellow-400/20" : "bg-yellow-50 border-yellow-200"} border rounded-lg p-4 mb-4`}>
+              <p className={`text-center ${darkMode ? "text-yellow-300" : "text-yellow-800"} font-medium`}>
+                ℹ️ Sua conta será temporariamente desativada. Você pode reativá-la a qualquer momento fazendo login novamente!
+              </p>
+            </div>
             <p className={`text-center ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
-              Para desativar sua conta, basta confirmar sua senha. Caso queira ativar novamente basta logar.
+              Para desativar sua conta, basta confirmar sua senha.
             </p>
 
             <div>
@@ -311,8 +328,13 @@ export default function DeactivateAccount() {
             <div className="w-16 h-16 bg-green-400 rounded-full flex items-center justify-center">
               <CheckCircle2 className="w-10 h-10 text-white" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900">SUCESSO!</h2>
-            <p className="text-center text-gray-600">Sua conta foi desativada com Sucesso!</p>
+            <h2 className="text-2xl font-bold text-gray-900">Conta Desativada!</h2>
+            <p className="text-center text-gray-600">
+              Sua conta foi desativada com sucesso.
+            </p>
+            <p className="text-center text-gray-600 text-sm">
+              Para reativar, basta fazer login novamente quando desejar retornar.
+            </p>
             <button
               onClick={async () => {
                 setShowSuccessDialog(false);
