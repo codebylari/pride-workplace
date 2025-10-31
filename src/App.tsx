@@ -34,17 +34,11 @@ import CandidateProfile from "./pages/CandidateProfile";
 import CompanyProfile from "./pages/CompanyProfile";
 // Perfil da empresa
 
-import AboutUs from "./pages/AboutUs";
-// Página Quem Somos (redireciona baseado no tipo de usuário)
-
 import CompanyAbout from "./pages/CompanyAbout";
 // Página Quem Somos - Empresa
 
 import CandidateAbout from "./pages/CandidateAbout";
 // Página Quem Somos - Candidato
-
-import Support from "./pages/Support";
-// Página de Suporte (redireciona baseado no tipo de usuário)
 
 import CompanySupport from "./pages/CompanySupport";
 // Página de Suporte - Empresa
@@ -58,10 +52,11 @@ import TermsCandidate from "./pages/TermsCandidate";
 import TermsCompany from "./pages/TermsCompany";
 // Termos de Uso - Empresas
 
-import Settings from "./pages/Settings";
-// Página de Configurações
 import CompanySettings from "./pages/CompanySettings";
+// Página de Configurações - Empresa
+
 import CandidateSettings from "./pages/CandidateSettings";
+// Página de Configurações - Candidato
 
 import CandidateAccount from "./pages/CandidateAccount";
 // Página de Conta - Candidato
@@ -117,9 +112,6 @@ import ForgotPassword from "./pages/ForgotPassword";
 import NotFound from "./pages/NotFound";
 // Página exibida quando a rota não existe (erro 404)
 
-import CommunityRules from "./pages/CommunityRules";
-// Página de Regras da Comunidade (geral)
-
 import CandidateCommunityRules from "./pages/CandidateCommunityRules";
 // Página de Regras da Comunidade - Candidato
 
@@ -163,17 +155,11 @@ const App = () => (
             <Route path="/company-profile" element={<CompanyProfile />} />
             {/* Perfil da empresa */}
             
-            <Route path="/about" element={<AboutUs />} />
-            {/* Página Quem Somos (redireciona baseado no tipo de usuário) */}
-            
             <Route path="/company-about" element={<CompanyAbout />} />
             {/* Página Quem Somos - Empresa */}
             
             <Route path="/candidate-about" element={<CandidateAbout />} />
             {/* Página Quem Somos - Candidato */}
-            
-            <Route path="/support" element={<Support />} />
-            {/* Página de Suporte (redireciona baseado no tipo de usuário) */}
             
             <Route path="/company-support" element={<CompanySupport />} />
             {/* Página de Suporte - Empresa */}
@@ -186,9 +172,6 @@ const App = () => (
             
             <Route path="/terms-company" element={<TermsCompany />} />
             {/* Termos de Uso - Empresas */}
-            
-            <Route path="/settings" element={<Settings />} />
-            {/* Página de Configurações (redireciona baseado no tipo de usuário) */}
             
             <Route path="/company-settings" element={<CompanySettings />} />
             {/* Página de Configurações da Empresa */}
@@ -243,9 +226,6 @@ const App = () => (
             
             <Route path="/forgot-password" element={<ForgotPassword />} />
             {/* Página de Recuperar Senha */}
-            
-            <Route path="/community-rules" element={<CommunityRules />} />
-            {/* Página de Regras da Comunidade (geral) */}
             
             <Route path="/candidate-community-rules" element={<CandidateCommunityRules />} />
             {/* Página de Regras da Comunidade - Candidato */}
