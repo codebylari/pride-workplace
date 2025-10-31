@@ -247,7 +247,7 @@ export default function Register() {
       if (localGender === "outros") {
         setCustomGender(localCustomGender);
       }
-      setStep(3);
+      setStep(2.5);
     };
 
     return (
@@ -321,13 +321,126 @@ export default function Register() {
     );
   };
 
+  const Step2_5Candidate = () => {
+    const [selectedExperience, setSelectedExperience] = useState("");
+    
+    return (
+      <div className="flex flex-col items-center space-y-6 md:space-y-8 text-center text-white px-4">
+        <button
+          onClick={() => setStep(2)}
+          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+        >
+          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+          <span className="font-medium">Voltar</span>
+        </button>
+        <h2 className="text-2xl md:text-3xl font-bold">Qual a sua experiência no mercado de trabalho?</h2>
+        
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-3xl">
+          {[
+            { emoji: "👷", label: "4 ano de Experiência", value: "4-anos" },
+            { emoji: "👷", label: "1 a 2 anos de Experiência", value: "1-2-anos" },
+            { emoji: "👷", label: "3 a 5 anos de Experiência", value: "3-5-anos" },
+            { emoji: "👷", label: "+6 anos de Experiência", value: "6-mais-anos" },
+          ].map((option) => (
+            <button
+              key={option.value}
+              onClick={() => setSelectedExperience(option.value)}
+              className={`p-6 rounded-2xl transition-all ${
+                selectedExperience === option.value
+                  ? "bg-success text-success-foreground scale-105"
+                  : "bg-white/20 text-white hover:bg-white/30"
+              }`}
+            >
+              <div className="text-4xl md:text-5xl mb-2">{option.emoji}</div>
+              <p className="text-sm font-medium">{option.label}</p>
+            </button>
+          ))}
+        </div>
+        
+        {selectedExperience && (
+          <Button
+            onClick={() => setStep(2.7)}
+            className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-5 md:py-6 rounded-full text-base md:text-lg font-semibold px-8 md:px-10 w-full md:w-80"
+          >
+            PRÓXIMO
+          </Button>
+        )}
+      </div>
+    );
+  };
+
+  const Step2_7Candidate = () => {
+    const [selectedAreas, setSelectedAreas] = useState<string[]>([]);
+    
+    const toggleArea = (area: string) => {
+      setSelectedAreas(prev => 
+        prev.includes(area) 
+          ? prev.filter(a => a !== area)
+          : [...prev, area]
+      );
+    };
+    
+    return (
+      <div className="flex flex-col items-center space-y-6 md:space-y-8 text-center text-white px-4">
+        <button
+          onClick={() => setStep(2.5)}
+          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+        >
+          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+          <span className="font-medium">Voltar</span>
+        </button>
+        <h2 className="text-2xl md:text-3xl font-bold">Selecione as suas áreas de especialização</h2>
+        
+        <div className="grid grid-cols-2 gap-4 w-full max-w-3xl">
+          {[
+            "Ciências de Dados",
+            "Testes",
+            "Cibersegurança",
+            "Infraestrutura",
+            "Desenvolvimento de Software",
+            "Blockchain",
+            "Inteligência Artificial",
+            "Arquitetura",
+            "Engenharia de Dados",
+            "Suporte Técnico",
+            "Desing",
+            "Análise de Dados",
+            "Nuvens",
+            "Outros",
+          ].map((area) => (
+            <Button
+              key={area}
+              onClick={() => toggleArea(area)}
+              className={`py-5 md:py-6 rounded-2xl text-sm md:text-base transition-all ${
+                selectedAreas.includes(area)
+                  ? "bg-success hover:bg-success/90 text-success-foreground scale-105"
+                  : "bg-white/20 hover:bg-white/30 text-white"
+              }`}
+            >
+              {area}
+            </Button>
+          ))}
+        </div>
+        
+        {selectedAreas.length > 0 && (
+          <Button
+            onClick={() => setStep(3)}
+            className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-5 md:py-6 rounded-full text-base md:text-lg font-semibold px-8 md:px-10 w-full md:w-80"
+          >
+            PRÓXIMO
+          </Button>
+        )}
+      </div>
+    );
+  };
+
   const Step3Candidate = () => {
     const [selectedArea, setSelectedArea] = useState("");
     
     return (
       <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
         <button
-          onClick={() => setStep(2)}
+          onClick={() => setStep(2.7)}
           className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
         >
           <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
@@ -1758,15 +1871,17 @@ export default function Register() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#6E4062] via-[#5a3452] to-[#6E4062] p-3 md:p-8 lg:p-12">
       <div className="w-full max-w-4xl bg-white/10 backdrop-blur-lg rounded-2xl md:rounded-3xl p-6 md:p-12 shadow-2xl">
-        {step === 1 && <Step1 />}
-        {role === "candidate" && step === 2 && <Step2Candidate />}
-        {role === "candidate" && step === 3 && <Step3Candidate />}
-        {role === "candidate" && step === 4 && <Step4Candidate />}
-        {role === "candidate" && step === 5 && <Step5Candidate />}
-        {role === "candidate" && step === 6 && <Step6Candidate />}
-        {role === "candidate" && step === 7 && Step7Candidate}
-        {role === "candidate" && step === 8 && <Step8Terms />}
-        {role === "candidate" && step === 9 && <Step9Photo />}
+      {step === 1 && <Step1 />}
+      {role === "candidate" && step === 2 && <Step2Candidate />}
+      {role === "candidate" && step === 2.5 && <Step2_5Candidate />}
+      {role === "candidate" && step === 2.7 && <Step2_7Candidate />}
+      {role === "candidate" && step === 3 && <Step3Candidate />}
+      {role === "candidate" && step === 4 && <Step4Candidate />}
+      {role === "candidate" && step === 5 && <Step5Candidate />}
+      {role === "candidate" && step === 6 && <Step6Candidate />}
+      {role === "candidate" && step === 7 && Step7Candidate}
+      {role === "candidate" && step === 8 && <Step8Terms />}
+      {role === "candidate" && step === 9 && <Step9Photo />}
         {role === "candidate" && step === 10 && <Step10Success />}
 
         {role === "company" && step === 2 && <Step2Company />}
