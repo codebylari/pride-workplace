@@ -1608,7 +1608,7 @@ export default function Register() {
   // ------------------- RENDER -------------------
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#6E4062] via-[#5a3452] to-[#6E4062] p-3 md:p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#6E4062] via-[#5a3452] to-[#6E4062] p-3 md:p-8 lg:p-12">
       <div className="w-full max-w-4xl bg-white/10 backdrop-blur-lg rounded-2xl md:rounded-3xl p-6 md:p-12 shadow-2xl">
         {step === 1 && <Step1 />}
         {role === "candidate" && step === 2 && <Step2Candidate />}
