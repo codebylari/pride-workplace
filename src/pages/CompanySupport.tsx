@@ -197,7 +197,10 @@ export default function CompanySupport() {
             Chat/Suporte
           </Button>
 
-          <Button className="w-full bg-[#FFF8D6] hover:bg-[#FFF2A9] text-gray-800 py-8 rounded-full text-xl font-semibold shadow-lg">
+          <Button 
+            onClick={() => navigate("/company-community-rules")}
+            className="w-full bg-[#FFF8D6] hover:bg-[#FFF2A9] text-gray-800 py-8 rounded-full text-xl font-semibold shadow-lg"
+          >
             Regras da Comunidade
           </Button>
         </div>
