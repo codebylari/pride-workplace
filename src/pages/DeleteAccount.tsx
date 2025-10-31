@@ -23,7 +23,9 @@ export default function DeleteAccount() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const isCompany = user?.user_metadata?.user_type === "company";
+  // Detecta se é empresa pela URL ou pelo user_metadata
+  const isCompanyRoute = window.location.pathname.includes('/company-');
+  const isCompany = isCompanyRoute || user?.user_metadata?.user_type === "company";
   const displayName = isCompany 
     ? user?.user_metadata?.company_name || "Nome da Empresa"
     : user?.user_metadata?.full_name || "Nome do Usuário";
