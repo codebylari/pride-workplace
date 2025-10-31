@@ -419,7 +419,7 @@ export default function Register() {
             }}
             className="bg-success hover:bg-success/90 text-success-foreground py-5 md:py-6 rounded-full text-base md:text-lg font-semibold px-8 md:px-10"
           >
-            Recomeçar Cadastro
+            Compreendo
           </Button>
         </div>
       </div>
