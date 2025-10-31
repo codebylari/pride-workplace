@@ -171,11 +171,11 @@ export default function CandidateSupport() {
 
         {/* Buttons Section */}
         <div className="space-y-6 mb-16">
-          <Button className="w-full bg-gradient-to-r from-purple-700 to-purple-600 hover:from-purple-800 hover:to-purple-700 text-white py-8 rounded-full text-xl font-semibold shadow-lg">
+          <Button className="w-full bg-[#FFF8D6] hover:bg-[#FFF2A9] text-gray-800 py-8 rounded-full text-xl font-semibold shadow-lg">
             Chat/Suporte
           </Button>
 
-          <Button className="w-full bg-gradient-to-r from-purple-700 to-purple-600 hover:from-purple-800 hover:to-purple-700 text-white py-8 rounded-full text-xl font-semibold shadow-lg">
+          <Button className="w-full bg-[#FFF8D6] hover:bg-[#FFF2A9] text-gray-800 py-8 rounded-full text-xl font-semibold shadow-lg">
             Regras da Comunidade
           </Button>
         </div>
