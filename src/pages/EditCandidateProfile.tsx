@@ -39,7 +39,7 @@ export default function EditCandidateProfile() {
       
       const { data } = await supabase
         .from("profiles")
-        .select("gender, linkedin_url")
+        .select("gender, linkedin_url, about_me, experience, education, journey, resume_url")
         .eq("id", user.id)
         .maybeSingle();
       
@@ -53,6 +53,10 @@ export default function EditCandidateProfile() {
           }
         }
         setLinkedinUrl(data.linkedin_url || "");
+        setAboutMe(data.about_me || "");
+        setExperience(data.experience || "");
+        setEducation(data.education || "");
+        setMyJourney(data.journey || "");
       }
     };
     loadProfile();
@@ -152,14 +156,35 @@ export default function EditCandidateProfile() {
         updates.linkedin_url = linkedinUrl;
       }
 
-      // Update profile fields
-      if (Object.keys(updates).length > 0) {
-        const { error: updateError } = await supabase
-          .from("profiles")
-          .update(updates)
-          .eq("id", user?.id);
+      // Save text fields
+      if (aboutMe.trim() !== "") {
+        updates.about_me = aboutMe;
+      }
+      if (experience.trim() !== "") {
+        updates.experience = experience;
+      }
+      if (education.trim() !== "") {
+        updates.education = education;
+      }
+      if (myJourney.trim() !== "") {
+        updates.journey = myJourney;
+      }
 
-        if (updateError) throw updateError;
+      // Handle resume upload
+      if (resume) {
+        if (!user?.id) throw new Error("Usuário não autenticado.");
+
+        const ext = resume.name.split(".").pop() || "pdf";
+        const path = `${user.id}/resume.${ext}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from("profile-photos")
+          .upload(path, resume, { upsert: true, contentType: resume.type });
+
+        if (uploadError) throw uploadError;
+
+        const { data: urlData } = supabase.storage.from("profile-photos").getPublicUrl(path);
+        updates.resume_url = urlData.publicUrl;
       }
 
       // Handle photo upload
@@ -176,14 +201,17 @@ export default function EditCandidateProfile() {
         if (uploadError) throw uploadError;
 
         const { data: urlData } = supabase.storage.from("profile-photos").getPublicUrl(path);
-        const publicUrl = urlData.publicUrl;
+        updates.photo_url = urlData.publicUrl;
+      }
 
-        const { error: photoUpdateError } = await supabase
+      // Update profile fields
+      if (Object.keys(updates).length > 0) {
+        const { error: updateError } = await supabase
           .from("profiles")
-          .update({ photo_url: publicUrl })
-          .eq("id", user.id);
+          .update(updates)
+          .eq("id", user?.id);
 
-        if (photoUpdateError) throw photoUpdateError;
+        if (updateError) throw updateError;
       }
 
       toast({

@@ -36,7 +36,7 @@ export default function CandidateProfile() {
       if (!user?.id) return;
       const { data } = await supabase
         .from("profiles")
-        .select("photo_url, full_name, gender, linkedin_url")
+        .select("photo_url, full_name, gender, linkedin_url, about_me, experience, education, journey, resume_url")
         .eq("id", user.id)
         .maybeSingle();
       
@@ -44,13 +44,13 @@ export default function CandidateProfile() {
       setUserGender(data?.gender ?? "");
       setUserLinkedin(data?.linkedin_url ?? "");
       
-      // Mock data for now - replace with actual fields when they exist in DB
+      // Load actual data from database
       setProfileData({
-        about_me: sections["sobre-mim"].content.trim() ? sections["sobre-mim"].content : undefined,
-        experience: sections["experiencia"].content.trim() ? sections["experiencia"].content : undefined,
-        education: sections["formacao"].content.trim() ? sections["formacao"].content : undefined,
-        journey: sections["minha-jornada"].content.trim() ? sections["minha-jornada"].content : undefined,
-        resume_url: sections["curriculo"].content.trim() ? "has_resume" : undefined,
+        about_me: data?.about_me,
+        experience: data?.experience,
+        education: data?.education,
+        journey: data?.journey,
+        resume_url: data?.resume_url,
       });
     };
     load();
@@ -116,23 +116,23 @@ export default function CandidateProfile() {
   const sections = {
     "sobre-mim": {
       title: "Sobre Mim",
-      content: ""
+      content: profileData.about_me || ""
     },
     "experiencia": {
       title: "Experiência",
-      content: ""
+      content: profileData.experience || ""
     },
     "formacao": {
       title: "Formação",
-      content: ""
+      content: profileData.education || ""
     },
     "minha-jornada": {
       title: "Minha Jornada",
-      content: ""
+      content: profileData.journey || ""
     },
     "curriculo": {
       title: "Currículo",
-      content: ""
+      content: profileData.resume_url || ""
     }
   };
 
@@ -413,7 +413,19 @@ export default function CandidateProfile() {
                       <h3 className={`text-xl font-bold mb-4 pr-8 ${darkMode ? "text-white" : "text-gray-800"}`}>
                         {section.title}
                       </h3>
-                      {section.content.trim() ? (
+                      {key === "curriculo" && section.content.trim() ? (
+                        <div className="text-center">
+                          <a
+                            href={section.content}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
+                          >
+                            <FileText size={20} />
+                            <span>Baixar Currículo</span>
+                          </a>
+                        </div>
+                      ) : section.content.trim() ? (
                         <div className={`whitespace-pre-line text-sm leading-relaxed ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
                           {section.content}
                         </div>

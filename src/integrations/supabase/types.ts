@@ -129,35 +129,50 @@ export type Database = {
       }
       profiles: {
         Row: {
+          about_me: string | null
           city: string | null
           created_at: string
+          education: string | null
+          experience: string | null
           full_name: string
           gender: string | null
           id: string
+          journey: string | null
           linkedin_url: string | null
           photo_url: string | null
+          resume_url: string | null
           state: string | null
           updated_at: string
         }
         Insert: {
+          about_me?: string | null
           city?: string | null
           created_at?: string
+          education?: string | null
+          experience?: string | null
           full_name: string
           gender?: string | null
           id: string
+          journey?: string | null
           linkedin_url?: string | null
           photo_url?: string | null
+          resume_url?: string | null
           state?: string | null
           updated_at?: string
         }
         Update: {
+          about_me?: string | null
           city?: string | null
           created_at?: string
+          education?: string | null
+          experience?: string | null
           full_name?: string
           gender?: string | null
           id?: string
+          journey?: string | null
           linkedin_url?: string | null
           photo_url?: string | null
+          resume_url?: string | null
           state?: string | null
           updated_at?: string
         }
