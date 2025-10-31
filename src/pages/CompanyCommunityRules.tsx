@@ -56,7 +56,7 @@ export default function CompanyCommunityRules() {
   ];
 
   return (
-    <div className={`min-h-screen ${darkMode ? "bg-background" : "bg-gradient-primary"}`}>
+    <div className="min-h-screen bg-white">
       {/* Header */}
       <header style={{ background: 'linear-gradient(to right, hsl(315, 26%, 40%), hsl(320, 30%, 50%))' }} className="text-white p-4 flex justify-between items-center sticky top-0 z-40">
         <button
@@ -192,13 +192,13 @@ export default function CompanyCommunityRules() {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8 max-w-4xl">
-        <div className="bg-card/10 backdrop-blur-lg rounded-3xl p-8 md:p-12 shadow-card">
+        <div className="bg-white rounded-3xl p-8 md:p-12 shadow-lg">
           <div className="text-center mb-10">
             <div className="text-6xl mb-4">🏢</div>
-            <h1 className="text-4xl md:text-5xl font-bold text-primary-foreground mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
               Regras da Comunidade para Empresas
             </h1>
-            <p className="text-xl text-primary-foreground/80">
+            <p className="text-xl text-gray-700">
               Compromisso com inclusão e ética profissional
             </p>
           </div>
@@ -207,17 +207,17 @@ export default function CompanyCommunityRules() {
             {rules.map((rule, index) => (
               <div
                 key={index}
-                className="bg-card/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-card/20 transition-smooth border border-border"
+                className="bg-gray-50 rounded-2xl p-6 hover:bg-gray-100 transition-all border border-gray-200"
               >
                 <div className="flex items-start gap-4">
-                  <div className="text-success flex-shrink-0">
+                  <div className="text-purple-600 flex-shrink-0">
                     {rule.icon}
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-primary-foreground mb-2">
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
                       {rule.title}
                     </h3>
-                    <p className="text-primary-foreground/80 leading-relaxed">
+                    <p className="text-gray-700 leading-relaxed">
                       {rule.description}
                     </p>
                   </div>
@@ -226,11 +226,11 @@ export default function CompanyCommunityRules() {
             ))}
           </div>
 
-          <div className="bg-card/10 backdrop-blur-sm rounded-2xl p-6 mb-8 border border-border">
-            <h3 className="text-xl font-semibold text-primary-foreground mb-3">
+          <div className="bg-orange-50 rounded-2xl p-6 mb-8 border border-orange-200">
+            <h3 className="text-xl font-semibold text-gray-900 mb-3">
               ⚠️ Consequências de Violações
             </h3>
-            <ul className="text-primary-foreground/80 space-y-2 list-disc list-inside">
+            <ul className="text-gray-700 space-y-2 list-disc list-inside">
               <li>Primeira violação: Aviso formal e revisão das vagas publicadas</li>
               <li>Segunda violação: Suspensão temporária e impossibilidade de publicar novas vagas</li>
               <li>Violações graves ou repetidas: Banimento permanente da plataforma</li>
@@ -238,11 +238,11 @@ export default function CompanyCommunityRules() {
             </ul>
           </div>
 
-          <div className="bg-success/20 backdrop-blur-sm rounded-2xl p-6 border border-success/30">
-            <h3 className="text-xl font-semibold text-primary-foreground mb-3">
+          <div className="bg-green-50 rounded-2xl p-6 border border-green-200">
+            <h3 className="text-xl font-semibold text-gray-900 mb-3">
               💼 Boas Práticas para Empresas
             </h3>
-            <ul className="text-primary-foreground/90 space-y-2 list-disc list-inside">
+            <ul className="text-gray-700 space-y-2 list-disc list-inside">
               <li>Seja transparente sobre a cultura organizacional e valores da empresa</li>
               <li>Ofereça feedback construtivo aos candidatos após entrevistas</li>
               <li>Mantenha as informações das vagas sempre atualizadas</li>
