@@ -56,7 +56,7 @@ export default function CandidateCommunityRules() {
   ];
 
   return (
-    <div className={`min-h-screen ${darkMode ? "bg-background" : "bg-gradient-primary"}`}>
+    <div className={`min-h-screen ${darkMode ? "bg-gray-900" : "bg-white"}`}>
       {/* Header */}
       <header style={{ background: 'linear-gradient(to right, hsl(315, 26%, 40%), hsl(320, 30%, 50%))' }} className="text-white p-4 flex justify-between items-center sticky top-0 z-40">
         <Button
@@ -170,13 +170,13 @@ export default function CandidateCommunityRules() {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8 max-w-4xl">
-        <div className="bg-card/10 backdrop-blur-lg rounded-3xl p-8 md:p-12 shadow-card">
+        <div className="bg-gradient-primary/10 backdrop-blur-lg rounded-3xl p-8 md:p-12 shadow-card">
           <div className="text-center mb-10">
             <div className="text-6xl mb-4">🌈</div>
-            <h1 className="text-4xl md:text-5xl font-bold text-primary-foreground mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
               Regras da Comunidade
             </h1>
-            <p className="text-xl text-primary-foreground/80">
+            <p className="text-xl text-muted-foreground">
               Juntos construímos um espaço inclusivo e respeitoso
             </p>
           </div>
@@ -185,17 +185,17 @@ export default function CandidateCommunityRules() {
             {rules.map((rule, index) => (
               <div
                 key={index}
-                className="bg-card/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-card/20 transition-smooth border border-border"
+                className="bg-card border border-border rounded-2xl p-6 hover:shadow-lg transition-smooth"
               >
                 <div className="flex items-start gap-4">
                   <div className="text-success flex-shrink-0">
                     {rule.icon}
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-primary-foreground mb-2">
+                    <h3 className="text-xl font-semibold text-foreground mb-2">
                       {rule.title}
                     </h3>
-                    <p className="text-primary-foreground/80 leading-relaxed">
+                    <p className="text-muted-foreground leading-relaxed">
                       {rule.description}
                     </p>
                   </div>
@@ -204,11 +204,11 @@ export default function CandidateCommunityRules() {
             ))}
           </div>
 
-          <div className="bg-card/10 backdrop-blur-sm rounded-2xl p-6 mb-8 border border-border">
-            <h3 className="text-xl font-semibold text-primary-foreground mb-3">
+          <div className="bg-card border border-border rounded-2xl p-6 mb-8">
+            <h3 className="text-xl font-semibold text-foreground mb-3">
               ⚠️ Consequências de Violações
             </h3>
-            <ul className="text-primary-foreground/80 space-y-2 list-disc list-inside">
+            <ul className="text-muted-foreground space-y-2 list-disc list-inside">
               <li>Primeira violação: Aviso formal</li>
               <li>Segunda violação: Suspensão temporária da conta</li>
               <li>Violações graves ou repetidas: Banimento permanente</li>
@@ -216,10 +216,10 @@ export default function CandidateCommunityRules() {
           </div>
 
           <div className="bg-success/20 backdrop-blur-sm rounded-2xl p-6 border border-success/30">
-            <h3 className="text-xl font-semibold text-primary-foreground mb-3">
+            <h3 className="text-xl font-semibold text-foreground mb-3">
               💡 Dica para Candidatos
             </h3>
-            <p className="text-primary-foreground/90">
+            <p className="text-foreground/90">
               Mantenha seu perfil atualizado, seja proativo nas candidaturas e sempre 
               mantenha uma comunicação profissional. Sua reputação na plataforma é valiosa!
             </p>
