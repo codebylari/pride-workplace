@@ -107,7 +107,8 @@ export function ChatBot() {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-8 right-8 w-20 h-20 bg-gradient-to-br from-pink-300 to-pink-400 rounded-full flex items-center justify-center shadow-xl hover:scale-110 transition-transform z-50"
+          className="fixed bottom-8 right-8 w-20 h-20 bg-gradient-to-br from-pink-500 to-pink-600 rounded-full flex items-center justify-center shadow-xl hover:scale-110 transition-transform z-50"
+          style={{ boxShadow: '0 0 30px rgba(236, 72, 153, 0.6)' }}
         >
           <Bot size={40} className="text-white" />
         </button>
@@ -119,7 +120,7 @@ export function ChatBot() {
           {/* Cabeçalho */}
           <div style={{ background: 'linear-gradient(to right, hsl(315, 26%, 40%), hsl(320, 30%, 50%))' }} className="rounded-t-3xl p-6 flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-pink-300 rounded-full flex items-center justify-center">
+              <div className="w-16 h-16 bg-gradient-to-br from-pink-500 to-pink-600 rounded-full flex items-center justify-center" style={{ boxShadow: '0 0 20px rgba(236, 72, 153, 0.5)' }}>
                 <Bot size={32} className="text-white" />
               </div>
               <div className="text-white">
@@ -153,9 +154,10 @@ export function ChatBot() {
                 <div
                   className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
                     message.role === "assistant"
-                      ? "bg-pink-300"
+                      ? "bg-gradient-to-br from-pink-500 to-pink-600"
                       : "bg-blue-400"
                   }`}
+                  style={message.role === "assistant" ? { boxShadow: '0 0 15px rgba(236, 72, 153, 0.4)' } : {}}
                 >
                   {message.role === "assistant" ? (
                     <Bot size={20} className="text-white" />
@@ -178,7 +180,7 @@ export function ChatBot() {
             ))}
             {isLoading && (
               <div className="flex gap-3">
-                <div className="w-10 h-10 bg-pink-300 rounded-full flex items-center justify-center">
+                <div className="w-10 h-10 bg-gradient-to-br from-pink-500 to-pink-600 rounded-full flex items-center justify-center" style={{ boxShadow: '0 0 15px rgba(236, 72, 153, 0.4)' }}>
                   <Bot size={20} className="text-white" />
                 </div>
                 <div className="bg-white p-4 rounded-2xl">
