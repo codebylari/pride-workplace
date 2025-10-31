@@ -1624,7 +1624,7 @@ export default function Register() {
             <Button
               key={option}
               onClick={() => toggleValue(option)}
-              className={`py-6 rounded-2xl text-base transition-all ${
+              className={`py-6 rounded-full text-base transition-all ${
                 selectedValues.includes(option)
                   ? "bg-success hover:bg-success/90 text-success-foreground scale-105"
                   : "bg-white/20 hover:bg-white/30 text-white"
