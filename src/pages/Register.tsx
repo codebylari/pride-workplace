@@ -66,6 +66,7 @@ export default function Register() {
   const [position, setPosition] = useState("");
   const [companyContactLastName, setCompanyContactLastName] = useState("");
   const [diversity, setDiversity] = useState<"sim" | "nao" | null>(null);
+  const [candidateValue, setCandidateValue] = useState("");
 
   // ------------------- CARREGAR ESTADOS -------------------
   useEffect(() => {
@@ -1580,7 +1581,57 @@ export default function Register() {
         
         {selectedGit && (
           <Button
-            onClick={() => setStep(6)}
+            onClick={() => setStep(5.5)}
+            className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-6 rounded-full text-lg font-semibold px-10 w-80"
+          >
+            PRÓXIMO
+          </Button>
+        )}
+      </div>
+    );
+  };
+
+  const Step5_5Company = () => {
+    const [selectedValue, setSelectedValue] = useState("");
+    
+    return (
+      <div className="flex flex-col items-center space-y-6 text-center text-white px-4">
+        <button
+          onClick={() => setStep(5)}
+          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+        >
+          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+          <span className="font-medium">Voltar</span>
+        </button>
+        <h2 className="text-2xl md:text-3xl font-bold max-w-2xl">O que vocês valorizam mais em um candidato a longo prazo?</h2>
+        
+        <div className="flex flex-col space-y-4 w-full max-w-2xl">
+          {[
+            "Potencial de crescimento e aprendizado",
+            "Especialização técnica em determinada área",
+            "Flexibilidade e adaptabilidade",
+            "Comprometimento e estabilidade",
+          ].map((option) => (
+            <Button
+              key={option}
+              onClick={() => setSelectedValue(option)}
+              className={`py-6 rounded-full text-base md:text-lg transition-all ${
+                selectedValue === option
+                  ? "bg-success hover:bg-success/90 text-success-foreground"
+                  : "bg-white/20 hover:bg-white/30 text-white"
+              }`}
+            >
+              {option}
+            </Button>
+          ))}
+        </div>
+        
+        {selectedValue && (
+          <Button
+            onClick={() => {
+              setCandidateValue(selectedValue);
+              setStep(6);
+            }}
             className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-6 rounded-full text-lg font-semibold px-10 w-80"
           >
             PRÓXIMO
@@ -1636,7 +1687,7 @@ export default function Register() {
       <form onSubmit={handleSubmit} className="space-y-6 max-w-4xl mx-auto px-4">
         <button
           type="button"
-          onClick={() => setStep(5)}
+          onClick={() => setStep(5.5)}
           className="flex items-center gap-2 text-white/80 hover:text-white transition-colors group mb-4"
         >
           <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
@@ -2136,6 +2187,7 @@ export default function Register() {
         {role === "company" && step === 3 && <Step3Company />}
         {role === "company" && step === 4 && <Step4Company />}
         {role === "company" && step === 5 && <Step5Company />}
+        {role === "company" && step === 5.5 && <Step5_5Company />}
         {role === "company" && step === 6 && Step6Company}
         {role === "company" && step === 7 && <Step7Company />}
         {role === "company" && step === 8 && <Step8Company />}
