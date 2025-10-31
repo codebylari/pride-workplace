@@ -116,7 +116,7 @@ export function ChatBot() {
 
       {/* Janela do Chat */}
       {isOpen && (
-        <div className="fixed bottom-8 right-8 w-[500px] h-[600px] bg-white rounded-3xl shadow-2xl z-50 flex flex-col animate-fade-in">
+        <div className="fixed bottom-8 right-8 w-[90vw] max-w-[450px] h-[80vh] max-h-[550px] bg-white rounded-3xl shadow-2xl z-50 flex flex-col animate-fade-in">
           {/* Cabeçalho */}
           <div style={{ background: 'linear-gradient(to right, hsl(315, 26%, 40%), hsl(320, 30%, 50%))' }} className="rounded-t-3xl p-6 flex items-center justify-between">
             <div className="flex items-center gap-4">

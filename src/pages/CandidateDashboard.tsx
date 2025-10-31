@@ -7,82 +7,7 @@ import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
 import { useTheme } from "@/contexts/ThemeContext";
-
-// Mock data - será substituído por dados reais do banco
-const mockJobs = [
-  {
-    id: 1,
-    company: "Mercado Livre",
-    title: "Vaga Temporária - Analista de TI / Suporte Técnico",
-    type: "Freelancer · Remoto · Part-time",
-    applicants: "Fila à contratar",
-    remote: true,
-  },
-  {
-    id: 2,
-    company: "Mercado Livre",
-    title: "Analista de TI / Suporte Técnico",
-    type: "Freelancer · Remoto · Part-time",
-    applicants: "Fila à contratar",
-    remote: true,
-  },
-  {
-    id: 3,
-    company: "Mercado Livre",
-    title: "Vaga Temporária - Analista de TI / Suporte Técnico",
-    type: "Freelancer · Remoto · Part-time",
-    applicants: "Fila à contratar",
-    remote: true,
-  },
-  {
-    id: 4,
-    company: "Mercado Livre",
-    title: "Vaga Temporária - Analista de TI / Suporte Técnico",
-    type: "Freelancer · Remoto · Part-time",
-    applicants: "Fila à contratar",
-    remote: true,
-  },
-  {
-    id: 5,
-    company: "Mercado Livre",
-    title: "Vaga Temporária - Analista de TI / Suporte Técnico",
-    type: "Freelancer · Remoto · Part-time",
-    applicants: "Fila à contratar",
-    remote: true,
-  },
-  {
-    id: 6,
-    company: "Mercado Livre",
-    title: "Vaga Temporária - Analista de TI / Suporte Técnico",
-    type: "Freelancer · Remoto · Part-time",
-    applicants: "Fila à contratar",
-    remote: true,
-  },
-  {
-    id: 7,
-    company: "Mercado Livre",
-    title: "Vaga Temporária - Analista de TI / Suporte Técnico",
-    type: "Freelancer · Remoto · Part-time",
-    applicants: "Fila à contratar",
-    remote: true,
-  },
-  {
-    id: 8,
-    company: "Mercado Livre",
-    title: "Vaga Temporária - Analista de TI / Suporte Técnico",
-    type: "Freelancer · Remoto · Part-time",
-    applicants: "Fila à contratar",
-    remote: true,
-  },
-  {
-    id: 9,
-    company: "Mercado Livre",
-    title: "Vaga Temporária - Analista de TI / Suporte Técnico",
-    type: "Freelancer · Remoto · Part-time",
-    applicants: "Fila à contratar",
-    remote: true,
-  },
-];
+import { supabase } from "@/integrations/supabase/client";
 
 export default function CandidateDashboard() {
   const navigate = useNavigate();
@@ -91,16 +16,51 @@ export default function CandidateDashboard() {
   const [showSidebar, setShowSidebar] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [jobs, setJobs] = useState<any[]>([]);
+  const [userGender, setUserGender] = useState<string>("");
   const jobsPerPage = 9;
 
-  // Get user name from metadata
   const userName = user?.user_metadata?.full_name || "Usuário";
 
-  // Calculate pagination
+  // Fetch jobs from database
+  useEffect(() => {
+    const fetchJobs = async () => {
+      const { data } = await supabase
+        .from("jobs")
+        .select(`
+          *,
+          company_profiles!jobs_company_id_fkey(fantasy_name, logo_url)
+        `)
+        .order("created_at", { ascending: false });
+      
+      if (data) {
+        setJobs(data);
+      }
+    };
+    fetchJobs();
+  }, []);
+
+  // Fetch user gender
+  useEffect(() => {
+    const fetchGender = async () => {
+      if (!user?.id) return;
+      const { data } = await supabase
+        .from("profiles")
+        .select("gender")
+        .eq("id", user.id)
+        .maybeSingle();
+      
+      setUserGender(data?.gender || "");
+    };
+    fetchGender();
+  }, [user?.id]);
+
   const indexOfLastJob = currentPage * jobsPerPage;
   const indexOfFirstJob = indexOfLastJob - jobsPerPage;
-  const currentJobs = mockJobs.slice(indexOfFirstJob, indexOfLastJob);
-  const totalPages = Math.ceil(mockJobs.length / jobsPerPage);
+  const currentJobs = jobs.slice(indexOfFirstJob, indexOfLastJob);
+  const totalPages = Math.ceil(jobs.length / jobsPerPage);
+
+  const genderText = userGender === "masculino" ? "candidato" : userGender === "feminino" ? "candidata" : "candidato(a)";
 
   const handleLogout = async () => {
     await signOut();
@@ -138,7 +98,7 @@ export default function CandidateDashboard() {
               </div>
               <div className="min-w-0">
                 <h2 className="text-lg sm:text-xl font-semibold truncate">{userName}</h2>
-                <p className="text-xs sm:text-sm text-white/80">candidato (a)</p>
+                <p className="text-xs sm:text-sm text-white/80">{genderText}</p>
               </div>
             </div>
 
@@ -249,50 +209,64 @@ export default function CandidateDashboard() {
       <main className="container mx-auto px-3 sm:px-4 py-6 sm:py-8 max-w-6xl">
         {/* Job Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
-          {currentJobs.map((job) => (
-            <div
-              key={job.id}
-              className={`rounded-xl shadow-md hover:shadow-lg transition p-4 sm:p-6 space-y-3 sm:space-y-4 ${darkMode ? "bg-gray-700" : "bg-white"}`}
-            >
-              {/* Company Logo */}
-              <div className="flex items-start justify-between">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-yellow-400 rounded-full flex items-center justify-center">
-                  <span className="text-xs font-bold">ML</span>
-                </div>
-                {job.remote && (
-                  <div className="flex items-center gap-1 text-orange-500 text-xs sm:text-sm">
-                    <MapPin size={14} className="sm:w-4 sm:h-4" />
-                    <span className="hidden sm:inline">Remoto</span>
-                    <span className="sm:hidden">R</span>
-                  </div>
-                )}
-              </div>
-
-              {/* Company Name */}
-              <h3 className={`text-sm sm:text-base font-semibold ${darkMode ? "text-white" : "text-gray-800"}`}>{job.company}</h3>
-
-              {/* Job Title */}
-              <p className={`text-xs sm:text-sm font-medium ${darkMode ? "text-gray-300" : "text-gray-700"}`}>{job.title}</p>
-
-              {/* Job Type */}
-              <p className={`text-xs ${darkMode ? "text-gray-400" : "text-gray-500"}`}>{job.type}</p>
-
-              {/* Applicants */}
-              <div className={`flex items-center gap-2 text-xs sm:text-sm ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
-                <Users size={14} className="sm:w-4 sm:h-4" />
-                <span>{job.applicants}</span>
-              </div>
-
-              {/* View Details Button */}
-              <Button
-                onClick={() => navigate(`/job/${job.id}`)}
-                variant="link"
-                className="text-blue-600 hover:text-blue-700 p-0 h-auto font-normal text-xs sm:text-sm"
-              >
-                → Ver detalhes
-              </Button>
+          {currentJobs.length === 0 ? (
+            <div className="col-span-full text-center py-12">
+              <p className={`text-lg ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+                Nenhuma vaga disponível no momento.
+              </p>
             </div>
-          ))}
+          ) : (
+            currentJobs.map((job) => (
+              <div
+                key={job.id}
+                className={`rounded-xl shadow-md hover:shadow-lg transition p-4 sm:p-6 space-y-3 sm:space-y-4 ${darkMode ? "bg-gray-700" : "bg-white"}`}
+              >
+                {/* Company Logo */}
+                <div className="flex items-start justify-between">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center overflow-hidden">
+                    {job.company_profiles?.logo_url ? (
+                      <img src={job.company_profiles.logo_url} alt="Logo" className="w-full h-full object-cover" />
+                    ) : (
+                      <span className="text-xs font-bold text-white">
+                        {job.company_profiles?.fantasy_name?.charAt(0) || "E"}
+                      </span>
+                    )}
+                  </div>
+                  {job.location?.toLowerCase().includes("remoto") && (
+                    <div className="flex items-center gap-1 text-orange-500 text-xs sm:text-sm">
+                      <MapPin size={14} className="sm:w-4 sm:h-4" />
+                      <span className="hidden sm:inline">Remoto</span>
+                      <span className="sm:hidden">R</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Company Name */}
+                <h3 className={`text-sm sm:text-base font-semibold ${darkMode ? "text-white" : "text-gray-800"}`}>
+                  {job.company_profiles?.fantasy_name || "Empresa"}
+                </h3>
+
+                {/* Job Title */}
+                <p className={`text-xs sm:text-sm font-medium ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+                  {job.title}
+                </p>
+
+                {/* Job Type and Location */}
+                <p className={`text-xs ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+                  {job.job_type} · {job.location}
+                </p>
+
+                {/* View Details Button */}
+                <Button
+                  onClick={() => navigate(`/job/${job.id}`)}
+                  variant="link"
+                  className="text-blue-600 hover:text-blue-700 p-0 h-auto font-normal text-xs sm:text-sm"
+                >
+                  → Ver detalhes
+                </Button>
+              </div>
+            ))
+          )}
         </div>
 
         {/* Pagination */}

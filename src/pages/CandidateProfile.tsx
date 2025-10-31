@@ -184,7 +184,7 @@ export default function CandidateProfile() {
               </div>
               <div>
                 <h2 className="text-xl font-semibold">{fullName}</h2>
-                <p className="text-sm text-white/80">candidato (a)</p>
+                <p className="text-sm text-white/80">{userGender === "masculino" ? "candidato" : userGender === "feminino" ? "candidata" : "candidato(a)"}</p>
               </div>
             </div>
 

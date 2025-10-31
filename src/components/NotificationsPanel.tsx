@@ -26,8 +26,8 @@ export function NotificationsPanel() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <button className="relative p-2 hover:bg-accent rounded-full transition-colors">
-          <Bell className="h-5 w-5 text-foreground" />
+        <button className="relative p-2 hover:bg-white/10 rounded-full transition-colors">
+          <Bell className="h-5 w-5 text-white" />
           {unreadCount > 0 && (
             <Badge 
               variant="destructive" 
