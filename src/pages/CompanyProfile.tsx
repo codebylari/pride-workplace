@@ -285,10 +285,10 @@ export default function CompanyProfile() {
           {/* Profile Card */}
           <div className={`rounded-3xl shadow-lg p-4 sm:p-8 ${darkMode ? "bg-gray-700" : "bg-white"}`}>
             {/* Logo Section */}
-            <div className="flex justify-center mb-6">
+            <div className={`flex justify-center ${completionPercentage < 100 ? 'mb-16' : 'mb-6'}`}>
               <div className="relative">
-                {completionPercentage < 100 && (
-                  <div className="absolute -top-8 left-1/2 -translate-x-1/2 z-10">
+                {completionPercentage < 100 ? (
+                  <>
                     <CircularProgress percentage={completionPercentage}>
                       {logoUrl ? (
                         <img
@@ -305,10 +305,14 @@ export default function CompanyProfile() {
                         </div>
                       )}
                     </CircularProgress>
-                  </div>
-                )}
-                
-                {completionPercentage === 100 && (
+                    <button 
+                      onClick={() => navigate("/edit-company-profile")}
+                      className={`absolute -bottom-2 -right-2 p-2 rounded-full shadow-md transition ${darkMode ? "bg-gray-600 hover:bg-gray-500" : "bg-white hover:bg-gray-100"} z-20`}
+                    >
+                      <Edit size={20} className={darkMode ? "text-gray-300" : "text-gray-600"} />
+                    </button>
+                  </>
+                ) : (
                   <>
                     {logoUrl ? (
                       <img
@@ -324,23 +328,29 @@ export default function CompanyProfile() {
                         </span>
                       </div>
                     )}
+                    <button 
+                      onClick={() => navigate("/edit-company-profile")}
+                      className={`absolute bottom-0 right-0 p-2 rounded-full shadow-md transition ${darkMode ? "bg-gray-600 hover:bg-gray-500" : "bg-white hover:bg-gray-100"}`}
+                    >
+                      <Edit size={20} className={darkMode ? "text-gray-300" : "text-gray-600"} />
+                    </button>
                   </>
                 )}
-                
-                <button 
-                  onClick={() => navigate("/edit-company-profile")}
-                  className={`absolute bottom-0 right-0 p-2 rounded-full shadow-md transition ${darkMode ? "bg-gray-600 hover:bg-gray-500" : "bg-white hover:bg-gray-100"}`}
-                >
-                  <Edit size={20} className={darkMode ? "text-gray-300" : "text-gray-600"} />
-                </button>
               </div>
             </div>
             
-            {/* Profile Completion Text */}
             {completionPercentage < 100 && (
-              <p className={`text-center mb-4 ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
-                Perfil {completionPercentage}% completo
-              </p>
+              <div className="text-center mb-6">
+                <p className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+                  Perfil {completionPercentage}% completo
+                </p>
+                <button
+                  onClick={() => navigate("/edit-company-profile")}
+                  className="mt-2 text-pink-500 hover:text-pink-600 text-sm font-medium"
+                >
+                  Completar perfil
+                </button>
+              </div>
             )}
 
             {/* Rating */}
