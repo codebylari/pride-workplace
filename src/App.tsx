@@ -63,23 +63,23 @@ import Settings from "./pages/Settings";
 import CompanySettings from "./pages/CompanySettings";
 import CandidateSettings from "./pages/CandidateSettings";
 
-import Account from "./pages/Account";
+import CandidateAccount from "./pages/CandidateAccount";
 // Página de Conta - Candidato
 
 import CompanyAccount from "./pages/CompanyAccount";
 // Página de Conta - Empresa
 
-import ChangePassword from "./pages/ChangePassword";
-// Página de Alterar Senha
+import CandidateChangePassword from "./pages/CandidateChangePassword";
+// Página de Alterar Senha - Candidato
 
-import ChangeEmail from "./pages/ChangeEmail";
-// Página de Alterar Email
+import CandidateChangeEmail from "./pages/CandidateChangeEmail";
+// Página de Alterar Email - Candidato
 
-import DeactivateAccount from "./pages/DeactivateAccount";
-// Página de Desativar Conta
+import CandidateDeactivateAccount from "./pages/CandidateDeactivateAccount";
+// Página de Desativar Conta - Candidato
 
-import DeleteAccount from "./pages/DeleteAccount";
-// Página de Deletar Conta
+import CandidateDeleteAccount from "./pages/CandidateDeleteAccount";
+// Página de Deletar Conta - Candidato
 
 import EditCandidateProfile from "./pages/EditCandidateProfile";
 // Página de Editar Perfil do Candidato
@@ -87,7 +87,7 @@ import EditCandidateProfile from "./pages/EditCandidateProfile";
 import EditCompanyProfile from "./pages/EditCompanyProfile";
 // Página de Editar Perfil da Empresa
 
-import CreateJob from "./pages/CreateJob";
+import CompanyCreateJob from "./pages/CompanyCreateJob";
 // Página de Cadastrar Vagas
 
 import CompanyJobs from "./pages/CompanyJobs";
@@ -96,16 +96,16 @@ import CompanyJobs from "./pages/CompanyJobs";
 import CompanyJobDetails from "./pages/CompanyJobDetails";
 // Página de Detalhes da Vaga (Empresa)
 
-import JobCandidates from "./pages/JobCandidates";
+import CompanyJobCandidates from "./pages/CompanyJobCandidates";
 // Página de Candidatos da Vaga
 
-import JobDetails from "./pages/JobDetails";
-// Página de Detalhes da Vaga
+import CandidateJobDetails from "./pages/CandidateJobDetails";
+// Página de Detalhes da Vaga - Candidato
 
-import JobApplication from "./pages/JobApplication";
+import CandidateJobApplication from "./pages/CandidateJobApplication";
 // Página de Candidatura à Vaga
 
-import MyApplications from "./pages/MyApplications";
+import CandidateMyApplications from "./pages/CandidateMyApplications";
 // Página de Minhas Candidaturas
 
 import CompanyPublicProfile from "./pages/CompanyPublicProfile";
@@ -196,20 +196,20 @@ const App = () => (
             <Route path="/candidate-settings" element={<CandidateSettings />} />
             {/* Página de Configurações do Candidato */}
             
-            <Route path="/account" element={<Account />} />
+            <Route path="/account" element={<CandidateAccount />} />
             <Route path="/company-account" element={<CompanyAccount />} />
             
-            <Route path="/change-password" element={<ChangePassword />} />
-            <Route path="/company-change-password" element={<ChangePassword />} />
+            <Route path="/change-password" element={<CandidateChangePassword />} />
+            <Route path="/company-change-password" element={<CandidateChangePassword />} />
             
-            <Route path="/change-email" element={<ChangeEmail />} />
-            <Route path="/company-change-email" element={<ChangeEmail />} />
+            <Route path="/change-email" element={<CandidateChangeEmail />} />
+            <Route path="/company-change-email" element={<CandidateChangeEmail />} />
             
-            <Route path="/deactivate-account" element={<DeactivateAccount />} />
-            <Route path="/company-deactivate-account" element={<DeactivateAccount />} />
+            <Route path="/deactivate-account" element={<CandidateDeactivateAccount />} />
+            <Route path="/company-deactivate-account" element={<CandidateDeactivateAccount />} />
             
-            <Route path="/delete-account" element={<DeleteAccount />} />
-            <Route path="/company-delete-account" element={<DeleteAccount />} />
+            <Route path="/delete-account" element={<CandidateDeleteAccount />} />
+            <Route path="/company-delete-account" element={<CandidateDeleteAccount />} />
             
             <Route path="/edit-candidate-profile" element={<EditCandidateProfile />} />
             {/* Página de Editar Perfil do Candidato */}
@@ -217,7 +217,7 @@ const App = () => (
             <Route path="/edit-company-profile" element={<EditCompanyProfile />} />
             {/* Página de Editar Perfil da Empresa */}
             
-            <Route path="/create-job" element={<CreateJob />} />
+            <Route path="/create-job" element={<CompanyCreateJob />} />
             {/* Página de Cadastrar Vagas */}
             
             <Route path="/company-jobs" element={<CompanyJobs />} />
@@ -226,16 +226,16 @@ const App = () => (
             <Route path="/company-job/:jobId" element={<CompanyJobDetails />} />
             {/* Página de Detalhes da Vaga (Empresa) */}
             
-            <Route path="/job-candidates/:jobId" element={<JobCandidates />} />
+            <Route path="/job-candidates/:jobId" element={<CompanyJobCandidates />} />
             {/* Página de Candidatos da Vaga */}
             
-            <Route path="/job/:id" element={<JobDetails />} />
+            <Route path="/job/:id" element={<CandidateJobDetails />} />
             {/* Página de Detalhes da Vaga */}
             
-            <Route path="/job/:id/apply" element={<JobApplication />} />
+            <Route path="/job/:id/apply" element={<CandidateJobApplication />} />
             {/* Página de Candidatura à Vaga */}
             
-            <Route path="/my-applications" element={<MyApplications />} />
+            <Route path="/my-applications" element={<CandidateMyApplications />} />
             {/* Página de Minhas Candidaturas */}
             
             <Route path="/company/:id/profile" element={<CompanyPublicProfile />} />
