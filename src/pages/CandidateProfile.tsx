@@ -301,9 +301,9 @@ export default function CandidateProfile() {
                       )}
                       <button 
                         onClick={() => navigate("/edit-candidate-profile")}
-                        className="absolute bottom-0 right-0 w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white hover:bg-blue-600 transition shadow-lg"
+                        className={`absolute bottom-0 right-0 p-2 rounded-full shadow-md transition ${darkMode ? "bg-gray-600 hover:bg-gray-500" : "bg-white hover:bg-gray-100"}`}
                       >
-                        <Edit2 size={18} />
+                        <Edit2 size={20} className={darkMode ? "text-gray-300" : "text-gray-600"} />
                       </button>
                     </div>
                   </CircularProgress>
@@ -323,9 +323,9 @@ export default function CandidateProfile() {
                     )}
                     <button 
                       onClick={() => navigate("/edit-candidate-profile")}
-                      className="absolute bottom-0 right-0 w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white hover:bg-blue-600 transition shadow-lg"
+                      className={`absolute bottom-0 right-0 p-2 rounded-full shadow-md transition ${darkMode ? "bg-gray-600 hover:bg-gray-500" : "bg-white hover:bg-gray-100"}`}
                     >
-                      <Edit2 size={18} />
+                      <Edit2 size={20} className={darkMode ? "text-gray-300" : "text-gray-600"} />
                     </button>
                   </div>
                 )}
