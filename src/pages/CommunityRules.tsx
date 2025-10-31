@@ -39,11 +39,11 @@ export default function CommunityRules() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-primary flex flex-col items-center justify-center p-4">
-      <div className="w-full max-w-4xl bg-card/10 backdrop-blur-lg rounded-3xl p-8 md:p-12 shadow-card">
+    <div className="min-h-screen bg-white flex flex-col items-center justify-center p-4">
+      <div className="w-full max-w-4xl bg-white rounded-3xl p-8 md:p-12 shadow-lg">
         <button
           onClick={() => navigate("/")}
-          className="mb-6 flex items-center gap-2 text-primary-foreground/80 hover:text-primary-foreground transition-smooth group"
+          className="mb-6 flex items-center gap-2 text-gray-700 hover:text-gray-900 transition-smooth group"
         >
           <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
           <span className="font-medium">Voltar ao Início</span>
@@ -51,10 +51,10 @@ export default function CommunityRules() {
 
         <div className="text-center mb-10">
           <div className="text-6xl mb-4">🌈</div>
-          <h1 className="text-4xl md:text-5xl font-bold text-primary-foreground mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
             Regras da Comunidade
           </h1>
-          <p className="text-xl text-primary-foreground/80">
+          <p className="text-xl text-gray-700">
             Juntos construímos um espaço inclusivo e respeitoso
           </p>
         </div>
@@ -63,17 +63,17 @@ export default function CommunityRules() {
           {rules.map((rule, index) => (
             <div
               key={index}
-              className="bg-card/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-card/20 transition-smooth border border-primary-foreground/10"
+              className="bg-gray-50 rounded-2xl p-6 hover:bg-gray-100 transition-all border border-gray-200"
             >
               <div className="flex items-start gap-4">
-                <div className="text-success flex-shrink-0">
+                <div className="text-purple-600 flex-shrink-0">
                   {rule.icon}
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-primary-foreground mb-2">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
                     {rule.title}
                   </h3>
-                  <p className="text-primary-foreground/80 leading-relaxed">
+                  <p className="text-gray-700 leading-relaxed">
                     {rule.description}
                   </p>
                 </div>
@@ -82,11 +82,11 @@ export default function CommunityRules() {
           ))}
         </div>
 
-        <div className="bg-card/10 backdrop-blur-sm rounded-2xl p-6 mb-8 border border-primary-foreground/10">
-          <h3 className="text-xl font-semibold text-primary-foreground mb-3">
+        <div className="bg-orange-50 rounded-2xl p-6 mb-8 border border-orange-200">
+          <h3 className="text-xl font-semibold text-gray-900 mb-3">
             ⚠️ Consequências de Violações
           </h3>
-          <ul className="text-primary-foreground/80 space-y-2 list-disc list-inside">
+          <ul className="text-gray-700 space-y-2 list-disc list-inside">
             <li>Primeira violação: Aviso formal</li>
             <li>Segunda violação: Suspensão temporária da conta</li>
             <li>Violações graves ou repetidas: Banimento permanente</li>
