@@ -194,10 +194,10 @@ export default function Register() {
       <div className="flex flex-col md:flex-row gap-4 md:gap-6 w-full md:w-auto">
         <div
           onClick={() => setRole("candidate")}
-          className={`cursor-pointer p-6 rounded-2xl text-center w-full md:w-56 transition ${
+          className={`cursor-pointer p-6 rounded-2xl text-center w-full md:w-56 transition-all ${
             role === "candidate"
-              ? "bg-primary/30 text-white border-2 border-primary"
-              : "bg-white/20 text-white"
+              ? "bg-success text-success-foreground border-2 border-success scale-105"
+              : "bg-white/20 text-white hover:bg-white/30"
           }`}
         >
           <p className="text-4xl md:text-5xl mb-2">👩‍💻</p>
@@ -206,10 +206,10 @@ export default function Register() {
 
         <div
           onClick={() => setRole("company")}
-          className={`cursor-pointer p-6 rounded-2xl text-center w-full md:w-56 transition ${
+          className={`cursor-pointer p-6 rounded-2xl text-center w-full md:w-56 transition-all ${
             role === "company"
-              ? "bg-primary/30 text-white border-2 border-primary"
-              : "bg-white/20 text-white"
+              ? "bg-success text-success-foreground border-2 border-success scale-105"
+              : "bg-white/20 text-white hover:bg-white/30"
           }`}
         >
           <p className="text-4xl md:text-5xl mb-2">🏢</p>
