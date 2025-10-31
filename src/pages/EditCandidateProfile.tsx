@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useToast } from "@/hooks/use-toast";
 import { PhotoEditor } from "@/components/PhotoEditor";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function EditCandidateProfile() {
   const navigate = useNavigate();
@@ -27,6 +28,8 @@ export default function EditCandidateProfile() {
   const [myJourney, setMyJourney] = useState("");
   const [profilePhoto, setProfilePhoto] = useState<File | null>(null);
   const [resume, setResume] = useState<File | null>(null);
+  const [genderEdit, setGenderEdit] = useState<"feminino" | "masculino" | "outros" | "">("");
+  const [customGenderEdit, setCustomGenderEdit] = useState("");
 
   const userName = user?.user_metadata?.full_name?.split(" ")[0] || "Usuário";
   const fullName = user?.user_metadata?.full_name || "Usuário";
@@ -83,8 +86,12 @@ export default function EditCandidateProfile() {
     }
   };
 
-  const handleSaveChanges = () => {
-    // Verifica se alguma alteração foi feita
+  const handleSaveChanges = async () => {
+    const hasGenderChange =
+      genderEdit && (genderEdit as string) !== ""
+        ? ((genderEdit as string) === "outros" ? customGenderEdit.trim() !== "" : true)
+        : false;
+
     const hasChanges = 
       displayName.trim() !== "" || 
       aboutMe.trim() !== "" || 
@@ -92,7 +99,8 @@ export default function EditCandidateProfile() {
       education.trim() !== "" || 
       myJourney.trim() !== "" || 
       profilePhoto !== null || 
-      resume !== null;
+      resume !== null ||
+      hasGenderChange;
 
     if (!hasChanges) {
       toast({
@@ -103,11 +111,43 @@ export default function EditCandidateProfile() {
       return;
     }
 
-    toast({
-      title: "Alterações salvas!",
-      description: "Seu perfil foi atualizado com sucesso.",
-    });
-    navigate("/candidate-profile");
+    try {
+      if (profilePhoto) {
+        if (!user?.id) throw new Error("Usuário não autenticado.");
+
+        const ext = profilePhoto.name.split(".").pop() || "jpg";
+        const path = `${user.id}/profile.${ext}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from("profile-photos")
+          .upload(path, profilePhoto, { upsert: true, contentType: profilePhoto.type });
+
+        if (uploadError) throw uploadError;
+
+        const { data: urlData } = supabase.storage.from("profile-photos").getPublicUrl(path);
+        const publicUrl = urlData.publicUrl;
+
+        const { error: updateError } = await supabase
+          .from("profiles")
+          .update({ photo_url: publicUrl })
+          .eq("id", user.id);
+
+        if (updateError) throw updateError;
+      }
+
+      toast({
+        title: "Alterações salvas!",
+        description: "Seu perfil foi atualizado com sucesso.",
+      });
+      navigate("/candidate-profile");
+    } catch (err: any) {
+      console.error("Erro ao salvar alterações:", err);
+      toast({
+        title: "Erro ao salvar",
+        description: err.message || "Não foi possível salvar as alterações.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -285,6 +325,48 @@ export default function EditCandidateProfile() {
                   className={`w-full p-3 rounded-lg border ${darkMode ? "bg-gray-600 text-white border-gray-500" : "bg-gray-100 text-gray-800 border-gray-300"}`}
                   placeholder="Conte um pouco sobre você"
                 />
+              </div>
+
+              <div>
+                <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-800"}`}>
+                  Gênero
+                </label>
+                <div className="space-y-3">
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <Button
+                      type="button"
+                      onClick={() => setGenderEdit("feminino")}
+                      className={`flex-1 py-3 rounded-full ${genderEdit === "feminino" ? "bg-pink-300 text-white" : darkMode ? "bg-gray-600 text-white" : "bg-gray-100 text-gray-800"}`}
+                    >
+                      Feminino
+                    </Button>
+                    <Button
+                      type="button"
+                      onClick={() => setGenderEdit("masculino")}
+                      className={`flex-1 py-3 rounded-full ${genderEdit === "masculino" ? "bg-pink-300 text-white" : darkMode ? "bg-gray-600 text-white" : "bg-gray-100 text-gray-800"}`}
+                    >
+                      Masculino
+                    </Button>
+                    <Button
+                      type="button"
+                      onClick={() => setGenderEdit("outros")}
+                      className={`flex-1 py-3 rounded-full ${genderEdit === "outros" ? "bg-pink-300 text-white" : darkMode ? "bg-gray-600 text-white" : "bg-gray-100 text-gray-800"}`}
+                    >
+                      Outros
+                    </Button>
+                  </div>
+                  {genderEdit === "outros" && (
+                    <input
+                      type="text"
+                      value={customGenderEdit}
+                      onChange={(e) => setCustomGenderEdit(e.target.value)}
+                      placeholder="Especifique seu gênero"
+                      className={`w-full p-3 rounded-full border ${
+                        darkMode ? "bg-gray-600 text-white border-gray-500 placeholder:text-gray-300" : "bg-gray-100 text-gray-800 border-gray-300 placeholder:text-gray-500"
+                      }`}
+                    />
+                  )}
+                </div>
               </div>
             </div>
 

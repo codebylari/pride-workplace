@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Menu, Bell, MapPin, Upload, FileText } from "lucide-react";
+import { Menu, Bell, MapPin, Upload, FileText, Linkedin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -243,17 +243,22 @@ export default function JobApplication() {
             <label className={`block mb-3 font-semibold ${darkMode ? "text-white" : "text-gray-800"}`}>
               LinkedIn (opcional)
             </label>
-            <input
-              type="url"
-              value={linkedinUrl}
-              onChange={(e) => setLinkedinUrl(e.target.value)}
-              placeholder="https://www.linkedin.com/in/seu-perfil"
-              className={`w-full p-4 rounded-lg border ${
-                darkMode 
-                  ? "bg-gray-600 text-white border-gray-500 placeholder:text-gray-400" 
-                  : "bg-gray-50 text-gray-800 border-gray-300 placeholder:text-gray-500"
-              }`}
-            />
+            <div className="relative">
+              <span className={`${darkMode ? "text-gray-300" : "text-gray-500"} absolute left-3 top-1/2 -translate-y-1/2`} aria-hidden="true">
+                <Linkedin size={20} />
+              </span>
+              <input
+                type="url"
+                value={linkedinUrl}
+                onChange={(e) => setLinkedinUrl(e.target.value)}
+                placeholder="https://www.linkedin.com/in/seu-perfil"
+                className={`w-full p-4 pl-12 rounded-lg border ${
+                  darkMode 
+                    ? "bg-gray-600 text-white border-gray-500 placeholder:text-gray-400" 
+                    : "bg-gray-50 text-gray-800 border-gray-300 placeholder:text-gray-500"
+                }`}
+              />
+            </div>
           </div>
 
           {/* Contact Info */}

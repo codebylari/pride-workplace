@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Menu, Bell, Star, Edit2, Briefcase, User, Settings, Headset, Info, FileText, LogOut, ChevronDown, ChevronUp, ClipboardList } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
 import { useTheme } from "@/contexts/ThemeContext";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function CandidateProfile() {
   const navigate = useNavigate();
@@ -18,7 +19,20 @@ export default function CandidateProfile() {
   const userName = user?.user_metadata?.full_name?.split(" ")[0] || "Usuário";
   const fullName = user?.user_metadata?.full_name || "Usuário";
   const rating = 4.5;
+  const [photoUrl, setPhotoUrl] = useState<string | null>(null);
 
+  useEffect(() => {
+    const load = async () => {
+      if (!user?.id) return;
+      const { data } = await supabase
+        .from("profiles")
+        .select("photo_url")
+        .eq("id", user.id)
+        .single();
+      setPhotoUrl(data?.photo_url ?? null);
+    };
+    load();
+  }, [user?.id]);
   const handleLogout = async () => {
     await signOut();
     navigate("/auth");
@@ -151,9 +165,13 @@ Busco oportunidades como freelancer para ganhar experiência prática, contribui
             {/* Profile Section */}
             <div className="p-6 flex items-center gap-4 border-b border-white/20">
               <div className="w-20 h-20 rounded-full bg-gray-300 overflow-hidden border-4 border-white/30">
-                <div className="w-full h-full bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center text-2xl font-bold text-white">
-                  {userName.charAt(0).toUpperCase()}
-                </div>
+                {photoUrl ? (
+                  <img src={photoUrl} alt={`Foto de ${fullName}`} className="w-full h-full object-cover" loading="lazy" />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center text-2xl font-bold text-white">
+                    {userName.charAt(0).toUpperCase()}
+                  </div>
+                )}
               </div>
               <div>
                 <h2 className="text-xl font-semibold">{fullName}</h2>
@@ -266,9 +284,18 @@ Busco oportunidades como freelancer para ganhar experiência prática, contribui
             {/* Profile Photo */}
             <div className="relative -mt-16 mb-6 flex justify-center">
               <div className="relative">
-                <div className={`w-32 h-32 rounded-full bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center text-4xl font-bold text-white border-4 shadow-xl ${darkMode ? "border-gray-700" : "border-white"}`}>
-                  {userName.charAt(0).toUpperCase()}
-                </div>
+                {photoUrl ? (
+                  <img
+                    src={photoUrl}
+                    alt={`Foto de ${fullName}`}
+                    className={`w-32 h-32 rounded-full object-cover border-4 shadow-xl ${darkMode ? "border-gray-700" : "border-white"}`}
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className={`w-32 h-32 rounded-full bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center text-4xl font-bold text-white border-4 shadow-xl ${darkMode ? "border-gray-700" : "border-white"}`}>
+                    {userName.charAt(0).toUpperCase()}
+                  </div>
+                )}
                 <button 
                   onClick={() => navigate("/edit-candidate-profile")}
                   className="absolute bottom-0 right-0 w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white hover:bg-blue-600 transition shadow-lg"
