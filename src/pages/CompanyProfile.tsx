@@ -385,7 +385,7 @@ export default function CompanyProfile() {
                     </TooltipTrigger>
                     <TooltipContent className="max-w-xs">
                       <p className="text-sm">
-                        Você começa com nota máxima 5.0 e após conclusão de cada serviço o candidato ou empresa te dão uma nota.
+                        A avaliação inicial é de 5.0 estrelas. Após a conclusão de cada projeto, candidatos ou empresas avaliam seu desempenho, atualizando sua pontuação geral.
                       </p>
                     </TooltipContent>
                   </Tooltip>
