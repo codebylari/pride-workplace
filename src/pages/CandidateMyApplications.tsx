@@ -39,57 +39,64 @@ export default function MyApplications() {
 
 
   useEffect(() => {
-    if (user) {
+    if (user?.id) {
       fetchApplications();
+    } else {
+      setApplications([]);
+      setLoading(false);
     }
   }, [user]);
 
   const fetchApplications = async () => {
     try {
+      // Se não houver usuário, finalize o loading e limpe a lista
+      if (!user?.id) {
+        setApplications([]);
+        setLoading(false);
+        return;
+      }
       setLoading(true);
-      const { data, error } = await supabase
+      const { data: appsData, error } = await supabase
         .from("applications")
-        .select(`
-          *,
-          jobs!inner (
-            id,
-            title,
-            job_type,
-            location,
-            company_id
-          )
-        `)
+        .select("*")
         .eq("candidate_id", user?.id)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
 
-      // Buscar informações das empresas separadamente
-      if (data && data.length > 0) {
-        const companyIds = [...new Set(data.map(app => app.jobs?.company_id).filter(Boolean))];
-        
+      if (appsData && appsData.length > 0) {
+        // Buscar jobs das candidaturas
+        const jobIds = [...new Set(appsData.map((a: any) => a.job_id).filter(Boolean))];
+        const { data: jobsData } = await supabase
+          .from("jobs")
+          .select("id, title, job_type, location, company_id")
+          .in("id", jobIds);
+
+        // Buscar empresas
+        const companyIds = [...new Set((jobsData || []).map((j: any) => j.company_id).filter(Boolean))];
         const { data: companiesData } = await supabase
           .from("company_profiles")
           .select("user_id, fantasy_name, rating")
           .in("user_id", companyIds);
 
-        // Buscar ratings
-        const applicationIds = data.map(app => app.id);
+        // Buscar ratings do usuário para essas candidaturas
+        const applicationIds = appsData.map((a: any) => a.id);
         const { data: ratingsData } = await supabase
           .from("ratings")
           .select("id, rating, rater_id, application_id")
           .in("application_id", applicationIds)
           .eq("rater_id", user?.id);
 
-        // Combinar dados
-        const applicationsWithData = data.map(app => ({
-          ...app,
-          jobs: {
-            ...app.jobs,
-            company_profiles: companiesData?.find(c => c.user_id === app.jobs?.company_id)
-          },
-          ratings: ratingsData?.filter(r => r.application_id === app.id) || []
-        }));
+        // Combinar tudo
+        const applicationsWithData = appsData.map((app: any) => {
+          const job = (jobsData || []).find((j: any) => j.id === app.job_id);
+          const company = job ? (companiesData || []).find((c: any) => c.user_id === job.company_id) : undefined;
+          return {
+            ...app,
+            jobs: job ? { ...job, company_profiles: company } : undefined,
+            ratings: (ratingsData || []).filter((r: any) => r.application_id === app.id) || []
+          };
+        });
 
         setApplications(applicationsWithData);
       } else {
