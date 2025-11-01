@@ -272,10 +272,25 @@ export default function CompanyPublicProfile() {
 
             {/* Rating */}
             <div className="flex justify-center items-center gap-2 mb-4">
-              {[1, 2, 3, 4].map((star) => (
-                <Star key={star} size={24} className="fill-green-400 text-green-400" />
-              ))}
-              <Star size={24} className="fill-gray-300 text-gray-300" />
+              {[1, 2, 3, 4, 5].map((star) => {
+                const isFullStar = star <= Math.floor(companyData.rating);
+                const isHalfStar = star === Math.ceil(companyData.rating) && companyData.rating % 1 !== 0;
+                
+                if (isFullStar) {
+                  return <Star key={star} size={24} className="fill-yellow-400 text-yellow-400" />;
+                } else if (isHalfStar) {
+                  return (
+                    <div key={star} className="relative">
+                      <Star size={24} className="text-yellow-400" />
+                      <div className="absolute inset-0 overflow-hidden" style={{ width: '50%' }}>
+                        <Star size={24} className="fill-yellow-400 text-yellow-400" />
+                      </div>
+                    </div>
+                  );
+                } else {
+                  return <Star key={star} size={24} className="text-gray-300" />;
+                }
+              })}
               <span className={`ml-2 font-semibold ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
                 {companyData.rating}
               </span>
@@ -292,10 +307,10 @@ export default function CompanyPublicProfile() {
               <div>
                 <Button
                   onClick={() => toggleSection("about")}
-                  className="w-full bg-[#FFF8D6] hover:bg-[#FFF2A9] text-gray-800 py-6 rounded-full text-lg font-medium shadow-md flex items-center justify-between"
+                  className="w-full bg-[#FFF8D6] hover:bg-[#FFF2A9] text-gray-800 py-6 rounded-full text-lg font-medium shadow-md flex items-center justify-center gap-2"
                 >
                   <span>Conheça a Empresa</span>
-                  {expandedSection === "about" ? <ChevronUp size={24} /> : <ChevronDown size={24} />}
+                  {expandedSection === "about" ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                 </Button>
                 {expandedSection === "about" && (
                   <div className={`mt-3 p-6 rounded-2xl shadow-lg ${darkMode ? "bg-gray-600" : "bg-white"} border border-gray-200`}>
@@ -319,10 +334,10 @@ export default function CompanyPublicProfile() {
               <div>
                 <Button
                   onClick={() => toggleSection("seeking")}
-                  className="w-full bg-[#FFF8D6] hover:bg-[#FFF2A9] text-gray-800 py-6 rounded-full text-lg font-medium shadow-md flex items-center justify-between"
+                  className="w-full bg-[#FFF8D6] hover:bg-[#FFF2A9] text-gray-800 py-6 rounded-full text-lg font-medium shadow-md flex items-center justify-center gap-2"
                 >
                   <span>O que buscamos</span>
-                  {expandedSection === "seeking" ? <ChevronUp size={24} /> : <ChevronDown size={24} />}
+                  {expandedSection === "seeking" ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                 </Button>
                 {expandedSection === "seeking" && (
                   <div className={`mt-3 p-6 rounded-2xl shadow-lg ${darkMode ? "bg-gray-600" : "bg-white"} border border-gray-200`}>
@@ -348,10 +363,10 @@ export default function CompanyPublicProfile() {
               <div>
                 <Button
                   onClick={() => toggleSection("testimonials")}
-                  className="w-full bg-[#FFF8D6] hover:bg-[#FFF2A9] text-gray-800 py-6 rounded-full text-lg font-medium shadow-md flex items-center justify-between"
+                  className="w-full bg-[#FFF8D6] hover:bg-[#FFF2A9] text-gray-800 py-6 rounded-full text-lg font-medium shadow-md flex items-center justify-center gap-2"
                 >
                   <span>Relatos</span>
-                  {expandedSection === "testimonials" ? <ChevronUp size={24} /> : <ChevronDown size={24} />}
+                  {expandedSection === "testimonials" ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                 </Button>
                 {expandedSection === "testimonials" && (
                   <div className={`mt-3 p-6 rounded-2xl shadow-lg ${darkMode ? "bg-gray-600" : "bg-white"} border border-gray-200`}>
@@ -402,10 +417,10 @@ export default function CompanyPublicProfile() {
               <div>
                 <Button
                   onClick={() => toggleSection("training")}
-                  className="w-full bg-[#FFF8D6] hover:bg-[#FFF2A9] text-gray-800 py-6 rounded-full text-lg font-medium shadow-md flex items-center justify-between"
+                  className="w-full bg-[#FFF8D6] hover:bg-[#FFF2A9] text-gray-800 py-6 rounded-full text-lg font-medium shadow-md flex items-center justify-center gap-2"
                 >
                   <span>Formação</span>
-                  {expandedSection === "training" ? <ChevronUp size={24} /> : <ChevronDown size={24} />}
+                  {expandedSection === "training" ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                 </Button>
                 {expandedSection === "training" && (
                   <div className={`mt-3 p-6 rounded-2xl shadow-lg ${darkMode ? "bg-gray-600" : "bg-white"} border border-gray-200`}>
@@ -433,10 +448,10 @@ export default function CompanyPublicProfile() {
               <div>
                 <Button
                   onClick={() => toggleSection("jobs")}
-                  className="w-full bg-[#FFF8D6] hover:bg-[#FFF2A9] text-gray-800 py-6 rounded-full text-lg font-medium shadow-md flex items-center justify-between"
+                  className="w-full bg-[#FFF8D6] hover:bg-[#FFF2A9] text-gray-800 py-6 rounded-full text-lg font-medium shadow-md flex items-center justify-center gap-2"
                 >
                   <span>Vagas Disponíveis</span>
-                  {expandedSection === "jobs" ? <ChevronUp size={24} /> : <ChevronDown size={24} />}
+                  {expandedSection === "jobs" ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                 </Button>
                 {expandedSection === "jobs" && (
                   <div className={`mt-3 p-6 rounded-2xl shadow-lg ${darkMode ? "bg-gray-600" : "bg-white"} border border-gray-200`}>
