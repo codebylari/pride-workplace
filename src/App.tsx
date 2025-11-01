@@ -148,6 +148,8 @@ const App = () => (
             {/* Define as rotas da aplicação */}
             <Route path="/" element={<Auth />} />
             {/* Página de login inicial */}
+            <Route path="/auth" element={<Auth />} />
+            {/* Alias para login */}
             
             <Route path="/register" element={<Register />} />
             {/* Página de cadastro */}
