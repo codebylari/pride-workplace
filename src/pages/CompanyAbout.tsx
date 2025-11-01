@@ -4,6 +4,7 @@ import { NotificationsPanel } from "@/components/NotificationsPanel";
 import { CompanySidebar } from "@/components/CompanySidebar";
 import { ChatBot } from "@/components/ChatBot";
 import { useTheme } from "@/contexts/ThemeContext";
+import logo from "@/assets/logo-linkar.png";
 
 export default function CompanyAbout() {
   const { darkMode } = useTheme();
@@ -85,11 +86,7 @@ export default function CompanyAbout() {
         {/* Logo Section */}
         <div className="flex justify-center animate-fade-in" style={{ animationDelay: '0.3s' }}>
           <div className="text-center py-8">
-            <div className="text-7xl font-bold mb-3">
-              <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-                Linka+
-              </span>
-            </div>
+            <img src={logo} alt="Linka+ Logo" className="w-64 sm:w-80 h-auto mx-auto mb-3" />
             <p className={`text-lg ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
               Diversidade em Tecnologia
             </p>
