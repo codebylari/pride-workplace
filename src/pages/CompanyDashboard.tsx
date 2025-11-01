@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, Briefcase, PlusCircle, User, Settings, Headset, Info, FileText, LogOut, List } from "lucide-react";
+import { Menu } from "lucide-react";
 import { NotificationsPanel } from "@/components/NotificationsPanel";
+import { CompanySidebar } from "@/components/CompanySidebar";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
@@ -9,17 +10,11 @@ import { useTheme } from "@/contexts/ThemeContext";
 
 export default function CompanyDashboard() {
   const navigate = useNavigate();
-  const { user, signOut } = useAuth();
+  const { user } = useAuth();
   const { darkMode } = useTheme();
   const [showSidebar, setShowSidebar] = useState(false);
 
-  // Extrai o nome da empresa dos metadados do usuário
   const companyName = user?.user_metadata?.company_name || "Empresa";
-
-  const handleLogout = async () => {
-    await signOut();
-    navigate("/");
-  };
 
   return (
     <div className={`min-h-screen relative overflow-hidden ${darkMode ? "bg-gray-800" : "bg-gray-50"}`}>
@@ -144,118 +139,7 @@ export default function CompanyDashboard() {
       </header>
 
       {/* Menu Lateral */}
-      {showSidebar && (
-        <div className="fixed inset-0 z-50 bg-black/50" onClick={() => setShowSidebar(false)}>
-          <div 
-            style={{ background: 'linear-gradient(to bottom, hsl(315, 35%, 55%), hsl(315, 30%, 50%), hsl(320, 30%, 50%))' }}
-            className="absolute left-0 top-0 h-full w-[min(80vw,320px)] shadow-xl text-white flex flex-col overflow-hidden"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Seção de Perfil */}
-            <div className="p-6 space-y-2 border-b border-white/20">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center">
-                  <span className="text-xs font-bold text-black">ML</span>
-                </div>
-                <div>
-                  <h2 className="text-xl font-semibold">{companyName}</h2>
-                  <p className="text-sm text-white/80">empresa</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Itens do Menu */}
-            <nav className="flex-1 py-6 px-4 space-y-2">
-              <button className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left">
-                <Briefcase size={24} />
-                <span className="text-lg">Vagas</span>
-              </button>
-              
-              <button 
-                onClick={() => navigate("/create-job")}
-                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
-              >
-                <PlusCircle size={24} />
-                <span className="text-lg">Cadastrar Vagas</span>
-              </button>
-              
-              <button 
-                onClick={() => {
-                  setShowSidebar(false);
-                  navigate("/company-jobs");
-                }}
-                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
-              >
-                <List size={24} />
-                <span className="text-lg">Minhas Vagas</span>
-              </button>
-              
-              <button 
-                onClick={() => navigate("/company-profile")}
-                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
-              >
-                <User size={24} />
-                <span className="text-lg">Meu Perfil</span>
-              </button>
-              
-              <button 
-                onClick={() => {
-                  setShowSidebar(false);
-                  navigate("/company-settings");
-                }}
-                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
-              >
-                <Settings size={24} />
-                <span className="text-lg">Configurações</span>
-              </button>
-              
-              <button 
-                onClick={() => {
-                  setShowSidebar(false);
-                  navigate("/company-support");
-                }}
-                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
-              >
-                <Headset size={24} />
-                <span className="text-lg">Suporte</span>
-              </button>
-              
-              <button 
-                onClick={() => {
-                  setShowSidebar(false);
-                  navigate("/company-about");
-                }}
-                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
-              >
-                <Info size={24} />
-                <span className="text-lg">Quem Somos</span>
-              </button>
-              
-              <button 
-                onClick={() => {
-                  setShowSidebar(false);
-                  navigate("/terms-company");
-                }}
-                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
-              >
-                <FileText size={24} />
-                <span className="text-lg">Termos de Uso</span>
-              </button>
-            </nav>
-
-            {/* Botão de Sair no Final */}
-            <div className="p-4 border-t border-white/20">
-              <button 
-                onClick={handleLogout}
-                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left text-red-500"
-              >
-                <LogOut size={24} />
-                <span className="text-lg">Sair</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <CompanySidebar showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
 
       {/* Conteúdo Principal */}
       <main className="container mx-auto px-3 sm:px-4 py-6 sm:py-12 relative z-10">

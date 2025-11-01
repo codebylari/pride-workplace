@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, MapPin, Users, Briefcase, User, Settings, Headset, Info, FileText, LogOut, ClipboardList } from "lucide-react";
+import { Menu, MapPin } from "lucide-react";
 import { NotificationsPanel } from "@/components/NotificationsPanel";
+import { CandidateSidebar } from "@/components/CandidateSidebar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/useAuth";
@@ -17,10 +18,7 @@ export default function CandidateDashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [jobs, setJobs] = useState<any[]>([]);
-  const [userGender, setUserGender] = useState<string>("");
   const jobsPerPage = 9;
-
-  const userName = user?.user_metadata?.full_name || "Usuário";
 
   // Fetch jobs from database
   useEffect(() => {
@@ -40,32 +38,10 @@ export default function CandidateDashboard() {
     fetchJobs();
   }, []);
 
-  // Fetch user gender
-  useEffect(() => {
-    const fetchGender = async () => {
-      if (!user?.id) return;
-      const { data } = await supabase
-        .from("profiles")
-        .select("gender")
-        .eq("id", user.id)
-        .maybeSingle();
-      
-      setUserGender(data?.gender || "");
-    };
-    fetchGender();
-  }, [user?.id]);
-
   const indexOfLastJob = currentPage * jobsPerPage;
   const indexOfFirstJob = indexOfLastJob - jobsPerPage;
   const currentJobs = jobs.slice(indexOfFirstJob, indexOfLastJob);
   const totalPages = Math.ceil(jobs.length / jobsPerPage);
-
-  const genderText = userGender === "masculino" ? "candidato" : userGender === "feminino" ? "candidata" : "candidato(a)";
-
-  const handleLogout = async () => {
-    await signOut();
-    navigate("/");
-  };
 
   return (
     <div className={`min-h-screen ${darkMode ? "bg-gray-800" : "bg-gray-50"}`}>
@@ -82,113 +58,7 @@ export default function CandidateDashboard() {
       </header>
 
       {/* Sidebar */}
-      {showSidebar && (
-        <div className="fixed inset-0 z-50 bg-black/50" onClick={() => setShowSidebar(false)}>
-          <div 
-            style={{ background: 'linear-gradient(to bottom, hsl(315, 35%, 55%), hsl(315, 30%, 50%), hsl(320, 30%, 50%))' }}
-            className="absolute left-0 top-0 h-full w-[min(80vw,320px)] shadow-xl text-white flex flex-col overflow-hidden"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Profile Section */}
-            <div className="p-4 sm:p-6 flex items-center gap-3 sm:gap-4 border-b border-white/20 flex-shrink-0">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gray-300 overflow-hidden border-4 border-white/30 flex-shrink-0">
-                <div className="w-full h-full bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center text-xl sm:text-2xl font-bold text-white">
-                  {userName.charAt(0).toUpperCase()}
-                </div>
-              </div>
-              <div className="min-w-0">
-                <h2 className="text-lg sm:text-xl font-semibold truncate">{userName}</h2>
-                <p className="text-xs sm:text-sm text-white/80">{genderText}</p>
-              </div>
-            </div>
-
-            {/* Menu Items */}
-            <nav className="flex-1 py-4 sm:py-6 px-3 sm:px-4 space-y-1 sm:space-y-2 overflow-y-auto">
-              <button className="w-full flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-white/10 rounded-lg transition text-left">
-                <Briefcase size={20} className="sm:w-6 sm:h-6 flex-shrink-0" />
-                <span className="text-base sm:text-lg">Vagas</span>
-              </button>
-
-              <button 
-                onClick={() => {
-                  setShowSidebar(false);
-                  navigate("/my-applications");
-                }}
-                className="w-full flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-white/10 rounded-lg transition text-left"
-              >
-                <ClipboardList size={20} className="sm:w-6 sm:h-6 flex-shrink-0" />
-                <span className="text-base sm:text-lg">Minhas Candidaturas</span>
-              </button>
-              
-              <button
-                onClick={() => {
-                  setShowSidebar(false);
-                  navigate("/candidate-profile");
-                }}
-                className="w-full flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-white/10 rounded-lg transition text-left"
-              >
-                <User size={20} className="sm:w-6 sm:h-6 flex-shrink-0" />
-                <span className="text-base sm:text-lg">Meu Perfil</span>
-              </button>
-              
-              <button 
-                onClick={() => {
-                  setShowSidebar(false);
-                  navigate("/candidate-settings");
-                }}
-                className="w-full flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-white/10 rounded-lg transition text-left"
-              >
-                <Settings size={20} className="sm:w-6 sm:h-6 flex-shrink-0" />
-                <span className="text-base sm:text-lg">Configurações</span>
-              </button>
-              
-              <button 
-                onClick={() => {
-                  setShowSidebar(false);
-                  navigate("/candidate-support");
-                }}
-                className="w-full flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-white/10 rounded-lg transition text-left"
-              >
-                <Headset size={20} className="sm:w-6 sm:h-6 flex-shrink-0" />
-                <span className="text-base sm:text-lg">Suporte</span>
-              </button>
-              
-              <button 
-                onClick={() => {
-                  setShowSidebar(false);
-                  navigate("/candidate-about");
-                }}
-                className="w-full flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-white/10 rounded-lg transition text-left"
-              >
-                <Info size={20} className="sm:w-6 sm:h-6 flex-shrink-0" />
-                <span className="text-base sm:text-lg">Quem Somos</span>
-              </button>
-              
-              <button 
-                onClick={() => {
-                  setShowSidebar(false);
-                  navigate("/terms-candidate");
-                }}
-                className="w-full flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-white/10 rounded-lg transition text-left"
-              >
-                <FileText size={20} className="sm:w-6 sm:h-6 flex-shrink-0" />
-                <span className="text-base sm:text-lg">Termos de Uso</span>
-              </button>
-            </nav>
-
-            {/* Logout Button at Bottom */}
-            <div className="p-3 sm:p-4 border-t border-white/20 flex-shrink-0">
-              <button 
-                onClick={handleLogout}
-                className="w-full flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-white/10 rounded-lg transition text-left text-red-500"
-              >
-                <LogOut size={20} className="sm:w-6 sm:h-6 flex-shrink-0" />
-                <span className="text-base sm:text-lg">Sair</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <CandidateSidebar showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
 
       {/* Search Bar */}
       <div className={`shadow-sm p-3 sm:p-4 ${darkMode ? "bg-gray-700" : "bg-white"}`}>
