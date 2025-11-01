@@ -42,16 +42,25 @@ export default function CompanyViewCandidateProfile() {
         .from("profiles")
         .select("*")
         .eq("id", candidateId)
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
+      if (!data) {
+        throw new Error("Perfil não encontrado");
+      }
 
-      // Get user email from auth metadata
-      const { data: userData } = await supabase.auth.admin.getUserById(candidateId);
+      // Get contact info using the secure function
+      const { data: contactData, error: contactError } = await supabase
+        .rpc("get_candidate_contact_info", { _candidate_id: candidateId });
+
+      if (contactError) {
+        console.error("Error fetching contact info:", contactError);
+      }
       
       setProfile({
         ...data,
-        email: userData?.user?.email
+        email: contactData?.[0]?.email,
+        linkedin_url: contactData?.[0]?.linkedin_url || data.linkedin_url
       });
     } catch (error: any) {
       toast({
@@ -134,7 +143,7 @@ export default function CompanyViewCandidateProfile() {
                       <Star 
                         key={i} 
                         size={24} 
-                        className={i < Math.floor(profile.rating || 5) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}
+                        className={i < Math.floor(profile.rating || 5) ? "fill-green-500 text-green-500" : "text-gray-300"}
                       />
                     ))}
                     <span className={`text-lg font-semibold ${darkMode ? "text-white" : "text-gray-900"}`}>
