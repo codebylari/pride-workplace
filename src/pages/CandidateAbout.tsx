@@ -33,68 +33,94 @@ export default function CandidateAbout() {
       <CandidateSidebar showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
 
       {/* Main Content */}
-      <main className="container mx-auto px-6 py-16 max-w-6xl">
-        {/* Page Title */}
-        <h1 className={`text-4xl font-bold text-center mb-16 ${darkMode ? "text-white" : "text-gray-800"}`}>
-          Quem Somos
-        </h1>
-
-        {/* About Section */}
-        <div className={`rounded-2xl shadow-sm p-12 mb-12 animate-fade-in ${darkMode ? "bg-gray-700" : "bg-white"}`}>
-          <div className="prose prose-lg max-w-none">
-            <p className={`leading-relaxed text-justify mb-6 ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-              Somos uma plataforma criada com o propósito de fortalecer a presença de mulheres e pessoas da comunidade LGBTIAPN+ no mercado de Tecnologia da Informação.
-            </p>
-            
-            <p className={`leading-relaxed text-justify mb-6 ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-              Nosso objetivo é oferecer um espaço seguro, inclusivo e especializado para a divulgação de oportunidades de trabalho temporário, conectando profissionais qualificados a empresas que compartilham dos mesmos valores de respeito e diversidade.
-            </p>
-            
-            <p className={`leading-relaxed text-justify mb-6 ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-              Acreditamos que a tecnologia pode e deve ser um instrumento de transformação social.
-            </p>
-            
-            <p className={`leading-relaxed text-justify ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-              Mais do que uma plataforma de trabalho, somos uma comunidade que apoia, acolhe e incentiva o crescimento profissional de cada pessoa usuária.
-            </p>
-          </div>
+      <main className="container mx-auto px-4 sm:px-6 py-12 max-w-7xl">
+        {/* Hero Section */}
+        <div className="text-center mb-16 animate-fade-in">
+          <h1 className={`text-5xl sm:text-6xl font-bold mb-6 ${darkMode ? "text-white" : "text-gray-900"}`}>
+            Quem Somos
+          </h1>
+          <div className="w-24 h-1 mx-auto" style={{ background: 'linear-gradient(to right, hsl(315, 26%, 40%), hsl(320, 30%, 50%))' }}></div>
         </div>
 
-        {/* Team Section */}
-        <div className={`rounded-2xl shadow-sm p-12 mb-12 animate-fade-in ${darkMode ? "bg-gray-700" : "bg-white"}`} style={{ animationDelay: '0.1s' }}>
-          <h2 className={`text-2xl font-semibold mb-8 text-center ${darkMode ? "text-white" : "text-gray-800"}`}>
-            Nossa Equipe
-          </h2>
-          
-          <p className={`text-center leading-relaxed max-w-3xl mx-auto ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-            Alunos do terceiro período de Sistemas de Informação, Engenharia de Software e Tecnologia de Análise e Desenvolvimento de Sistemas: Adryel Costa, Bruno Araujo, Larissa Soeiro e Rafaella Costa
-          </p>
-        </div>
-
-        {/* Partners Section */}
-        <div className={`rounded-2xl shadow-sm p-12 mb-12 animate-fade-in ${darkMode ? "bg-gray-700" : "bg-white"}`} style={{ animationDelay: '0.2s' }}>
-          <h2 className={`text-2xl font-semibold mb-8 text-center ${darkMode ? "text-white" : "text-gray-800"}`}>
-            Nossas Parcerias
-          </h2>
-          
-          <div className="flex justify-center">
-            <div className="text-center">
-              <img src={logoUnisales} alt="UniSales" className="w-56 h-auto mx-auto mb-2" />
-              <p className={darkMode ? "text-gray-300" : "text-gray-600"}>Centro Universitário Salesiano</p>
+        {/* Mission Section */}
+        <div className={`rounded-3xl shadow-lg p-8 sm:p-12 mb-8 animate-fade-in border ${darkMode ? "bg-gray-700 border-gray-600" : "bg-white border-gray-100"}`}>
+          <div className="max-w-4xl mx-auto">
+            <h2 className={`text-3xl font-bold mb-8 text-center ${darkMode ? "text-white" : "text-gray-900"}`}>
+              Nossa Missão
+            </h2>
+            <div className={`space-y-6 text-lg leading-relaxed ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+              <p className="text-center">
+                Somos uma plataforma criada com o propósito de fortalecer a presença de mulheres e pessoas da comunidade LGBTIAPN+ no mercado de Tecnologia da Informação.
+              </p>
+              
+              <p className="text-center">
+                Nosso objetivo é oferecer um espaço seguro, inclusivo e especializado para a divulgação de oportunidades de trabalho temporário, conectando profissionais qualificados a empresas que compartilham dos mesmos valores de respeito e diversidade.
+              </p>
             </div>
           </div>
         </div>
 
-        {/* Logo Section */}
-        <div className="flex justify-center animate-fade-in" style={{ animationDelay: '0.3s' }}>
-          <div className="text-center py-8">
+        {/* Vision Section */}
+        <div className={`rounded-3xl shadow-lg p-8 sm:p-12 mb-8 animate-fade-in border ${darkMode ? "bg-gray-700 border-gray-600" : "bg-white border-gray-100"}`} style={{ animationDelay: '0.1s' }}>
+          <div className="max-w-4xl mx-auto">
+            <h2 className={`text-3xl font-bold mb-8 text-center ${darkMode ? "text-white" : "text-gray-900"}`}>
+              Nossa Visão
+            </h2>
+            <div className={`space-y-6 text-lg leading-relaxed ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+              <p className="text-center">
+                Acreditamos que a tecnologia pode e deve ser um instrumento de transformação social.
+              </p>
+              
+              <p className="text-center">
+                Mais do que uma plataforma de trabalho, somos uma comunidade que apoia, acolhe e incentiva o crescimento profissional de cada pessoa usuária.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Team Section */}
+        <div className={`rounded-3xl shadow-lg p-8 sm:p-12 mb-8 animate-fade-in border ${darkMode ? "bg-gray-700 border-gray-600" : "bg-white border-gray-100"}`} style={{ animationDelay: '0.2s' }}>
+          <h2 className={`text-3xl font-bold mb-8 text-center ${darkMode ? "text-white" : "text-gray-900"}`}>
+            Equipe de Desenvolvimento
+          </h2>
+          
+          <div className={`text-center leading-relaxed max-w-3xl mx-auto ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+            <p className="text-lg mb-4">
+              Projeto desenvolvido por alunos do terceiro período dos cursos de Sistemas de Informação, Engenharia de Software e Tecnologia de Análise e Desenvolvimento de Sistemas.
+            </p>
+            <div className="flex flex-wrap justify-center gap-3 mt-6">
+              <span className={`px-4 py-2 rounded-full text-sm font-medium ${darkMode ? "bg-gray-600 text-gray-200" : "bg-gray-100 text-gray-700"}`}>Adryel Costa</span>
+              <span className={`px-4 py-2 rounded-full text-sm font-medium ${darkMode ? "bg-gray-600 text-gray-200" : "bg-gray-100 text-gray-700"}`}>Bruno Araujo</span>
+              <span className={`px-4 py-2 rounded-full text-sm font-medium ${darkMode ? "bg-gray-600 text-gray-200" : "bg-gray-100 text-gray-700"}`}>Larissa Soeiro</span>
+              <span className={`px-4 py-2 rounded-full text-sm font-medium ${darkMode ? "bg-gray-600 text-gray-200" : "bg-gray-100 text-gray-700"}`}>Rafaella Costa</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Partners Section */}
+        <div className={`rounded-3xl shadow-lg p-8 sm:p-12 mb-8 animate-fade-in border ${darkMode ? "bg-gray-700 border-gray-600" : "bg-white border-gray-100"}`} style={{ animationDelay: '0.3s' }}>
+          <h2 className={`text-3xl font-bold mb-10 text-center ${darkMode ? "text-white" : "text-gray-900"}`}>
+            Parcerias Institucionais
+          </h2>
+          
+          <div className="flex justify-center">
+            <div className="text-center">
+              <img src={logoUnisales} alt="UniSales - Centro Universitário Salesiano" className="w-64 h-auto mx-auto mb-4" />
+              <p className={`text-base font-medium ${darkMode ? "text-gray-300" : "text-gray-600"}`}>Centro Universitário Salesiano</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Brand Section */}
+        <div className="flex justify-center animate-fade-in mt-16" style={{ animationDelay: '0.4s' }}>
+          <div className="text-center">
             <img 
               src={logo} 
-              alt="Linka+ Logo" 
-              className="w-64 sm:w-80 h-auto mx-auto mb-3"
+              alt="Linka+ - Plataforma de Diversidade em Tecnologia" 
+              className="w-72 sm:w-96 h-auto mx-auto mb-4"
               style={{ filter: 'brightness(0) saturate(100%) invert(35%) sepia(18%) saturate(1453%) hue-rotate(268deg) brightness(93%) contrast(90%)' }}
             />
-            <p className={`text-lg ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+            <p className={`text-lg font-medium ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
               Diversidade em Tecnologia
             </p>
           </div>
