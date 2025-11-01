@@ -35,24 +35,27 @@ export default function CompanyJobs() {
   const companyName = user?.user_metadata?.company_name || "Empresa";
 
   useEffect(() => {
-    if (user) {
-      fetchJobs();
-    }
+    fetchJobs();
   }, [user]);
 
   const fetchJobs = async () => {
+    if (!user?.id) {
+      setLoading(false);
+      return;
+    }
+    
     try {
       setLoading(true);
-      console.log("Current user ID:", user?.id);
       const { data, error } = await supabase
         .from("jobs")
         .select("*")
-        .eq("company_id", user?.id)
+        .eq("company_id", user.id)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
       setJobs(data || []);
     } catch (error: any) {
+      console.error("Erro ao carregar vagas:", error);
       toast({
         title: "Erro ao carregar vagas",
         description: error.message,
