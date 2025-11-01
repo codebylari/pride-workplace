@@ -210,7 +210,8 @@ export default function EditCandidateProfile() {
         if (uploadError) throw uploadError;
 
         const { data: urlData } = supabase.storage.from("profile-photos").getPublicUrl(path);
-        updates.photo_url = urlData.publicUrl;
+        // Add timestamp to force browser to reload image
+        updates.photo_url = `${urlData.publicUrl}?t=${Date.now()}`;
       }
 
       // Update profile fields

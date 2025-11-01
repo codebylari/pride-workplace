@@ -154,7 +154,8 @@ export default function EditCompanyProfile() {
         if (uploadError) throw uploadError;
 
         const { data: urlData } = supabase.storage.from("profile-photos").getPublicUrl(path);
-        updates.logo_url = urlData.publicUrl;
+        // Add timestamp to force browser to reload image
+        updates.logo_url = `${urlData.publicUrl}?t=${Date.now()}`;
       }
 
       // Update company profile

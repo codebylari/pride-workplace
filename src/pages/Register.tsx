@@ -1310,7 +1310,7 @@ export default function Register() {
         const { error: updateError } = await supabase
           .from('profiles')
           .update({ 
-            photo_url: publicUrl,
+            photo_url: `${publicUrl}?t=${Date.now()}`,
             gender: finalGender
           })
           .eq('id', userId);
@@ -2091,7 +2091,7 @@ export default function Register() {
         // Update company profile with logo URL
         const { error: updateError } = await supabase
           .from('company_profiles')
-          .update({ logo_url: publicUrl })
+          .update({ logo_url: `${publicUrl}?t=${Date.now()}` })
           .eq('user_id', userId);
 
         if (updateError) throw updateError;
