@@ -83,6 +83,37 @@ export default function JobCandidates() {
     }
   };
 
+  const handleUpdateStatus = async (applicationId: string, newStatus: string) => {
+    try {
+      const updateData: any = { status: newStatus };
+      if (newStatus === 'contact_requested') {
+        updateData.contract_status = 'pending';
+      }
+
+      const { error } = await supabase
+        .from("applications")
+        .update(updateData)
+        .eq("id", applicationId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Status atualizado",
+        description: newStatus === 'accepted' 
+          ? "Candidato aceito! Uma notificação foi enviada." 
+          : "Solicitação de contato enviada ao candidato.",
+      });
+
+      fetchJobAndCandidates();
+    } catch (error: any) {
+      toast({
+        title: "Erro ao atualizar status",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  };
+
   const handleUpdateContractStatus = async (applicationId: string, newStatus: string) => {
     try {
       const updateData: any = { contract_status: newStatus };
@@ -227,7 +258,25 @@ export default function JobCandidates() {
                             Ver Perfil
                           </Button>
                           
-                          {application.contract_status === 'pending' && (
+                          {application.status === 'pending' && (
+                            <>
+                              <Button
+                                onClick={() => handleUpdateStatus(application.id, 'accepted')}
+                                size="sm"
+                              >
+                                Aceitar Candidato
+                              </Button>
+                              <Button
+                                onClick={() => handleUpdateStatus(application.id, 'contact_requested')}
+                                variant="secondary"
+                                size="sm"
+                              >
+                                Solicitar Contato
+                              </Button>
+                            </>
+                          )}
+                          
+                          {(application.status === 'accepted' || application.status === 'contact_requested') && application.contract_status === 'pending' && (
                             <Button
                               onClick={() => handleUpdateContractStatus(application.id, 'active')}
                               size="sm"
