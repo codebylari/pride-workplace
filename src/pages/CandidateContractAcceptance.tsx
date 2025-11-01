@@ -12,7 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 export default function ContractAcceptance() {
   const navigate = useNavigate();
   const { applicationId } = useParams();
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const { darkMode } = useTheme();
   const { toast } = useToast();
   const [showSidebar, setShowSidebar] = useState(false);
@@ -20,14 +20,29 @@ export default function ContractAcceptance() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (applicationId && user) {
+    console.log("useEffect triggered", { applicationId, user: user?.id, authLoading });
+    
+    if (authLoading) {
+      console.log("Still loading auth...");
+      return;
+    }
+    
+    if (!user) {
+      console.log("No user, redirecting to auth");
+      navigate("/auth");
+      return;
+    }
+    
+    if (applicationId) {
+      console.log("Fetching application...");
       fetchApplication();
     }
-  }, [applicationId, user]);
+  }, [applicationId, user, authLoading]);
 
   const fetchApplication = async () => {
     try {
       setLoading(true);
+      console.log("Fetching application for:", applicationId, "user:", user?.id);
       
       // Buscar application
       const { data: appData, error: appError } = await supabase
@@ -37,21 +52,27 @@ export default function ContractAcceptance() {
         .eq("candidate_id", user?.id)
         .single();
 
+      console.log("Application data:", appData, "Error:", appError);
       if (appError) throw appError;
 
       // Buscar job
-      const { data: jobData } = await supabase
+      const { data: jobData, error: jobError } = await supabase
         .from("jobs")
         .select("*")
         .eq("id", appData.job_id)
         .single();
 
+      console.log("Job data:", jobData, "Error:", jobError);
+      if (jobError) throw jobError;
+
       // Buscar empresa
-      const { data: companyData } = await supabase
+      const { data: companyData, error: companyError } = await supabase
         .from("company_profiles")
         .select("*")
         .eq("user_id", jobData?.company_id)
         .single();
+
+      console.log("Company data:", companyData, "Error:", companyError);
 
       setApplication({
         ...appData,
