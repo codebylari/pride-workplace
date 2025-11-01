@@ -28,6 +28,7 @@ export default function EditCandidateProfile() {
   const [education, setEducation] = useState("");
   const [myJourney, setMyJourney] = useState("");
   const [profilePhoto, setProfilePhoto] = useState<File | null>(null);
+  const [currentPhotoUrl, setCurrentPhotoUrl] = useState<string | null>(null);
   const [resume, setResume] = useState<File | null>(null);
   const [genderEdit, setGenderEdit] = useState<"feminino" | "masculino" | "outros" | "">("");
   const [customGenderEdit, setCustomGenderEdit] = useState("");
@@ -38,9 +39,14 @@ export default function EditCandidateProfile() {
     const loadProfile = async () => {
       if (!user?.id) return;
       
+      // Set display name from user metadata
+      if (user.user_metadata?.full_name) {
+        setDisplayName(user.user_metadata.full_name);
+      }
+      
       const { data } = await supabase
         .from("profiles")
-        .select("gender, linkedin_url, about_me, experience, education, journey, resume_url")
+        .select("gender, linkedin_url, about_me, experience, education, journey, resume_url, photo_url")
         .eq("id", user.id)
         .maybeSingle();
       
@@ -58,10 +64,11 @@ export default function EditCandidateProfile() {
         setExperience(data.experience || "");
         setEducation(data.education || "");
         setMyJourney(data.journey || "");
+        setCurrentPhotoUrl(data.photo_url || null);
       }
     };
     loadProfile();
-  }, [user?.id]);
+  }, [user?.id, user?.user_metadata?.full_name]);
 
   const userName = user?.user_metadata?.full_name?.split(" ")[0] || "Usuário";
   const fullName = user?.user_metadata?.full_name || "Usuário";
@@ -333,6 +340,12 @@ export default function EditCandidateProfile() {
                   <img
                     src={URL.createObjectURL(profilePhoto)}
                     alt="Preview"
+                    className="w-40 h-40 rounded-full object-cover border-4 border-white shadow-lg"
+                  />
+                ) : currentPhotoUrl ? (
+                  <img
+                    src={currentPhotoUrl}
+                    alt="Foto atual"
                     className="w-40 h-40 rounded-full object-cover border-4 border-white shadow-lg"
                   />
                 ) : (
