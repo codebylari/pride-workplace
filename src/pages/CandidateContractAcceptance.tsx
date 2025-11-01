@@ -20,29 +20,16 @@ export default function ContractAcceptance() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log("useEffect triggered", { applicationId, user: user?.id, authLoading });
-    
-    if (authLoading) {
-      console.log("Still loading auth...");
+    if (authLoading || !user || !applicationId) {
       return;
     }
     
-    if (!user) {
-      console.log("No user, redirecting to auth");
-      navigate("/auth");
-      return;
-    }
-    
-    if (applicationId) {
-      console.log("Fetching application...");
-      fetchApplication();
-    }
+    fetchApplication();
   }, [applicationId, user, authLoading]);
 
   const fetchApplication = async () => {
     try {
       setLoading(true);
-      console.log("Fetching application for:", applicationId, "user:", user?.id);
       
       // Buscar application
       const { data: appData, error: appError } = await supabase
@@ -52,7 +39,6 @@ export default function ContractAcceptance() {
         .eq("candidate_id", user?.id)
         .single();
 
-      console.log("Application data:", appData, "Error:", appError);
       if (appError) throw appError;
 
       // Buscar job
@@ -62,7 +48,6 @@ export default function ContractAcceptance() {
         .eq("id", appData.job_id)
         .single();
 
-      console.log("Job data:", jobData, "Error:", jobError);
       if (jobError) throw jobError;
 
       // Buscar empresa
@@ -71,8 +56,6 @@ export default function ContractAcceptance() {
         .select("*")
         .eq("user_id", jobData?.company_id)
         .single();
-
-      console.log("Company data:", companyData, "Error:", companyError);
 
       setApplication({
         ...appData,
@@ -145,12 +128,25 @@ export default function ContractAcceptance() {
     }
   };
 
-  if (loading) {
+  if (authLoading || loading) {
     return (
       <div className={`min-h-screen ${darkMode ? "bg-gray-800" : "bg-gray-50"}`}>
         <header style={{ background: 'linear-gradient(to right, hsl(315, 26%, 40%), hsl(320, 30%, 50%))' }} className="text-white p-4">
           <p className="text-center">Carregando...</p>
         </header>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className={`min-h-screen ${darkMode ? "bg-gray-800" : "bg-gray-50"}`}>
+        <header style={{ background: 'linear-gradient(to right, hsl(315, 26%, 40%), hsl(320, 30%, 50%))' }} className="text-white p-4">
+          <p className="text-center">Você precisa estar logado para ver esta página</p>
+        </header>
+        <div className="container mx-auto px-4 py-8 text-center">
+          <Button onClick={() => navigate("/auth")}>Fazer Login</Button>
+        </div>
       </div>
     );
   }
