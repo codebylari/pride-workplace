@@ -263,11 +263,28 @@ export default function CompanyPublicProfile() {
         <div className="max-w-4xl mx-auto">
           {/* Profile Card */}
           <div className={`rounded-3xl shadow-lg p-8 ${darkMode ? "bg-gray-700" : "bg-white"}`}>
-            {/* Logo Section - SEM botão de editar */}
+            {/* Logo Section - Visão pública sem edição */}
             <div className="flex justify-center mb-6">
-              <div className="w-32 h-32 bg-yellow-400 rounded-full flex items-center justify-center shadow-lg text-6xl">
-                {companyData.logo}
-              </div>
+              {companyData.logo ? (
+                typeof companyData.logo === 'string' && companyData.logo.startsWith('http') ? (
+                  <img
+                    src={companyData.logo}
+                    alt={`Logo de ${companyData.name}`}
+                    className="w-32 h-32 rounded-full object-cover shadow-lg"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="w-32 h-32 bg-yellow-400 rounded-full flex items-center justify-center shadow-lg text-6xl">
+                    {companyData.logo}
+                  </div>
+                )
+              ) : (
+                <div className="w-32 h-32 bg-yellow-400 rounded-full flex items-center justify-center shadow-lg">
+                  <span className="text-4xl font-bold text-white">
+                    {companyData.name.substring(0, 2).toUpperCase()}
+                  </span>
+                </div>
+              )}
             </div>
 
             {/* Rating */}
