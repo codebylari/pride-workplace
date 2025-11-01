@@ -97,6 +97,9 @@ import CompanyJobDetails from "./pages/CompanyJobDetails";
 import CompanyJobCandidates from "./pages/CompanyJobCandidates";
 // Página de Candidatos da Vaga
 
+import CompanyViewCandidateProfile from "./pages/CompanyViewCandidateProfile";
+// Página de Visualização de Perfil do Candidato pela Empresa
+
 import CandidateJobDetails from "./pages/CandidateJobDetails";
 // Página de Detalhes da Vaga - Candidato
 
@@ -217,6 +220,9 @@ const App = () => (
             
             <Route path="/job-candidates/:jobId" element={<CompanyJobCandidates />} />
             {/* Página de Candidatos da Vaga */}
+            
+            <Route path="/candidate-profile/:candidateId" element={<CompanyViewCandidateProfile />} />
+            {/* Página de Visualização de Perfil do Candidato pela Empresa */}
             
             <Route path="/job/:id" element={<CandidateJobDetails />} />
             {/* Página de Detalhes da Vaga */}
