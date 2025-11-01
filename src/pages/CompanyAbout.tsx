@@ -86,7 +86,12 @@ export default function CompanyAbout() {
         {/* Logo Section */}
         <div className="flex justify-center animate-fade-in" style={{ animationDelay: '0.3s' }}>
           <div className="text-center py-8">
-            <img src={logo} alt="Linka+ Logo" className="w-64 sm:w-80 h-auto mx-auto mb-3" />
+            <img 
+              src={logo} 
+              alt="Linka+ Logo" 
+              className="w-64 sm:w-80 h-auto mx-auto mb-3"
+              style={{ filter: 'brightness(0) saturate(100%) invert(35%) sepia(18%) saturate(1453%) hue-rotate(268deg) brightness(93%) contrast(90%)' }}
+            />
             <p className={`text-lg ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
               Diversidade em Tecnologia
             </p>
