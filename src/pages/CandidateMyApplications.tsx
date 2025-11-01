@@ -241,7 +241,26 @@ export default function MyApplications() {
                         Ver Detalhes da Vaga
                       </Button>
                       
-                      {app.contract_status === 'pending' && (
+                      {app.status === 'accepted' && !app.candidate_accepted && app.start_date && (
+                        <Button
+                          onClick={() => navigate(`/contract/${app.id}`)}
+                          className="bg-green-500 hover:bg-green-600"
+                          size="sm"
+                        >
+                          Aceitar Contrato
+                        </Button>
+                      )}
+                      
+                      {app.contract_status === 'active' && app.candidate_accepted && (
+                        <div className="flex items-center gap-2">
+                          <Badge variant="default">Contrato Ativo</Badge>
+                          <span className="text-xs text-gray-500">
+                            Até {new Date(app.end_date).toLocaleDateString('pt-BR')}
+                          </span>
+                        </div>
+                      )}
+                      
+                      {app.contract_status === 'pending' && !app.start_date && (
                         <Button
                           onClick={() => setApplicationToDelete(app.id)}
                           variant="destructive"

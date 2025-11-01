@@ -16,34 +16,43 @@ export type Database = {
     Tables: {
       applications: {
         Row: {
+          candidate_accepted: boolean | null
           candidate_id: string
           completed_at: string | null
           contract_status: Database["public"]["Enums"]["contract_status"] | null
           created_at: string
+          end_date: string | null
           id: string
           job_id: string
+          start_date: string | null
           status: string
         }
         Insert: {
+          candidate_accepted?: boolean | null
           candidate_id: string
           completed_at?: string | null
           contract_status?:
             | Database["public"]["Enums"]["contract_status"]
             | null
           created_at?: string
+          end_date?: string | null
           id?: string
           job_id: string
+          start_date?: string | null
           status?: string
         }
         Update: {
+          candidate_accepted?: boolean | null
           candidate_id?: string
           completed_at?: string | null
           contract_status?:
             | Database["public"]["Enums"]["contract_status"]
             | null
           created_at?: string
+          end_date?: string | null
           id?: string
           job_id?: string
+          start_date?: string | null
           status?: string
         }
         Relationships: [

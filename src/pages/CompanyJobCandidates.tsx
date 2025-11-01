@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { RatingDialog } from "@/components/RatingDialog";
+import { ContractDialog } from "@/components/ContractDialog";
 
 export default function JobCandidates() {
   const navigate = useNavigate();
@@ -24,6 +25,12 @@ export default function JobCandidates() {
   const [applications, setApplications] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [ratingDialog, setRatingDialog] = useState<{
+    open: boolean;
+    applicationId: string;
+    candidateId: string;
+    candidateName: string;
+  } | null>(null);
+  const [contractDialog, setContractDialog] = useState<{
     open: boolean;
     applicationId: string;
     candidateId: string;
@@ -108,6 +115,50 @@ export default function JobCandidates() {
     } catch (error: any) {
       toast({
         title: "Erro ao atualizar status",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleDefineContract = async (startDate: string, endDate: string) => {
+    if (!contractDialog) return;
+
+    try {
+      const { error } = await supabase
+        .from("applications")
+        .update({
+          status: 'accepted',
+          contract_status: 'pending',
+          start_date: startDate,
+          end_date: endDate,
+          candidate_accepted: false
+        })
+        .eq("id", contractDialog.applicationId);
+
+      if (error) throw error;
+
+      // Criar notificação para o candidato
+      await supabase
+        .from("notifications")
+        .insert({
+          user_id: contractDialog.candidateId,
+          title: "Nova Proposta de Contrato",
+          message: `Você recebeu uma proposta de contrato de ${job?.title}. Revise e responda.`,
+          type: "contract_proposal",
+          related_id: contractDialog.applicationId
+        });
+
+      toast({
+        title: "Contrato enviado!",
+        description: "O candidato receberá uma notificação para aceitar.",
+      });
+
+      setContractDialog(null);
+      fetchJobAndCandidates();
+    } catch (error: any) {
+      toast({
+        title: "Erro ao enviar contrato",
         description: error.message,
         variant: "destructive",
       });
@@ -261,10 +312,15 @@ export default function JobCandidates() {
                           {application.status === 'pending' && (
                             <>
                               <Button
-                                onClick={() => handleUpdateStatus(application.id, 'accepted')}
+                                onClick={() => setContractDialog({
+                                  open: true,
+                                  applicationId: application.id,
+                                  candidateId: application.candidate_id,
+                                  candidateName: application.profiles?.full_name || "Candidato"
+                                })}
                                 size="sm"
                               >
-                                Aceitar Candidato
+                                Aceitar e Definir Contrato
                               </Button>
                               <Button
                                 onClick={() => handleUpdateStatus(application.id, 'contact_requested')}
@@ -337,6 +393,15 @@ export default function JobCandidates() {
             fetchJobAndCandidates();
             setRatingDialog(null);
           }}
+        />
+      )}
+      
+      {contractDialog && (
+        <ContractDialog
+          open={contractDialog.open}
+          onOpenChange={(open) => !open && setContractDialog(null)}
+          candidateName={contractDialog.candidateName}
+          onConfirm={handleDefineContract}
         />
       )}
       

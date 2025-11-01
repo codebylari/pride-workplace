@@ -20,6 +20,12 @@ export function NotificationsPanel() {
       navigate("/company-jobs");
     } else if (notification.type === "application_accepted" || notification.type === "contact_requested") {
       navigate("/my-applications");
+    } else if (notification.type === "contract_proposal") {
+      navigate(`/contract/${notification.related_id}`);
+    } else if (notification.type === "contract_accepted") {
+      navigate("/company-jobs");
+    } else if (notification.type === "rate_candidate" || notification.type === "rate_company") {
+      navigate("/my-applications");
     }
   };
 

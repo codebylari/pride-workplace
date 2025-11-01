@@ -109,6 +109,9 @@ import CandidateJobApplication from "./pages/CandidateJobApplication";
 import CandidateMyApplications from "./pages/CandidateMyApplications";
 // Página de Minhas Candidaturas
 
+import CandidateContractAcceptance from "./pages/CandidateContractAcceptance";
+// Página de Aceitação de Contrato
+
 import CompanyPublicProfile from "./pages/CompanyPublicProfile";
 // Página pública do Perfil da Empresa (visualização)
 
@@ -232,6 +235,9 @@ const App = () => (
             
             <Route path="/my-applications" element={<CandidateMyApplications />} />
             {/* Página de Minhas Candidaturas */}
+            
+            <Route path="/contract/:applicationId" element={<CandidateContractAcceptance />} />
+            {/* Página de Aceitação de Contrato */}
             
             <Route path="/company/:id/profile" element={<CompanyPublicProfile />} />
             {/* Página pública do Perfil da Empresa (visualização) */}
