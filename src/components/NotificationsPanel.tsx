@@ -33,7 +33,7 @@ export function NotificationsPanel() {
     <Sheet>
       <SheetTrigger asChild>
         <button className="relative p-2 hover:bg-white/10 rounded-full transition-colors">
-          <Bell className="h-5 w-5 text-white" />
+          <Bell className="h-6 w-6 text-white" />
           {unreadCount > 0 && (
             <Badge 
               variant="destructive" 
