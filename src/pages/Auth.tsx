@@ -73,10 +73,9 @@ export default function Auth() {
 
   return (
     <div className="min-h-screen relative overflow-hidden flex items-center justify-center p-2 sm:p-8 lg:p-12 bg-gradient-to-br from-[#6E4062] via-[#5a3452] to-[#6E4062]">
-      {/* Logo no topo centralizado */}
-      <div className="absolute top-4 sm:top-8 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 sm:gap-3">
-        <img src={icon} alt="Linka+ Icon" className="w-8 sm:w-12 h-auto" />
-        <img src={logo} alt="Linka+ Logo" className="w-32 sm:w-48 h-auto" />
+      {/* Logo LINKA+ no topo centralizado */}
+      <div className="absolute top-12 sm:top-16 left-1/2 -translate-x-1/2 z-20">
+        <img src={logo} alt="Linka+ Logo" className="w-40 sm:w-56 h-auto" />
       </div>
 
       {/* Elementos decorativos geométricos */}
@@ -123,6 +122,9 @@ export default function Auth() {
         {/* Left side - Welcome */}
         <div className="flex flex-col justify-center items-start space-y-4 sm:space-y-8 text-white">
           <div className="space-y-2 sm:space-y-4">
+            {/* Ícone L+ acima do Bem-vindo */}
+            <img src={icon} alt="Linka+ Icon" className="w-16 sm:w-24 md:w-28 h-auto mb-2 sm:mb-4" />
+            
             <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold leading-tight">
               Bem-vindo!
             </h1>
