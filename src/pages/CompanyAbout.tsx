@@ -5,6 +5,7 @@ import { CompanySidebar } from "@/components/CompanySidebar";
 import { ChatBot } from "@/components/ChatBot";
 import { useTheme } from "@/contexts/ThemeContext";
 import logo from "@/assets/logo-linkar.png";
+import logoUnisales from "@/assets/logo-unisales.svg";
 
 export default function CompanyAbout() {
   const { darkMode } = useTheme();
@@ -74,10 +75,7 @@ export default function CompanyAbout() {
           
           <div className="flex justify-center">
             <div className="text-center">
-              <div className="text-6xl font-bold mb-2">
-                <span className="text-red-600">U</span>
-                <span className="text-blue-600">niSales</span>
-              </div>
+              <img src={logoUnisales} alt="UniSales" className="w-56 h-auto mx-auto mb-2" />
               <p className={darkMode ? "text-gray-300" : "text-gray-600"}>Centro Universitário Salesiano</p>
             </div>
           </div>
