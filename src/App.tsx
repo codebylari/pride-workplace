@@ -99,6 +99,8 @@ import CompanyJobCandidates from "./pages/CompanyJobCandidates";
 
 import CompanyViewCandidateProfile from "./pages/CompanyViewCandidateProfile";
 // Página de Visualização de Perfil do Candidato pela Empresa
+import CompanyViewCandidateProfileAlias from "./pages/CompanyViewCandidateProfileAlias";
+// Alias legado para acessos diretos
 
 import CandidateJobDetails from "./pages/CandidateJobDetails";
 // Página de Detalhes da Vaga - Candidato
@@ -228,6 +230,8 @@ const App = () => (
             
             <Route path="/candidate-profile/:candidateId" element={<CompanyViewCandidateProfile />} />
             {/* Página de Visualização de Perfil do Candidato pela Empresa */}
+            <Route path="/CompanyViewCandidateProfile" element={<CompanyViewCandidateProfileAlias />} />
+            {/* Alias para antigas rotas diretas, suporta ?id= */}
             
             <Route path="/job/:id" element={<CandidateJobDetails />} />
             {/* Página de Detalhes da Vaga */}
