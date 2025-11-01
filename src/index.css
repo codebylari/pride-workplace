@@ -43,8 +43,6 @@
 
     /* Gradientes */
     --gradient-primary: linear-gradient(135deg, hsl(315 26% 40%), hsl(315 26% 50%)); /* Gradiente roxo. */
-    --gradient-accent: linear-gradient(135deg, hsl(315 26% 55%), hsl(315 26% 40%)); /* Gradiente roxo claro-escuro. */
-    --gradient-hero: linear-gradient(135deg, hsla(315, 26%, 40%, 0.1), hsl(315 26% 50% / 0.1)); /* Gradiente leve para seções de destaque. */
 
     /* Transições */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Transição suave padrão para animações. */
@@ -84,8 +82,6 @@
     --ring: 315 30% 50%; /* Cor de foco no modo escuro. */
 
     --gradient-primary: linear-gradient(135deg, hsl(315 26% 50%), hsl(315 26% 55%)); /* Gradiente roxo (versão escura). */
-    --gradient-accent: linear-gradient(135deg, hsl(315 26% 60%), hsl(315 26% 50%)); /* Gradiente roxo claro-escuro. */
-    --gradient-hero: linear-gradient(135deg, hsl(315 26% 50% / 0.15), hsl(315 26% 55% / 0.15)); /* Gradiente sutil de fundo no dark mode. */
     
     --shadow-glow: 0 0 40px hsl(315 26% 50% / 0.4); /* Efeito de brilho ao redor (roxo translúcido). */
     --shadow-card: 0 10px 30px -10px hsl(315 26% 50% / 0.3); /* Sombra dos cartões no modo escuro. */
@@ -124,14 +120,6 @@
   
   .gradient-primary {
     background: var(--gradient-primary); /* Classe utilitária para aplicar gradiente principal. */
-  }
-  
-  .gradient-accent {
-    background: var(--gradient-accent); /* Classe utilitária para aplicar gradiente de destaque. */
-  }
-  
-  .gradient-hero {
-    background: var(--gradient-hero); /* Classe utilitária para aplicar gradiente leve. */
   }
   
   .shadow-glow {
