@@ -20,10 +20,13 @@ export default function ContractAcceptance() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (authLoading || !user || !applicationId) {
+    if (authLoading) return;
+
+    if (!user || !applicationId) {
+      setLoading(false);
       return;
     }
-    
+
     fetchApplication();
   }, [applicationId, user, authLoading]);
 
@@ -37,16 +40,24 @@ export default function ContractAcceptance() {
         .select("*")
         .eq("id", applicationId)
         .eq("candidate_id", user?.id)
-        .single();
+        .maybeSingle();
 
       if (appError) throw appError;
+      if (!appData) {
+        toast({
+          title: "Contrato não encontrado",
+          description: "Verifique o link de convite ou acesse via Minhas Candidaturas.",
+        });
+        setApplication(null);
+        return;
+      }
 
       // Buscar job
       const { data: jobData, error: jobError } = await supabase
         .from("jobs")
         .select("*")
         .eq("id", appData.job_id)
-        .single();
+        .maybeSingle();
 
       if (jobError) throw jobError;
 
@@ -55,7 +66,9 @@ export default function ContractAcceptance() {
         .from("company_profiles")
         .select("*")
         .eq("user_id", jobData?.company_id)
-        .single();
+        .maybeSingle();
+
+      if (companyError) throw companyError;
 
       setApplication({
         ...appData,
