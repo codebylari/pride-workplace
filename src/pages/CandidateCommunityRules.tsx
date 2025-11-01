@@ -1,21 +1,18 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/hooks/useAuth";
+
 import { useTheme } from "@/contexts/ThemeContext";
 import { Button } from "@/components/ui/button";
-import { Menu, Shield, Users, Heart, AlertCircle, HandshakeIcon, CheckCircle, UserCheck, Briefcase, User, Settings, Headset, Info, FileText, ClipboardList, LogOut } from "lucide-react";
+import { Menu, Shield, Users, Heart, AlertCircle, HandshakeIcon, CheckCircle, UserCheck } from "lucide-react";
 import { NotificationsPanel } from "@/components/NotificationsPanel";
+import { CandidateSidebar } from "@/components/CandidateSidebar";
 
 export default function CandidateCommunityRules() {
   const navigate = useNavigate();
-  const { user, signOut } = useAuth();
+  
   const { darkMode } = useTheme();
   const [showSidebar, setShowSidebar] = useState(false);
 
-  const handleLogout = async () => {
-    await signOut();
-    navigate("/");
-  };
 
   const rules = [
     {
@@ -74,94 +71,7 @@ export default function CandidateCommunityRules() {
       </header>
 
       {/* Sidebar */}
-      {showSidebar && (
-        <div
-          className="fixed inset-0 bg-black/50 z-50"
-          onClick={() => setShowSidebar(false)}
-        >
-          <div
-            style={{ background: 'linear-gradient(to bottom, hsl(315, 35%, 55%), hsl(315, 30%, 50%), hsl(320, 30%, 50%))' }}
-            className="fixed left-0 top-0 h-full w-[min(80vw,320px)] shadow-xl text-white flex flex-col overflow-hidden"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="p-4 sm:p-6 flex items-center gap-3 sm:gap-4 border-b border-white/20 flex-shrink-0">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gray-300 overflow-hidden border-4 border-white/30 flex-shrink-0">
-                <div className="w-full h-full bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center text-xl sm:text-2xl font-bold text-white">
-                  {user?.user_metadata?.full_name?.charAt(0).toUpperCase() || "C"}
-                </div>
-              </div>
-              <div className="min-w-0">
-                <h2 className="text-lg sm:text-xl font-semibold truncate text-white">
-                  {user?.user_metadata?.full_name || "Candidato"}
-                </h2>
-                <p className="text-xs sm:text-sm text-white/80">candidato (a)</p>
-              </div>
-            </div>
-
-            <nav className="flex-1 py-4 sm:py-6 px-3 sm:px-4 space-y-1 sm:space-y-2 overflow-y-auto">
-              <button
-                onClick={() => navigate("/candidate-dashboard")}
-                className="w-full flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-white/10 rounded-lg transition text-left text-white"
-              >
-                <Briefcase size={20} className="sm:w-6 sm:h-6 flex-shrink-0" />
-                <span className="text-base sm:text-lg">Vagas</span>
-              </button>
-              <button
-                onClick={() => navigate("/my-applications")}
-                className="w-full flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-white/10 rounded-lg transition text-left text-white"
-              >
-                <ClipboardList size={20} className="sm:w-6 sm:h-6 flex-shrink-0" />
-                <span className="text-base sm:text-lg">Minhas Candidaturas</span>
-              </button>
-              <button
-                onClick={() => navigate("/candidate-profile")}
-                className="w-full flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-white/10 rounded-lg transition text-left text-white"
-              >
-                <User size={20} className="sm:w-6 sm:h-6 flex-shrink-0" />
-                <span className="text-base sm:text-lg">Meu Perfil</span>
-              </button>
-              <button
-                onClick={() => navigate("/candidate-settings")}
-                className="w-full flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-white/10 rounded-lg transition text-left text-white"
-              >
-                <Settings size={20} className="sm:w-6 sm:h-6 flex-shrink-0" />
-                <span className="text-base sm:text-lg">Configurações</span>
-              </button>
-              <button
-                onClick={() => navigate("/candidate-support")}
-                className="w-full flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-white/10 rounded-lg transition text-left text-white"
-              >
-                <Headset size={20} className="sm:w-6 sm:h-6 flex-shrink-0" />
-                <span className="text-base sm:text-lg">Suporte</span>
-              </button>
-              <button
-                onClick={() => navigate("/candidate-about")}
-                className="w-full flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-white/10 rounded-lg transition text-left text-white"
-              >
-                <Info size={20} className="sm:w-6 sm:h-6 flex-shrink-0" />
-                <span className="text-base sm:text-lg">Quem Somos</span>
-              </button>
-              <button
-                onClick={() => navigate("/terms-candidate")}
-                className="w-full flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-white/10 rounded-lg transition text-left text-white"
-              >
-                <FileText size={20} className="sm:w-6 sm:h-6 flex-shrink-0" />
-                <span className="text-base sm:text-lg">Termos de Uso</span>
-              </button>
-            </nav>
-
-            <div className="p-3 sm:p-4 border-t border-white/20 flex-shrink-0">
-              <button
-                onClick={handleLogout}
-                className="w-full flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-white/10 rounded-lg transition text-left text-red-500"
-              >
-                <LogOut size={20} className="sm:w-6 sm:h-6 flex-shrink-0" />
-                <span className="text-base sm:text-lg">Sair</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <CandidateSidebar showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8 max-w-4xl">
