@@ -277,13 +277,13 @@ export default function CompanyPublicProfile() {
                 const isHalfStar = star === Math.ceil(companyData.rating) && companyData.rating % 1 !== 0;
                 
                 if (isFullStar) {
-                  return <Star key={star} size={24} className="fill-yellow-400 text-yellow-400" />;
+                  return <Star key={star} size={24} className="fill-green-500 text-green-500" />;
                 } else if (isHalfStar) {
                   return (
                     <div key={star} className="relative">
-                      <Star size={24} className="text-yellow-400" />
+                      <Star size={24} className="text-green-500" />
                       <div className="absolute inset-0 overflow-hidden" style={{ width: '50%' }}>
-                        <Star size={24} className="fill-yellow-400 text-yellow-400" />
+                        <Star size={24} className="fill-green-500 text-green-500" />
                       </div>
                     </div>
                   );
