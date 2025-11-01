@@ -3,19 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Button } from "@/components/ui/button";
-import { Menu, Shield, Users, Heart, AlertCircle, HandshakeIcon, Briefcase, UserCheck, PlusCircle, List, User, Settings, Headset, Info, FileText, LogOut } from "lucide-react";
+import { Menu, Shield, Users, Heart, AlertCircle, HandshakeIcon, Briefcase, UserCheck } from "lucide-react";
 import { NotificationsPanel } from "@/components/NotificationsPanel";
+import { CompanySidebar } from "@/components/CompanySidebar";
 
 export default function CompanyCommunityRules() {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
   const { darkMode } = useTheme();
   const [showSidebar, setShowSidebar] = useState(false);
-
-  const handleLogout = async () => {
-    await signOut();
-    navigate("/");
-  };
 
   const rules = [
     {
@@ -56,7 +52,7 @@ export default function CompanyCommunityRules() {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className={`min-h-screen ${darkMode ? "bg-gray-800" : "bg-gray-50"}`}>
       {/* Header */}
       <header style={{ background: 'linear-gradient(to right, hsl(315, 26%, 40%), hsl(320, 30%, 50%))' }} className="text-white p-4 flex justify-between items-center sticky top-0 z-40">
         <button
@@ -66,132 +62,21 @@ export default function CompanyCommunityRules() {
           <Menu size={24} />
         </button>
 
-        <div className="[&_svg]:text-white [&_button]:hover:bg-white/10">
-          <NotificationsPanel />
-        </div>
+        <NotificationsPanel />
       </header>
 
       {/* Sidebar */}
-      {showSidebar && (
-        <div
-          className="fixed inset-0 bg-black/50 z-50"
-          onClick={() => setShowSidebar(false)}
-        >
-          <div
-            style={{ background: 'linear-gradient(to bottom, hsl(315, 35%, 55%), hsl(315, 30%, 50%), hsl(320, 30%, 50%))' }}
-            className="fixed left-0 top-0 h-full w-64 shadow-xl text-white flex flex-col"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="p-6 space-y-2 border-b border-white/20">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center">
-                  <span className="text-xs font-bold text-black">
-                    {user?.user_metadata?.company_name?.substring(0, 2).toUpperCase() || "ML"}
-                  </span>
-                </div>
-                <div>
-                  <h2 className="text-xl font-semibold text-white">{user?.user_metadata?.company_name || "Empresa"}</h2>
-                  <p className="text-sm text-white/80">empresa</p>
-                </div>
-              </div>
-            </div>
-
-            <nav className="flex-1 py-6 px-4 space-y-2">
-              <button
-                onClick={() => navigate("/company-dashboard")}
-                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left text-white"
-              >
-                <Briefcase size={24} />
-                <span className="text-lg">Vagas</span>
-              </button>
-              <button
-                onClick={() => navigate("/create-job")}
-                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left text-white"
-              >
-                <PlusCircle size={24} />
-                <span className="text-lg">Cadastrar Vagas</span>
-              </button>
-              <button
-                onClick={() => {
-                  setShowSidebar(false);
-                  navigate("/company-jobs");
-                }}
-                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left text-white"
-              >
-                <List size={24} />
-                <span className="text-lg">Minhas Vagas</span>
-              </button>
-              <button
-                onClick={() => navigate("/company-profile")}
-                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left text-white"
-              >
-                <User size={24} />
-                <span className="text-lg">Meu Perfil</span>
-              </button>
-              <button
-                onClick={() => {
-                  setShowSidebar(false);
-                  navigate("/company-settings");
-                }}
-                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left text-white"
-              >
-                <Settings size={24} />
-                <span className="text-lg">Configurações</span>
-              </button>
-              <button
-                onClick={() => {
-                  setShowSidebar(false);
-                  navigate("/company-support");
-                }}
-                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left text-white"
-              >
-                <Headset size={24} />
-                <span className="text-lg">Suporte</span>
-              </button>
-              <button
-                onClick={() => {
-                  setShowSidebar(false);
-                  navigate("/company-about");
-                }}
-                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left text-white"
-              >
-                <Info size={24} />
-                <span className="text-lg">Quem Somos</span>
-              </button>
-              <button
-                onClick={() => {
-                  setShowSidebar(false);
-                  navigate("/terms-company");
-                }}
-                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left text-white"
-              >
-                <FileText size={24} />
-                <span className="text-lg">Termos de Uso</span>
-              </button>
-            </nav>
-
-            <div className="p-4 border-t border-white/20">
-              <button
-                onClick={handleLogout}
-                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left text-red-500"
-              >
-                <LogOut size={24} />
-                <span className="text-lg">Sair</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <CompanySidebar showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8 max-w-4xl">
-        <div className="bg-white rounded-3xl p-8 md:p-12 shadow-lg">
+        <div className={`rounded-3xl p-8 md:p-12 shadow-lg border ${darkMode ? "bg-gray-700 border-gray-600" : "bg-white border-gray-100"}`}>
           <div className="text-center mb-10">
             <div className="text-6xl mb-4">🏢</div>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            <h1 className={`text-4xl md:text-5xl font-bold mb-4 ${darkMode ? "text-white" : "text-gray-900"}`}>
               Regras da Comunidade para Empresas
             </h1>
-            <p className="text-xl text-gray-700">
+            <p className={`text-xl ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
               Compromisso com inclusão e ética profissional
             </p>
           </div>
@@ -200,17 +85,17 @@ export default function CompanyCommunityRules() {
             {rules.map((rule, index) => (
               <div
                 key={index}
-                className="bg-gray-50 rounded-2xl p-6 hover:bg-gray-100 transition-all border border-gray-200"
+                className={`rounded-2xl p-6 transition-all border ${darkMode ? "bg-gray-600/50 hover:bg-gray-600 border-gray-500" : "bg-gray-50 hover:bg-gray-100 border-gray-200"}`}
               >
                 <div className="flex items-start gap-4">
                   <div className="text-purple-600 flex-shrink-0">
                     {rule.icon}
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    <h3 className={`text-xl font-semibold mb-2 ${darkMode ? "text-white" : "text-gray-900"}`}>
                       {rule.title}
                     </h3>
-                    <p className="text-gray-700 leading-relaxed">
+                    <p className={`leading-relaxed ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
                       {rule.description}
                     </p>
                   </div>
@@ -219,11 +104,11 @@ export default function CompanyCommunityRules() {
             ))}
           </div>
 
-          <div className="bg-orange-50 rounded-2xl p-6 mb-8 border border-orange-200">
-            <h3 className="text-xl font-semibold text-gray-900 mb-3">
+          <div className={`rounded-2xl p-6 mb-8 border ${darkMode ? "bg-orange-900/30 border-orange-700" : "bg-orange-50 border-orange-200"}`}>
+            <h3 className={`text-xl font-semibold mb-3 ${darkMode ? "text-white" : "text-gray-900"}`}>
               ⚠️ Consequências de Violações
             </h3>
-            <ul className="text-gray-700 space-y-2 list-disc list-inside">
+            <ul className={`space-y-2 list-disc list-inside ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
               <li>Primeira violação: Aviso formal e revisão das vagas publicadas</li>
               <li>Segunda violação: Suspensão temporária e impossibilidade de publicar novas vagas</li>
               <li>Violações graves ou repetidas: Banimento permanente da plataforma</li>
@@ -231,11 +116,11 @@ export default function CompanyCommunityRules() {
             </ul>
           </div>
 
-          <div className="bg-green-50 rounded-2xl p-6 border border-green-200">
-            <h3 className="text-xl font-semibold text-gray-900 mb-3">
+          <div className={`rounded-2xl p-6 border ${darkMode ? "bg-green-900/30 border-green-700" : "bg-green-50 border-green-200"}`}>
+            <h3 className={`text-xl font-semibold mb-3 ${darkMode ? "text-white" : "text-gray-900"}`}>
               💼 Boas Práticas para Empresas
             </h3>
-            <ul className="text-gray-700 space-y-2 list-disc list-inside">
+            <ul className={`space-y-2 list-disc list-inside ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
               <li>Seja transparente sobre a cultura organizacional e valores da empresa</li>
               <li>Ofereça feedback construtivo aos candidatos após entrevistas</li>
               <li>Mantenha as informações das vagas sempre atualizadas</li>

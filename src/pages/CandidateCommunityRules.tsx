@@ -53,21 +53,17 @@ export default function CandidateCommunityRules() {
   ];
 
   return (
-    <div className={`min-h-screen ${darkMode ? "bg-gray-900" : "bg-white"}`}>
+    <div className={`min-h-screen ${darkMode ? "bg-gray-800" : "bg-gray-50"}`}>
       {/* Header */}
       <header style={{ background: 'linear-gradient(to right, hsl(315, 26%, 40%), hsl(320, 30%, 50%))' }} className="text-white p-4 flex justify-between items-center sticky top-0 z-40">
-        <Button
-          variant="ghost"
-          size="icon"
+        <button
           onClick={() => setShowSidebar(!showSidebar)}
-          className="text-white hover:bg-white/10 p-2"
+          className="p-2 hover:bg-white/10 rounded-lg transition"
         >
           <Menu size={24} />
-        </Button>
+        </button>
 
-        <div className="[&_svg]:text-white [&_button]:hover:bg-white/10">
-          <NotificationsPanel />
-        </div>
+        <NotificationsPanel />
       </header>
 
       {/* Sidebar */}
@@ -75,13 +71,13 @@ export default function CandidateCommunityRules() {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8 max-w-4xl">
-        <div className="bg-gradient-primary/10 backdrop-blur-lg rounded-3xl p-8 md:p-12 shadow-card">
+        <div className={`rounded-3xl p-8 md:p-12 shadow-lg border ${darkMode ? "bg-gray-700 border-gray-600" : "bg-white border-gray-100"}`}>
           <div className="text-center mb-10">
             <div className="text-6xl mb-4">🌈</div>
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+            <h1 className={`text-4xl md:text-5xl font-bold mb-4 ${darkMode ? "text-white" : "text-gray-900"}`}>
               Regras da Comunidade
             </h1>
-            <p className="text-xl text-muted-foreground">
+            <p className={`text-xl ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
               Juntos construímos um espaço inclusivo e respeitoso
             </p>
           </div>
@@ -90,17 +86,17 @@ export default function CandidateCommunityRules() {
             {rules.map((rule, index) => (
               <div
                 key={index}
-                className="bg-card border border-border rounded-2xl p-6 hover:shadow-lg transition-smooth"
+                className={`rounded-2xl p-6 transition-all border ${darkMode ? "bg-gray-600/50 hover:bg-gray-600 border-gray-500" : "bg-gray-50 hover:bg-gray-100 border-gray-200"}`}
               >
                 <div className="flex items-start gap-4">
-                  <div className="text-success flex-shrink-0">
+                  <div className="text-purple-600 flex-shrink-0">
                     {rule.icon}
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-foreground mb-2">
+                    <h3 className={`text-xl font-semibold mb-2 ${darkMode ? "text-white" : "text-gray-900"}`}>
                       {rule.title}
                     </h3>
-                    <p className="text-muted-foreground leading-relaxed">
+                    <p className={`leading-relaxed ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
                       {rule.description}
                     </p>
                   </div>
@@ -109,22 +105,22 @@ export default function CandidateCommunityRules() {
             ))}
           </div>
 
-          <div className="bg-card border border-border rounded-2xl p-6 mb-8">
-            <h3 className="text-xl font-semibold text-foreground mb-3">
+          <div className={`rounded-2xl p-6 mb-8 border ${darkMode ? "bg-orange-900/30 border-orange-700" : "bg-orange-50 border-orange-200"}`}>
+            <h3 className={`text-xl font-semibold mb-3 ${darkMode ? "text-white" : "text-gray-900"}`}>
               ⚠️ Consequências de Violações
             </h3>
-            <ul className="text-muted-foreground space-y-2 list-disc list-inside">
+            <ul className={`space-y-2 list-disc list-inside ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
               <li>Primeira violação: Aviso formal</li>
               <li>Segunda violação: Suspensão temporária da conta</li>
               <li>Violações graves ou repetidas: Banimento permanente</li>
             </ul>
           </div>
 
-          <div className="bg-success/20 backdrop-blur-sm rounded-2xl p-6 border border-success/30">
-            <h3 className="text-xl font-semibold text-foreground mb-3">
+          <div className={`rounded-2xl p-6 border ${darkMode ? "bg-green-900/30 border-green-700" : "bg-green-50 border-green-200"}`}>
+            <h3 className={`text-xl font-semibold mb-3 ${darkMode ? "text-white" : "text-gray-900"}`}>
               💡 Dica para Candidatos
             </h3>
-            <p className="text-foreground/90">
+            <p className={`${darkMode ? "text-gray-300" : "text-gray-700"}`}>
               Mantenha seu perfil atualizado, seja proativo nas candidaturas e sempre 
               mantenha uma comunicação profissional. Sua reputação na plataforma é valiosa!
             </p>
