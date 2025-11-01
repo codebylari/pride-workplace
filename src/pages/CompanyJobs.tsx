@@ -154,8 +154,9 @@ export default function CompanyJobs() {
             {jobs.map((job) => (
               <div
                 key={job.id}
-                className={`w-full p-6 rounded-xl shadow-sm hover:shadow-md transition flex items-center justify-between ${
-                  darkMode ? "bg-gray-700" : "bg-white"
+                onClick={() => navigate(`/company-job/${job.id}`)}
+                className={`w-full p-6 rounded-xl shadow-sm hover:shadow-md transition flex items-center justify-between cursor-pointer ${
+                  darkMode ? "bg-gray-700 hover:bg-gray-650" : "bg-white hover:bg-gray-50"
                 }`}
               >
                 <div className="text-left flex-1">
@@ -166,7 +167,7 @@ export default function CompanyJobs() {
                     {job.job_type} • {job.location}
                   </p>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
                   <Button
                     onClick={(e) => handleEditClick(job.id, e)}
                     variant="ghost"
