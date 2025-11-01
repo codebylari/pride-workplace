@@ -88,7 +88,7 @@ export default function CompanyAbout() {
               <span className={`px-4 py-2 rounded-full text-sm font-medium ${darkMode ? "bg-gray-600 text-gray-200" : "bg-gray-100 text-gray-700"}`}>Adryel Costa</span>
               <span className={`px-4 py-2 rounded-full text-sm font-medium ${darkMode ? "bg-gray-600 text-gray-200" : "bg-gray-100 text-gray-700"}`}>Bruno Araujo</span>
               <span className={`px-4 py-2 rounded-full text-sm font-medium ${darkMode ? "bg-gray-600 text-gray-200" : "bg-gray-100 text-gray-700"}`}>Larissa Soeiro</span>
-              <span className={`px-4 py-2 rounded-full text-sm font-medium ${darkMode ? "bg-gray-600 text-gray-200" : "bg-gray-100 text-gray-700"}`}>Rafaella Costa</span>
+              <span className={`px-4 py-2 rounded-full text-sm font-medium ${darkMode ? "bg-gray-600 text-gray-200" : "bg-gray-100 text-gray-700"}`}>Rafaella Silva</span>
             </div>
           </div>
         </div>
