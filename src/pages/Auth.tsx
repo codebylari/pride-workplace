@@ -72,75 +72,48 @@ export default function Auth() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden flex items-center justify-center p-2 sm:p-8 lg:p-12 bg-gradient-to-br from-[#6E4062] via-[#5a3452] to-[#6E4062]">
+    <div className="min-h-screen relative overflow-hidden flex items-center justify-center p-4 sm:p-8 lg:p-12 bg-gradient-to-br from-[#6E4062] via-[#5a3452] to-[#6E4062]">
       {/* Logo LINKA+ no topo centralizado */}
-      <div className="absolute top-12 sm:top-16 left-1/2 -translate-x-1/2 z-20">
-        <img src={logo} alt="Linka+ Logo" className="w-40 sm:w-56 h-auto" />
+      <div className="absolute top-8 sm:top-12 left-1/2 -translate-x-1/2 z-20 animate-fade-in">
+        <img src={logo} alt="Linka+ Logo" className="w-48 sm:w-64 h-auto drop-shadow-2xl" />
       </div>
 
-      {/* Elementos decorativos geométricos */}
+      {/* Elementos decorativos sutis */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Círculos grandes com blur */}
-        <div className="absolute top-20 left-20 w-96 h-96 rounded-full bg-purple-500/20 blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-32 right-32 w-[500px] h-[500px] rounded-full bg-pink-500/15 blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/3 w-80 h-80 rounded-full bg-blue-500/15 blur-3xl"></div>
+        {/* Círculos grandes com blur suave */}
+        <div className="absolute top-20 left-20 w-96 h-96 rounded-full bg-purple-500/10 blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-32 right-32 w-[500px] h-[500px] rounded-full bg-pink-500/10 blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/3 w-80 h-80 rounded-full bg-blue-500/10 blur-3xl"></div>
         
-        {/* Formas geométricas decorativas - quadrados e retângulos */}
-        <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-white/5 rounded-2xl rotate-45"></div>
-        <div className="absolute top-1/3 right-1/3 w-24 h-24 bg-white/5 rounded-full"></div>
-        <div className="absolute bottom-1/3 left-1/2 w-16 h-40 bg-white/5 rounded-xl rotate-12"></div>
-        <div className="absolute top-1/2 right-1/4 w-28 h-28 bg-white/5 rounded-2xl -rotate-12"></div>
-        <div className="absolute bottom-1/4 right-1/3 w-20 h-20 bg-white/5 rounded-full"></div>
-        
-        {/* Mais formas geométricas distribuídas */}
-        <div className="absolute top-20 right-1/4 w-20 h-20 bg-white/5 rounded-xl rotate-45"></div>
-        <div className="absolute top-1/3 left-1/5 w-16 h-16 bg-white/5 rounded-full"></div>
-        <div className="absolute bottom-1/4 left-1/3 w-24 h-24 bg-white/5 rounded-2xl -rotate-12"></div>
-        <div className="absolute bottom-20 right-1/5 w-28 h-28 bg-white/5 rounded-xl rotate-12"></div>
-        <div className="absolute top-1/4 right-1/5 w-12 h-32 bg-white/5 rounded-lg rotate-45"></div>
-        <div className="absolute bottom-1/3 right-1/2 w-18 h-18 bg-white/5 rounded-full"></div>
-        <div className="absolute top-2/3 left-1/4 w-22 h-22 bg-white/5 rounded-xl -rotate-45"></div>
-        <div className="absolute top-1/2 right-1/6 w-26 h-26 bg-white/5 rounded-2xl rotate-12"></div>
-        <div className="absolute bottom-1/2 right-1/3 w-20 h-36 bg-white/5 rounded-lg -rotate-12"></div>
-        
-        {/* Mais formas no lado direito (lado do sign in) */}
-        <div className="absolute top-1/4 right-10 w-24 h-24 bg-white/5 rounded-xl -rotate-45"></div>
-        <div className="absolute top-2/3 right-20 w-18 h-18 bg-white/5 rounded-full"></div>
-        <div className="absolute bottom-1/4 right-12 w-20 h-28 bg-white/5 rounded-lg rotate-45"></div>
-        <div className="absolute top-1/3 right-1/12 w-22 h-22 bg-white/5 rounded-2xl rotate-12"></div>
-        <div className="absolute bottom-1/3 right-1/8 w-16 h-40 bg-white/5 rounded-xl -rotate-12"></div>
-        <div className="absolute top-1/2 right-8 w-14 h-14 bg-white/5 rounded-full"></div>
-        
-        {/* Linhas decorativas */}
-        <div className="absolute top-40 left-1/3 w-48 h-0.5 bg-white/10 rotate-45"></div>
-        <div className="absolute bottom-40 right-1/4 w-64 h-0.5 bg-white/10 -rotate-12"></div>
-        <div className="absolute top-1/3 right-1/5 w-40 h-0.5 bg-white/10 rotate-12"></div>
-        <div className="absolute bottom-1/3 left-1/5 w-56 h-0.5 bg-white/10 -rotate-45"></div>
+        {/* Formas geométricas minimalistas */}
+        <div className="absolute top-1/4 right-1/4 w-24 h-24 bg-white/5 rounded-2xl rotate-45"></div>
+        <div className="absolute bottom-1/3 left-1/4 w-32 h-32 bg-white/5 rounded-full"></div>
+        <div className="absolute top-2/3 right-1/3 w-20 h-20 bg-white/5 rounded-xl -rotate-12"></div>
       </div>
 
-      <div className="w-full max-w-6xl grid md:grid-cols-2 gap-4 sm:gap-8 relative z-10 px-2 sm:px-4 pt-20 sm:pt-0">
+      <div className="w-full max-w-7xl grid md:grid-cols-2 gap-8 lg:gap-16 relative z-10 px-4 sm:px-6 pt-24 sm:pt-8">
         {/* Left side - Welcome */}
-        <div className="flex flex-col justify-center items-start space-y-4 sm:space-y-8 text-white">
-          <div className="space-y-2 sm:space-y-4">
+        <div className="flex flex-col justify-center items-start space-y-8 sm:space-y-10 text-white animate-fade-in">
+          <div className="space-y-6">
             {/* Ícone L+ acima do Bem-vindo */}
-            <img src={icon} alt="Linka+ Icon" className="w-16 sm:w-24 md:w-28 h-auto mb-2 sm:mb-4" />
+            <img src={icon} alt="Linka+ Icon" className="w-20 sm:w-28 md:w-32 h-auto mb-4 drop-shadow-2xl" />
             
-            <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold leading-tight">
+            <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold leading-tight">
               Bem-vindo!
             </h1>
             
-            <div className="w-12 sm:w-16 h-1 bg-gradient-to-r from-orange-400 to-pink-500"></div>
+            <div className="w-16 sm:w-20 h-1 bg-gradient-to-r from-orange-400 via-pink-500 to-purple-500 rounded-full"></div>
             
-            <p className="text-sm sm:text-lg text-purple-200 max-w-md leading-relaxed">
+            <p className="text-base sm:text-xl text-white/90 max-w-lg leading-relaxed font-light">
               Conectando talentos diversos com empresas que valorizam a inclusão e a diversidade no ambiente de trabalho.
             </p>
           </div>
           
-          <div className="space-y-2 sm:space-y-4">
-            <p className="text-base sm:text-lg text-purple-200">Não possui conta?</p>
+          <div className="space-y-4">
+            <p className="text-lg sm:text-xl text-white/90 font-light">Ainda não possui conta?</p>
             <Button
               onClick={() => navigate("/register")}
-              className="bg-gradient-to-r from-orange-400 to-pink-500 hover:from-orange-500 hover:to-pink-600 text-white px-6 sm:px-8 py-4 sm:py-6 rounded-full text-sm sm:text-base font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+              className="bg-white/10 backdrop-blur-sm hover:bg-white/20 border-2 border-white/30 hover:border-white/50 text-white px-8 sm:px-10 py-5 sm:py-6 rounded-full text-base sm:text-lg font-medium shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
             >
               CADASTRAR-SE
             </Button>
@@ -148,29 +121,32 @@ export default function Auth() {
         </div>
 
         {/* Right side - Login form */}
-        <div className="flex items-center justify-center">
-          <div className="w-full max-w-md bg-white/10 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-6 sm:p-10 space-y-4 sm:space-y-8 shadow-2xl border border-white/20 relative">
-            {/* Efeito de brilho/reflexo de vidro */}
-            <div className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-50 pointer-events-none"></div>
+        <div className="flex items-center justify-center animate-fade-in" style={{ animationDelay: '0.2s' }}>
+          <div className="w-full max-w-md bg-white/10 backdrop-blur-2xl rounded-3xl p-8 sm:p-12 space-y-8 shadow-2xl border border-white/20 relative overflow-hidden">
+            {/* Efeito de brilho sutil */}
+            <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent pointer-events-none"></div>
+            <div className="absolute -top-20 -right-20 w-40 h-40 bg-purple-500/20 rounded-full blur-3xl"></div>
+            <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-pink-500/20 rounded-full blur-3xl"></div>
             
-            <div className="text-center space-y-2 relative z-10">
-              <h2 className="text-2xl sm:text-3xl font-bold text-white">Sign in</h2>
+            <div className="text-center space-y-3 relative z-10">
+              <h2 className="text-3xl sm:text-4xl font-bold text-white">Entrar</h2>
+              <p className="text-white/70 text-sm">Acesse sua conta</p>
             </div>
             
-            <form onSubmit={handleLogin} className="space-y-4 sm:space-y-6 relative z-10">
-              <div className="space-y-1 sm:space-y-2">
+            <form onSubmit={handleLogin} className="space-y-6 relative z-10">
+              <div className="space-y-2">
                 <label className="text-white text-sm font-medium">Email</label>
                 <Input
                   type="email"
-                  placeholder="Digite seu email"
+                  placeholder="seu@email.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="bg-white/90 rounded-lg py-4 sm:py-6 text-gray-900 placeholder:text-gray-500 border border-white/30 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                  className="bg-white/95 rounded-xl py-6 text-gray-900 placeholder:text-gray-400 border-0 focus:ring-2 focus:ring-pink-400 shadow-lg"
                 />
               </div>
 
-              <div className="space-y-1 sm:space-y-2">
+              <div className="space-y-2">
                 <label className="text-white text-sm font-medium">Senha</label>
                 <div className="relative">
                   <Input
@@ -179,14 +155,14 @@ export default function Auth() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="bg-white/90 rounded-lg py-4 sm:py-6 text-gray-900 placeholder:text-gray-500 pr-12 border border-white/30 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                    className="bg-white/95 rounded-xl py-6 text-gray-900 placeholder:text-gray-400 pr-12 border-0 focus:ring-2 focus:ring-pink-400 shadow-lg"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-900 transition-colors"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors"
                   >
-                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
                 </div>
               </div>
@@ -195,7 +171,7 @@ export default function Auth() {
                 <button
                   type="button"
                   onClick={() => navigate("/forgot-password")}
-                  className="text-white/80 text-xs sm:text-sm hover:text-white transition-colors"
+                  className="text-white/80 text-sm hover:text-white transition-colors underline-offset-2 hover:underline"
                 >
                   Esqueceu sua senha?
                 </button>
@@ -204,7 +180,7 @@ export default function Auth() {
               <Button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-orange-400 to-pink-500 hover:from-orange-500 hover:to-pink-600 text-white py-4 sm:py-6 rounded-full text-base sm:text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50"
+                className="w-full bg-gradient-to-r from-orange-400 via-pink-500 to-purple-500 hover:from-orange-500 hover:via-pink-600 hover:to-purple-600 text-white py-6 rounded-xl text-lg font-semibold shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 disabled:opacity-50"
               >
                 {loading ? "Entrando..." : "Entrar"}
               </Button>
