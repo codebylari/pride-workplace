@@ -43,9 +43,12 @@ export default function CompanySettings() {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto">
-          <h1 className={`text-3xl font-bold text-center mb-12 ${darkMode ? "text-white" : "text-gray-900"}`}>
-            Configurações
-          </h1>
+          <div className="text-center mb-12 animate-fade-in">
+            <h1 className={`text-4xl sm:text-5xl font-bold mb-4 ${darkMode ? "text-white" : "text-gray-900"}`}>
+              Configurações
+            </h1>
+            <div className="w-24 h-1 mx-auto" style={{ background: 'linear-gradient(to right, hsl(315, 26%, 40%), hsl(320, 30%, 50%))' }}></div>
+          </div>
 
           <div className="space-y-6">
             {/* Notificações */}
