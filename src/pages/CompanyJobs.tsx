@@ -125,9 +125,12 @@ export default function CompanyJobs() {
 
       {/* Main Content */}
       <main className="container mx-auto px-6 py-16 max-w-6xl">
-        <h1 className={`text-4xl font-bold text-center mb-16 ${darkMode ? "text-white" : "text-gray-800"}`}>
-          Minhas Vagas
-        </h1>
+        <div className="text-center mb-12 animate-fade-in">
+          <h1 className={`text-4xl sm:text-5xl font-bold mb-4 ${darkMode ? "text-white" : "text-gray-900"}`}>
+            Minhas Vagas
+          </h1>
+          <div className="w-24 h-1 mx-auto" style={{ background: 'linear-gradient(to right, hsl(315, 26%, 40%), hsl(320, 30%, 50%))' }}></div>
+        </div>
 
         {loading ? (
           <div className="space-y-4">
