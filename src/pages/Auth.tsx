@@ -85,10 +85,32 @@ export default function Auth() {
         <div className="absolute bottom-32 right-32 w-[500px] h-[500px] rounded-full bg-pink-500/10 blur-3xl"></div>
         <div className="absolute top-1/2 left-1/3 w-80 h-80 rounded-full bg-blue-500/10 blur-3xl"></div>
         
-        {/* Formas geométricas minimalistas */}
-        <div className="absolute top-1/4 right-1/4 w-24 h-24 bg-white/5 rounded-2xl rotate-45"></div>
-        <div className="absolute bottom-1/3 left-1/4 w-32 h-32 bg-white/5 rounded-full"></div>
-        <div className="absolute top-2/3 right-1/3 w-20 h-20 bg-white/5 rounded-xl -rotate-12"></div>
+        {/* Formas geométricas decorativas - quadrados e retângulos */}
+        <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-white/5 rounded-2xl rotate-45"></div>
+        <div className="absolute top-1/3 right-1/3 w-24 h-24 bg-white/5 rounded-full"></div>
+        <div className="absolute bottom-1/3 left-1/2 w-16 h-40 bg-white/5 rounded-xl rotate-12"></div>
+        <div className="absolute top-1/2 right-1/4 w-28 h-28 bg-white/5 rounded-2xl -rotate-12"></div>
+        <div className="absolute bottom-1/4 right-1/3 w-20 h-20 bg-white/5 rounded-full"></div>
+        
+        {/* Mais formas geométricas distribuídas */}
+        <div className="absolute top-20 right-1/4 w-20 h-20 bg-white/5 rounded-xl rotate-45"></div>
+        <div className="absolute top-1/3 left-1/5 w-16 h-16 bg-white/5 rounded-full"></div>
+        <div className="absolute bottom-1/4 left-1/3 w-24 h-24 bg-white/5 rounded-2xl -rotate-12"></div>
+        <div className="absolute bottom-20 right-1/5 w-28 h-28 bg-white/5 rounded-xl rotate-12"></div>
+        <div className="absolute top-1/4 right-1/5 w-12 h-32 bg-white/5 rounded-lg rotate-45"></div>
+        <div className="absolute bottom-1/3 right-1/2 w-18 h-18 bg-white/5 rounded-full"></div>
+        <div className="absolute top-2/3 left-1/4 w-22 h-22 bg-white/5 rounded-xl -rotate-45"></div>
+        <div className="absolute top-1/2 right-1/6 w-26 h-26 bg-white/5 rounded-2xl rotate-12"></div>
+        <div className="absolute bottom-1/2 right-1/3 w-20 h-36 bg-white/5 rounded-lg -rotate-12"></div>
+        
+        {/* Mais formas no lado direito */}
+        <div className="absolute top-1/4 right-10 w-24 h-24 bg-white/5 rounded-xl -rotate-45"></div>
+        <div className="absolute top-2/3 right-20 w-18 h-18 bg-white/5 rounded-full"></div>
+        <div className="absolute bottom-1/4 right-12 w-20 h-28 bg-white/5 rounded-lg rotate-45"></div>
+        
+        {/* Linhas decorativas */}
+        <div className="absolute top-40 left-1/3 w-48 h-0.5 bg-white/10 rotate-45"></div>
+        <div className="absolute bottom-40 right-1/4 w-64 h-0.5 bg-white/10 -rotate-12"></div>
       </div>
 
       <div className="w-full max-w-7xl grid md:grid-cols-2 gap-8 lg:gap-16 relative z-10 px-4 sm:px-6 pt-24 sm:pt-8">
