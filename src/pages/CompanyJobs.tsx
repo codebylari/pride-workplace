@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, ChevronRight } from "lucide-react";
+import { Menu, Pencil, Trash2 } from "lucide-react";
 import { NotificationsPanel } from "@/components/NotificationsPanel";
 import { CompanySidebar } from "@/components/CompanySidebar";
 import { useAuth } from "@/hooks/useAuth";
@@ -9,6 +9,17 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 export default function CompanyJobs() {
   const navigate = useNavigate();
@@ -18,6 +29,8 @@ export default function CompanyJobs() {
   const [showSidebar, setShowSidebar] = useState(false);
   const [jobs, setJobs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [jobToDelete, setJobToDelete] = useState<string | null>(null);
 
   const companyName = user?.user_metadata?.company_name || "Empresa";
 
@@ -48,6 +61,46 @@ export default function CompanyJobs() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleDeleteClick = (jobId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setJobToDelete(jobId);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!jobToDelete) return;
+
+    try {
+      const { error } = await supabase
+        .from("jobs")
+        .delete()
+        .eq("id", jobToDelete);
+
+      if (error) throw error;
+
+      toast({
+        title: "Vaga excluída",
+        description: "A vaga foi excluída com sucesso.",
+      });
+
+      fetchJobs();
+    } catch (error: any) {
+      toast({
+        title: "Erro ao excluir vaga",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setDeleteDialogOpen(false);
+      setJobToDelete(null);
+    }
+  };
+
+  const handleEditClick = (jobId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    navigate(`/edit-job/${jobId}`);
   };
 
   return (
@@ -96,14 +149,13 @@ export default function CompanyJobs() {
         ) : (
           <div className="space-y-4">
             {jobs.map((job) => (
-              <button
+              <div
                 key={job.id}
-                onClick={() => navigate(`/company-job/${job.id}`)}
                 className={`w-full p-6 rounded-xl shadow-sm hover:shadow-md transition flex items-center justify-between ${
-                  darkMode ? "bg-gray-700 hover:bg-gray-600" : "bg-white hover:bg-gray-50"
+                  darkMode ? "bg-gray-700" : "bg-white"
                 }`}
               >
-                <div className="text-left">
+                <div className="text-left flex-1">
                   <h3 className={`text-xl font-semibold mb-2 ${darkMode ? "text-white" : "text-gray-900"}`}>
                     {job.title}
                   </h3>
@@ -111,12 +163,46 @@ export default function CompanyJobs() {
                     {job.job_type} • {job.location}
                   </p>
                 </div>
-                <ChevronRight className={darkMode ? "text-gray-400" : "text-gray-600"} size={24} />
-              </button>
+                <div className="flex gap-2">
+                  <Button
+                    onClick={(e) => handleEditClick(job.id, e)}
+                    variant="ghost"
+                    size="icon"
+                    className="hover:bg-blue-100 dark:hover:bg-blue-900"
+                  >
+                    <Pencil className="w-5 h-5 text-blue-600" />
+                  </Button>
+                  <Button
+                    onClick={(e) => handleDeleteClick(job.id, e)}
+                    variant="ghost"
+                    size="icon"
+                    className="hover:bg-red-100 dark:hover:bg-red-900"
+                  >
+                    <Trash2 className="w-5 h-5 text-red-600" />
+                  </Button>
+                </div>
+              </div>
             ))}
           </div>
         )}
       </main>
+      
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmar exclusão</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tem certeza que deseja excluir esta vaga? Esta ação não pode ser desfeita.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmDelete} className="bg-red-600 hover:bg-red-700">
+              Excluir
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       
       <ChatBot />
     </div>

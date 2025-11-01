@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,12 +12,14 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
-export default function CreateJob() {
+export default function EditCompanyJob() {
+  const { jobId } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
   const { darkMode } = useTheme();
   const { toast } = useToast();
   const [showSidebar, setShowSidebar] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   // Form states
   const [title, setTitle] = useState("");
@@ -30,10 +32,56 @@ export default function CreateJob() {
   const [experience, setExperience] = useState("");
   const [period, setPeriod] = useState("");
 
+  useEffect(() => {
+    if (jobId && user) {
+      fetchJobData();
+    }
+  }, [jobId, user]);
+
+  const fetchJobData = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from("jobs")
+        .select("*")
+        .eq("id", jobId)
+        .eq("company_id", user?.id)
+        .single();
+
+      if (error) throw error;
+
+      if (data) {
+        setTitle(data.title);
+        setWorkModel(data.job_type);
+        setCity(data.location);
+        setSalary(data.salary || "");
+        setBenefits(data.requirements || "");
+        
+        // Parse description to extract fields
+        const descParts = data.description.split("\n\n");
+        setDescription(descParts[0] || "");
+        
+        descParts.slice(1).forEach((part: string) => {
+          if (part.startsWith("Área: ")) setArea(part.replace("Área: ", ""));
+          if (part.startsWith("Experiência: ")) setExperience(part.replace("Experiência: ", ""));
+          if (part.startsWith("Período: ")) setPeriod(part.replace("Período: ", ""));
+        });
+      }
+    } catch (error: any) {
+      toast({
+        title: "Erro ao carregar vaga",
+        description: error.message,
+        variant: "destructive",
+      });
+      navigate("/company-jobs");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validação de campos obrigatórios
     if (!title || !description || !area || !benefits || !salary || !workModel || !city || !experience || !period) {
       toast({
         title: "Campos obrigatórios",
@@ -44,48 +92,46 @@ export default function CreateJob() {
     }
 
     try {
-      const { error } = await supabase.from("jobs").insert({
-        company_id: user?.id,
-        title,
-        description: `${description}\n\nÁrea: ${area}\nBenefícios: ${benefits}\nExperiência: ${experience}\nPeríodo: ${period}`,
-        job_type: workModel,
-        location: city,
-        salary,
-        requirements: benefits,
-      });
+      const { error } = await supabase
+        .from("jobs")
+        .update({
+          title,
+          description: `${description}\n\nÁrea: ${area}\nBenefícios: ${benefits}\nExperiência: ${experience}\nPeríodo: ${period}`,
+          job_type: workModel,
+          location: city,
+          salary,
+          requirements: benefits,
+        })
+        .eq("id", jobId)
+        .eq("company_id", user?.id);
 
       if (error) throw error;
 
       toast({
-        title: "Vaga cadastrada!",
-        description: "A vaga foi cadastrada com sucesso.",
+        title: "Vaga atualizada!",
+        description: "A vaga foi atualizada com sucesso.",
       });
 
-      // Limpar formulário
-      setTitle("");
-      setDescription("");
-      setArea("");
-      setBenefits("");
-      setSalary("");
-      setWorkModel("");
-      setCity("");
-      setExperience("");
-      setPeriod("");
-
-      // Redirecionar para lista de vagas
       setTimeout(() => navigate("/company-jobs"), 1500);
     } catch (error: any) {
       toast({
-        title: "Erro ao cadastrar vaga",
+        title: "Erro ao atualizar vaga",
         description: error.message,
         variant: "destructive",
       });
     }
   };
 
+  if (loading) {
+    return (
+      <div className={`min-h-screen flex items-center justify-center ${darkMode ? "bg-gray-800" : "bg-gray-50"}`}>
+        <p className={darkMode ? "text-white" : "text-gray-800"}>Carregando...</p>
+      </div>
+    );
+  }
+
   return (
     <div className={`min-h-screen ${darkMode ? "bg-gray-800" : "bg-gray-50"}`}>
-      {/* Header */}
       <header style={{ background: 'linear-gradient(to right, hsl(315, 26%, 40%), hsl(320, 30%, 50%))' }} className="text-white p-4 flex justify-between items-center">
         <button
           onClick={() => setShowSidebar(!showSidebar)}
@@ -97,18 +143,15 @@ export default function CreateJob() {
         <NotificationsPanel />
       </header>
 
-      {/* Sidebar */}
       <CompanySidebar showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
 
-      {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           <h1 className={`text-3xl font-bold text-center mb-8 ${darkMode ? "text-white" : "text-gray-900"}`}>
-            Cadastrar Vagas
+            Editar Vaga
           </h1>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Título da Vaga */}
             <div>
               <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-900"}`}>
                 Título da Vaga
@@ -117,11 +160,10 @@ export default function CreateJob() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 required
-                className={`${darkMode ? "bg-gray-700 text-white border-gray-600" : "border-blue-400"} focus:border-blue-500 focus:ring-blue-500`}
+                className={darkMode ? "bg-gray-700 text-white border-gray-600" : ""}
               />
             </div>
 
-            {/* Descrição da Vaga */}
             <div>
               <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-900"}`}>
                 Descrição da Vaga
@@ -135,7 +177,6 @@ export default function CreateJob() {
               />
             </div>
 
-            {/* Área */}
             <div>
               <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-900"}`}>
                 Área
@@ -148,7 +189,6 @@ export default function CreateJob() {
               />
             </div>
 
-            {/* Benefícios/Informações Extras */}
             <div>
               <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-900"}`}>
                 Benefícios/Informações Extras
@@ -162,7 +202,6 @@ export default function CreateJob() {
               />
             </div>
 
-            {/* Piso Salarial e Modelo de Trabalho */}
             <div className="grid md:grid-cols-2 gap-6">
               <div>
                 <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-900"}`}>
@@ -191,7 +230,6 @@ export default function CreateJob() {
               </div>
             </div>
 
-            {/* Cidade e Experiência Necessária */}
             <div className="grid md:grid-cols-2 gap-6">
               <div>
                 <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-900"}`}>
@@ -220,7 +258,6 @@ export default function CreateJob() {
               </div>
             </div>
 
-            {/* Período */}
             <div>
               <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-900"}`}>
                 Período
@@ -234,13 +271,20 @@ export default function CreateJob() {
               />
             </div>
 
-            {/* Botão de Cadastrar */}
-            <div className="flex justify-center pt-4">
+            <div className="flex justify-center gap-4 pt-4">
+              <Button
+                type="button"
+                onClick={() => navigate("/company-jobs")}
+                variant="outline"
+                className="px-8 py-6 text-lg"
+              >
+                Cancelar
+              </Button>
               <Button
                 type="submit"
                 className="px-12 py-6 bg-green-300 hover:bg-green-400 text-green-900 font-semibold text-lg rounded-full"
               >
-                Cadastrar a Vaga
+                Salvar Alterações
               </Button>
             </div>
           </form>
