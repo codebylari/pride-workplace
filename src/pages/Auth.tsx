@@ -7,7 +7,6 @@ import { useToast } from "@/hooks/use-toast";
 import { Eye, EyeOff } from "lucide-react";
 import logo from "@/assets/logo-linkar.png";
 import icon from "@/assets/icon-linkar.png";
-import lovableLogo from "@/assets/logo-lovable.png";
 
 export default function Auth() {
   const [email, setEmail] = useState("");
@@ -210,11 +209,6 @@ export default function Auth() {
             </form>
           </div>
         </div>
-      </div>
-
-      {/* Lovable Logo no rodapé */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 animate-fade-in">
-        <img src={lovableLogo} alt="Powered by Lovable" className="w-16 sm:w-20 h-auto opacity-60 hover:opacity-100 transition-opacity" />
       </div>
     </div>
   );
