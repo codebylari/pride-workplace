@@ -11,8 +11,22 @@ interface Message {
   content: string;
 }
 
-export function ChatBot() {
-  const [isOpen, setIsOpen] = useState(false);
+interface ChatBotProps {
+  isOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}
+
+export function ChatBot({ isOpen: externalIsOpen, onOpenChange }: ChatBotProps = {}) {
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
+  const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
+  
+  const handleOpenChange = (open: boolean) => {
+    if (onOpenChange) {
+      onOpenChange(open);
+    } else {
+      setInternalIsOpen(open);
+    }
+  };
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
@@ -106,7 +120,7 @@ export function ChatBot() {
       {/* Botão do Chat */}
       {!isOpen && (
         <button
-          onClick={() => setIsOpen(true)}
+          onClick={() => handleOpenChange(true)}
           className="fixed bottom-8 right-8 w-20 h-20 rounded-full flex items-center justify-center shadow-xl hover:scale-110 transition-transform z-50"
           style={{ background: '#F86999' }}
         >
@@ -135,7 +149,7 @@ export function ChatBot() {
               </div>
             </div>
             <button
-              onClick={() => setIsOpen(false)}
+              onClick={() => handleOpenChange(false)}
               className="text-white hover:bg-white/10 rounded-lg p-2 transition"
             >
               <X size={24} />

@@ -11,6 +11,7 @@ export default function CompanySupport() {
   const navigate = useNavigate();
   const { darkMode } = useTheme();
   const [showSidebar, setShowSidebar] = useState(false);
+  const [chatOpen, setChatOpen] = useState(false);
 
   return (
     <div className={`min-h-screen ${darkMode ? "bg-gray-800" : "bg-gray-50"}`}>
@@ -38,7 +39,10 @@ export default function CompanySupport() {
 
         {/* Buttons Section */}
         <div className="space-y-6 mb-16">
-          <Button className="w-full bg-[#FFF8D6] hover:bg-[#FFF2A9] text-gray-800 py-8 rounded-full text-xl font-semibold shadow-lg">
+          <Button 
+            onClick={() => setChatOpen(true)}
+            className="w-full bg-[#FFF8D6] hover:bg-[#FFF2A9] text-gray-800 py-8 rounded-full text-xl font-semibold shadow-lg"
+          >
             Chat/Suporte
           </Button>
 
@@ -52,7 +56,7 @@ export default function CompanySupport() {
       </main>
       
       {/* ChatBot */}
-      <ChatBot />
+      <ChatBot isOpen={chatOpen} onOpenChange={setChatOpen} />
     </div>
   );
 }
