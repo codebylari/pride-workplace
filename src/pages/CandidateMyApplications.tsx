@@ -207,8 +207,19 @@ export default function MyApplications() {
                         variant="outline"
                         size="sm"
                       >
-                        Ver Vaga
+                        Ver Detalhes da Vaga
                       </Button>
+                      
+                      {app.contract_status === 'pending' && (
+                        <Button
+                          onClick={() => setApplicationToDelete(app.id)}
+                          variant="destructive"
+                          size="sm"
+                        >
+                          <Trash2 size={16} className="mr-1" />
+                          Cancelar Candidatura
+                        </Button>
+                      )}
                       
                       {app.contract_status === 'completed' && !hasRated(app) && (
                         <Button
@@ -230,25 +241,6 @@ export default function MyApplications() {
                         <Badge variant="secondary">✓ Avaliado</Badge>
                       )}
                     </div>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => navigate(`/job-details/${app.jobs?.id}`)}
-                      className={`p-2 hover:bg-gray-100 rounded-lg transition ${
-                        darkMode ? "hover:bg-gray-600" : ""
-                      }`}
-                    >
-                      <ChevronRight size={24} className={darkMode ? "text-white" : "text-gray-600"} />
-                    </button>
-                    {app.contract_status === 'pending' && (
-                      <button
-                        onClick={() => setApplicationToDelete(app.id)}
-                        className="p-2 hover:bg-red-50 rounded-lg transition"
-                      >
-                        <Trash2 size={24} className="text-red-500" />
-                      </button>
-                    )}
                   </div>
                 </div>
               </div>
