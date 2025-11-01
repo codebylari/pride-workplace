@@ -51,34 +51,58 @@ export default function MyApplications() {
         .from("applications")
         .select(`
           *,
-          jobs (
+          jobs!inner (
             id,
             title,
             job_type,
             location,
-            company_id,
-            company_profiles (
-              fantasy_name,
-              rating
-            )
-          ),
-          ratings!ratings_application_id_fkey (
-            id,
-            rating,
-            rater_id
+            company_id
           )
         `)
         .eq("candidate_id", user?.id)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setApplications(data || []);
+
+      // Buscar informações das empresas separadamente
+      if (data && data.length > 0) {
+        const companyIds = [...new Set(data.map(app => app.jobs?.company_id).filter(Boolean))];
+        
+        const { data: companiesData } = await supabase
+          .from("company_profiles")
+          .select("user_id, fantasy_name, rating")
+          .in("user_id", companyIds);
+
+        // Buscar ratings
+        const applicationIds = data.map(app => app.id);
+        const { data: ratingsData } = await supabase
+          .from("ratings")
+          .select("id, rating, rater_id, application_id")
+          .in("application_id", applicationIds)
+          .eq("rater_id", user?.id);
+
+        // Combinar dados
+        const applicationsWithData = data.map(app => ({
+          ...app,
+          jobs: {
+            ...app.jobs,
+            company_profiles: companiesData?.find(c => c.user_id === app.jobs?.company_id)
+          },
+          ratings: ratingsData?.filter(r => r.application_id === app.id) || []
+        }));
+
+        setApplications(applicationsWithData);
+      } else {
+        setApplications([]);
+      }
     } catch (error: any) {
+      console.error("Erro ao carregar candidaturas:", error);
       toast({
         title: "Erro ao carregar candidaturas",
         description: error.message,
         variant: "destructive",
       });
+      setApplications([]);
     } finally {
       setLoading(false);
     }
