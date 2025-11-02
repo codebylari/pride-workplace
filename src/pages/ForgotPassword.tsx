@@ -69,7 +69,7 @@ export default function ForgotPassword() {
 
             <div className="pt-6 flex flex-col items-center">
               <p className="text-gray-600 mb-4">Atenciosamente,</p>
-              <img src={logoLinkar} alt="Linka+ Logo" className="h-12 w-auto brightness-0" />
+              <img src={logoLinkar} alt="Linka+ Logo" className="h-12 w-auto" style={{ filter: 'invert(46%) sepia(28%) saturate(1088%) hue-rotate(267deg) brightness(90%) contrast(85%)' }} />
             </div>
           </div>
         </div>
