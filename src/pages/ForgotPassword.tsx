@@ -44,6 +44,14 @@ export default function ForgotPassword() {
     return (
       <div className="min-h-screen flex items-center justify-center p-6" style={{ background: 'linear-gradient(to bottom right, hsl(315, 26%, 40%), hsl(315, 30%, 50%), hsl(320, 30%, 50%))' }}>
         <div className="w-full max-w-2xl bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl p-12">
+          <Button
+            variant="ghost"
+            onClick={() => navigate(-1)}
+            className="mb-6 -ml-2 text-gray-600 hover:text-gray-900"
+          >
+            <ArrowLeft className="w-5 h-5 mr-2" />
+            Voltar
+          </Button>
           <div className="text-center space-y-6">
             <h1 className="text-3xl font-bold text-gray-900">
               Solicitação de Redefinição de Senha Recebida
