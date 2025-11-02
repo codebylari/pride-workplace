@@ -688,7 +688,7 @@ export default function Register() {
           <span className="font-medium">Voltar</span>
         </button>
         <h2 className="text-2xl md:text-3xl font-bold">
-          Qual é o seu nível de conhecimento em Git?
+          Qual é o seu nível de conhecimento em GitHub?
         </h2>
         {["Básico", "Intermediário", "Avançado", "Nenhum conhecimento"].map(
           (option) => (
@@ -1564,7 +1564,7 @@ export default function Register() {
           <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
           <span className="font-medium">Voltar</span>
         </button>
-        <h2 className="text-3xl font-bold">Experiência em Git?</h2>
+        <h2 className="text-3xl font-bold">Experiência em GitHub?</h2>
         {["Sim, básico", "Sim, avançado", "Conhecimento teórico", "Não necessário"].map((option) => (
           <Button
             key={option}
