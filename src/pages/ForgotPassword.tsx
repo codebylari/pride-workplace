@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Lock } from "lucide-react";
+import { Lock, ArrowLeft } from "lucide-react";
+import logoLinkar from "@/assets/logo-linkar.png";
 
 export default function ForgotPassword() {
   const navigate = useNavigate();
@@ -43,24 +44,32 @@ export default function ForgotPassword() {
     return (
       <div className="min-h-screen flex items-center justify-center p-6" style={{ background: 'linear-gradient(to bottom right, hsl(315, 26%, 40%), hsl(315, 30%, 50%), hsl(320, 30%, 50%))' }}>
         <div className="w-full max-w-2xl bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl p-12">
+          <Button
+            variant="ghost"
+            onClick={() => navigate("/auth")}
+            className="mb-6 -ml-2 text-gray-600 hover:text-gray-900"
+          >
+            <ArrowLeft className="w-5 h-5 mr-2" />
+            Voltar
+          </Button>
           <div className="text-center space-y-6">
             <h1 className="text-3xl font-bold text-gray-900">
-              Recebemos sua solicitação para redefinir sua senha.
+              Solicitação de Redefinição de Senha Recebida
             </h1>
             
             <div className="space-y-4 text-gray-700 text-lg">
-              <p>Uma nova senha foi gerada e enviada para o seu e-mail.</p>
+              <p>Informamos que uma nova senha foi gerada e enviada para o endereço de e-mail cadastrado.</p>
               <p>
-                Por segurança, recomendamos que você altere esta senha após o primeiro acesso.
+                Por questões de segurança, recomendamos fortemente que a senha seja alterada após o primeiro acesso ao sistema.
               </p>
               <p>
-                Caso não tenha solicitado a redefinição, ignore esta mensagem ou entre em contato com nosso suporte.
+                Caso não tenha solicitado esta redefinição, solicitamos que desconsidere esta mensagem ou entre em contato com nossa equipe de suporte.
               </p>
             </div>
 
-            <div className="pt-6">
-              <p className="text-gray-600">Atenciosamente,</p>
-              <p className="text-2xl font-bold text-primary mt-2">Linka+.</p>
+            <div className="pt-6 flex flex-col items-center">
+              <p className="text-gray-600 mb-4">Atenciosamente,</p>
+              <img src={logoLinkar} alt="Linka+ Logo" className="h-12 w-auto" style={{ filter: 'invert(46%) sepia(28%) saturate(1088%) hue-rotate(267deg) brightness(90%) contrast(85%)' }} />
             </div>
           </div>
         </div>
@@ -71,6 +80,14 @@ export default function ForgotPassword() {
   return (
     <div className="min-h-screen flex items-center justify-center p-6" style={{ background: 'linear-gradient(to bottom right, hsl(315, 26%, 40%), hsl(315, 30%, 50%), hsl(320, 30%, 50%))' }}>
       <div className="w-full max-w-md bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl p-8">
+        <Button
+          variant="ghost"
+          onClick={() => navigate("/auth")}
+          className="mb-4 -ml-2 text-gray-600 hover:text-gray-900"
+        >
+          <ArrowLeft className="w-5 h-5 mr-2" />
+          Voltar
+        </Button>
         <div className="flex flex-col items-center space-y-6">
           <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center">
             <Lock className="w-10 h-10 text-gray-600" />
@@ -81,7 +98,7 @@ export default function ForgotPassword() {
           </h1>
 
           <p className="text-center text-gray-600">
-            Digite seu email e enviaremos um link para a nova senha.
+            Informe seu endereço de e-mail para receber as instruções de redefinição de senha.
           </p>
 
           <form onSubmit={handleSubmit} className="w-full space-y-6">
@@ -90,7 +107,7 @@ export default function ForgotPassword() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="digite seu email"
+                placeholder="Digite seu e-mail"
                 required
                 className="w-full p-4 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
               />

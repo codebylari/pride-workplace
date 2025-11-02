@@ -110,13 +110,26 @@ export default function Register() {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validação de senha - deve conter pelo menos uma letra
-    const hasLetter = /[a-zA-Z]/.test(password);
-    if (!hasLetter) {
-      setPasswordError("A senha deve conter pelo menos uma letra");
+    // Validação de senha completa
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    
+    if (password.length < 6) {
+      setPasswordError("A senha deve ter pelo menos 6 caracteres");
       toast({
         title: "Erro",
-        description: "A senha deve conter pelo menos uma letra.",
+        description: "A senha deve ter pelo menos 6 caracteres.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (!hasUpperCase || !hasLowerCase || !hasNumber) {
+      setPasswordError("A senha deve conter pelo menos 1 letra maiúscula, 1 letra minúscula e 1 número");
+      toast({
+        title: "Erro",
+        description: "A senha deve conter pelo menos 1 letra maiúscula, 1 letra minúscula e 1 número.",
         variant: "destructive",
       });
       return;
@@ -815,13 +828,26 @@ export default function Register() {
       setPasswordError("");
       setConfirmPasswordError("");
       
-      // Validação de senha - deve conter pelo menos uma letra
-      const hasLetter = /[a-zA-Z]/.test(password);
-      if (!hasLetter) {
-        setPasswordError("A senha deve conter pelo menos uma letra");
+      // Validação de senha completa
+      const hasUpperCase = /[A-Z]/.test(password);
+      const hasLowerCase = /[a-z]/.test(password);
+      const hasNumber = /[0-9]/.test(password);
+      
+      if (password.length < 6) {
+        setPasswordError("A senha deve ter pelo menos 6 caracteres");
         toast({
           title: "Erro na senha",
-          description: "A senha deve conter pelo menos uma letra.",
+          description: "A senha deve ter pelo menos 6 caracteres.",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      if (!hasUpperCase || !hasLowerCase || !hasNumber) {
+        setPasswordError("A senha deve conter pelo menos 1 letra maiúscula, 1 letra minúscula e 1 número");
+        toast({
+          title: "Erro na senha",
+          description: "A senha deve conter pelo menos 1 letra maiúscula, 1 letra minúscula e 1 número.",
           variant: "destructive",
         });
         return;
@@ -1054,8 +1080,16 @@ export default function Register() {
                   Mínimo 6 caracteres
                 </li>
                 <li className="flex items-center gap-1">
-                  <span className={/[a-zA-Z]/.test(password) ? "text-green-300" : "text-white/60"}>✓</span>
-                  Pelo menos uma letra
+                  <span className={/[A-Z]/.test(password) ? "text-green-300" : "text-white/60"}>✓</span>
+                  Pelo menos 1 letra maiúscula
+                </li>
+                <li className="flex items-center gap-1">
+                  <span className={/[a-z]/.test(password) ? "text-green-300" : "text-white/60"}>✓</span>
+                  Pelo menos 1 letra minúscula
+                </li>
+                <li className="flex items-center gap-1">
+                  <span className={/[0-9]/.test(password) ? "text-green-300" : "text-white/60"}>✓</span>
+                  Pelo menos 1 número
                 </li>
               </ul>
               {passwordError && (
@@ -1667,13 +1701,26 @@ export default function Register() {
       setPasswordError("");
       setConfirmPasswordError("");
       
-      // Validação de senha - deve conter pelo menos uma letra
-      const hasLetter = /[a-zA-Z]/.test(password);
-      if (!hasLetter) {
-       // setPasswordError("A senha deve conter pelo menos uma letra");
+      // Validação de senha completa
+      const hasUpperCase = /[A-Z]/.test(password);
+      const hasLowerCase = /[a-z]/.test(password);
+      const hasNumber = /[0-9]/.test(password);
+      
+      if (password.length < 6) {
+        setPasswordError("A senha deve ter pelo menos 6 caracteres");
         toast({
           title: "Erro na senha",
-          description: "A senha deve conter pelo menos uma letra.",
+          description: "A senha deve ter pelo menos 6 caracteres.",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      if (!hasUpperCase || !hasLowerCase || !hasNumber) {
+        setPasswordError("A senha deve conter pelo menos 1 letra maiúscula, 1 letra minúscula e 1 número");
+        toast({
+          title: "Erro na senha",
+          description: "A senha deve conter pelo menos 1 letra maiúscula, 1 letra minúscula e 1 número.",
           variant: "destructive",
         });
         return;
@@ -1897,8 +1944,16 @@ export default function Register() {
                   Mínimo 6 caracteres
                 </li>
                 <li className="flex items-center gap-1">
-                  <span className={/[a-zA-Z]/.test(password) ? "text-green-300" : "text-white/60"}>✓</span>
-                  Pelo menos uma letra
+                  <span className={/[A-Z]/.test(password) ? "text-green-300" : "text-white/60"}>✓</span>
+                  Pelo menos 1 letra maiúscula
+                </li>
+                <li className="flex items-center gap-1">
+                  <span className={/[a-z]/.test(password) ? "text-green-300" : "text-white/60"}>✓</span>
+                  Pelo menos 1 letra minúscula
+                </li>
+                <li className="flex items-center gap-1">
+                  <span className={/[0-9]/.test(password) ? "text-green-300" : "text-white/60"}>✓</span>
+                  Pelo menos 1 número
                 </li>
               </ul>
               {passwordError && (
