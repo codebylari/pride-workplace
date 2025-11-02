@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Lock } from "lucide-react";
+import { Lock, ArrowLeft } from "lucide-react";
 import logoLinkar from "@/assets/logo-linkar.png";
 
 export default function ForgotPassword() {
@@ -72,6 +72,14 @@ export default function ForgotPassword() {
   return (
     <div className="min-h-screen flex items-center justify-center p-6" style={{ background: 'linear-gradient(to bottom right, hsl(315, 26%, 40%), hsl(315, 30%, 50%), hsl(320, 30%, 50%))' }}>
       <div className="w-full max-w-md bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl p-8">
+        <Button
+          variant="ghost"
+          onClick={() => navigate(-1)}
+          className="mb-4 -ml-2 text-gray-600 hover:text-gray-900"
+        >
+          <ArrowLeft className="w-5 h-5 mr-2" />
+          Voltar
+        </Button>
         <div className="flex flex-col items-center space-y-6">
           <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center">
             <Lock className="w-10 h-10 text-gray-600" />
