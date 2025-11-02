@@ -24,12 +24,6 @@ export default function Register() {
   // ------------------- ESTADOS GERAIS -------------------
   const [step, setStep] = useState(1);
   const [role, setRole] = useState<"candidate" | "company" | "">("");
-  
-  // Debug logs
-  useEffect(() => {
-    console.log("Current step:", step);
-    console.log("Current role:", role);
-  }, [step, role]);
   const [loading, setLoading] = useState(false);
 
   // ------------------- API IBGE -------------------
@@ -38,9 +32,6 @@ export default function Register() {
   const [loadingCities, setLoadingCities] = useState(false);
 
   // ------------------- CAMPOS CANDIDATO -------------------
-  const [gender, setGender] = useState<"feminino" | "masculino" | "outros" | "">("");
-  const [customGender, setCustomGender] = useState("");
-  const [orientation, setOrientation] = useState<"heterossexual" | "lgbt" | "">("");
   const [fullName, setFullName] = useState("");
   const [lastName, setLastName] = useState("");
   const [birthDate, setBirthDate] = useState("");
@@ -66,7 +57,6 @@ export default function Register() {
   const [position, setPosition] = useState("");
   const [companyContactLastName, setCompanyContactLastName] = useState("");
   const [diversity, setDiversity] = useState<"sim" | "nao" | null>(null);
-  const [candidateValue, setCandidateValue] = useState("");
 
   // ------------------- CARREGAR ESTADOS -------------------
   useEffect(() => {
@@ -189,40 +179,40 @@ export default function Register() {
 
   // ------------------- STEP 1 -------------------
   const Step1 = () => (
-    <div className="flex flex-col items-center space-y-6 md:space-y-8 px-4">
-      <h2 className="text-2xl md:text-3xl font-bold text-center text-white">
+    <div className="flex flex-col items-center space-y-8">
+      <h2 className="text-3xl font-bold text-center text-white">
         Quem é você na nossa plataforma?
       </h2>
-      <div className="flex flex-col md:flex-row gap-4 md:gap-6 w-full md:w-auto">
+      <div className="flex flex-col md:flex-row gap-6">
         <div
           onClick={() => setRole("candidate")}
-          className={`cursor-pointer p-6 rounded-2xl text-center w-full md:w-56 transition-all ${
+          className={`cursor-pointer p-6 rounded-2xl text-center w-56 transition ${
             role === "candidate"
-              ? "bg-success text-success-foreground border-2 border-success scale-105"
-              : "bg-white/20 text-white hover:bg-white/30"
+              ? "bg-green-300 text-black"
+              : "bg-white/20 text-white"
           }`}
         >
-          <p className="text-4xl md:text-5xl mb-2">👩‍💻</p>
-          <p className="font-semibold text-sm md:text-base">Sou um(a) candidato(a)</p>
+          <p className="text-5xl mb-2">👩‍💻</p>
+          <p className="font-semibold">Sou um(a) candidato(a)</p>
         </div>
 
         <div
           onClick={() => setRole("company")}
-          className={`cursor-pointer p-6 rounded-2xl text-center w-full md:w-56 transition-all ${
+          className={`cursor-pointer p-6 rounded-2xl text-center w-56 transition ${
             role === "company"
-              ? "bg-success text-success-foreground border-2 border-success scale-105"
-              : "bg-white/20 text-white hover:bg-white/30"
+              ? "bg-green-300 text-black"
+              : "bg-white/20 text-white"
           }`}
         >
-          <p className="text-4xl md:text-5xl mb-2">🏢</p>
-          <p className="font-semibold text-sm md:text-base">Sou uma empresa</p>
+          <p className="text-5xl mb-2">🏢</p>
+          <p className="font-semibold">Sou uma empresa</p>
         </div>
       </div>
 
       <Button
         onClick={() => role && setStep(2)}
         disabled={!role}
-        className="mt-4 md:mt-8 bg-success hover:bg-success/90 text-success-foreground py-5 md:py-6 rounded-full text-base md:text-lg font-semibold px-8 md:px-10 w-full md:w-auto"
+        className="mt-8 bg-green-300/80 hover:bg-green-400/80 text-green-900 py-6 rounded-full text-lg font-semibold px-10"
       >
         PRÓXIMO
       </Button>
@@ -230,575 +220,112 @@ export default function Register() {
   );
 
   // ------------------- FLUXO CANDIDATO -------------------
-  const Step2Candidate = () => {
-    const [localGender, setLocalGender] = useState<"feminino" | "masculino" | "outros" | "">(gender);
-    const [localCustomGender, setLocalCustomGender] = useState(customGender);
-
-    const handleGenderSelect = (selectedGender: "feminino" | "masculino") => {
-      setLocalGender(selectedGender);
-      setGender(selectedGender);
-      setCustomGender("");
-    };
-
-    const handleOthersClick = () => {
-      setLocalGender("outros");
-      setGender("outros");
-    };
-
-    const handleContinue = () => {
-      if (localGender === "outros") {
-        setCustomGender(localCustomGender);
-      }
-      // Se for masculino, ir para pergunta de orientação sexual
-      if (localGender === "masculino") {
-        setStep(2.3);
-      } else {
-        setStep(2.5);
-      }
-    };
-
-    return (
-      <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
-        <button
-          onClick={() => setStep(1)}
-          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
-        >
-          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-          <span className="font-medium">Voltar</span>
-        </button>
-        <h2 className="text-2xl md:text-3xl font-bold">Qual é o seu gênero?</h2>
-        
+  const Step2Candidate = () => (
+    <div className="flex flex-col items-center space-y-6 text-center text-white">
+      <h2 className="text-3xl font-bold">Em qual área você atua?</h2>
+      {[
+        "Desenvolvimento de Software",
+        "Design",
+        "Ciência de Dados",
+        "Cibersegurança",
+        "Infraestrutura",
+        "Inteligência Artificial",
+        "Blockchain",
+        "Outros",
+      ].map((option) => (
         <Button
-          onClick={() => handleGenderSelect("feminino")}
-          className={`w-full md:w-80 py-5 md:py-6 rounded-full text-base md:text-lg transition-all ${
-            localGender === "feminino"
-              ? "bg-success hover:bg-success/90 text-success-foreground"
-              : "bg-white/20 hover:bg-white/30 text-white"
-          }`}
-        >
-          Feminino
-        </Button>
-        
-        <Button
-          onClick={() => handleGenderSelect("masculino")}
-          className={`w-full md:w-80 py-5 md:py-6 rounded-full text-base md:text-lg transition-all ${
-            localGender === "masculino"
-              ? "bg-success hover:bg-success/90 text-success-foreground"
-              : "bg-white/20 hover:bg-white/30 text-white"
-          }`}
-        >
-          Masculino
-        </Button>
-        
-        <div className="w-full md:w-80 space-y-3">
-          <Button
-            onClick={handleOthersClick}
-            className={`w-full py-5 md:py-6 rounded-full text-base md:text-lg transition-all ${
-              localGender === "outros"
-                ? "bg-success hover:bg-success/90 text-success-foreground"
-                : "bg-white/20 hover:bg-white/30 text-white"
-            }`}
-          >
-            Outros
-          </Button>
-          
-          {localGender === "outros" && (
-            <div className="space-y-3 animate-fade-in">
-              <input
-                type="text"
-                value={localCustomGender}
-                onChange={(e) => setLocalCustomGender(e.target.value)}
-                placeholder="Especifique seu gênero"
-                autoFocus
-                className="w-full py-4 px-6 rounded-full bg-white/20 text-white placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-success focus:bg-white/30 text-base md:text-lg transition-all"
-              />
-            </div>
-          )}
-        </div>
-        
-        {localGender && (localGender !== "outros" || localCustomGender.trim()) && (
-          <Button
-            onClick={handleContinue}
-            className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-5 md:py-6 rounded-full text-base md:text-lg font-semibold px-8 md:px-10 w-full md:w-80"
-          >
-            PRÓXIMO
-          </Button>
-        )}
-      </div>
-    );
-  };
-
-  // ------------------- STEP 2.3 - ORIENTAÇÃO SEXUAL (APENAS MASCULINO) -------------------
-  const Step2_3Candidate = () => {
-    const [localOrientation, setLocalOrientation] = useState(orientation);
-    
-    const handleOrientationSelect = (selected: "heterossexual" | "lgbt") => {
-      setLocalOrientation(selected);
-      setOrientation(selected);
-    };
-    
-    const handleContinue = () => {
-      if (localOrientation === "heterossexual") {
-        // Mostrar mensagem de restrição
-        setStep(2.4);
-      } else {
-        // Continuar para próximo passo
-        setStep(2.5);
-      }
-    };
-    
-    return (
-      <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
-        <button
-          onClick={() => setStep(2)}
-          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
-        >
-          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-          <span className="font-medium">Voltar</span>
-        </button>
-        <h2 className="text-2xl md:text-3xl font-bold">Qual é a sua orientação sexual?</h2>
-        
-        <Button
-          onClick={() => handleOrientationSelect("lgbt")}
-          className={`w-full md:w-80 py-5 md:py-6 rounded-full text-base md:text-lg transition-all ${
-            localOrientation === "lgbt"
-              ? "bg-success hover:bg-success/90 text-success-foreground"
-              : "bg-white/20 hover:bg-white/30 text-white"
-          }`}
-        >
-          LGBTQIA+
-        </Button>
-        
-        <Button
-          onClick={() => handleOrientationSelect("heterossexual")}
-          className={`w-full md:w-80 py-5 md:py-6 rounded-full text-base md:text-lg transition-all ${
-            localOrientation === "heterossexual"
-              ? "bg-success hover:bg-success/90 text-success-foreground"
-              : "bg-white/20 hover:bg-white/30 text-white"
-          }`}
-        >
-          Heterossexual
-        </Button>
-        
-        {localOrientation && (
-          <Button
-            onClick={handleContinue}
-            className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-5 md:py-6 rounded-full text-base md:text-lg font-semibold px-8 md:px-10 w-full md:w-80"
-          >
-            PRÓXIMO
-          </Button>
-        )}
-      </div>
-    );
-  };
-
-  // ------------------- STEP 2.4 - MENSAGEM DE RESTRIÇÃO -------------------
-  const Step2_4Candidate = () => {
-    return (
-      <div className="flex flex-col items-center justify-center space-y-6 md:space-y-8 text-center text-white px-4 min-h-[400px]">
-        <div className="text-6xl md:text-7xl mb-4">🌈</div>
-        <h2 className="text-2xl md:text-3xl font-bold max-w-2xl">
-          Nossa plataforma é dedicada a mulheres e à comunidade LGBTQIA+
-        </h2>
-        <p className="text-lg md:text-xl text-white/80 max-w-xl">
-          Trabalhamos para promover a inclusão e diversidade no mercado de tecnologia, 
-          oferecendo oportunidades especialmente para grupos historicamente sub-representados.
-        </p>
-        <div className="flex flex-col md:flex-row gap-4 mt-8">
-          <Button
-            onClick={() => navigate("/")}
-            className="bg-white/20 hover:bg-white/30 text-white py-5 md:py-6 rounded-full text-base md:text-lg font-semibold px-8 md:px-10"
-          >
-            Voltar ao Início
-          </Button>
-          <Button
-            onClick={() => navigate("/community-rules")}
-            className="bg-success hover:bg-success/90 text-success-foreground py-5 md:py-6 rounded-full text-base md:text-lg font-semibold px-8 md:px-10"
-          >
-            Compreendo
-          </Button>
-        </div>
-      </div>
-    );
-  };
-
-  const Step2_5Candidate = () => {
-    const [selectedExperience, setSelectedExperience] = useState("");
-    
-    const getPreviousStep = () => {
-      // Se veio do step de orientação sexual (masculino), voltar para 2.3
-      if (gender === "masculino") {
-        return 2.3;
-      }
-      // Senão, voltar para step 2 (seleção de gênero)
-      return 2;
-    };
-    
-    return (
-      <div className="flex flex-col items-center space-y-6 md:space-y-8 text-center text-white px-4">
-        <button
-          onClick={() => setStep(getPreviousStep())}
-          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
-        >
-          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-          <span className="font-medium">Voltar</span>
-        </button>
-        <h2 className="text-2xl md:text-3xl font-bold">Qual a sua experiência no mercado de trabalho?</h2>
-        
-        <div className="grid grid-cols-2 gap-4 w-full max-w-2xl">
-          {[
-            { emoji: "👨‍💻", label: "1 a 2 anos de Experiência", value: "1-2-anos" },
-            { emoji: "👨‍💻", label: "3 a 5 anos de Experiência", value: "3-5-anos" },
-            { emoji: "👨‍💻", label: "4 anos de Experiência", value: "4-anos" },
-            { emoji: "👨‍💻", label: "+6 anos de Experiência", value: "6-mais-anos" },
-          ].map((option) => (
-            <button
-              key={option.value}
-              onClick={() => setSelectedExperience(option.value)}
-              className={`p-6 rounded-2xl transition-all ${
-                selectedExperience === option.value
-                  ? "bg-success text-success-foreground scale-105"
-                  : "bg-white/20 text-white hover:bg-white/30"
-              }`}
-            >
-              <div className="text-4xl md:text-5xl mb-2">{option.emoji}</div>
-              <p className="text-sm font-medium">{option.label}</p>
-            </button>
-          ))}
-        </div>
-        
-        {selectedExperience && (
-          <Button
-            onClick={() => setStep(2.7)}
-            className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-5 md:py-6 rounded-full text-base md:text-lg font-semibold px-8 md:px-10 w-full md:w-80"
-          >
-            PRÓXIMO
-          </Button>
-        )}
-      </div>
-    );
-  };
-
-  const Step2_7Candidate = () => {
-    const [selectedAreas, setSelectedAreas] = useState<string[]>([]);
-    
-    const toggleArea = (area: string) => {
-      setSelectedAreas(prev => 
-        prev.includes(area) 
-          ? prev.filter(a => a !== area)
-          : [...prev, area]
-      );
-    };
-    
-    return (
-      <div className="flex flex-col items-center space-y-6 md:space-y-8 text-center text-white px-4">
-        <button
-          onClick={() => setStep(2.5)}
-          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
-        >
-          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-          <span className="font-medium">Voltar</span>
-        </button>
-        <h2 className="text-2xl md:text-3xl font-bold">Selecione as suas áreas de especialização</h2>
-        
-        <div className="grid grid-cols-2 gap-4 w-full max-w-3xl">
-          {[
-            "Ciências de Dados",
-            "Testes",
-            "Cibersegurança",
-            "Infraestrutura",
-            "Desenvolvimento de Software",
-            "Blockchain",
-            "Inteligência Artificial",
-            "Arquitetura",
-            "Engenharia de Dados",
-            "Suporte Técnico",
-            "Desing",
-            "Análise de Dados",
-            "Nuvens",
-            "Outros",
-          ].map((area) => (
-            <Button
-              key={area}
-              onClick={() => toggleArea(area)}
-              className={`py-5 md:py-6 rounded-2xl text-sm md:text-base transition-all ${
-                selectedAreas.includes(area)
-                  ? "bg-success hover:bg-success/90 text-success-foreground scale-105"
-                  : "bg-white/20 hover:bg-white/30 text-white"
-              }`}
-            >
-              {area}
-            </Button>
-          ))}
-        </div>
-        
-        {selectedAreas.length > 0 && (
-          <Button
-            onClick={() => setStep(3)}
-            className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-5 md:py-6 rounded-full text-base md:text-lg font-semibold px-8 md:px-10 w-full md:w-80"
-          >
-            PRÓXIMO
-          </Button>
-        )}
-      </div>
-    );
-  };
-
-  const Step3Candidate = () => {
-    const [selectedArea, setSelectedArea] = useState("");
-    
-    return (
-      <div className="flex flex-col items-center space-y-6 md:space-y-8 text-center text-white px-4">
-        <button
-          onClick={() => setStep(2.7)}
-          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
-        >
-          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-          <span className="font-medium">Voltar</span>
-        </button>
-        <h2 className="text-2xl md:text-3xl font-bold">Em qual área você atua?</h2>
-        
-        <div className="grid grid-cols-2 gap-4 w-full max-w-2xl">
-          {[
-            "Desenvolvimento de Software",
-            "Design",
-            "Ciência de Dados",
-            "Cibersegurança",
-            "Infraestrutura",
-            "Inteligência Artificial",
-            "Blockchain",
-            "Outros",
-          ].map((option) => (
-            <Button
-              key={option}
-              onClick={() => setSelectedArea(option)}
-              className={`py-5 md:py-6 rounded-2xl text-sm md:text-base transition-all ${
-                selectedArea === option
-                  ? "bg-success hover:bg-success/90 text-success-foreground scale-105"
-                  : "bg-white/20 hover:bg-white/30 text-white"
-              }`}
-            >
-              {option}
-            </Button>
-          ))}
-        </div>
-        
-        {selectedArea && (
-          <Button
-            onClick={() => setStep(4)}
-            className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-5 md:py-6 rounded-full text-base md:text-lg font-semibold px-8 md:px-10 w-full md:w-80"
-          >
-            PRÓXIMO
-          </Button>
-        )}
-      </div>
-    );
-  };
-
-  const Step4Candidate = () => {
-    const [selectedLevel, setSelectedLevel] = useState("");
-    
-    return (
-      <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
-        <button
+          key={option}
           onClick={() => setStep(3)}
-          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+          className="w-80 py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-lg"
         >
-          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-          <span className="font-medium">Voltar</span>
-        </button>
-        <h2 className="text-2xl md:text-3xl font-bold">Qual o seu nível de experiência?</h2>
-        {["Júnior", "Pleno", "Sênior", "Especialista"].map((option) => (
+          {option}
+        </Button>
+      ))}
+    </div>
+  );
+
+  const Step3Candidate = () => (
+    <div className="flex flex-col items-center space-y-6 text-center text-white">
+      <h2 className="text-3xl font-bold">Qual o seu nível de experiência?</h2>
+      {["Júnior", "Pleno", "Sênior", "Especialista"].map((option) => (
+        <Button
+          key={option}
+          onClick={() => setStep(4)}
+          className="w-80 py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-lg"
+        >
+          {option}
+        </Button>
+      ))}
+    </div>
+  );
+
+  const Step4Candidate = () => (
+    <div className="flex flex-col items-center space-y-6 text-center text-white">
+      <h2 className="text-3xl font-bold">Qual tipo de oportunidade procura?</h2>
+      {["Estágio", "CLT", "Freelancer", "Trainee", "Temporário", "Aprendiz"].map(
+        (option) => (
           <Button
             key={option}
-            onClick={() => setSelectedLevel(option)}
-            className={`w-full md:w-80 py-5 md:py-6 rounded-full text-base md:text-lg transition-all ${
-              selectedLevel === option
-                ? "bg-success hover:bg-success/90 text-success-foreground"
-                : "bg-white/20 hover:bg-white/30 text-white"
-            }`}
+            onClick={() => setStep(5)}
+            className="w-80 py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-lg"
           >
             {option}
           </Button>
-        ))}
-        
-        {selectedLevel && (
-          <Button
-            onClick={() => setStep(5)}
-            className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-5 md:py-6 rounded-full text-base md:text-lg font-semibold px-8 md:px-10 w-full md:w-80"
-          >
-            PRÓXIMO
-          </Button>
-        )}
-      </div>
-    );
-  };
+        )
+      )}
+    </div>
+  );
 
-  const Step5Candidate = () => {
-    const [selectedType, setSelectedType] = useState("");
-    
-    return (
-      <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
-        <button
-          onClick={() => setStep(4)}
-          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
-        >
-          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-          <span className="font-medium">Voltar</span>
-        </button>
-        <h2 className="text-2xl md:text-3xl font-bold">Qual tipo de oportunidade procura?</h2>
-        {["Estágio", "CLT", "Freelancer", "Trainee", "Temporário", "Aprendiz"].map(
-          (option) => (
-            <Button
-              key={option}
-              onClick={() => setSelectedType(option)}
-              className={`w-full md:w-80 py-5 md:py-6 rounded-full text-base md:text-lg transition-all ${
-                selectedType === option
-                  ? "bg-success hover:bg-success/90 text-success-foreground"
-                  : "bg-white/20 hover:bg-white/30 text-white"
-              }`}
-            >
-              {option}
-            </Button>
-          )
-        )}
-        
-        {selectedType && (
+  const Step5Candidate = () => (
+    <div className="flex flex-col items-center space-y-6 text-center text-white">
+      <h2 className="text-3xl font-bold">
+        Qual é o seu nível de conhecimento em GitHub?
+      </h2>
+      {["Básico", "Intermediário", "Avançado", "Nenhum conhecimento"].map(
+        (option) => (
           <Button
+            key={option}
             onClick={() => setStep(6)}
-            className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-5 md:py-6 rounded-full text-base md:text-lg font-semibold px-8 md:px-10 w-full md:w-80"
+            className="w-80 py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-lg"
           >
-            PRÓXIMO
+            {option}
           </Button>
-        )}
-      </div>
-    );
-  };
+        )
+      )}
+    </div>
+  );
 
-  const Step6Candidate = () => {
-    const [selectedGit, setSelectedGit] = useState("");
-    
-    return (
-      <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
-        <button
-          onClick={() => setStep(5)}
-          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
-        >
-          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-          <span className="font-medium">Voltar</span>
-        </button>
-        <h2 className="text-2xl md:text-3xl font-bold">
-          Qual é o seu nível de conhecimento em Git?
-        </h2>
-        {["Básico", "Intermediário", "Avançado", "Nenhum conhecimento"].map(
-          (option) => (
-            <Button
-              key={option}
-              onClick={() => setSelectedGit(option)}
-              className={`w-full md:w-80 py-5 md:py-6 rounded-full text-base md:text-lg transition-all ${
-                selectedGit === option
-                  ? "bg-success hover:bg-success/90 text-success-foreground"
-                  : "bg-white/20 hover:bg-white/30 text-white"
-              }`}
-            >
-              {option}
-            </Button>
-          )
-        )}
-        
-        {selectedGit && (
-          <Button
-            onClick={() => setStep(6.5)}
-            className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-5 md:py-6 rounded-full text-base md:text-lg font-semibold px-8 md:px-10 w-full md:w-80"
-          >
-            PRÓXIMO
-          </Button>
-        )}
-      </div>
-    );
-  };
-
-  const Step6_5Candidate = () => {
-    const [selectedRemote, setSelectedRemote] = useState("");
-    
-    return (
-      <div className="flex flex-col items-center space-y-6 md:space-y-8 text-center text-white px-4">
-        <button
-          onClick={() => setStep(6)}
-          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
-        >
-          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-          <span className="font-medium">Voltar</span>
-        </button>
-        <h2 className="text-2xl md:text-3xl font-bold">
-          Estou em busca de projetos remotos globais.
-        </h2>
-        
-        <div className="flex gap-6 justify-center items-center">
-          <button
-            onClick={() => setSelectedRemote("sim")}
-            className={`p-8 rounded-2xl transition-all ${
-              selectedRemote === "sim"
-                ? "bg-success text-success-foreground scale-110"
-                : "bg-white/20 text-white hover:bg-white/30"
-            }`}
-          >
-            <div className="text-6xl">👍</div>
-          </button>
-          
-          <button
-            onClick={() => setSelectedRemote("talvez")}
-            className={`p-8 rounded-2xl transition-all ${
-              selectedRemote === "talvez"
-                ? "bg-success text-success-foreground scale-110"
-                : "bg-white/20 text-white hover:bg-white/30"
-            }`}
-          >
-            <div className="text-6xl">🙋</div>
-          </button>
-          
-          <button
-            onClick={() => setSelectedRemote("nao")}
-            className={`p-8 rounded-2xl transition-all ${
-              selectedRemote === "nao"
-                ? "bg-success text-success-foreground scale-110"
-                : "bg-white/20 text-white hover:bg-white/30"
-            }`}
-          >
-            <div className="text-6xl">👎</div>
-          </button>
-        </div>
-        
-        {selectedRemote && (
-          <Button
-            onClick={() => setStep(7)}
-            className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-5 md:py-6 rounded-full text-base md:text-lg font-semibold px-8 md:px-10 w-full md:w-80"
-          >
-            PRÓXIMO
-          </Button>
-        )}
-      </div>
-    );
-  };
-
-  // Função para verificar se o email já está em uso (validação básica local)
+  // Função para verificar se o email já está em uso
   const checkEmailAvailability = async (emailToCheck: string) => {
+    if (!emailToCheck || !emailToCheck.includes("@")) return;
+    
     setCheckingEmail(true);
     setEmailError("");
+    
     try {
-      if (!emailToCheck) return;
-      const basicEmailRegex = /.+@.+\..+/;
-      if (!basicEmailRegex.test(emailToCheck)) {
-        setEmailError("Email inválido. Verifique e tente novamente.");
+      // Tenta fazer um signUp temporário para verificar se o email já existe
+      const { data, error } = await supabase.auth.signUp({
+        email: emailToCheck,
+        password: "temp_password_for_validation_12345",
+        options: {
+          data: { temp_validation: true }
+        }
+      });
+      
+      if (error) {
+        if (error.message.includes("already registered") || 
+            error.message.includes("User already registered")) {
+          setEmailError("Este email já está cadastrado. Por favor, use outro email ou faça login.");
+        }
       }
-    } catch (error) {
-      console.error("Erro ao validar email:", error);
+    } catch (error: any) {
+      console.error("Erro ao verificar email:", error);
     } finally {
       setCheckingEmail(false);
     }
   };
 
-  const Step7Candidate = React.useMemo(() => {
+  const Step6Candidate = React.useMemo(() => {
     const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
       
@@ -837,24 +364,16 @@ export default function Register() {
         return;
       }
       
-      setStep(8);
+      setStep(7);
     };
 
     return (
-      <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6 max-w-4xl mx-auto px-4">
-        <button
-          type="button"
-          onClick={() => setStep(6)}
-          className="flex items-center gap-2 text-white/80 hover:text-white transition-colors group mb-4"
-        >
-          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-          <span className="font-medium">Voltar</span>
-        </button>
-        <h2 className="text-2xl md:text-3xl font-bold text-center text-white mb-4 md:mb-6">
+      <form onSubmit={handleSubmit} className="space-y-6 max-w-4xl mx-auto">
+        <h2 className="text-3xl font-bold text-center text-white mb-6">
           Cadastramento de Dados
         </h2>
 
-        <div className="bg-white/20 backdrop-blur-md rounded-2xl p-4 md:p-6 space-y-3 md:space-y-4">
+        <div className="bg-white/20 backdrop-blur-md rounded-2xl p-6 space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="block text-white mb-1">Nome</label>
@@ -863,7 +382,7 @@ export default function Register() {
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 required
-                className="w-full p-3 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary"
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
               />
             </div>
             <div>
@@ -873,7 +392,7 @@ export default function Register() {
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
                 required
-                className="w-full p-3 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary"
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
               />
             </div>
             <div>
@@ -883,7 +402,7 @@ export default function Register() {
                 value={birthDate}
                 onChange={(e) => setBirthDate(e.target.value)}
                 required
-                className="w-full p-3 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary"
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
               />
             </div>
 
@@ -893,12 +412,12 @@ export default function Register() {
                 type="text"
                 value={socialName}
                 onChange={(e) => setSocialName(e.target.value)}
-                className="w-full p-3 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary"
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
               />
             </div>
 
             <div>
-              <label className="block text-white mb-1">CPF</label>
+              <label className="block text-white mb-1">CPF (apenas números)</label>
               <input
                 type="text"
                 value={cpf}
@@ -909,11 +428,11 @@ export default function Register() {
                 required
                 maxLength={11}
                 placeholder="00000000000"
-                className="w-full p-3 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary"
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
               />
             </div>
             <div>
-              <label className="block text-white mb-1">RG</label>
+              <label className="block text-white mb-1">RG (apenas números)</label>
               <input
                 type="text"
                 value={rg}
@@ -924,7 +443,7 @@ export default function Register() {
                 required
                 maxLength={15}
                 placeholder="000000000"
-                className="w-full p-3 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary"
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
               />
             </div>
 
@@ -934,7 +453,7 @@ export default function Register() {
                 value={state}
                 onChange={(e) => setState(e.target.value)}
                 required
-                className="w-full p-3 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary"
+                className="w-full p-3 rounded-lg border border-gray-300 bg-white text-black"
               >
                 <option value="">Selecione seu estado</option>
                 {states.map((st) => (
@@ -952,7 +471,7 @@ export default function Register() {
                 onChange={(e) => setCity(e.target.value)}
                 required
                 disabled={!state || loadingCities}
-                className="w-full p-3 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary disabled:opacity-50"
+                className="w-full p-3 rounded-lg border border-gray-300 bg-white text-black disabled:opacity-50"
               >
                 <option value="">
                   {loadingCities ? "Carregando..." : !state ? "Selecione o estado primeiro" : "Selecione sua cidade"}
@@ -966,22 +485,19 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1">Telefone/WhatsApp</label>
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600 font-medium">+55</span>
-                <input
-                  type="text"
-                  value={phone}
-                  onChange={(e) => {
-                    const value = e.target.value.replace(/\D/g, '');
-                    setPhone(value);
-                  }}
-                  required
-                  maxLength={11}
-                  placeholder="11999999999"
-                  className="w-full p-3 pl-14 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary"
-                />
-              </div>
+              <label className="block text-white mb-1">Telefone/WhatsApp (apenas números)</label>
+              <input
+                type="text"
+                value={phone}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, '');
+                  setPhone(value);
+                }}
+                required
+                maxLength={11}
+                placeholder="11999999999"
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+              />
             </div>
           </div>
 
@@ -997,9 +513,9 @@ export default function Register() {
               }}
               onBlur={(e) => checkEmailAvailability(e.target.value)}
               required
-              className={`w-full p-3 rounded-lg bg-white text-black focus:ring-2 ${
-                emailError ? "ring-2 ring-red-500" : "focus:ring-primary"
-              }`}
+              className={`w-full p-3 rounded-lg border ${
+                emailError ? "border-red-500" : "border-gray-300"
+              } text-black`}
             />
             {checkingEmail && (
               <p className="text-yellow-300 text-sm mt-1">Verificando email...</p>
@@ -1011,7 +527,8 @@ export default function Register() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <div>
-              <label className="block text-white mb-1">Digite sua Senha</label>
+              <label className="block text-white mb-1 min-h-[3rem] flex items-end">Digite sua Senha</label>
+              <p className="text-white/80 text-xs mb-1">(deve conter pelo menos uma letra)</p>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -1022,9 +539,9 @@ export default function Register() {
                   }}
                   required
                   minLength={6}
-                  className={`w-full p-3 pr-10 rounded-lg bg-white text-black focus:ring-2 ${
-                    passwordError ? "ring-2 ring-red-500" : "focus:ring-primary"
-                  }`}
+                  className={`w-full p-3 pr-10 rounded-lg border ${
+                    passwordError ? "border-red-500" : "border-gray-300"
+                  } text-black`}
                 />
                 <button
                   type="button"
@@ -1039,23 +556,14 @@ export default function Register() {
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
-              <ul className="text-white/80 text-xs mt-2 space-y-1">
-                <li className="flex items-center gap-1">
-                  <span className={password.length >= 6 ? "text-green-300" : "text-white/60"}>✓</span>
-                  Mínimo 6 caracteres
-                </li>
-                <li className="flex items-center gap-1">
-                  <span className={/[a-zA-Z]/.test(password) ? "text-green-300" : "text-white/60"}>✓</span>
-                  Pelo menos uma letra
-                </li>
-              </ul>
               {passwordError && (
                 <p className="text-red-300 text-sm mt-1 font-semibold">{passwordError}</p>
               )}
             </div>
 
             <div>
-              <label className="block text-white mb-1">Repita sua Senha</label>
+              <label className="block text-white mb-1 min-h-[3rem] flex items-end">Repita sua Senha</label>
+              <p className="text-white/80 text-xs mb-1 invisible">(espaço reservado)</p>
               <div className="relative">
                 <input
                   type={showConfirmPassword ? "text" : "password"}
@@ -1066,9 +574,9 @@ export default function Register() {
                   }}
                   required
                   minLength={6}
-                  className={`w-full p-3 pr-10 rounded-lg bg-white text-black focus:ring-2 ${
-                    confirmPasswordError ? "ring-2 ring-red-500" : "focus:ring-primary"
-                  }`}
+                  className={`w-full p-3 pr-10 rounded-lg border ${
+                    confirmPasswordError ? "border-red-500" : "border-gray-300"
+                  } text-black`}
                 />
                 <button
                   type="button"
@@ -1083,11 +591,6 @@ export default function Register() {
                   {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
-              {confirmPassword && (
-                <p className={`text-xs mt-2 ${password === confirmPassword ? "text-green-300" : "text-red-300"}`}>
-                  {password === confirmPassword ? "✓ Senhas coincidem" : "✗ Senhas não coincidem"}
-                </p>
-              )}
               {confirmPasswordError && (
                 <p className="text-red-300 text-sm mt-1 font-semibold">{confirmPasswordError}</p>
               )}
@@ -1097,7 +600,7 @@ export default function Register() {
           <button
             type="submit"
             disabled={checkingEmail || !!emailError || !!passwordError || !!confirmPasswordError}
-            className="w-full bg-success hover:bg-success/90 text-success-foreground py-4 rounded-full mt-4 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-green-300/80 hover:bg-green-400/80 text-green-900 py-4 rounded-full mt-4 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {checkingEmail ? "VERIFICANDO..." : "CONTINUAR E ENVIAR OS DADOS"}
           </button>
@@ -1106,15 +609,8 @@ export default function Register() {
     );
   }, [fullName, lastName, birthDate, socialName, cpf, rg, email, password, confirmPassword, phone, state, city, states, cities, loadingCities, checkingEmail, emailError, passwordError, confirmPasswordError, showPassword, showConfirmPassword]);
 
-  const Step8Terms = () => (
-    <div className="text-white space-y-6 max-w-3xl mx-auto text-justify px-4">
-      <button
-        onClick={() => setStep(7)}
-        className="flex items-center gap-2 text-white/80 hover:text-white transition-colors group mb-4"
-      >
-        <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-        <span className="font-medium">Voltar</span>
-      </button>
+  const Step7Terms = () => (
+    <div className="text-white space-y-6 max-w-3xl mx-auto text-justify">
       <h2 className="text-3xl font-bold text-center mb-6">
         📌 Termos e Condições – Candidatos
       </h2>
@@ -1160,10 +656,10 @@ export default function Register() {
         Ao continuar, você declara estar de acordo com os termos acima e reafirma seu compromisso com uma comunidade inclusiva e respeitosa.
       </p>
 
-      <div className="text-center px-4">
+      <div className="text-center">
         <Button
-          onClick={() => setStep(9)}
-          className="bg-success hover:bg-success/90 text-success-foreground py-4 px-8 md:px-10 rounded-full font-semibold mt-4 w-full md:w-auto"
+          onClick={() => setStep(8)}
+          className="bg-green-300/80 hover:bg-green-400/80 text-green-900 py-4 px-10 rounded-full font-semibold mt-4"
         >
           Li e aceito os termos para continuar
         </Button>
@@ -1171,9 +667,8 @@ export default function Register() {
     </div>
   );
 
-  const Step9Photo = () => {
+  const Step8Photo = () => {
     const [photo, setPhoto] = useState<File | null>(null);
-    const [uploadingPhoto, setUploadingPhoto] = useState(false);
 
     const handlePhotoSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
       if (event.target.files && event.target.files[0]) {
@@ -1181,173 +676,15 @@ export default function Register() {
       }
     };
 
-    const handleRegisterWithoutPhoto = async () => {
-      setUploadingPhoto(true);
-
-      try {
-        // Cadastrar usuário sem foto
-        const { data: authData, error: authError } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: `${window.location.origin}/`,
-            data: {
-              full_name: `${fullName} ${lastName}`,
-              role,
-              state,
-              city,
-              birth_date: birthDate,
-              social_name: socialName,
-              cpf,
-              rg,
-              phone,
-              gender: gender === 'outros' ? customGender : gender,
-            },
-          },
-        });
-
-        if (authError && (authError.message?.includes('already') || authError.message?.includes('registered'))) {
-          const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
-          if (signInError) throw signInError;
-        } else if (authError) {
-          throw authError;
-        }
-
-        const { data: sessionData } = await supabase.auth.getSession();
-        if (!sessionData.session) {
-          throw new Error("Não foi possível confirmar o login. Verifique seu email e tente novamente.");
-        }
-
-        const userId = sessionData.session.user.id;
-        const finalGender = gender === 'outros' ? customGender : gender;
-        
-        // Salva apenas o gênero, sem foto
-        const { error: updateError } = await supabase
-          .from('profiles')
-          .update({ 
-            gender: finalGender
-          })
-          .eq('id', userId);
-
-        if (updateError) throw updateError;
-
-        setStep(10);
-        toast({ title: "Cadastro realizado!", description: "Perfil criado com sucesso." });
-      } catch (error: any) {
-        console.error('Erro no cadastro:', error);
-        toast({
-          title: "Erro no cadastro",
-          description: error.message || "Ocorreu um erro ao realizar o cadastro.",
-          variant: "destructive",
-        });
-      } finally {
-        setUploadingPhoto(false);
-      }
-    };
-
-    const handleRegisterWithPhoto = async () => {
-      setUploadingPhoto(true);
-
-      try {
-        // 1) Tenta cadastrar usuário
-        const { data: authData, error: authError } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: `${window.location.origin}/`,
-            data: {
-              full_name: `${fullName} ${lastName}`,
-              role,
-              state,
-              city,
-              birth_date: birthDate,
-              social_name: socialName,
-              cpf,
-              rg,
-              phone,
-              gender: gender === 'outros' ? customGender : gender,
-            },
-          },
-        });
-
-        // 2) Se já for cadastrado, faz login para obter sessão
-        if (authError && (authError.message?.includes('already') || authError.message?.includes('registered'))) {
-          const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
-          if (signInError) throw signInError;
-        } else if (authError) {
-          throw authError;
-        }
-
-        // 3) Garante que temos sessão antes de subir a foto
-        const { data: sessionData } = await supabase.auth.getSession();
-        if (!sessionData.session) {
-          throw new Error("Não foi possível confirmar o login. Verifique seu email e tente novamente.");
-        }
-
-        const userId = sessionData.session.user.id;
-
-        // 4) Upload da foto
-        const fileExt = photo!.name.split('.').pop();
-        const fileName = `${userId}/profile.${fileExt}`;
-
-        const { error: uploadError } = await supabase.storage
-          .from('profile-photos')
-          .upload(fileName, photo!, {
-            upsert: true,
-            contentType: photo!.type
-          });
-
-        if (uploadError) throw uploadError;
-
-        // 5) URL pública
-        const { data: { publicUrl } } = supabase.storage
-          .from('profile-photos')
-          .getPublicUrl(fileName);
-
-        // 6) Salva URL e gênero na tabela de perfis
-        const finalGender = gender === 'outros' ? customGender : gender;
-        
-        const { error: updateError } = await supabase
-          .from('profiles')
-          .update({ 
-            photo_url: `${publicUrl}?t=${Date.now()}`,
-            gender: finalGender
-          })
-          .eq('id', userId);
-
-        if (updateError) throw updateError;
-
-        setStep(10);
-        toast({ title: "Cadastro realizado!", description: "Foto salva com sucesso." });
-      } catch (error: any) {
-        console.error('Erro no cadastro com foto:', error);
-        toast({
-          title: "Erro no cadastro",
-          description: error.message || "Ocorreu um erro ao realizar o cadastro.",
-          variant: "destructive",
-        });
-      } finally {
-        setUploadingPhoto(false);
-      }
-    };
-
     return (
-      <div className="flex flex-col items-center text-white space-y-6 px-4">
-        <button
-          onClick={() => setStep(8)}
-          className="self-start flex items-center gap-2 text-white/80 hover:text-white transition-colors group mb-2"
-        >
-          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-          <span className="font-medium">Voltar</span>
-        </button>
-        <h2 className="text-3xl font-bold">Escolha sua foto (opcional)</h2>
-        <p className="text-white/80 text-center">Você pode adicionar uma foto agora ou pular esta etapa</p>
+      <div className="flex flex-col items-center text-white space-y-6">
+        <h2 className="text-3xl font-bold">Escolha sua foto</h2>
 
         {photo ? (
           <img
             src={URL.createObjectURL(photo)}
             alt="Prévia da foto"
-            className="w-40 h-40 rounded-full object-cover border-4 border-primary shadow-lg"
+            className="w-40 h-40 rounded-full object-cover border-4 border-green-300 shadow-lg"
           />
         ) : (
           <div className="w-40 h-40 rounded-full bg-white/10 flex items-center justify-center text-4xl border-2 border-white/30">
@@ -1361,30 +698,19 @@ export default function Register() {
             <input type="file" accept="image/*" onChange={handlePhotoSelect} className="hidden" />
           </label>
 
-          <div className="flex flex-col md:flex-row gap-3 w-full md:w-auto">
-            <Button
-              disabled={uploadingPhoto}
-              onClick={handleRegisterWithoutPhoto}
-              variant="outline"
-              className="py-3 px-8 rounded-full font-semibold text-white border-white/40 hover:bg-white/10"
-            >
-              Pular
-            </Button>
-            
-            <Button
-              disabled={!photo || uploadingPhoto}
-              onClick={handleRegisterWithPhoto}
-              className="bg-success hover:bg-success/90 text-success-foreground py-3 px-8 rounded-full font-semibold"
-            >
-              {uploadingPhoto ? "Cadastrando..." : "Cadastrar com foto"}
-            </Button>
-          </div>
+          <Button
+            disabled={!photo}
+            onClick={handleRegister}
+            className="bg-green-300/80 hover:bg-green-400/80 text-green-900 py-3 px-8 rounded-full font-semibold"
+          >
+            {photo ? "Cadastrar" : "Selecione uma foto primeiro"}
+          </Button>
         </div>
       </div>
     );
   };
 
-  const Step10Success = () => (
+  const Step9Success = () => (
     <div className="flex flex-col items-center text-white space-y-6 text-center">
       <h2 className="text-4xl font-bold text-green-300">SUCESSO!</h2>
       <p className="text-lg max-w-md">
@@ -1392,8 +718,8 @@ export default function Register() {
         Agradecemos a sua confiança em nossa plataforma!
       </p>
       <Button
-        onClick={() => navigate("/")}
-        className="bg-success hover:bg-success/90 text-success-foreground py-4 px-8 md:px-10 rounded-full font-semibold w-full md:w-auto"
+        onClick={() => navigate("/auth")}
+        className="bg-green-300/80 hover:bg-green-400/80 text-green-900 py-4 px-10 rounded-full font-semibold"
       >
         Ir para página inicial
       </Button>
@@ -1402,253 +728,86 @@ export default function Register() {
 
   // ------------------- FLUXO EMPRESA -------------------
 
-  const Step2Company = () => {
-    const [selectedProject, setSelectedProject] = useState("");
-    
-    return (
-      <div className="flex flex-col items-center space-y-6 text-center text-white px-4">
-        <button
-          onClick={() => setStep(1)}
-          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
-        >
-          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-          <span className="font-medium">Voltar</span>
-        </button>
-        <h2 className="text-3xl font-bold">Tipo de projeto</h2>
-        {[
-          "Novas ideias/projeto",
-          "Reforçar equipe",
-          "Experiência específica",
-          "Novas competências",
-          "Outros",
-        ].map((option) => (
-          <Button
-            key={option}
-            onClick={() => setSelectedProject(option)}
-            className={`w-80 py-6 rounded-full text-lg transition-all ${
-              selectedProject === option
-                ? "bg-success hover:bg-success/90 text-success-foreground"
-                : "bg-white/20 hover:bg-white/30 text-white"
-            }`}
-          >
-            {option}
-          </Button>
-        ))}
-        
-        {selectedProject && (
-          <Button
-            onClick={() => setStep(3)}
-            className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-6 rounded-full text-lg font-semibold px-10 w-80"
-          >
-            PRÓXIMO
-          </Button>
-        )}
-      </div>
-    );
-  };
-
-  const Step3Company = () => {
-    const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
-    
-    const toggleSkill = (skill: string) => {
-      setSelectedSkills(prev => 
-        prev.includes(skill) 
-          ? prev.filter(s => s !== skill)
-          : [...prev, skill]
-      );
-    };
-    
-    return (
-      <div className="flex flex-col items-center space-y-6 text-center text-white px-4">
-        <button
-          onClick={() => setStep(2)}
-          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
-        >
-          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-          <span className="font-medium">Voltar</span>
-        </button>
-        <h2 className="text-3xl font-bold">Competências essenciais</h2>
-        <p className="text-white/80 text-sm">Selecione uma ou mais opções</p>
-        
-        <div className="grid grid-cols-2 gap-4 w-full max-w-3xl">
-          {[
-            "Ciência de Dados",
-            "Testes",
-            "Cibersegurança",
-            "Infraestrutura",
-            "Desenvolvimento de Software",
-            "Blockchain",
-            "Inteligência Artificial",
-            "Arquitetura",
-            "Engenharia de Dados",
-            "Suporte Técnico",
-            "Design",
-            "Análise de Dados",
-            "Nuvem",
-            "Outros",
-          ].map((option) => (
-            <Button
-              key={option}
-              onClick={() => toggleSkill(option)}
-              className={`py-6 rounded-2xl text-base transition-all ${
-                selectedSkills.includes(option)
-                  ? "bg-success hover:bg-success/90 text-success-foreground scale-105"
-                  : "bg-white/20 hover:bg-white/30 text-white"
-              }`}
-            >
-              {option}
-            </Button>
-          ))}
-        </div>
-        
-        {selectedSkills.length > 0 && (
-          <Button
-            onClick={() => setStep(4)}
-            className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-6 rounded-full text-lg font-semibold px-10 w-80"
-          >
-            PRÓXIMO
-          </Button>
-        )}
-      </div>
-    );
-  };
-
-  const Step4Company = () => {
-    const [selectedTime, setSelectedTime] = useState("");
-    
-    return (
-      <div className="flex flex-col items-center space-y-6 text-center text-white px-4">
-        <button
+  const Step2Company = () => (
+    <div className="flex flex-col items-center space-y-6 text-center text-white">
+      <h2 className="text-3xl font-bold">Tipo de projeto</h2>
+      {[
+        "Novas ideias/projeto",
+        "Reforçar equipe",
+        "Experiência específica",
+        "Novas competências",
+        "Outros",
+      ].map((option) => (
+        <Button
+          key={option}
           onClick={() => setStep(3)}
-          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+          className="w-80 py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-lg transition-all"
         >
-          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-          <span className="font-medium">Voltar</span>
-        </button>
-        <h2 className="text-3xl font-bold">Quanto tempo precisa do profissional?</h2>
-        {["Decidir mais tarde", "< 1 semana", "1 semana - 6 meses", "+ 6 meses"].map((option) => (
-          <Button
-            key={option}
-            onClick={() => setSelectedTime(option)}
-            className={`w-80 py-6 rounded-full text-lg transition-all ${
-              selectedTime === option
-                ? "bg-success hover:bg-success/90 text-success-foreground"
-                : "bg-white/20 hover:bg-white/30 text-white"
-            }`}
-          >
-            {option}
-          </Button>
-        ))}
-        
-        {selectedTime && (
-          <Button
-            onClick={() => setStep(5)}
-            className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-6 rounded-full text-lg font-semibold px-10 w-80"
-          >
-            PRÓXIMO
-          </Button>
-        )}
-      </div>
-    );
-  };
+          {option}
+        </Button>
+      ))}
+    </div>
+  );
 
-  const Step5Company = () => {
-    const [selectedGit, setSelectedGit] = useState("");
-    
-    return (
-      <div className="flex flex-col items-center space-y-6 text-center text-white px-4">
-        <button
+  const Step3Company = () => (
+    <div className="flex flex-col items-center space-y-6 text-center text-white">
+      <h2 className="text-3xl font-bold">Competências essenciais</h2>
+      {[
+        "Ciência de Dados",
+        "Testes",
+        "Cibersegurança",
+        "Infraestrutura",
+        "Desenvolvimento de Software",
+        "Blockchain",
+        "Inteligência Artificial",
+        "Arquitetura",
+        "Engenharia de Dados",
+        "Suporte Técnico",
+        "Design",
+        "Análise de Dados",
+        "Nuvem",
+        "Outros",
+      ].map((option) => (
+        <Button
+          key={option}
           onClick={() => setStep(4)}
-          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+          className="w-80 py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-lg transition-all"
         >
-          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-          <span className="font-medium">Voltar</span>
-        </button>
-        <h2 className="text-3xl font-bold">Experiência em Git?</h2>
-        {["Sim, básico", "Sim, avançado", "Conhecimento teórico", "Não necessário"].map((option) => (
-          <Button
-            key={option}
-            onClick={() => setSelectedGit(option)}
-            className={`w-80 py-6 rounded-full text-lg transition-all ${
-              selectedGit === option
-                ? "bg-success hover:bg-success/90 text-success-foreground"
-                : "bg-white/20 hover:bg-white/30 text-white"
-            }`}
-          >
-            {option}
-          </Button>
-        ))}
-        
-        {selectedGit && (
-          <Button
-            onClick={() => setStep(5.5)}
-            className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-6 rounded-full text-lg font-semibold px-10 w-80"
-          >
-            PRÓXIMO
-          </Button>
-        )}
-      </div>
-    );
-  };
+          {option}
+        </Button>
+      ))}
+    </div>
+  );
 
-  const Step5_5Company = () => {
-    const [selectedValues, setSelectedValues] = useState<string[]>([]);
-    
-    const toggleValue = (value: string) => {
-      setSelectedValues(prev => 
-        prev.includes(value) 
-          ? prev.filter(v => v !== value)
-          : [...prev, value]
-      );
-    };
-    
-    return (
-      <div className="flex flex-col items-center space-y-6 text-center text-white px-4">
-        <button
+  const Step4Company = () => (
+    <div className="flex flex-col items-center space-y-6 text-center text-white">
+      <h2 className="text-3xl font-bold">Quanto tempo precisa do profissional?</h2>
+      {["Decidir mais tarde", "< 1 semana", "1 semana - 6 meses", "+ 6 meses"].map((option) => (
+        <Button
+          key={option}
           onClick={() => setStep(5)}
-          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+          className="w-80 py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-lg transition-all"
         >
-          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-          <span className="font-medium">Voltar</span>
-        </button>
-        <h2 className="text-2xl md:text-3xl font-bold max-w-2xl">O que vocês valorizam mais em um candidato a longo prazo?</h2>
-        <p className="text-white/80 text-sm">Selecione uma ou mais opções</p>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-3xl">
-          {[
-            "Potencial de crescimento e aprendizado",
-            "Especialização técnica em determinada área",
-            "Flexibilidade e adaptabilidade",
-            "Comprometimento e estabilidade",
-          ].map((option) => (
-            <Button
-              key={option}
-              onClick={() => toggleValue(option)}
-              className={`py-6 rounded-full text-base transition-all ${
-                selectedValues.includes(option)
-                  ? "bg-success hover:bg-success/90 text-success-foreground scale-105"
-                  : "bg-white/20 hover:bg-white/30 text-white"
-              }`}
-            >
-              {option}
-            </Button>
-          ))}
-        </div>
-        
-        {selectedValues.length > 0 && (
-          <Button
-            onClick={() => {
-              setCandidateValue(selectedValues.join(", "));
-              setStep(6);
-            }}
-            className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-6 rounded-full text-lg font-semibold px-10 w-80"
-          >
-            PRÓXIMO
-          </Button>
-        )}
-      </div>
-    );
-  };
+          {option}
+        </Button>
+      ))}
+    </div>
+  );
+
+  const Step5Company = () => (
+    <div className="flex flex-col items-center space-y-6 text-center text-white">
+      <h2 className="text-3xl font-bold">Experiência em GitHub?</h2>
+      {["Sim, básico", "Sim, avançado", "Conhecimento teórico", "Não necessário"].map((option) => (
+        <Button
+          key={option}
+          onClick={() => setStep(6)}
+          className="w-80 py-6 rounded-full bg-white/20 hover:bg-white/30 text-white text-lg transition-all"
+        >
+          {option}
+        </Button>
+      ))}
+    </div>
+  );
 
   const Step6Company = React.useMemo(() => {
     const handleSubmit = async (e: React.FormEvent) => {
@@ -1661,7 +820,7 @@ export default function Register() {
       // Validação de senha - deve conter pelo menos uma letra
       const hasLetter = /[a-zA-Z]/.test(password);
       if (!hasLetter) {
-       // setPasswordError("A senha deve conter pelo menos uma letra");
+        setPasswordError("A senha deve conter pelo menos uma letra");
         toast({
           title: "Erro na senha",
           description: "A senha deve conter pelo menos uma letra.",
@@ -1693,15 +852,7 @@ export default function Register() {
     };
 
     return (
-      <form onSubmit={handleSubmit} className="space-y-6 max-w-4xl mx-auto px-4">
-        <button
-          type="button"
-          onClick={() => setStep(5.5)}
-          className="flex items-center gap-2 text-white/80 hover:text-white transition-colors group mb-4"
-        >
-          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-          <span className="font-medium">Voltar</span>
-        </button>
+      <form onSubmit={handleSubmit} className="space-y-6 max-w-4xl mx-auto">
         <h2 className="text-3xl font-bold text-center text-white mb-6">
           Cadastramento de Empresa
         </h2>
@@ -1715,7 +866,7 @@ export default function Register() {
                 value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
                 required
-                className="w-full p-3 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary"
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
               />
             </div>
           </div>
@@ -1728,7 +879,7 @@ export default function Register() {
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 required
-                className="w-full p-3 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary"
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
               />
             </div>
 
@@ -1739,14 +890,14 @@ export default function Register() {
                 value={companyContactLastName}
                 onChange={(e) => setCompanyContactLastName(e.target.value)}
                 required
-                className="w-full p-3 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary"
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-white mb-1">CNPJ</label>
+              <label className="block text-white mb-1">CNPJ (apenas números)</label>
               <input
                 type="text"
                 value={cnpj}
@@ -1757,7 +908,7 @@ export default function Register() {
                 required
                 maxLength={14}
                 placeholder="00000000000000"
-                className="w-full p-3 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary"
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
               />
             </div>
 
@@ -1768,7 +919,7 @@ export default function Register() {
                 value={position}
                 onChange={(e) => setPosition(e.target.value)}
                 required
-                className="w-full p-3 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary"
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
               />
             </div>
 
@@ -1778,7 +929,7 @@ export default function Register() {
                 value={state}
                 onChange={(e) => setState(e.target.value)}
                 required
-                className="w-full p-3 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary"
+                className="w-full p-3 rounded-lg border border-gray-300 bg-white text-black"
               >
                 <option value="">Selecione o estado da empresa</option>
                 {states.map((st) => (
@@ -1796,7 +947,7 @@ export default function Register() {
                 onChange={(e) => setCity(e.target.value)}
                 required
                 disabled={!state || loadingCities}
-                className="w-full p-3 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary disabled:opacity-50"
+                className="w-full p-3 rounded-lg border border-gray-300 bg-white text-black disabled:opacity-50"
               >
                 <option value="">
                   {loadingCities ? "Carregando..." : !state ? "Selecione o estado primeiro" : "Selecione a cidade"}
@@ -1810,22 +961,19 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1">Telefone/WhatsApp</label>
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600 font-medium">+55</span>
-                <input
-                  type="text"
-                  value={phone}
-                  onChange={(e) => {
-                    const value = e.target.value.replace(/\D/g, '');
-                    setPhone(value);
-                  }}
-                  required
-                  maxLength={11}
-                  placeholder="11999999999"
-                  className="w-full p-3 pl-14 rounded-lg bg-white text-black focus:ring-2 focus:ring-primary"
-                />
-              </div>
+              <label className="block text-white mb-1">Telefone/WhatsApp (apenas números)</label>
+              <input
+                type="text"
+                value={phone}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, '');
+                  setPhone(value);
+                }}
+                required
+                maxLength={11}
+                placeholder="11999999999"
+                className="w-full p-3 rounded-lg border border-gray-300 text-black"
+              />
             </div>
           </div>
 
@@ -1841,9 +989,9 @@ export default function Register() {
                 }}
                 onBlur={(e) => checkEmailAvailability(e.target.value)}
                 required
-                className={`w-full p-3 rounded-lg bg-white text-black focus:ring-2 ${
-                  emailError ? "ring-2 ring-red-500" : "focus:ring-primary"
-                }`}
+                className={`w-full p-3 rounded-lg border ${
+                  emailError ? "border-red-500" : "border-gray-300"
+                } text-black`}
               />
               {checkingEmail && (
                 <p className="text-yellow-300 text-sm mt-1">Verificando email...</p>
@@ -1854,7 +1002,8 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-white mb-1">Senha</label>
+              <label className="block text-white mb-1 min-h-[3rem] flex items-end">Senha</label>
+              <p className="text-white/80 text-xs mb-1">(deve conter pelo menos uma letra)</p>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -1865,9 +1014,9 @@ export default function Register() {
                   }}
                   required
                   minLength={6}
-                  className={`w-full p-3 pr-10 rounded-lg bg-white text-black focus:ring-2 ${
-                    passwordError ? "ring-2 ring-red-500" : "focus:ring-primary"
-                  }`}
+                  className={`w-full p-3 pr-10 rounded-lg border ${
+                    passwordError ? "border-red-500" : "border-gray-300"
+                  } text-black`}
                 />
                 <button
                   type="button"
@@ -1882,23 +1031,14 @@ export default function Register() {
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
-              <ul className="text-white/80 text-xs mt-2 space-y-1">
-                <li className="flex items-center gap-1">
-                  <span className={password.length >= 6 ? "text-green-300" : "text-white/60"}>✓</span>
-                  Mínimo 6 caracteres
-                </li>
-                <li className="flex items-center gap-1">
-                  <span className={/[a-zA-Z]/.test(password) ? "text-green-300" : "text-white/60"}>✓</span>
-                  Pelo menos uma letra
-                </li>
-              </ul>
               {passwordError && (
                 <p className="text-red-300 text-sm mt-1 font-semibold">{passwordError}</p>
               )}
             </div>
 
             <div>
-              <label className="block text-white mb-1">Confirmar Senha</label>
+              <label className="block text-white mb-1 min-h-[3rem] flex items-end">Confirmar Senha</label>
+              <p className="text-white/80 text-xs mb-1 invisible">(espaço reservado)</p>
               <div className="relative">
                 <input
                   type={showConfirmPassword ? "text" : "password"}
@@ -1909,9 +1049,9 @@ export default function Register() {
                   }}
                   required
                   minLength={6}
-                  className={`w-full p-3 pr-10 rounded-lg bg-white text-black focus:ring-2 ${
-                    confirmPasswordError ? "ring-2 ring-red-500" : "focus:ring-primary"
-                  }`}
+                  className={`w-full p-3 pr-10 rounded-lg border ${
+                    confirmPasswordError ? "border-red-500" : "border-gray-300"
+                  } text-black`}
                 />
                 <button
                   type="button"
@@ -1926,11 +1066,6 @@ export default function Register() {
                   {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
-              {confirmPassword && (
-                <p className={`text-xs mt-2 ${password === confirmPassword ? "text-green-300" : "text-red-300"}`}>
-                  {password === confirmPassword ? "✓ Senhas coincidem" : "✗ Senhas não coincidem"}
-                </p>
-              )}
               {confirmPasswordError && (
                 <p className="text-red-300 text-sm mt-1 font-semibold">{confirmPasswordError}</p>
               )}
@@ -1950,7 +1085,7 @@ export default function Register() {
                   checked={diversity === "sim"}
                   onChange={() => setDiversity("sim")}
                   required
-                  className="accent-primary"
+                  className="accent-green-500"
                 />
                 Sim
               </label>
@@ -1962,7 +1097,7 @@ export default function Register() {
                   checked={diversity === "nao"}
                   onChange={() => setDiversity("nao")}
                   required
-                  className="accent-primary"
+                  className="accent-green-500"
                 />
                 Não
               </label>
@@ -1972,7 +1107,7 @@ export default function Register() {
           <button
             type="submit"
             disabled={checkingEmail || !!emailError || !!passwordError || !!confirmPasswordError}
-            className="w-full bg-success hover:bg-success/90 text-success-foreground py-4 rounded-full mt-4 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-green-300/80 hover:bg-green-400/80 text-green-900 py-4 rounded-full mt-4 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {checkingEmail ? "VERIFICANDO..." : "CONTINUAR E ENVIAR OS DADOS"}
           </button>
@@ -1982,14 +1117,7 @@ export default function Register() {
   }, [companyName, fullName, companyContactLastName, cnpj, position, state, city, phone, email, password, confirmPassword, diversity, states, cities, loadingCities, checkingEmail, emailError, passwordError, confirmPasswordError, showPassword, showConfirmPassword]);
 
   const Step7Company = () => (
-    <div className="text-white space-y-6 max-w-3xl mx-auto text-justify px-4">
-      <button
-        onClick={() => setStep(6)}
-        className="flex items-center gap-2 text-white/80 hover:text-white transition-colors group mb-4"
-      >
-        <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-        <span className="font-medium">Voltar</span>
-      </button>
+    <div className="text-white space-y-6 max-w-3xl mx-auto text-justify">
       <h2 className="text-3xl font-bold text-center mb-6">
         📌 Termos e Condições – Empresas Apoiadoras
       </h2>
@@ -2011,10 +1139,10 @@ export default function Register() {
         Ao prosseguir, a empresa declara ter lido e aceitado todos os termos acima.
       </p>
 
-      <div className="text-center px-4">
+      <div className="text-center">
         <Button
           onClick={() => setStep(8)}
-          className="bg-success hover:bg-success/90 text-success-foreground py-4 px-8 md:px-10 rounded-full font-semibold mt-4 transition-all w-full md:w-auto"
+          className="bg-green-300/80 hover:bg-green-400/80 text-green-900 py-4 px-10 rounded-full font-semibold mt-4 transition-all"
         >
           Concordo com os termos e quero apoiar
         </Button>
@@ -2024,7 +1152,6 @@ export default function Register() {
 
   const Step8Company = () => {
     const [logo, setLogo] = useState<File | null>(null);
-    const [uploadingLogo, setUploadingLogo] = useState(false);
 
     const handleLogoSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
       if (event.target.files && event.target.files[0]) {
@@ -2032,104 +1159,15 @@ export default function Register() {
       }
     };
 
-    const handleRegisterWithLogo = async () => {
-      if (!logo) {
-        toast({
-          title: "Logo obrigatório",
-          description: "Por favor, selecione um logo antes de continuar.",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      setUploadingLogo(true);
-
-      try {
-        // First, register the user
-        const { data: authData, error: authError } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: `${window.location.origin}/`,
-            data: {
-              full_name: `${fullName} ${companyContactLastName}`,
-              role,
-              state,
-              city,
-              company_name: companyName,
-              cnpj,
-              phone,
-              position,
-              diversity,
-            },
-          },
-        });
-
-        if (authError) throw authError;
-
-        const userId = authData.user?.id;
-        if (!userId) throw new Error("Erro ao obter ID do usuário");
-
-        // Upload logo to storage
-        const fileExt = logo.name.split('.').pop();
-        const fileName = `${userId}/logo.${fileExt}`;
-
-        const { error: uploadError } = await supabase.storage
-          .from('profile-photos')
-          .upload(fileName, logo, {
-            upsert: true,
-            contentType: logo.type
-          });
-
-        if (uploadError) throw uploadError;
-
-        // Get public URL
-        const { data: { publicUrl } } = supabase.storage
-          .from('profile-photos')
-          .getPublicUrl(fileName);
-
-        // Update company profile with logo URL
-        const { error: updateError } = await supabase
-          .from('company_profiles')
-          .update({ logo_url: `${publicUrl}?t=${Date.now()}` })
-          .eq('user_id', userId);
-
-        if (updateError) throw updateError;
-
-        setStep(9);
-
-        toast({
-          title: "Cadastro realizado!",
-          description: "Sua empresa agora faz parte da plataforma.",
-        });
-
-      } catch (error: any) {
-        toast({
-          title: "Erro no cadastro",
-          description: error.message || "Ocorreu um erro ao realizar o cadastro.",
-          variant: "destructive",
-        });
-      } finally {
-        setUploadingLogo(false);
-      }
-    };
-
     return (
-      <div className="flex flex-col items-center text-white space-y-6 px-4">
-        <button
-          onClick={() => setStep(7)}
-          className="self-start flex items-center gap-2 text-white/80 hover:text-white transition-colors group mb-2"
-        >
-          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-          <span className="font-medium">Voltar</span>
-        </button>
+      <div className="flex flex-col items-center text-white space-y-6">
         <h2 className="text-3xl font-bold">Envie o logo da sua empresa</h2>
 
         {logo ? (
           <img
             src={URL.createObjectURL(logo)}
             alt="Prévia da logo"
-            className="w-40 h-40 rounded-full object-cover border-4 border-primary shadow-lg"
+            className="w-40 h-40 rounded-full object-cover border-4 border-green-300 shadow-lg"
           />
         ) : (
           <div className="w-40 h-40 rounded-full bg-white/10 flex items-center justify-center text-4xl border-2 border-white/30">
@@ -2144,11 +1182,11 @@ export default function Register() {
           </label>
 
           <Button
-            disabled={!logo || uploadingLogo}
-            onClick={handleRegisterWithLogo}
-            className="bg-success hover:bg-success/90 text-success-foreground py-3 px-8 rounded-full font-semibold w-full md:w-auto"
+            disabled={!logo}
+            onClick={handleRegister}
+            className="bg-green-300/80 hover:bg-green-400/80 text-green-900 py-3 px-8 rounded-full font-semibold"
           >
-            {uploadingLogo ? "Cadastrando..." : logo ? "Finalizar cadastro" : "Selecione uma logo"}
+            {logo ? "Finalizar cadastro" : "Selecione uma logo"}
           </Button>
         </div>
       </div>
@@ -2157,14 +1195,14 @@ export default function Register() {
 
   const Step9Company = () => (
     <div className="flex flex-col items-center text-white space-y-6 text-center">
-      <h2 className="text-4xl font-bold text-primary">Cadastro concluído!</h2>
+      <h2 className="text-4xl font-bold text-green-300">Cadastro concluído!</h2>
       <p className="text-lg max-w-md">
         Sua empresa agora faz parte de uma rede que apoia a diversidade e a inclusão.
         Obrigado por se juntar a nós 💜
       </p>
       <Button
-        onClick={() => navigate("/")}
-        className="bg-success hover:bg-success/90 text-success-foreground py-4 px-8 md:px-10 rounded-full font-semibold w-full md:w-auto"
+        onClick={() => navigate("/auth")}
+        className="bg-green-300/80 hover:bg-green-400/80 text-green-900 py-4 px-10 rounded-full font-semibold"
       >
         Ir para login
       </Button>
@@ -2174,29 +1212,22 @@ export default function Register() {
   // ------------------- RENDER -------------------
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#6E4062] via-[#5a3452] to-[#6E4062] p-3 md:p-8 lg:p-12">
-      <div className="w-full max-w-4xl bg-white/10 backdrop-blur-lg rounded-2xl md:rounded-3xl p-6 md:p-12 shadow-2xl">
-      {step === 1 && <Step1 />}
-      {role === "candidate" && step === 2 && <Step2Candidate />}
-      {role === "candidate" && step === 2.3 && <Step2_3Candidate />}
-      {role === "candidate" && step === 2.4 && <Step2_4Candidate />}
-      {role === "candidate" && step === 2.5 && <Step2_5Candidate />}
-      {role === "candidate" && step === 2.7 && <Step2_7Candidate />}
-      {role === "candidate" && step === 3 && <Step3Candidate />}
-      {role === "candidate" && step === 4 && <Step4Candidate />}
-      {role === "candidate" && step === 5 && <Step5Candidate />}
-      {role === "candidate" && step === 6 && <Step6Candidate />}
-      {role === "candidate" && step === 6.5 && <Step6_5Candidate />}
-      {role === "candidate" && step === 7 && Step7Candidate}
-      {role === "candidate" && step === 8 && <Step8Terms />}
-      {role === "candidate" && step === 9 && <Step9Photo />}
-        {role === "candidate" && step === 10 && <Step10Success />}
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-purple-700 to-purple-600 p-4">
+      <div className="w-full max-w-4xl bg-white/10 backdrop-blur-lg rounded-3xl p-12 shadow-2xl">
+        {step === 1 && <Step1 />}
+        {role === "candidate" && step === 2 && <Step2Candidate />}
+        {role === "candidate" && step === 3 && <Step3Candidate />}
+        {role === "candidate" && step === 4 && <Step4Candidate />}
+        {role === "candidate" && step === 5 && <Step5Candidate />}
+        {role === "candidate" && step === 6 && Step6Candidate}
+        {role === "candidate" && step === 7 && <Step7Terms />}
+        {role === "candidate" && step === 8 && <Step8Photo />}
+        {role === "candidate" && step === 9 && <Step9Success />}
 
         {role === "company" && step === 2 && <Step2Company />}
         {role === "company" && step === 3 && <Step3Company />}
         {role === "company" && step === 4 && <Step4Company />}
         {role === "company" && step === 5 && <Step5Company />}
-        {role === "company" && step === 5.5 && <Step5_5Company />}
         {role === "company" && step === 6 && Step6Company}
         {role === "company" && step === 7 && <Step7Company />}
         {role === "company" && step === 8 && <Step8Company />}
