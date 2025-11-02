@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Lock } from "lucide-react";
+import logoLinkar from "@/assets/logo-linkar.png";
 
 export default function ForgotPassword() {
   const navigate = useNavigate();
@@ -45,22 +46,22 @@ export default function ForgotPassword() {
         <div className="w-full max-w-2xl bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl p-12">
           <div className="text-center space-y-6">
             <h1 className="text-3xl font-bold text-gray-900">
-              Recebemos sua solicitação para redefinir sua senha.
+              Solicitação de Redefinição de Senha Recebida
             </h1>
             
             <div className="space-y-4 text-gray-700 text-lg">
-              <p>Uma nova senha foi gerada e enviada para o seu e-mail.</p>
+              <p>Informamos que uma nova senha foi gerada e enviada para o endereço de e-mail cadastrado.</p>
               <p>
-                Por segurança, recomendamos que você altere esta senha após o primeiro acesso.
+                Por questões de segurança, recomendamos fortemente que a senha seja alterada após o primeiro acesso ao sistema.
               </p>
               <p>
-                Caso não tenha solicitado a redefinição, ignore esta mensagem ou entre em contato com nosso suporte.
+                Caso não tenha solicitado esta redefinição, solicitamos que desconsidere esta mensagem ou entre em contato com nossa equipe de suporte.
               </p>
             </div>
 
-            <div className="pt-6">
-              <p className="text-gray-600">Atenciosamente,</p>
-              <p className="text-2xl font-bold text-primary mt-2">Linka+.</p>
+            <div className="pt-6 flex flex-col items-center">
+              <p className="text-gray-600 mb-4">Atenciosamente,</p>
+              <img src={logoLinkar} alt="Linka+ Logo" className="h-12 w-auto" />
             </div>
           </div>
         </div>
@@ -81,7 +82,7 @@ export default function ForgotPassword() {
           </h1>
 
           <p className="text-center text-gray-600">
-            Digite seu email e enviaremos um link para a nova senha.
+            Informe seu endereço de e-mail para receber as instruções de redefinição de senha.
           </p>
 
           <form onSubmit={handleSubmit} className="w-full space-y-6">
@@ -90,7 +91,7 @@ export default function ForgotPassword() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="digite seu email"
+                placeholder="Digite seu e-mail"
                 required
                 className="w-full p-4 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
               />
