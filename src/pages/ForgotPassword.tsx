@@ -61,7 +61,7 @@ export default function ForgotPassword() {
 
             <div className="pt-6 flex flex-col items-center">
               <p className="text-gray-600 mb-4">Atenciosamente,</p>
-              <img src={logoLinkar} alt="Linka+ Logo" className="h-12 w-auto" />
+              <img src={logoLinkar} alt="Linka+ Logo" className="h-12 w-auto brightness-0" />
             </div>
           </div>
         </div>
