@@ -62,7 +62,7 @@ export function CandidateSidebar({ showSidebar, setShowSidebar }: CandidateSideb
     { icon: Briefcase, label: "Vagas", path: "/candidate-dashboard" },
     { icon: ClipboardList, label: "Minhas Candidaturas", path: "/my-applications" },
     { icon: Heart, label: "Match de Vagas", path: "/candidate-swipe" },
-    { icon: Heart, label: "Meus Matches", path: "/matches" },
+    { icon: Heart, label: "Meus Matches", path: "/matches-candidate" },
     { icon: User, label: "Meu Perfil", path: "/candidate-profile" },
     { icon: Settings, label: "Configurações", path: "/candidate-settings" },
     { icon: Headset, label: "Suporte", path: "/candidate-support" },
@@ -107,11 +107,7 @@ export function CandidateSidebar({ showSidebar, setShowSidebar }: CandidateSideb
                 key={item.path}
                 onClick={() => {
                   setShowSidebar(false);
-                  if (item.path === "/matches") {
-                    navigate("/matches", { state: { context: "candidate" } });
-                  } else {
-                    navigate(item.path);
-                  }
+                  navigate(item.path);
                 }}
                 className={`w-full flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-lg transition text-left ${
                   isActive ? "bg-white/20" : "hover:bg-white/10"

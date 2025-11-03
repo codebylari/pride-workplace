@@ -144,8 +144,11 @@ import CandidateSwipe from "./pages/CandidateSwipe";
 import CompanySwipe from "./pages/CompanySwipe";
 // Página de Match de Talentos - Empresa
 
-import Matches from "./pages/Matches";
-// Página de Matches - Candidatos e Empresas
+import MatchesCandidate from "./pages/MatchesCandidate";
+// Página de Matches - Candidatos
+
+import MatchesCompany from "./pages/MatchesCompany";
+// Página de Matches - Empresas
 
 import CompanyTestimonials from "./pages/CompanyTestimonials";
 // Página de Depoimentos - Empresa
@@ -305,8 +308,11 @@ const App = () => (
             <Route path="/company-swipe" element={<CompanySwipe />} />
             {/* Página de Match de Talentos - Empresa */}
             
-            <Route path="/matches" element={<Matches />} />
-            {/* Página de Matches - Candidatos e Empresas */}
+            <Route path="/matches-candidate" element={<MatchesCandidate />} />
+            {/* Página de Matches - Candidatos */}
+            
+            <Route path="/matches-company" element={<MatchesCompany />} />
+            {/* Página de Matches - Empresas */}
             
             <Route path="/company-testimonials" element={<CompanyTestimonials />} />
             {/* Página de Depoimentos - Empresa */}

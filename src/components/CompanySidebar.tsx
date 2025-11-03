@@ -62,7 +62,7 @@ export function CompanySidebar({ showSidebar, setShowSidebar }: CompanySidebarPr
     { icon: PlusCircle, label: "Cadastrar Vagas", path: "/create-job" },
     { icon: List, label: "Minhas Vagas", path: "/company-jobs" },
     { icon: Heart, label: "Match de Talentos", path: "/company-swipe" },
-    { icon: Heart, label: "Meus Matches", path: "/matches" },
+    { icon: Heart, label: "Meus Matches", path: "/matches-company" },
     { icon: MessageSquare, label: "Depoimentos", path: "/company-testimonials" },
     { icon: User, label: "Meu Perfil", path: "/company-profile" },
     { icon: Settings, label: "Configurações", path: "/company-settings" },
@@ -108,11 +108,7 @@ export function CompanySidebar({ showSidebar, setShowSidebar }: CompanySidebarPr
                 key={item.path}
                 onClick={() => {
                   setShowSidebar(false);
-                  if (item.path === "/matches") {
-                    navigate("/matches", { state: { context: "company" } });
-                  } else {
-                    navigate(item.path);
-                  }
+                  navigate(item.path);
                 }}
                 className={`w-full flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-lg transition text-left ${
                   isActive ? "bg-white/20" : "hover:bg-white/10"
