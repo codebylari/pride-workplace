@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, Camera, Upload, X, Linkedin } from "lucide-react";
+import { Menu, Camera, Upload, X, Linkedin, Sparkles, FileUp } from "lucide-react";
 import { CandidateSidebar } from "@/components/CandidateSidebar";
 import { NotificationsPanel } from "@/components/NotificationsPanel";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useToast } from "@/hooks/use-toast";
 import { PhotoEditor } from "@/components/PhotoEditor";
+import { AIResumeDialog } from "@/components/AIResumeDialog";
 import { supabase } from "@/integrations/supabase/client";
 
 export default function EditCandidateProfile() {
@@ -16,10 +17,13 @@ export default function EditCandidateProfile() {
   const { darkMode } = useTheme();
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const resumeInputRef = useRef<HTMLInputElement>(null);
   const [showSidebar, setShowSidebar] = useState(false);
   const [showPhotoOptions, setShowPhotoOptions] = useState(false);
   const [showPhotoEditor, setShowPhotoEditor] = useState(false);
+  const [showAIResumeDialog, setShowAIResumeDialog] = useState(false);
   const [tempPhotoUrl, setTempPhotoUrl] = useState<string | null>(null);
+  const [aiGeneratedResumeUrl, setAiGeneratedResumeUrl] = useState<string | null>(null);
 
   // Form fields
   const [displayName, setDisplayName] = useState("");
@@ -120,6 +124,14 @@ export default function EditCandidateProfile() {
     }
   };
 
+  const handleAIResumeGenerated = (resumeUrl: string) => {
+    setAiGeneratedResumeUrl(resumeUrl);
+    toast({
+      title: "Currículo gerado!",
+      description: "Seu currículo foi criado com sucesso. Clique em 'Confirmar Alterações' para salvar.",
+    });
+  };
+
   const handleSaveChanges = async () => {
     // Verificar autenticação primeiro
     if (!user?.id) {
@@ -144,6 +156,7 @@ export default function EditCandidateProfile() {
       myJourney.trim() !== "" || 
       profilePhoto !== null || 
       resume !== null ||
+      aiGeneratedResumeUrl !== null ||
       hasGenderChange ||
       linkedinUrl.trim() !== "";
 
@@ -183,8 +196,12 @@ export default function EditCandidateProfile() {
         updates.journey = myJourney;
       }
 
-      // Handle resume upload
-      if (resume) {
+      // Handle AI-generated resume
+      if (aiGeneratedResumeUrl) {
+        updates.resume_url = aiGeneratedResumeUrl;
+      }
+      // Handle manual resume upload
+      else if (resume) {
         const ext = resume.name.split(".").pop() || "pdf";
         const path = `${user.id}/resume.${ext}`;
 
@@ -467,35 +484,42 @@ export default function EditCandidateProfile() {
             </div>
           </div>
 
-          {/* Resume Upload */}
+          {/* Resume Section */}
           <div>
             <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-800"}`}>
               Currículo (apenas PDF)
             </label>
             <p className={`text-sm mb-3 ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
-              Envie seu currículo em formato PDF
+              Crie seu currículo com IA ou faça upload do seu arquivo PDF
             </p>
-            <div className="flex items-center gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <Button
-                onClick={() => document.getElementById("resume-upload")?.click()}
-                className="bg-purple-500 hover:bg-purple-600 text-white px-6 py-3 rounded-lg font-medium flex items-center gap-2"
+                onClick={() => setShowAIResumeDialog(true)}
+                className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-6 py-3 rounded-lg font-medium flex items-center justify-center gap-2"
               >
-                <Upload size={20} />
-                Enviar arquivo PDF
+                <Sparkles size={20} />
+                Criar com IA
               </Button>
-              {resume && (
-                <span className={`text-sm ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
-                  {resume.name}
-                </span>
-              )}
-              <input
-                id="resume-upload"
-                type="file"
-                accept=".pdf"
-                onChange={handleResumeChange}
-                className="hidden"
-              />
+              <Button
+                onClick={() => resumeInputRef.current?.click()}
+                className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium flex items-center justify-center gap-2"
+              >
+                <FileUp size={20} />
+                Fazer Upload
+              </Button>
             </div>
+            {(resume || aiGeneratedResumeUrl) && (
+              <p className={`text-sm mt-3 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+                {resume ? `📄 ${resume.name}` : '✨ Currículo gerado por IA'}
+              </p>
+            )}
+            <input
+              ref={resumeInputRef}
+              type="file"
+              accept=".pdf"
+              onChange={handleResumeChange}
+              className="hidden"
+            />
           </div>
 
           {/* Save Button */}
@@ -518,6 +542,20 @@ export default function EditCandidateProfile() {
           onCancel={handlePhotoCancel}
         />
       )}
+
+      {/* AI Resume Dialog */}
+      <AIResumeDialog
+        open={showAIResumeDialog}
+        onOpenChange={setShowAIResumeDialog}
+        profileData={{
+          fullName: displayName || fullName,
+          aboutMe,
+          experience,
+          education,
+          journey: myJourney,
+        }}
+        onResumeGenerated={handleAIResumeGenerated}
+      />
     </div>
   );
 }

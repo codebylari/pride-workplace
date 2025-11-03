@@ -2,3 +2,6 @@ project_id = "nvtgmcqromdzmrapbkrg"
 
 [functions.chat-assistant]
 verify_jwt = false
+
+[functions.generate-resume]
+verify_jwt = true
