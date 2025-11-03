@@ -701,18 +701,24 @@ export default function Register() {
     );
   };
 
-  // Função para verificar se o email já está em uso (validação básica local)
+  // Função para verificar formato do email
   const checkEmailAvailability = async (emailToCheck: string) => {
     setCheckingEmail(true);
     setEmailError("");
     try {
-      if (!emailToCheck) return;
+      if (!emailToCheck) return false;
+      
+      // Validação básica de formato
       const basicEmailRegex = /.+@.+\..+/;
       if (!basicEmailRegex.test(emailToCheck)) {
         setEmailError("Email inválido. Verifique e tente novamente.");
+        return false;
       }
+      
+      return true;
     } catch (error) {
       console.error("Erro ao validar email:", error);
+      return true; // Em caso de erro, permite continuar
     } finally {
       setCheckingEmail(false);
     }
@@ -763,10 +769,10 @@ export default function Register() {
       }
       
       // Verifica o email antes de avançar
-      await checkEmailAvailability(email);
+      const emailIsValid = await checkEmailAvailability(email);
       
-      // Se houver erro de email, não avança
-      if (emailError) {
+      // Se o email não for válido ou já estiver cadastrado, não avança
+      if (!emailIsValid || emailError) {
         return;
       }
       
@@ -1126,7 +1132,7 @@ export default function Register() {
       setUploadingPhoto(true);
 
       try {
-        // Cadastrar usuário sem foto
+        // Cadastra o usuário sem foto
         const { data: authData, error: authError } = await supabase.auth.signUp({
           email,
           password,
@@ -1147,10 +1153,10 @@ export default function Register() {
           },
         });
 
-        if (authError && (authError.message?.includes('already') || authError.message?.includes('registered'))) {
-          const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
-          if (signInError) throw signInError;
-        } else if (authError) {
+        if (authError) {
+          if (authError.message?.includes('already') || authError.message?.includes('registered')) {
+            throw new Error('Este email já está cadastrado. Por favor, faça login ou use outro email.');
+          }
           throw authError;
         }
 
@@ -1190,7 +1196,7 @@ export default function Register() {
       setUploadingPhoto(true);
 
       try {
-        // 1) Tenta cadastrar usuário
+        // 1) Cadastra o usuário
         const { data: authData, error: authError } = await supabase.auth.signUp({
           email,
           password,
@@ -1211,11 +1217,11 @@ export default function Register() {
           },
         });
 
-        // 2) Se já for cadastrado, faz login para obter sessão
-        if (authError && (authError.message?.includes('already') || authError.message?.includes('registered'))) {
-          const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
-          if (signInError) throw signInError;
-        } else if (authError) {
+        // 2) Se houver erro, mostra mensagem apropriada
+        if (authError) {
+          if (authError.message?.includes('already') || authError.message?.includes('registered')) {
+            throw new Error('Este email já está cadastrado. Por favor, faça login ou use outro email.');
+          }
           throw authError;
         }
 
@@ -1636,10 +1642,10 @@ export default function Register() {
       }
       
       // Verifica o email antes de avançar
-      await checkEmailAvailability(email);
+      const emailIsValid = await checkEmailAvailability(email);
       
-      // Se houver erro de email, não avança
-      if (emailError) {
+      // Se o email não for válido ou já estiver cadastrado, não avança
+      if (!emailIsValid || emailError) {
         return;
       }
       
@@ -2067,7 +2073,7 @@ export default function Register() {
       setUploadingLogo(true);
 
       try {
-        // First, register the user
+        // Cadastra a empresa
         const { data: authData, error: authError } = await supabase.auth.signUp({
           email,
           password,
@@ -2087,7 +2093,12 @@ export default function Register() {
           },
         });
 
-        if (authError) throw authError;
+        if (authError) {
+          if (authError.message?.includes('already') || authError.message?.includes('registered')) {
+            throw new Error('Este email já está cadastrado. Por favor, faça login ou use outro email.');
+          }
+          throw authError;
+        }
 
         const userId = authData.user?.id;
         if (!userId) throw new Error("Erro ao obter ID do usuário");
