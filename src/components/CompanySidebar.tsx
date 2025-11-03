@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { Briefcase, PlusCircle, User, Settings, Headset, Info, FileText, LogOut, List } from "lucide-react";
+import { Briefcase, PlusCircle, User, Settings, Headset, Info, FileText, LogOut, List, Heart } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useState, useEffect } from "react";
@@ -40,6 +40,8 @@ export function CompanySidebar({ showSidebar, setShowSidebar }: CompanySidebarPr
     { icon: Briefcase, label: "Dashboard", path: "/company-dashboard" },
     { icon: PlusCircle, label: "Cadastrar Vagas", path: "/create-job" },
     { icon: List, label: "Minhas Vagas", path: "/company-jobs" },
+    { icon: Heart, label: "Match de Talentos", path: "/company-swipe" },
+    { icon: Heart, label: "Meus Matches", path: "/matches" },
     { icon: User, label: "Meu Perfil", path: "/company-profile" },
     { icon: Settings, label: "Configurações", path: "/company-settings" },
     { icon: Headset, label: "Suporte", path: "/company-support" },

@@ -63,49 +63,73 @@ export default function Matches() {
   const fetchMatches = async (role: "candidate" | "company", userId: string) => {
     try {
       if (role === "candidate") {
-        const { data, error } = await supabase
+        const { data: matchesData, error } = await supabase
           .from("matches")
-          .select(`
-            id,
-            matched_at,
-            jobs!inner(id, title, location, job_type),
-            company_profiles!inner(fantasy_name, logo_url)
-          `)
+          .select("*")
           .eq("candidate_id", userId)
           .eq("status", "active")
           .order("matched_at", { ascending: false });
 
         if (error) throw error;
-        
-        const formattedData = data?.map(match => ({
-          id: match.id,
-          matched_at: match.matched_at,
-          job: match.jobs,
-          company: match.company_profiles,
-        })) || [];
+
+        // Buscar jobs e company_profiles separadamente
+        const formattedData = await Promise.all(
+          (matchesData || []).map(async (match) => {
+            const { data: jobData } = await supabase
+              .from("jobs")
+              .select("id, title, location, job_type")
+              .eq("id", match.job_id)
+              .maybeSingle();
+
+            const { data: companyData } = await supabase
+              .from("company_profiles")
+              .select("fantasy_name, logo_url")
+              .eq("user_id", match.company_id)
+              .maybeSingle();
+
+            return {
+              id: match.id,
+              matched_at: match.matched_at,
+              job: jobData || { id: "", title: "", location: "", job_type: "" },
+              company: companyData || { fantasy_name: "Empresa", logo_url: null },
+            };
+          })
+        );
         
         setMatches(formattedData);
       } else {
-        const { data, error } = await supabase
+        const { data: matchesData, error } = await supabase
           .from("matches")
-          .select(`
-            id,
-            matched_at,
-            jobs!inner(id, title, location, job_type),
-            profiles!inner(full_name, photo_url, city, state)
-          `)
+          .select("*")
           .eq("company_id", userId)
           .eq("status", "active")
           .order("matched_at", { ascending: false });
 
         if (error) throw error;
-        
-        const formattedData = data?.map(match => ({
-          id: match.id,
-          matched_at: match.matched_at,
-          job: match.jobs,
-          candidate: match.profiles,
-        })) || [];
+
+        // Buscar jobs e profiles separadamente
+        const formattedData = await Promise.all(
+          (matchesData || []).map(async (match) => {
+            const { data: jobData } = await supabase
+              .from("jobs")
+              .select("id, title, location, job_type")
+              .eq("id", match.job_id)
+              .maybeSingle();
+
+            const { data: candidateData } = await supabase
+              .from("profiles")
+              .select("full_name, photo_url, city, state")
+              .eq("id", match.candidate_id)
+              .maybeSingle();
+
+            return {
+              id: match.id,
+              matched_at: match.matched_at,
+              job: jobData || { id: "", title: "", location: "", job_type: "" },
+              candidate: candidateData || { full_name: "Candidato", photo_url: null, city: null, state: null },
+            };
+          })
+        );
         
         setMatches(formattedData);
       }
@@ -135,9 +159,9 @@ export default function Matches() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
       {userRole === "candidate" ? (
-        <CandidateSidebar open={sidebarOpen} setOpen={setSidebarOpen} />
+        <CandidateSidebar showSidebar={sidebarOpen} setShowSidebar={setSidebarOpen} />
       ) : (
-        <CompanySidebar open={sidebarOpen} setOpen={setSidebarOpen} />
+        <CompanySidebar showSidebar={sidebarOpen} setShowSidebar={setSidebarOpen} />
       )}
       
       <div className="container mx-auto px-4 py-8 max-w-4xl">

@@ -61,17 +61,33 @@ export default function CandidateSwipe() {
       setSwipedJobs(new Set(swipedJobIds));
 
       // Buscar vagas disponíveis
-      const { data: jobsData, error } = await supabase
-        .from("jobs")
-        .select(`
-          *,
-          company_profiles!inner(fantasy_name, logo_url, sector)
-        `)
-        .not("id", "in", `(${swipedJobIds.join(",") || "null"})`)
-        .limit(20);
+      let query = supabase.from("jobs").select("*");
+      
+      if (swipedJobIds.length > 0) {
+        query = query.not("id", "in", `(${swipedJobIds.join(",")})`);
+      }
+      
+      const { data: jobsData, error } = await query.limit(20);
 
       if (error) throw error;
-      setJobs(jobsData || []);
+
+      // Buscar company_profiles separadamente
+      const jobsWithCompanies = await Promise.all(
+        (jobsData || []).map(async (job) => {
+          const { data: companyData } = await supabase
+            .from("company_profiles")
+            .select("fantasy_name, logo_url, sector")
+            .eq("user_id", job.company_id)
+            .maybeSingle();
+
+          return {
+            ...job,
+            company_profiles: companyData || { fantasy_name: "Empresa", logo_url: null, sector: null },
+          };
+        })
+      );
+
+      setJobs(jobsWithCompanies);
     } catch (error) {
       console.error("Erro ao buscar vagas:", error);
       toast({
@@ -151,7 +167,7 @@ export default function CandidateSwipe() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
-      <CandidateSidebar open={sidebarOpen} setOpen={setSidebarOpen} />
+      <CandidateSidebar showSidebar={sidebarOpen} setShowSidebar={setSidebarOpen} />
       
       <div className="container mx-auto px-4 py-8 max-w-2xl">
         <div className="text-center mb-8">

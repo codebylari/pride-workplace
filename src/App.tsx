@@ -138,6 +138,15 @@ import AdminCandidates from "./pages/AdminCandidates";
 import AdminCompanies from "./pages/AdminCompanies";
 // Página de Gerenciamento de Empresas - Admin
 
+import CandidateSwipe from "./pages/CandidateSwipe";
+// Página de Match de Vagas - Candidato
+
+import CompanySwipe from "./pages/CompanySwipe";
+// Página de Match de Talentos - Empresa
+
+import Matches from "./pages/Matches";
+// Página de Matches - Candidatos e Empresas
+
 const queryClient = new QueryClient();
 // Cria uma instância do cliente React Query (gerencia cache e estado das requisições)
 
@@ -286,6 +295,15 @@ const App = () => (
             
             <Route path="/admin/companies" element={<AdminCompanies />} />
             {/* Página de Gerenciamento de Empresas - Admin */}
+            
+            <Route path="/candidate-swipe" element={<CandidateSwipe />} />
+            {/* Página de Match de Vagas - Candidato */}
+            
+            <Route path="/company-swipe" element={<CompanySwipe />} />
+            {/* Página de Match de Talentos - Empresa */}
+            
+            <Route path="/matches" element={<Matches />} />
+            {/* Página de Matches - Candidatos e Empresas */}
             
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             {/* Comentário lembrando que novas rotas devem vir antes da rota coringa */}

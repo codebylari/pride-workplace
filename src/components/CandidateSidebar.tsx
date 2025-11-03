@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { Briefcase, User, Settings, Headset, Info, FileText, LogOut, ClipboardList } from "lucide-react";
+import { Briefcase, User, Settings, Headset, Info, FileText, LogOut, ClipboardList, Heart } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useState, useEffect } from "react";
@@ -44,6 +44,8 @@ export function CandidateSidebar({ showSidebar, setShowSidebar }: CandidateSideb
   const menuItems = [
     { icon: Briefcase, label: "Vagas", path: "/candidate-dashboard" },
     { icon: ClipboardList, label: "Minhas Candidaturas", path: "/my-applications" },
+    { icon: Heart, label: "Match de Vagas", path: "/candidate-swipe" },
+    { icon: Heart, label: "Meus Matches", path: "/matches" },
     { icon: User, label: "Meu Perfil", path: "/candidate-profile" },
     { icon: Settings, label: "Configurações", path: "/candidate-settings" },
     { icon: Headset, label: "Suporte", path: "/candidate-support" },

@@ -55,37 +55,34 @@ export default function CompanySwipe() {
       const swipedCandidateIds = swipesData?.map(s => s.target_id) || [];
 
       // Buscar candidatos que se candidataram para vagas da empresa
-      const { data: candidatesData, error } = await supabase
+      const { data: applicationsData, error: appsError } = await supabase
         .from("applications")
-        .select(`
-          candidate_id,
-          profiles!inner(
-            id,
-            full_name,
-            photo_url,
-            city,
-            state,
-            about_me,
-            experience,
-            education,
-            rating
-          ),
-          jobs!inner(company_id)
-        `)
-        .eq("jobs.company_id", session.user.id)
-        .not("candidate_id", "in", `(${swipedCandidateIds.join(",") || "null"})`)
+        .select("candidate_id, jobs!inner(company_id)")
+        .eq("jobs.company_id", session.user.id);
+
+      if (appsError) throw appsError;
+
+      // Extrair candidate_ids únicos
+      const candidateIds = [...new Set(applicationsData?.map(app => app.candidate_id))];
+      
+      // Filtrar candidatos já swipados
+      const filteredCandidateIds = candidateIds.filter(id => !swipedCandidateIds.includes(id));
+
+      if (filteredCandidateIds.length === 0) {
+        setCandidates([]);
+        return;
+      }
+
+      // Buscar perfis dos candidatos
+      const { data: candidatesData, error: candidatesError } = await supabase
+        .from("profiles")
+        .select("id, full_name, photo_url, city, state, about_me, experience, education, rating")
+        .in("id", filteredCandidateIds)
         .limit(20);
 
-      if (error) throw error;
+      if (candidatesError) throw candidatesError;
 
-      // Extrair perfis únicos de candidatos
-      const uniqueCandidates = candidatesData
-        ?.map(app => app.profiles)
-        .filter((profile, index, self) => 
-          index === self.findIndex(p => p.id === profile.id)
-        ) || [];
-
-      setCandidates(uniqueCandidates as Candidate[]);
+      setCandidates(candidatesData || []);
     } catch (error) {
       console.error("Erro ao buscar candidatos:", error);
       toast({
@@ -182,7 +179,7 @@ export default function CompanySwipe() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
-      <CompanySidebar open={sidebarOpen} setOpen={setSidebarOpen} />
+      <CompanySidebar showSidebar={sidebarOpen} setShowSidebar={setSidebarOpen} />
       
       <div className="container mx-auto px-4 py-8 max-w-2xl">
         <div className="text-center mb-8">
