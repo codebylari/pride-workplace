@@ -107,7 +107,11 @@ export function CandidateSidebar({ showSidebar, setShowSidebar }: CandidateSideb
                 key={item.path}
                 onClick={() => {
                   setShowSidebar(false);
-                  navigate(item.path);
+                  if (item.path === "/matches") {
+                    navigate("/matches", { state: { context: "candidate" } });
+                  } else {
+                    navigate(item.path);
+                  }
                 }}
                 className={`w-full flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-lg transition text-left ${
                   isActive ? "bg-white/20" : "hover:bg-white/10"

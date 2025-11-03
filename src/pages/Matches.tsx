@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -39,6 +39,7 @@ export default function Matches() {
   const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userRole, setUserRole] = useState<"candidate" | "company" | null>(null);
+  const location = useLocation();
 
   useEffect(() => {
     checkAuthAndRole();
@@ -51,24 +52,31 @@ export default function Matches() {
       return;
     }
 
-    const { data: roleData, error } = await supabase
+    const preferredContext = (location.state as any)?.context as ("candidate" | "company" | undefined);
+
+    const { data: rolesData, error } = await supabase
       .from("user_roles")
       .select("role")
-      .eq("user_id", session.user.id)
-      .single();
+      .eq("user_id", session.user.id);
 
-    console.log("Matches - User Role:", roleData?.role, "Error:", error);
+    const roles = (rolesData || []).map((r: any) => r.role);
+    console.log("Matches - Roles:", roles, "Error:", error, "Preferred:", preferredContext);
 
-    if (roleData?.role === "candidate" || roleData?.role === "company") {
-      setUserRole(roleData.role);
-      fetchMatches(roleData.role, session.user.id);
+    let resolvedRole: "candidate" | "company" | null = null;
+    if (preferredContext && roles.includes(preferredContext)) {
+      resolvedRole = preferredContext;
+    } else if (roles.includes("company")) {
+      resolvedRole = "company";
+    } else if (roles.includes("candidate")) {
+      resolvedRole = "candidate";
+    }
+
+    if (resolvedRole) {
+      setUserRole(resolvedRole);
+      fetchMatches(resolvedRole, session.user.id);
     } else {
-      console.error("Role inválido ou não encontrado:", roleData);
-      toast({
-        title: "Erro",
-        description: "Não foi possível identificar o tipo de usuário",
-        variant: "destructive",
-      });
+      console.error("Role inválido ou não encontrado:", rolesData);
+      setUserRole(null);
     }
   };
 
