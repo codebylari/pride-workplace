@@ -86,7 +86,7 @@ export default function JobApplication() {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!useProfileResume && !customResume) {
       toast({
         title: "Currículo obrigatório",
@@ -96,14 +96,84 @@ export default function JobApplication() {
       return;
     }
 
-    toast({
-      title: "Candidatura enviada com sucesso!",
-      description: "Sua candidatura foi enviada para a empresa. Boa sorte!",
-    });
+    if (!user?.id || !id) {
+      toast({
+        title: "Erro",
+        description: "Usuário não autenticado ou vaga não encontrada.",
+        variant: "destructive",
+      });
+      return;
+    }
 
-    setTimeout(() => {
-      navigate("/candidate-dashboard");
-    }, 2000);
+    try {
+      // Verificar se já existe uma candidatura para esta vaga
+      const { data: existingApplication } = await supabase
+        .from("applications")
+        .select("id")
+        .eq("candidate_id", user.id)
+        .eq("job_id", id)
+        .maybeSingle();
+
+      if (existingApplication) {
+        toast({
+          title: "Candidatura já existente",
+          description: "Você já se candidatou para esta vaga.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Upload do currículo customizado se fornecido
+      let resumeUrl = null;
+      if (customResume) {
+        const fileExt = customResume.name.split('.').pop();
+        const fileName = `${user.id}/${id}_${Date.now()}.${fileExt}`;
+        
+        const { error: uploadError } = await supabase.storage
+          .from('profile-photos')
+          .upload(fileName, customResume);
+
+        if (uploadError) {
+          console.error("Erro ao fazer upload do currículo:", uploadError);
+        } else {
+          const { data: urlData } = supabase.storage
+            .from('profile-photos')
+            .getPublicUrl(fileName);
+          resumeUrl = urlData.publicUrl;
+        }
+      }
+
+      // Criar candidatura no banco
+      const { error: applicationError } = await supabase
+        .from("applications")
+        .insert({
+          candidate_id: user.id,
+          job_id: id,
+          status: "pending",
+          contract_status: "pending"
+        });
+
+      if (applicationError) {
+        console.error("Erro ao criar candidatura:", applicationError);
+        throw applicationError;
+      }
+
+      toast({
+        title: "Candidatura enviada com sucesso!",
+        description: "Sua candidatura foi enviada para a empresa. Boa sorte!",
+      });
+
+      setTimeout(() => {
+        navigate("/my-applications");
+      }, 2000);
+    } catch (error: any) {
+      console.error("Erro ao enviar candidatura:", error);
+      toast({
+        title: "Erro ao enviar candidatura",
+        description: error.message || "Ocorreu um erro ao processar sua candidatura.",
+        variant: "destructive",
+      });
+    }
   };
 
   if (loading) {
