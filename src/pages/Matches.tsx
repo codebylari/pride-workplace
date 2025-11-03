@@ -51,15 +51,24 @@ export default function Matches() {
       return;
     }
 
-    const { data: roleData } = await supabase
+    const { data: roleData, error } = await supabase
       .from("user_roles")
       .select("role")
       .eq("user_id", session.user.id)
       .single();
 
+    console.log("Matches - User Role:", roleData?.role, "Error:", error);
+
     if (roleData?.role === "candidate" || roleData?.role === "company") {
       setUserRole(roleData.role);
       fetchMatches(roleData.role, session.user.id);
+    } else {
+      console.error("Role inválido ou não encontrado:", roleData);
+      toast({
+        title: "Erro",
+        description: "Não foi possível identificar o tipo de usuário",
+        variant: "destructive",
+      });
     }
   };
 
@@ -172,9 +181,9 @@ export default function Matches() {
 
       {userRole === "candidate" ? (
         <CandidateSidebar showSidebar={sidebarOpen} setShowSidebar={setSidebarOpen} />
-      ) : (
+      ) : userRole === "company" ? (
         <CompanySidebar showSidebar={sidebarOpen} setShowSidebar={setSidebarOpen} />
-      )}
+      ) : null}
       
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="text-center mb-8">
