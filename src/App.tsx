@@ -254,6 +254,9 @@ const App = () => (
             <Route path="/candidate-community-rules" element={<CandidateCommunityRules />} />
             {/* Página de Regras da Comunidade - Candidato */}
             
+            <Route path="/rules" element={<CandidateCommunityRules />} />
+            {/* Rota simplificada para Regras da Comunidade - Candidato */}
+            
             <Route path="/company-community-rules" element={<CompanyCommunityRules />} />
             {/* Página de Regras da Comunidade - Empresa */}
             
