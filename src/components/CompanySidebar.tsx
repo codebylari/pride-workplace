@@ -16,6 +16,27 @@ export function CompanySidebar({ showSidebar, setShowSidebar }: CompanySidebarPr
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
 
   const companyName = user?.user_metadata?.company_name || "Empresa";
+  
+  // Formatar nome: primeira letra maiúscula + abreviação
+  const formatName = (name: string) => {
+    const parts = name.split(' ').filter(Boolean);
+    if (parts.length === 0) return "Empresa";
+    
+    // Capitalizar apenas primeira letra de cada palavra
+    const capitalize = (word: string) => 
+      word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    
+    if (parts.length === 1) {
+      return capitalize(parts[0]);
+    }
+    
+    // Primeiro nome + inicial do último
+    const firstName = capitalize(parts[0]);
+    const lastNameInitial = parts[parts.length - 1].charAt(0).toUpperCase();
+    return `${firstName} ${lastNameInitial}.`;
+  };
+  
+  const displayName = formatName(companyName);
 
   useEffect(() => {
     const fetchCompanyData = async () => {
@@ -70,7 +91,7 @@ export function CompanySidebar({ showSidebar, setShowSidebar }: CompanySidebarPr
             )}
           </div>
           <div className="min-w-0">
-            <h2 className="text-lg sm:text-xl font-semibold truncate">{companyName}</h2>
+            <h2 className="text-lg sm:text-xl font-semibold truncate">{displayName}</h2>
             <p className="text-xs sm:text-sm text-white/80">empresa</p>
           </div>
         </div>

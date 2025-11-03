@@ -17,7 +17,28 @@ export function CandidateSidebar({ showSidebar, setShowSidebar }: CandidateSideb
   const [userGender, setUserGender] = useState<string>("");
 
   const fullName = user?.user_metadata?.full_name || "Usuário";
-  const userName = fullName.split(" ")[0];
+  
+  // Formatar nome: primeira letra maiúscula + abreviação do sobrenome
+  const formatName = (name: string) => {
+    const parts = name.split(' ').filter(Boolean);
+    if (parts.length === 0) return "Usuário";
+    
+    // Capitalizar apenas primeira letra de cada palavra
+    const capitalize = (word: string) => 
+      word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    
+    if (parts.length === 1) {
+      return capitalize(parts[0]);
+    }
+    
+    // Primeiro nome + inicial do último sobrenome
+    const firstName = capitalize(parts[0]);
+    const lastNameInitial = parts[parts.length - 1].charAt(0).toUpperCase();
+    return `${firstName} ${lastNameInitial}.`;
+  };
+  
+  const displayName = formatName(fullName);
+  const userName = fullName.split(" ")[0] || "Usuário";
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -74,7 +95,7 @@ export function CandidateSidebar({ showSidebar, setShowSidebar }: CandidateSideb
             )}
           </div>
           <div className="min-w-0">
-            <h2 className="text-lg sm:text-xl font-semibold truncate">{fullName}</h2>
+            <h2 className="text-lg sm:text-xl font-semibold truncate">{displayName}</h2>
             <p className="text-xs sm:text-sm text-white/80">{genderText}</p>
           </div>
         </div>
