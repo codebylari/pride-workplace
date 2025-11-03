@@ -28,7 +28,7 @@ export default function EditCompanyProfile() {
   const [displayName, setDisplayName] = useState("");
   const [about, setAbout] = useState("");
   const [seeking, setSeeking] = useState("");
-  const [training, setTraining] = useState("");
+  const [sector, setSector] = useState("");
   const [logo, setLogo] = useState<string | null>(null);
   const [currentLogoUrl, setCurrentLogoUrl] = useState<string | null>(null);
 
@@ -37,7 +37,7 @@ export default function EditCompanyProfile() {
     displayName: "",
     about: "",
     seeking: "",
-    training: "",
+    sector: "",
     logo: null as string | null
   });
 
@@ -52,7 +52,7 @@ export default function EditCompanyProfile() {
       
       const { data } = await supabase
         .from("company_profiles")
-        .select("logo_url, about, seeking, training")
+        .select("logo_url, about, seeking, sector")
         .eq("user_id", user.id)
         .maybeSingle();
       
@@ -60,14 +60,14 @@ export default function EditCompanyProfile() {
         displayName: user.user_metadata?.company_name || companyName,
         about: data?.about || "",
         seeking: data?.seeking || "",
-        training: data?.training || "",
+        sector: data?.sector || "",
         logo: data?.logo_url || null
       };
 
       setDisplayName(initialData.displayName);
       setAbout(initialData.about);
       setSeeking(initialData.seeking);
-      setTraining(initialData.training);
+      setSector(initialData.sector);
       setCurrentLogoUrl(data?.logo_url || null);
       setOriginalValues(initialData);
     };
@@ -99,7 +99,7 @@ export default function EditCompanyProfile() {
       displayName !== originalValues.displayName ||
       about !== originalValues.about ||
       seeking !== originalValues.seeking ||
-      training !== originalValues.training ||
+      sector !== originalValues.sector ||
       logo !== originalValues.logo
     );
   };
@@ -133,8 +133,8 @@ export default function EditCompanyProfile() {
       if (seeking !== originalValues.seeking) {
         updates.seeking = seeking;
       }
-      if (training !== originalValues.training) {
-        updates.training = training;
+      if (sector !== originalValues.sector) {
+        updates.sector = sector;
       }
 
       // Handle logo upload if there's a new one
@@ -179,7 +179,7 @@ export default function EditCompanyProfile() {
         displayName,
         about,
         seeking,
-        training,
+        sector,
         logo
       });
 
@@ -259,12 +259,12 @@ export default function EditCompanyProfile() {
 
               <div>
                 <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-900"}`}>
-                  Formações
+                  Setor da Empresa
                 </label>
-                <Textarea
-                  value={training}
-                  onChange={(e) => setTraining(e.target.value)}
-                  rows={5}
+                <Input
+                  value={sector}
+                  onChange={(e) => setSector(e.target.value)}
+                  placeholder="Ex: Tecnologia, Educação, Saúde"
                   className={darkMode ? "bg-gray-700 text-white" : ""}
                 />
               </div>

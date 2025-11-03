@@ -961,9 +961,13 @@ export default function Register() {
                   }}
                   required
                   minLength={6}
+                  autoComplete="new-password"
+                  data-lpignore="true"
+                  data-form-type="other"
                   className={`w-full p-3 pr-10 rounded-lg bg-white text-black focus:ring-2 ${
                     passwordError ? "ring-2 ring-red-500" : "focus:ring-primary"
                   }`}
+                  style={{ WebkitTextSecurity: showPassword ? 'none' : 'disc' } as React.CSSProperties}
                 />
                 <button
                   type="button"
@@ -974,6 +978,7 @@ export default function Register() {
                   }}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800 z-10"
                   tabIndex={-1}
+                  aria-label="Mostrar/Ocultar senha"
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
@@ -1013,9 +1018,13 @@ export default function Register() {
                   }}
                   required
                   minLength={6}
+                  autoComplete="new-password"
+                  data-lpignore="true"
+                  data-form-type="other"
                   className={`w-full p-3 pr-10 rounded-lg bg-white text-black focus:ring-2 ${
                     confirmPasswordError ? "ring-2 ring-red-500" : "focus:ring-primary"
                   }`}
+                  style={{ WebkitTextSecurity: showConfirmPassword ? 'none' : 'disc' } as React.CSSProperties}
                 />
                 <button
                   type="button"
@@ -1026,6 +1035,7 @@ export default function Register() {
                   }}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800 z-10"
                   tabIndex={-1}
+                  aria-label="Mostrar/Ocultar confirmação de senha"
                 >
                   {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
@@ -1855,9 +1865,13 @@ export default function Register() {
                   }}
                   required
                   minLength={6}
+                  autoComplete="new-password"
+                  data-lpignore="true"
+                  data-form-type="other"
                   className={`w-full p-3 pr-10 rounded-lg bg-white text-black focus:ring-2 ${
                     passwordError ? "ring-2 ring-red-500" : "focus:ring-primary"
                   }`}
+                  style={{ WebkitTextSecurity: showPassword ? 'none' : 'disc' } as React.CSSProperties}
                 />
                 <button
                   type="button"
@@ -1868,6 +1882,7 @@ export default function Register() {
                   }}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800 z-10"
                   tabIndex={-1}
+                  aria-label="Mostrar/Ocultar senha"
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
@@ -1907,9 +1922,13 @@ export default function Register() {
                   }}
                   required
                   minLength={6}
+                  autoComplete="new-password"
+                  data-lpignore="true"
+                  data-form-type="other"
                   className={`w-full p-3 pr-10 rounded-lg bg-white text-black focus:ring-2 ${
                     confirmPasswordError ? "ring-2 ring-red-500" : "focus:ring-primary"
                   }`}
+                  style={{ WebkitTextSecurity: showConfirmPassword ? 'none' : 'disc' } as React.CSSProperties}
                 />
                 <button
                   type="button"
@@ -1920,6 +1939,7 @@ export default function Register() {
                   }}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800 z-10"
                   tabIndex={-1}
+                  aria-label="Mostrar/Ocultar confirmação de senha"
                 >
                   {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>

@@ -100,11 +100,8 @@ export default function CompanyProfile() {
       logoUrl,
       companyData.about,
       companyData.seeking.length > 0 ? "has_seeking" : null,
-      companyData.description,
       companyData.sector,
-      companyData.city,
-      companyData.fantasy_name,
-      companyData.cnpj
+      companyData.city
     ];
     
     const filledFields = fields.filter(field => field && field.toString().trim() !== "").length;
