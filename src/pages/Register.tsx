@@ -1944,39 +1944,99 @@ export default function Register() {
   }, [companyName, fullName, companyContactLastName, cnpj, position, state, city, phone, email, password, confirmPassword, diversity, states, cities, loadingCities, checkingEmail, emailError, passwordError, confirmPasswordError, showPassword, showConfirmPassword]);
 
   const Step7Company = () => (
-    <div className="text-white space-y-6 max-w-3xl mx-auto text-justify px-4">
+    <div className="text-white space-y-6 max-w-4xl mx-auto px-4 max-h-[75vh] overflow-y-auto">
       <button
         onClick={() => setStep(6)}
-        className="flex items-center gap-2 text-white/80 hover:text-white transition-colors group mb-4"
+        className="flex items-center gap-2 text-white/80 hover:text-white transition-colors group mb-4 sticky top-0 bg-[#6E4062] py-2 z-10"
       >
         <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
         <span className="font-medium">Voltar</span>
       </button>
-      <h2 className="text-3xl font-bold text-center mb-6">
-        📌 Termos e Condições – Empresas Apoiadoras
-      </h2>
+      
+      <div className="text-center mb-8">
+        <h2 className="text-3xl md:text-4xl font-bold mb-3">
+          📌 Termos e Condições de Uso
+        </h2>
+        <p className="text-lg text-white/90">
+          Empresas Parceiras
+        </p>
+        <div className="w-24 h-1 mx-auto mt-4 bg-gradient-to-r from-success to-success/60"></div>
+      </div>
 
-      <p>
-        Bem-vindo(a) à nossa plataforma. O cadastro e participação de empresas aqui representam
-        um compromisso com um ambiente inclusivo, justo e respeitoso.
-      </p>
+      <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 md:p-8 space-y-6">
+        <div className="space-y-4 leading-relaxed">
+          <p className="text-lg font-medium">
+            Prezada Empresa,
+          </p>
 
-      <ol className="list-decimal pl-5 space-y-3">
-        <li><strong>Compromisso com o Respeito e a Inclusão:</strong> a empresa declara que todas as vagas e interações estarão alinhadas com princípios de igualdade e respeito.</li>
-        <li><strong>Profissionalismo e Cordialidade:</strong> a comunicação com candidatos deve ser ética e transparente.</li>
-        <li><strong>Clareza e Honestidade nas Vagas:</strong> descrições claras e verdadeiras, sem anúncios enganosos.</li>
-        <li><strong>Valorização da Diversidade:</strong> incentivo à presença de mulheres e pessoas LGBT+ em seus processos seletivos.</li>
-        <li><strong>Confiabilidade e Responsabilidade:</strong> manutenção dos dados institucionais atualizados e válidos.</li>
-      </ol>
+          <p>
+            O cadastro e a participação nesta plataforma representam um compromisso institucional com a promoção de um ambiente de trabalho inclusivo, justo e respeitoso. Ao aceitar os presentes termos, sua organização passa a integrar uma rede que reconhece e valoriza a diversidade, comprometendo-se com a oferta de oportunidades seguras e igualitárias para mulheres e pessoas da comunidade LGBTIAPN+.
+          </p>
+        </div>
 
-      <p className="mt-6 text-center">
-        Ao prosseguir, a empresa declara ter lido e aceitado todos os termos acima.
-      </p>
+        <div className="h-px bg-white/20"></div>
 
-      <div className="text-center px-4">
+        <div className="space-y-6">
+          <section className="space-y-3">
+            <h3 className="text-xl md:text-2xl font-bold">
+              1. Compromisso com a Inclusão e o Respeito
+            </h3>
+            <p className="leading-relaxed">
+              A empresa declara que todas as vagas divulgadas e as interações realizadas dentro da plataforma estarão em conformidade com os princípios de inclusão, igualdade e respeito à diversidade. É expressamente vedada a publicação de anúncios discriminatórios, o uso de linguagem preconceituosa ou a imposição de restrições que não possuam justificativa técnica ou legal.
+            </p>
+          </section>
+
+          <section className="space-y-3">
+            <h3 className="text-xl md:text-2xl font-bold">
+              2. Conduta Ética e Profissional
+            </h3>
+            <p className="leading-relaxed">
+              A comunicação com os candidatos deve ser conduzida com ética, transparência e profissionalismo em todas as etapas do processo seletivo. A empresa reconhece que cada candidato possui uma trajetória única e merece ser tratado com consideração e respeito durante todo o processo de recrutamento e seleção.
+            </p>
+          </section>
+
+          <section className="space-y-3">
+            <h3 className="text-xl md:text-2xl font-bold">
+              3. Transparência nas Oportunidades Oferecidas
+            </h3>
+            <p className="leading-relaxed">
+              A empresa compromete-se a fornecer descrições de vagas completas, claras e verdadeiras, incluindo informações essenciais como: título do cargo, principais atribuições, requisitos obrigatórios e desejáveis, tipo de contratação, faixa salarial ou remuneração, benefícios oferecidos e modalidade de trabalho (presencial, remoto ou híbrido). É proibido o uso da plataforma para fins diversos da oferta legítima de oportunidades de trabalho.
+            </p>
+          </section>
+
+          <section className="space-y-3">
+            <h3 className="text-xl md:text-2xl font-bold">
+              4. Valorização da Diversidade
+            </h3>
+            <p className="leading-relaxed">
+              Ao utilizar esta plataforma, a empresa reconhece estar em um espaço dedicado ao fortalecimento de grupos historicamente marginalizados no mercado de trabalho. Compromete-se, portanto, não apenas a respeitar, mas também a promover ativamente a participação de mulheres e pessoas LGBTIAPN+ em seus processos seletivos, contribuindo para a construção de um mercado de trabalho mais equitativo e diverso.
+            </p>
+          </section>
+
+          <section className="space-y-3">
+            <h3 className="text-xl md:text-2xl font-bold">
+              5. Responsabilidade e Conformidade Legal
+            </h3>
+            <p className="leading-relaxed mb-3">
+              A empresa deve manter seus dados cadastrais atualizados e disponibilizar informações institucionais verificáveis (tais como CNPJ ativo e identificação do representante legal). O descumprimento dos princípios e normas estabelecidos nestes termos poderá resultar em advertência, suspensão temporária ou exclusão definitiva da conta, sem prejuízo das medidas legais cabíveis.
+            </p>
+            <p className="leading-relaxed">
+              Ao prosseguir com o cadastro, a empresa declara ter lido, compreendido e aceito integralmente todos os termos aqui estabelecidos, assumindo o compromisso de manter um ambiente profissional seguro, respeitoso e inclusivo dentro da plataforma.
+            </p>
+          </section>
+        </div>
+
+        <div className="h-px bg-white/20"></div>
+
+        <div className="text-center text-sm text-white/70">
+          <p>Última atualização: Janeiro de 2025</p>
+        </div>
+      </div>
+
+      <div className="text-center px-4 py-6 sticky bottom-0 bg-gradient-to-t from-[#6E4062] via-[#6E4062] to-transparent pt-8">
         <Button
           onClick={() => setStep(8)}
-          className="bg-success hover:bg-success/90 text-success-foreground py-4 px-8 md:px-10 rounded-full font-semibold mt-4 transition-all w-full md:w-auto"
+          className="bg-success hover:bg-success/90 text-success-foreground py-4 px-8 md:px-10 rounded-full font-semibold transition-all w-full md:w-auto"
         >
           Concordo com os termos e quero apoiar
         </Button>
