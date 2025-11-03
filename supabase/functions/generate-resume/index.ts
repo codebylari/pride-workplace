@@ -72,20 +72,15 @@ Retorne APENAS o HTML completo, sem explicações adicionais.`;
     const aiData = await aiResponse.json();
     const htmlContent = aiData.choices[0].message.content;
 
-    // Get auth token from request
-    const authHeader = req.headers.get('Authorization');
-    if (!authHeader) {
-      throw new Error('Não autorizado');
-    }
-
-    // Initialize Supabase client
+    // Initialize Supabase client with service role
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    const supabaseClient = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Get user from token
+    // Get authenticated user from JWT
+    const authHeader = req.headers.get('Authorization')!;
     const token = authHeader.replace('Bearer ', '');
-    const { data: { user }, error: userError } = await supabase.auth.getUser(token);
+    const { data: { user }, error: userError } = await supabaseClient.auth.getUser(token);
     
     if (userError || !user) {
       throw new Error('Usuário não autenticado');
@@ -97,7 +92,7 @@ Retorne APENAS o HTML completo, sem explicações adicionais.`;
     const filePath = `${user.id}/${fileName}`;
 
     // Upload to Supabase Storage
-    const { error: uploadError } = await supabase.storage
+    const { error: uploadError } = await supabaseClient.storage
       .from('profile-photos')
       .upload(filePath, htmlContent, {
         contentType: 'text/html',
@@ -110,7 +105,7 @@ Retorne APENAS o HTML completo, sem explicações adicionais.`;
     }
 
     // Get public URL
-    const { data: urlData } = supabase.storage
+    const { data: urlData } = supabaseClient.storage
       .from('profile-photos')
       .getPublicUrl(filePath);
 
