@@ -23,17 +23,39 @@ export default function CandidateDashboard() {
   // Fetch jobs from database
   useEffect(() => {
     const fetchJobs = async () => {
-      const { data } = await supabase
+      // Buscar todas as vagas
+      const { data: jobsData, error } = await supabase
         .from("jobs")
-        .select(`
-          *,
-          company_profiles!jobs_company_id_fkey(fantasy_name, logo_url)
-        `)
+        .select("*")
         .order("created_at", { ascending: false });
       
-      if (data) {
-        setJobs(data);
+      if (error) {
+        console.error("Erro ao buscar vagas:", error);
+        return;
       }
+
+      if (!jobsData) {
+        setJobs([]);
+        return;
+      }
+
+      // Buscar company_profiles separadamente para cada vaga
+      const jobsWithCompanies = await Promise.all(
+        jobsData.map(async (job) => {
+          const { data: companyData } = await supabase
+            .from("company_profiles")
+            .select("fantasy_name, logo_url")
+            .eq("user_id", job.company_id)
+            .maybeSingle();
+
+          return {
+            ...job,
+            company_profiles: companyData || { fantasy_name: "Empresa", logo_url: null },
+          };
+        })
+      );
+      
+      setJobs(jobsWithCompanies);
     };
     fetchJobs();
   }, []);
