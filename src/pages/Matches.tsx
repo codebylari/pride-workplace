@@ -178,12 +178,11 @@ export default function Matches() {
       
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="text-center mb-8">
-          <h1 className={`text-5xl font-bold mb-4 ${darkMode ? "text-white" : "text-gray-800"}`}>
-            <span className="inline-block pb-2 border-b border-purple-600">
-              Seus Matches
-            </span>
+          <h1 className={`text-4xl sm:text-5xl font-bold mb-4 ${darkMode ? "text-white" : "text-gray-800"}`}>
+            Seus Matches
           </h1>
-          <p className={darkMode ? "text-gray-400" : "text-gray-600"}>
+          <div className="w-24 h-1 bg-purple-600 mx-auto"></div>
+          <p className={`mt-4 ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
             {userRole === "candidate" 
               ? "Empresas que combinam com você" 
               : "Talentos que combinam com suas vagas"}
