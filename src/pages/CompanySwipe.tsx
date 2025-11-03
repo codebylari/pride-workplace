@@ -3,9 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { X, Heart, Star, MapPin, User, GraduationCap, Briefcase } from "lucide-react";
+import { X, Heart, Star, MapPin, User, GraduationCap, Briefcase, Menu } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { CompanySidebar } from "@/components/CompanySidebar";
+import { NotificationsPanel } from "@/components/NotificationsPanel";
+import { useTheme } from "@/contexts/ThemeContext";
 
 interface Candidate {
   id: string;
@@ -22,6 +24,7 @@ interface Candidate {
 export default function CompanySwipe() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { darkMode } = useTheme();
   const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -45,7 +48,6 @@ export default function CompanySwipe() {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) return;
 
-      // Buscar candidatos que a empresa ainda não deu swipe
       const { data: swipesData } = await supabase
         .from("swipes")
         .select("target_id")
@@ -54,7 +56,6 @@ export default function CompanySwipe() {
 
       const swipedCandidateIds = swipesData?.map(s => s.target_id) || [];
 
-      // Buscar candidatos que se candidataram para vagas da empresa
       const { data: applicationsData, error: appsError } = await supabase
         .from("applications")
         .select("candidate_id, jobs!inner(company_id)")
@@ -62,10 +63,8 @@ export default function CompanySwipe() {
 
       if (appsError) throw appsError;
 
-      // Extrair candidate_ids únicos
       const candidateIds = [...new Set(applicationsData?.map(app => app.candidate_id))];
       
-      // Filtrar candidatos já swipados
       const filteredCandidateIds = candidateIds.filter(id => !swipedCandidateIds.includes(id));
 
       if (filteredCandidateIds.length === 0) {
@@ -73,7 +72,6 @@ export default function CompanySwipe() {
         return;
       }
 
-      // Buscar perfis dos candidatos
       const { data: candidatesData, error: candidatesError } = await supabase
         .from("profiles")
         .select("id, full_name, photo_url, city, state, about_me, experience, education, rating")
@@ -103,7 +101,6 @@ export default function CompanySwipe() {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) return;
 
-      // Salvar swipe
       const { error } = await supabase.from("swipes").insert({
         user_id: session.user.id,
         target_id: currentCandidate.id,
@@ -120,7 +117,6 @@ export default function CompanySwipe() {
         });
       }
 
-      // Verificar se houve match
       const { data: matchData } = await supabase
         .from("matches")
         .select("*")
@@ -135,7 +131,6 @@ export default function CompanySwipe() {
         });
       }
 
-      // Avançar para próximo candidato
       setCurrentIndex(prev => prev + 1);
     } catch (error) {
       console.error("Erro ao registrar swipe:", error);
@@ -168,41 +163,55 @@ export default function CompanySwipe() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 flex items-center justify-center">
+      <div className={`min-h-screen flex items-center justify-center ${darkMode ? "bg-gray-800" : "bg-gray-50"}`}>
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-muted-foreground">Carregando candidatos...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
+          <p className={`mt-4 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>Carregando candidatos...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
+    <div className={`min-h-screen ${darkMode ? "bg-gray-800" : "bg-gray-50"}`}>
+      <header style={{ background: 'linear-gradient(to right, hsl(315, 26%, 40%), hsl(320, 30%, 50%))' }} className="text-white p-4 flex justify-between items-center sticky top-0 z-40">
+        <button
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          className="p-2 hover:bg-white/10 rounded-lg transition"
+        >
+          <Menu size={24} />
+        </button>
+        
+        <NotificationsPanel />
+      </header>
+
       <CompanySidebar showSidebar={sidebarOpen} setShowSidebar={setSidebarOpen} />
       
       <div className="container mx-auto px-4 py-8 max-w-2xl">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold mb-2">Match de Talentos 🎯</h1>
-          <p className="text-muted-foreground">
+          <h1 className={`text-3xl font-bold mb-2 ${darkMode ? "text-white" : "text-gray-800"}`}>Match de Talentos 🎯</h1>
+          <p className={darkMode ? "text-gray-400" : "text-gray-600"}>
             Deslize para encontrar os melhores talentos para sua empresa
           </p>
         </div>
 
         {!currentCandidate ? (
-          <Card className="p-12 text-center">
-            <Heart className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-            <h2 className="text-2xl font-bold mb-2">Sem mais candidatos por enquanto!</h2>
-            <p className="text-muted-foreground mb-6">
+          <Card className={`p-12 text-center ${darkMode ? "bg-gray-700" : "bg-white"}`}>
+            <Heart className={`w-16 h-16 mx-auto mb-4 ${darkMode ? "text-gray-500" : "text-gray-400"}`} />
+            <h2 className={`text-2xl font-bold mb-2 ${darkMode ? "text-white" : "text-gray-800"}`}>Sem mais candidatos por enquanto!</h2>
+            <p className={`mb-6 ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
               Você viu todos os candidatos disponíveis. Novos talentos aparecem diariamente!
             </p>
-            <Button onClick={() => navigate("/company-dashboard")}>
+            <Button 
+              onClick={() => navigate("/company-dashboard")}
+              className="bg-[#FFF8D6] hover:bg-[#FFF2A9] text-gray-800"
+            >
               Voltar ao Dashboard
             </Button>
           </Card>
         ) : (
           <div className="relative">
-            <Card className="p-6 mb-6 shadow-2xl border-2">
+            <Card className={`p-6 mb-6 shadow-xl border-2 ${darkMode ? "bg-gray-700 border-gray-600" : "bg-white"}`}>
               <div className="mb-4">
                 <div className="flex items-center gap-4 mb-4">
                   {currentCandidate.photo_url ? (
@@ -212,15 +221,15 @@ export default function CompanySwipe() {
                       className="w-24 h-24 rounded-full object-cover"
                     />
                   ) : (
-                    <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center">
-                      <User className="w-12 h-12 text-primary" />
+                    <div className="w-24 h-24 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center">
+                      <User className="w-12 h-12 text-white" />
                     </div>
                   )}
                   <div>
-                    <h2 className="text-2xl font-bold">{currentCandidate.full_name}</h2>
+                    <h2 className={`text-2xl font-bold ${darkMode ? "text-white" : "text-gray-800"}`}>{currentCandidate.full_name}</h2>
                     <div className="flex items-center gap-1 mt-1">
                       {renderStars(currentCandidate.rating || 5)}
-                      <span className="ml-2 text-sm text-muted-foreground">
+                      <span className={`ml-2 text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
                         {currentCandidate.rating?.toFixed(1) || "5.0"}
                       </span>
                     </div>
@@ -228,7 +237,7 @@ export default function CompanySwipe() {
                 </div>
 
                 {(currentCandidate.city || currentCandidate.state) && (
-                  <div className="flex items-center gap-2 text-muted-foreground mb-4">
+                  <div className={`flex items-center gap-2 mb-4 ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
                     <MapPin className="w-4 h-4" />
                     <span>{currentCandidate.city}{currentCandidate.city && currentCandidate.state && ", "}{currentCandidate.state}</span>
                   </div>
@@ -236,11 +245,11 @@ export default function CompanySwipe() {
 
                 {currentCandidate.about_me && (
                   <div className="mb-4">
-                    <h3 className="font-semibold mb-2 flex items-center gap-2">
+                    <h3 className={`font-semibold mb-2 flex items-center gap-2 ${darkMode ? "text-white" : "text-gray-800"}`}>
                       <User className="w-4 h-4" />
                       Sobre Mim
                     </h3>
-                    <p className="text-sm text-muted-foreground whitespace-pre-line">
+                    <p className={`text-sm whitespace-pre-line ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
                       {currentCandidate.about_me}
                     </p>
                   </div>
@@ -248,11 +257,11 @@ export default function CompanySwipe() {
 
                 {currentCandidate.experience && (
                   <div className="mb-4">
-                    <h3 className="font-semibold mb-2 flex items-center gap-2">
+                    <h3 className={`font-semibold mb-2 flex items-center gap-2 ${darkMode ? "text-white" : "text-gray-800"}`}>
                       <Briefcase className="w-4 h-4" />
                       Experiência
                     </h3>
-                    <p className="text-sm text-muted-foreground whitespace-pre-line">
+                    <p className={`text-sm whitespace-pre-line ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
                       {currentCandidate.experience}
                     </p>
                   </div>
@@ -260,11 +269,11 @@ export default function CompanySwipe() {
 
                 {currentCandidate.education && (
                   <div>
-                    <h3 className="font-semibold mb-2 flex items-center gap-2">
+                    <h3 className={`font-semibold mb-2 flex items-center gap-2 ${darkMode ? "text-white" : "text-gray-800"}`}>
                       <GraduationCap className="w-4 h-4" />
                       Formação
                     </h3>
-                    <p className="text-sm text-muted-foreground whitespace-pre-line">
+                    <p className={`text-sm whitespace-pre-line ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
                       {currentCandidate.education}
                     </p>
                   </div>
@@ -276,7 +285,7 @@ export default function CompanySwipe() {
               <Button
                 size="lg"
                 variant="outline"
-                className="w-16 h-16 rounded-full border-2 border-destructive hover:bg-destructive hover:text-white"
+                className="w-16 h-16 rounded-full border-2 border-red-500 hover:bg-red-500 hover:text-white"
                 onClick={() => handleSwipe("dislike")}
               >
                 <X className="w-8 h-8" />
@@ -294,14 +303,14 @@ export default function CompanySwipe() {
               <Button
                 size="lg"
                 variant="outline"
-                className="w-16 h-16 rounded-full border-2 border-success hover:bg-success hover:text-white"
+                className="w-16 h-16 rounded-full border-2 border-green-500 hover:bg-green-500 hover:text-white"
                 onClick={() => handleSwipe("like")}
               >
                 <Heart className="w-8 h-8" />
               </Button>
             </div>
 
-            <div className="text-center mt-6 text-sm text-muted-foreground">
+            <div className={`text-center mt-6 text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
               {candidates.length - currentIndex} candidatos restantes
             </div>
           </div>

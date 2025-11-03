@@ -3,10 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Heart, Building2, User, MapPin, Briefcase, Mail } from "lucide-react";
+import { Heart, Building2, User, MapPin, Briefcase, Mail, Menu } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { CandidateSidebar } from "@/components/CandidateSidebar";
 import { CompanySidebar } from "@/components/CompanySidebar";
+import { NotificationsPanel } from "@/components/NotificationsPanel";
+import { useTheme } from "@/contexts/ThemeContext";
 
 interface Match {
   id: string;
@@ -32,6 +34,7 @@ interface Match {
 export default function Matches() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { darkMode } = useTheme();
   const [matches, setMatches] = useState<Match[]>([]);
   const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -72,7 +75,6 @@ export default function Matches() {
 
         if (error) throw error;
 
-        // Buscar jobs e company_profiles separadamente
         const formattedData = await Promise.all(
           (matchesData || []).map(async (match) => {
             const { data: jobData } = await supabase
@@ -107,7 +109,6 @@ export default function Matches() {
 
         if (error) throw error;
 
-        // Buscar jobs e profiles separadamente
         const formattedData = await Promise.all(
           (matchesData || []).map(async (match) => {
             const { data: jobData } = await supabase
@@ -147,17 +148,28 @@ export default function Matches() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 flex items-center justify-center">
+      <div className={`min-h-screen flex items-center justify-center ${darkMode ? "bg-gray-800" : "bg-gray-50"}`}>
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-muted-foreground">Carregando matches...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
+          <p className={`mt-4 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>Carregando matches...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
+    <div className={`min-h-screen ${darkMode ? "bg-gray-800" : "bg-gray-50"}`}>
+      <header style={{ background: 'linear-gradient(to right, hsl(315, 26%, 40%), hsl(320, 30%, 50%))' }} className="text-white p-4 flex justify-between items-center sticky top-0 z-40">
+        <button
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          className="p-2 hover:bg-white/10 rounded-lg transition"
+        >
+          <Menu size={24} />
+        </button>
+        
+        <NotificationsPanel />
+      </header>
+
       {userRole === "candidate" ? (
         <CandidateSidebar showSidebar={sidebarOpen} setShowSidebar={setSidebarOpen} />
       ) : (
@@ -166,11 +178,11 @@ export default function Matches() {
       
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold mb-2 flex items-center justify-center gap-2">
-            <Heart className="w-8 h-8 text-primary fill-primary" />
+          <h1 className={`text-3xl font-bold mb-2 flex items-center justify-center gap-2 ${darkMode ? "text-white" : "text-gray-800"}`}>
+            <Heart className="w-8 h-8 text-pink-500 fill-pink-500" />
             Seus Matches
           </h1>
-          <p className="text-muted-foreground">
+          <p className={darkMode ? "text-gray-400" : "text-gray-600"}>
             {userRole === "candidate" 
               ? "Empresas que combinam com você" 
               : "Talentos que combinam com suas vagas"}
@@ -178,22 +190,25 @@ export default function Matches() {
         </div>
 
         {matches.length === 0 ? (
-          <Card className="p-12 text-center">
-            <Heart className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-            <h2 className="text-2xl font-bold mb-2">Nenhum match ainda</h2>
-            <p className="text-muted-foreground mb-6">
+          <Card className={`p-12 text-center ${darkMode ? "bg-gray-700" : "bg-white"}`}>
+            <Heart className={`w-16 h-16 mx-auto mb-4 ${darkMode ? "text-gray-500" : "text-gray-400"}`} />
+            <h2 className={`text-2xl font-bold mb-2 ${darkMode ? "text-white" : "text-gray-800"}`}>Nenhum match ainda</h2>
+            <p className={`mb-6 ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
               {userRole === "candidate"
                 ? "Continue curtindo vagas para encontrar oportunidades perfeitas!"
                 : "Continue avaliando candidatos para encontrar os talentos ideais!"}
             </p>
-            <Button onClick={() => navigate(userRole === "candidate" ? "/candidate-swipe" : "/company-swipe")}>
+            <Button 
+              onClick={() => navigate(userRole === "candidate" ? "/candidate-swipe" : "/company-swipe")}
+              className="bg-[#FFF8D6] hover:bg-[#FFF2A9] text-gray-800"
+            >
               Começar a Curtir
             </Button>
           </Card>
         ) : (
           <div className="grid gap-4">
             {matches.map((match) => (
-              <Card key={match.id} className="p-6 hover:shadow-lg transition-shadow">
+              <Card key={match.id} className={`p-6 hover:shadow-lg transition-shadow ${darkMode ? "bg-gray-700" : "bg-white"}`}>
                 <div className="flex items-start gap-4">
                   {userRole === "candidate" ? (
                     <>
@@ -204,20 +219,20 @@ export default function Matches() {
                           className="w-16 h-16 rounded-full object-cover"
                         />
                       ) : (
-                        <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                          <Building2 className="w-8 h-8 text-primary" />
+                        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center flex-shrink-0">
+                          <Building2 className="w-8 h-8 text-white" />
                         </div>
                       )}
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
-                          <Heart className="w-5 h-5 text-primary fill-primary" />
-                          <h3 className="text-xl font-bold">{match.job?.title}</h3>
+                          <Heart className="w-5 h-5 text-pink-500 fill-pink-500" />
+                          <h3 className={`text-xl font-bold ${darkMode ? "text-white" : "text-gray-800"}`}>{match.job?.title}</h3>
                         </div>
-                        <p className="text-muted-foreground flex items-center gap-1 mb-2">
+                        <p className={`flex items-center gap-1 mb-2 ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
                           <Building2 className="w-4 h-4" />
                           {match.company?.fantasy_name}
                         </p>
-                        <div className="space-y-1 text-sm text-muted-foreground">
+                        <div className={`space-y-1 text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
                           <p className="flex items-center gap-1">
                             <MapPin className="w-4 h-4" />
                             {match.job?.location}
@@ -227,11 +242,14 @@ export default function Matches() {
                             {match.job?.job_type}
                           </p>
                         </div>
-                        <p className="text-xs text-muted-foreground mt-3">
+                        <p className={`text-xs mt-3 ${darkMode ? "text-gray-500" : "text-gray-500"}`}>
                           Match em {new Date(match.matched_at).toLocaleDateString('pt-BR')}
                         </p>
                       </div>
-                      <Button onClick={() => navigate(`/candidate/job/${match.job?.id}`)}>
+                      <Button 
+                        onClick={() => navigate(`/job/${match.job?.id}`)}
+                        className="bg-[#FFF8D6] hover:bg-[#FFF2A9] text-gray-800"
+                      >
                         Ver Vaga
                       </Button>
                     </>
@@ -244,30 +262,33 @@ export default function Matches() {
                           className="w-16 h-16 rounded-full object-cover"
                         />
                       ) : (
-                        <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                          <User className="w-8 h-8 text-primary" />
+                        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center flex-shrink-0">
+                          <User className="w-8 h-8 text-white" />
                         </div>
                       )}
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
-                          <Heart className="w-5 h-5 text-primary fill-primary" />
-                          <h3 className="text-xl font-bold">{match.candidate?.full_name}</h3>
+                          <Heart className="w-5 h-5 text-pink-500 fill-pink-500" />
+                          <h3 className={`text-xl font-bold ${darkMode ? "text-white" : "text-gray-800"}`}>{match.candidate?.full_name}</h3>
                         </div>
-                        <p className="text-muted-foreground flex items-center gap-1 mb-2">
+                        <p className={`flex items-center gap-1 mb-2 ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
                           <Briefcase className="w-4 h-4" />
                           Para a vaga: {match.job?.title}
                         </p>
                         {(match.candidate?.city || match.candidate?.state) && (
-                          <p className="text-sm text-muted-foreground flex items-center gap-1">
+                          <p className={`text-sm flex items-center gap-1 ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
                             <MapPin className="w-4 h-4" />
                             {match.candidate.city}{match.candidate.city && match.candidate.state && ", "}{match.candidate.state}
                           </p>
                         )}
-                        <p className="text-xs text-muted-foreground mt-3">
+                        <p className={`text-xs mt-3 ${darkMode ? "text-gray-500" : "text-gray-500"}`}>
                           Match em {new Date(match.matched_at).toLocaleDateString('pt-BR')}
                         </p>
                       </div>
-                      <Button variant="outline">
+                      <Button 
+                        variant="outline"
+                        className={darkMode ? "border-gray-500 hover:bg-gray-600" : ""}
+                      >
                         <Mail className="w-4 h-4 mr-2" />
                         Contatar
                       </Button>
