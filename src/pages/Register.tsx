@@ -24,13 +24,6 @@ export default function Register() {
   // ------------------- ESTADOS GERAIS -------------------
   const [step, setStep] = useState(1);
   const [role, setRole] = useState<"candidate" | "company" | "">("");
-  
-  // Debug logs
-  useEffect(() => {
-    console.log("Current step:", step);
-    console.log("Current role:", role);
-  }, [step, role]);
-  const [loading, setLoading] = useState(false);
 
   // ------------------- API IBGE -------------------
   const [states, setStates] = useState<State[]>([]);
@@ -105,100 +98,6 @@ export default function Register() {
     };
     checkSession();
   }, [navigate]);
-
-  // ------------------- FUNÇÃO DE CADASTRO -------------------
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // Validação de senha completa
-    const hasUpperCase = /[A-Z]/.test(password);
-    const hasLowerCase = /[a-z]/.test(password);
-    const hasNumber = /[0-9]/.test(password);
-    
-    if (password.length < 6) {
-      setPasswordError("A senha deve ter pelo menos 6 caracteres");
-      toast({
-        title: "Erro",
-        description: "A senha deve ter pelo menos 6 caracteres.",
-        variant: "destructive",
-      });
-      return;
-    }
-    
-    if (!hasUpperCase || !hasLowerCase || !hasNumber) {
-      setPasswordError("A senha deve conter pelo menos 1 letra maiúscula, 1 letra minúscula e 1 número");
-      toast({
-        title: "Erro",
-        description: "A senha deve conter pelo menos 1 letra maiúscula, 1 letra minúscula e 1 número.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      setConfirmPasswordError("As senhas não coincidem");
-      toast({
-        title: "Erro",
-        description: "As senhas não coincidem.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/`,
-          data: {
-            full_name: role === "candidate" ? `${fullName} ${lastName}` : `${fullName} ${companyContactLastName}`,
-            role,
-            state,
-            city,
-            ...(role === "company" && {
-              company_name: companyName,
-              cnpj,
-              phone,
-              position,
-              diversity,
-            }),
-            ...(role === "candidate" && {
-              birth_date: birthDate,
-              social_name: socialName,
-              cpf,
-              rg,
-              phone,
-            }),
-          },
-        },
-      });
-
-      if (error) throw error;
-
-      toast({
-        title: "Cadastro realizado!",
-        description: "Você já pode fazer login na plataforma.",
-      });
-
-      // Redirect based on role
-      if (role === "company") {
-        navigate("/company-dashboard");
-      } else {
-        navigate("/candidate-dashboard");
-      }
-    } catch (error: any) {
-      toast({
-        title: "Erro no cadastro",
-        description: error.message || "Ocorreu um erro ao realizar o cadastro.",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
 
   // ------------------- STEP 1 -------------------
   const Step1 = () => (
