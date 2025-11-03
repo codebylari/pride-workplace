@@ -43,7 +43,7 @@ export default function Matches() {
 
   useEffect(() => {
     checkAuthAndRole();
-  }, []);
+  }, [location.pathname, location.state]);
 
   const checkAuthAndRole = async () => {
     const { data: { session } } = await supabase.auth.getSession();
@@ -63,7 +63,7 @@ export default function Matches() {
     console.log("Matches - Roles:", roles, "Error:", error, "Preferred:", preferredContext);
 
     let resolvedRole: "candidate" | "company" | null = null;
-    if (preferredContext && roles.includes(preferredContext)) {
+    if (preferredContext) {
       resolvedRole = preferredContext;
     } else if (roles.includes("company")) {
       resolvedRole = "company";
