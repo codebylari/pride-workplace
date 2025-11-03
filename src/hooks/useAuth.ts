@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
-  const [userRole, setUserRole] = useState<"candidate" | "company" | null>(null);
+  const [userRole, setUserRole] = useState<"candidate" | "company" | "admin" | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

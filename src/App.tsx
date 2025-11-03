@@ -129,6 +129,15 @@ import CandidateCommunityRules from "./pages/CandidateCommunityRules";
 import CompanyCommunityRules from "./pages/CompanyCommunityRules";
 // Página de Regras da Comunidade - Empresa
 
+import AdminDashboard from "./pages/AdminDashboard";
+// Dashboard Administrativo
+
+import AdminCandidates from "./pages/AdminCandidates";
+// Página de Gerenciamento de Candidatos - Admin
+
+import AdminCompanies from "./pages/AdminCompanies";
+// Página de Gerenciamento de Empresas - Admin
+
 const queryClient = new QueryClient();
 // Cria uma instância do cliente React Query (gerencia cache e estado das requisições)
 
@@ -259,6 +268,15 @@ const App = () => (
             
             <Route path="/company-community-rules" element={<CompanyCommunityRules />} />
             {/* Página de Regras da Comunidade - Empresa */}
+            
+            <Route path="/admin" element={<AdminDashboard />} />
+            {/* Dashboard Administrativo */}
+            
+            <Route path="/admin/candidates" element={<AdminCandidates />} />
+            {/* Página de Gerenciamento de Candidatos - Admin */}
+            
+            <Route path="/admin/companies" element={<AdminCompanies />} />
+            {/* Página de Gerenciamento de Empresas - Admin */}
             
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             {/* Comentário lembrando que novas rotas devem vir antes da rota coringa */}
