@@ -102,17 +102,6 @@ export default function Register() {
   // ------------------- STEP 1 -------------------
   const Step1 = () => (
     <div className="flex flex-col items-center space-y-6 md:space-y-8 px-4">
-<<<<<<< HEAD
-      
-       <button
-          onClick={() => Register()}
-          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
-        >
-          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-          <span className="font-medium">Voltar</span>
-        </button>
-
-=======
       <Button
         variant="ghost"
         onClick={() => navigate("/auth")}
@@ -121,7 +110,6 @@ export default function Register() {
         <ArrowLeft className="w-5 h-5 mr-2" />
         Voltar
       </Button>
->>>>>>> 14655e292cc1985230e27743d063740e06667b8c
       <h2 className="text-2xl md:text-3xl font-bold text-center text-white">
         Quem é você na nossa plataforma?
       </h2>
