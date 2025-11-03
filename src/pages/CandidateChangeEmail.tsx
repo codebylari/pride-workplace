@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Menu, CheckCircle2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
@@ -8,14 +8,19 @@ import { supabase } from "@/integrations/supabase/client";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { CandidateSidebar } from "@/components/CandidateSidebar";
+import { CompanySidebar } from "@/components/CompanySidebar";
 import { NotificationsPanel } from "@/components/NotificationsPanel";
 
 export default function ChangeEmail() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, signOut } = useAuth();
   const [showSidebar, setShowSidebar] = useState(false);
   const { darkMode } = useTheme();
   const { toast } = useToast();
+  
+  // Detecta se é empresa pela rota
+  const isCompany = location.pathname.includes('company');
 
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [currentEmail, setCurrentEmail] = useState("");
@@ -100,7 +105,11 @@ export default function ChangeEmail() {
       </header>
 
       {/* Sidebar */}
-      <CandidateSidebar showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
+      {isCompany ? (
+        <CompanySidebar showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
+      ) : (
+        <CandidateSidebar showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
+      )}
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
@@ -176,7 +185,7 @@ export default function ChangeEmail() {
             <button
               onClick={() => {
                 setShowSuccessDialog(false);
-                navigate("/account");
+                navigate(isCompany ? "/company-account" : "/account");
               }}
               className="w-full max-w-xs py-3 bg-[#FFF8D6] hover:bg-[#FFF2A9] text-gray-800 rounded-lg transition"
             >
