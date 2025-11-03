@@ -269,6 +269,15 @@ const App = () => (
             <Route path="/company-community-rules" element={<CompanyCommunityRules />} />
             {/* Página de Regras da Comunidade - Empresa */}
             
+            <Route path="/admin-dashboard" element={<AdminDashboard />} />
+            {/* Dashboard Administrativo */}
+            
+            <Route path="/admin/candidates" element={<AdminCandidates />} />
+            {/* Página de Gerenciamento de Candidatos - Admin */}
+            
+            <Route path="/admin/companies" element={<AdminCompanies />} />
+            {/* Página de Gerenciamento de Empresas - Admin */}
+            
             <Route path="/admin" element={<AdminDashboard />} />
             {/* Dashboard Administrativo */}
             
