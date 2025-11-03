@@ -384,6 +384,50 @@ export type Database = {
         }
         Relationships: []
       }
+      testimonials: {
+        Row: {
+          application_id: string
+          candidate_id: string
+          comment: string
+          company_id: string
+          created_at: string
+          id: string
+          job_title: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          application_id: string
+          candidate_id: string
+          comment: string
+          company_id: string
+          created_at?: string
+          id?: string
+          job_title: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          application_id?: string
+          candidate_id?: string
+          comment?: string
+          company_id?: string
+          created_at?: string
+          id?: string
+          job_title?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "testimonials_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: true
+            referencedRelation: "applications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string

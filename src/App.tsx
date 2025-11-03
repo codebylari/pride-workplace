@@ -147,6 +147,9 @@ import CompanySwipe from "./pages/CompanySwipe";
 import Matches from "./pages/Matches";
 // Página de Matches - Candidatos e Empresas
 
+import CompanyTestimonials from "./pages/CompanyTestimonials";
+// Página de Depoimentos - Empresa
+
 const queryClient = new QueryClient();
 // Cria uma instância do cliente React Query (gerencia cache e estado das requisições)
 
@@ -304,6 +307,9 @@ const App = () => (
             
             <Route path="/matches" element={<Matches />} />
             {/* Página de Matches - Candidatos e Empresas */}
+            
+            <Route path="/company-testimonials" element={<CompanyTestimonials />} />
+            {/* Página de Depoimentos - Empresa */}
             
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             {/* Comentário lembrando que novas rotas devem vir antes da rota coringa */}

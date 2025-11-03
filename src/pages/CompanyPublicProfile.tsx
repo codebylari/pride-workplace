@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Menu, Bell, Star, Briefcase, User, Settings, Headset, Info, FileText, LogOut, ChevronUp, ChevronDown, ClipboardList, PlusCircle, List } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
 import { useTheme } from "@/contexts/ThemeContext";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function CompanyPublicProfile() {
   const navigate = useNavigate();
@@ -14,9 +15,52 @@ export default function CompanyPublicProfile() {
   const [showSidebar, setShowSidebar] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
+  const [testimonials, setTestimonials] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const userName = user?.user_metadata?.full_name?.split(" ")[0] || "Usuário";
   const fullName = user?.user_metadata?.full_name || "Usuário";
+
+  useEffect(() => {
+    if (id) {
+      fetchTestimonials();
+    }
+  }, [id]);
+
+  const fetchTestimonials = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("testimonials")
+        .select("*")
+        .eq("company_id", id)
+        .eq("status", "approved")
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+
+      // Buscar dados dos candidatos
+      const testimonialsWithCandidates = await Promise.all(
+        (data || []).map(async (testimonial) => {
+          const { data: candidateData } = await supabase
+            .from("profiles")
+            .select("full_name, photo_url")
+            .eq("id", testimonial.candidate_id)
+            .single();
+
+          return {
+            ...testimonial,
+            candidate: candidateData || { full_name: "Candidato", photo_url: null },
+          };
+        })
+      );
+
+      setTestimonials(testimonialsWithCandidates);
+    } catch (error) {
+      console.error("Erro ao carregar depoimentos:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleLogout = async () => {
     await signOut();
@@ -393,39 +437,50 @@ export default function CompanyPublicProfile() {
                     >
                       ×
                     </button>
-                    <h3 className={`text-xl font-bold mb-6 ${darkMode ? "text-white" : "text-gray-800"}`}>
+                     <h3 className={`text-xl font-bold mb-6 ${darkMode ? "text-white" : "text-gray-800"}`}>
                       Relatos de pessoas que trabalharam na empresa
                     </h3>
-                    <div className="space-y-4">
-                      {companyData.testimonials.map((testimonial, index) => (
-                        <div
-                          key={index}
-                          className={`p-4 rounded-xl ${darkMode ? "bg-gray-700" : "bg-gray-50"}`}
-                        >
-                          <div className="flex items-start gap-3 mb-2">
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center flex-shrink-0">
-                              <span className="text-lg">{testimonial.icon}</span>
-                            </div>
-                            <div className="flex-1">
-                              <div className="flex items-center justify-between">
+                    {loading ? (
+                      <p className={darkMode ? "text-gray-400" : "text-gray-600"}>Carregando depoimentos...</p>
+                    ) : testimonials.length === 0 ? (
+                      <p className={darkMode ? "text-gray-400" : "text-gray-600"}>Nenhum depoimento ainda.</p>
+                    ) : (
+                      <div className="space-y-4">
+                        {testimonials.map((testimonial) => (
+                          <div
+                            key={testimonial.id}
+                            className={`p-4 rounded-xl ${darkMode ? "bg-gray-700" : "bg-gray-50"}`}
+                          >
+                            <div className="flex items-start gap-3 mb-2">
+                              {testimonial.candidate?.photo_url ? (
+                                <img
+                                  src={testimonial.candidate.photo_url}
+                                  alt={testimonial.candidate.full_name}
+                                  className="w-10 h-10 rounded-full object-cover flex-shrink-0"
+                                />
+                              ) : (
+                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center flex-shrink-0 text-white font-bold">
+                                  {testimonial.candidate?.full_name.charAt(0).toUpperCase()}
+                                </div>
+                              )}
+                              <div className="flex-1">
                                 <div>
                                   <p className={`font-semibold ${darkMode ? "text-white" : "text-gray-800"}`}>
-                                    {testimonial.name}
+                                    {testimonial.candidate?.full_name}
                                   </p>
                                   <p className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
-                                    {testimonial.role}
+                                    {testimonial.job_title}
                                   </p>
                                 </div>
-                                <span className="text-xl">{testimonial.icon}</span>
+                                <p className={`mt-2 text-sm ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+                                  {testimonial.comment}
+                                </p>
                               </div>
-                              <p className={`mt-2 text-sm ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-                                {testimonial.text}
-                              </p>
                             </div>
                           </div>
-                        </div>
-                      ))}
-                    </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
