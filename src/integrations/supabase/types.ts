@@ -191,6 +191,33 @@ export type Database = {
         }
         Relationships: []
       }
+      matches: {
+        Row: {
+          candidate_id: string
+          company_id: string
+          id: string
+          job_id: string
+          matched_at: string
+          status: string
+        }
+        Insert: {
+          candidate_id: string
+          company_id: string
+          id?: string
+          job_id: string
+          matched_at?: string
+          status?: string
+        }
+        Update: {
+          candidate_id?: string
+          company_id?: string
+          id?: string
+          job_id?: string
+          matched_at?: string
+          status?: string
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           created_at: string
@@ -321,6 +348,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      swipes: {
+        Row: {
+          action: string
+          created_at: string
+          id: string
+          target_id: string
+          target_type: string
+          user_id: string
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          id?: string
+          target_id: string
+          target_type: string
+          user_id: string
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          id?: string
+          target_id?: string
+          target_type?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       user_roles: {
         Row: {
