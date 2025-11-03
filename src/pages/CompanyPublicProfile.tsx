@@ -1,25 +1,23 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Menu, Bell, Star, Briefcase, User, Settings, Headset, Info, FileText, LogOut, ChevronUp, ChevronDown, ClipboardList, PlusCircle, List } from "lucide-react";
+import { Menu, Bell, Star, ChevronUp, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
 import { useTheme } from "@/contexts/ThemeContext";
 import { supabase } from "@/integrations/supabase/client";
+import { CandidateSidebar } from "@/components/CandidateSidebar";
+import { NotificationsPanel } from "@/components/NotificationsPanel";
 
 export default function CompanyPublicProfile() {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { user, signOut } = useAuth();
+  const { user } = useAuth();
   const { darkMode } = useTheme();
   const [showSidebar, setShowSidebar] = useState(false);
-  const [showNotifications, setShowNotifications] = useState(false);
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
   const [testimonials, setTestimonials] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-
-  const userName = user?.user_metadata?.full_name?.split(" ")[0] || "Usuário";
-  const fullName = user?.user_metadata?.full_name || "Usuário";
 
   useEffect(() => {
     if (id) {
@@ -60,11 +58,6 @@ export default function CompanyPublicProfile() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleLogout = async () => {
-    await signOut();
-    navigate("/");
   };
 
   const toggleSection = (section: string) => {
@@ -162,145 +155,11 @@ export default function CompanyPublicProfile() {
           <Menu size={24} />
         </button>
         
-        <div className="relative">
-          <button 
-            onClick={() => setShowNotifications(!showNotifications)}
-            className="p-2 hover:bg-white/10 rounded-lg transition"
-          >
-            <Bell size={24} />
-          </button>
-          
-          {showNotifications && (
-            <>
-              <div 
-                className="fixed inset-0 z-40" 
-                onClick={() => setShowNotifications(false)}
-              />
-              <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl z-50 animate-fade-in">
-                <div className="p-4 border-b border-gray-200">
-                  <h3 className="font-semibold text-gray-800">Notificações</h3>
-                </div>
-                <div className="p-6 text-center text-gray-500">
-                  <Bell size={48} className="mx-auto mb-3 text-gray-300" />
-                  <p>Sem novas notificações</p>
-                </div>
-              </div>
-            </>
-          )}
-        </div>
+        <NotificationsPanel />
       </header>
 
-      {/* Sidebar - Menu do Candidato */}
-      {showSidebar && (
-        <div className="fixed inset-0 z-50 bg-black/50" onClick={() => setShowSidebar(false)}>
-          <div 
-            style={{ background: 'linear-gradient(to bottom, hsl(315, 35%, 55%), hsl(315, 30%, 50%), hsl(320, 30%, 50%))' }}
-            className="absolute left-0 top-0 h-full w-64 shadow-xl text-white flex flex-col"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="p-6 flex items-center gap-4 border-b border-white/20">
-              <div className="w-20 h-20 rounded-full bg-gray-300 overflow-hidden border-4 border-white/30">
-                <div className="w-full h-full bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center text-2xl font-bold text-white">
-                  {userName.charAt(0).toUpperCase()}
-                </div>
-              </div>
-              <div>
-                <h2 className="text-xl font-semibold">{fullName}</h2>
-                <p className="text-sm text-white/80">candidato (a)</p>
-              </div>
-            </div>
-
-            <nav className="flex-1 py-6 px-4 space-y-2">
-              <button 
-                onClick={() => {
-                  setShowSidebar(false);
-                  navigate("/candidate-dashboard");
-                }}
-                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
-              >
-                <Briefcase size={24} />
-                <span className="text-lg">Vagas</span>
-              </button>
-
-              <button 
-                onClick={() => {
-                  setShowSidebar(false);
-                  navigate("/my-applications");
-                }}
-                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
-              >
-                <ClipboardList size={24} />
-                <span className="text-lg">Minhas Candidaturas</span>
-              </button>
-              
-              <button 
-                onClick={() => {
-                  setShowSidebar(false);
-                  navigate("/candidate-profile");
-                }}
-                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
-              >
-                <User size={24} />
-                <span className="text-lg">Meu Perfil</span>
-              </button>
-              
-              <button 
-                onClick={() => {
-                  setShowSidebar(false);
-                  navigate("/company-settings");
-                }}
-                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
-              >
-                <Settings size={24} />
-                <span className="text-lg">Configurações</span>
-              </button>
-              
-              <button 
-                onClick={() => {
-                  setShowSidebar(false);
-                  navigate("/support");
-                }}
-                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
-              >
-                <Headset size={24} />
-                <span className="text-lg">Suporte</span>
-              </button>
-              
-              <button 
-                onClick={() => {
-                  setShowSidebar(false);
-                  navigate("/about");
-                }}
-                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
-              >
-                <Info size={24} />
-                <span className="text-lg">Quem Somos</span>
-              </button>
-              
-              <button 
-                onClick={() => {
-                  setShowSidebar(false);
-                  navigate("/terms-candidate");
-                }}
-                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left"
-              >
-                <FileText size={24} />
-                <span className="text-lg">Termos de Uso</span>
-              </button>
-            </nav>
-
-            <div className="p-4 border-t border-white/20">
-              <button 
-                onClick={handleLogout}
-                className="w-full flex items-center gap-4 p-4 hover:bg-white/10 rounded-lg transition text-left text-red-500"
-              >
-                <LogOut size={24} />
-                <span className="text-lg">Sair</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Sidebar do Candidato */}
+      <CandidateSidebar showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">

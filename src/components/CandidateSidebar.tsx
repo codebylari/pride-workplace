@@ -18,23 +18,19 @@ export function CandidateSidebar({ showSidebar, setShowSidebar }: CandidateSideb
 
   const fullName = user?.user_metadata?.full_name || "Usuário";
   
-  // Formatar nome: primeira letra maiúscula + abreviação do sobrenome
+  // Formatar nome: NOME SOBRENOME em maiúsculas
   const formatName = (name: string) => {
-    const parts = name.split(' ').filter(Boolean);
-    if (parts.length === 0) return "Usuário";
-    
-    // Capitalizar apenas primeira letra de cada palavra
-    const capitalize = (word: string) => 
-      word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    const parts = name.trim().split(' ').filter(Boolean);
+    if (parts.length === 0) return "USUÁRIO";
     
     if (parts.length === 1) {
-      return capitalize(parts[0]);
+      return parts[0].toUpperCase();
     }
     
-    // Primeiro nome + inicial do último sobrenome
-    const firstName = capitalize(parts[0]);
-    const lastNameInitial = parts[parts.length - 1].charAt(0).toUpperCase();
-    return `${firstName} ${lastNameInitial}.`;
+    // Primeiro nome + último sobrenome em maiúsculas
+    const firstName = parts[0].toUpperCase();
+    const lastName = parts[parts.length - 1].toUpperCase();
+    return `${firstName} ${lastName}`;
   };
   
   const displayName = formatName(fullName);
@@ -60,7 +56,7 @@ export function CandidateSidebar({ showSidebar, setShowSidebar }: CandidateSideb
     navigate("/");
   };
 
-  const genderText = userGender === "masculino" ? "candidato" : userGender === "feminino" ? "candidata" : "candidato(a)";
+  const genderText = userGender === "masculino" ? "candidato" : userGender === "feminino" ? "candidata" : "candidato (a)";
 
   const menuItems = [
     { icon: Briefcase, label: "Vagas", path: "/candidate-dashboard" },
