@@ -1333,16 +1333,16 @@ export default function Register() {
 
   const Step10Success = () => (
     <div className="flex flex-col items-center text-white space-y-6 text-center">
-      <h2 className="text-4xl font-bold text-green-300">SUCESSO!</h2>
-      <p className="text-lg max-w-md">
+      <h2 className="text-4xl md:text-5xl font-bold text-white drop-shadow-lg">SUCESSO!</h2>
+      <p className="text-lg md:text-xl text-white max-w-md">
         Perfil criado com sucesso.<br />
         Agradecemos a sua confiança em nossa plataforma!
       </p>
       <Button
-        onClick={() => navigate("/")}
-        className="bg-success hover:bg-success/90 text-success-foreground py-4 px-8 md:px-10 rounded-full font-semibold w-full md:w-auto"
+        onClick={() => navigate("/candidate-dashboard")}
+        className="bg-success hover:bg-success/90 text-success-foreground py-4 px-8 md:px-10 rounded-full font-semibold w-full md:w-auto text-lg"
       >
-        Ir para página inicial
+        Ir para Dashboard do Candidato
       </Button>
     </div>
   );
@@ -2190,16 +2190,16 @@ export default function Register() {
 
   const Step9Company = () => (
     <div className="flex flex-col items-center text-white space-y-6 text-center">
-      <h2 className="text-4xl font-bold text-primary">Cadastro concluído!</h2>
-      <p className="text-lg max-w-md">
+      <h2 className="text-4xl md:text-5xl font-bold text-white drop-shadow-lg">Cadastro concluído!</h2>
+      <p className="text-lg md:text-xl text-white max-w-md">
         Sua empresa agora faz parte de uma rede que apoia a diversidade e a inclusão.
         Obrigado por se juntar a nós 💜
       </p>
       <Button
-        onClick={() => navigate("/")}
-        className="bg-success hover:bg-success/90 text-success-foreground py-4 px-8 md:px-10 rounded-full font-semibold w-full md:w-auto"
+        onClick={() => navigate("/company-dashboard")}
+        className="bg-success hover:bg-success/90 text-success-foreground py-4 px-8 md:px-10 rounded-full font-semibold w-full md:w-auto text-lg"
       >
-        Ir para login
+        Ir para Dashboard da Empresa
       </Button>
     </div>
   );
