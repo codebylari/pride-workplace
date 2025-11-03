@@ -178,9 +178,11 @@ export default function Matches() {
       
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="text-center mb-8">
-          <h1 className={`text-3xl font-bold mb-2 flex items-center justify-center gap-2 ${darkMode ? "text-white" : "text-gray-800"}`}>
-            <Heart className="w-8 h-8 text-pink-500 fill-pink-500" />
-            Seus Matches
+          <h1 className={`text-5xl font-bold mb-4 ${darkMode ? "text-white" : "text-gray-800"}`}>
+            <span className="inline-flex items-center gap-2 pb-2 border-b-4 border-purple-600">
+              <Heart className="w-10 h-10 text-pink-500 fill-pink-500" />
+              Seus Matches
+            </span>
           </h1>
           <p className={darkMode ? "text-gray-400" : "text-gray-600"}>
             {userRole === "candidate" 

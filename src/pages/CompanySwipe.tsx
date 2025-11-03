@@ -189,7 +189,11 @@ export default function CompanySwipe() {
       
       <div className="container mx-auto px-4 py-8 max-w-2xl">
         <div className="text-center mb-8">
-          <h1 className={`text-3xl font-bold mb-2 ${darkMode ? "text-white" : "text-gray-800"}`}>Match de Talentos 🎯</h1>
+          <h1 className={`text-5xl font-bold mb-4 ${darkMode ? "text-white" : "text-gray-800"}`}>
+            <span className="inline-block pb-2 border-b-4 border-purple-600">
+              Match de Talentos 🎯
+            </span>
+          </h1>
           <p className={darkMode ? "text-gray-400" : "text-gray-600"}>
             Deslize para encontrar os melhores talentos para sua empresa
           </p>
