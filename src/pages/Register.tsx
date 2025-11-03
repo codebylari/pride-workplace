@@ -1160,20 +1160,35 @@ export default function Register() {
           throw authError;
         }
 
-        const { data: sessionData } = await supabase.auth.getSession();
+        // Garante sessão (auto-confirm habilitado; se não, tenta login)
+        let { data: sessionData } = await supabase.auth.getSession();
         if (!sessionData.session) {
-          throw new Error("Não foi possível confirmar o login. Verifique seu email e tente novamente.");
+          const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+          if (signInError) throw signInError;
+          ({ data: sessionData } = await supabase.auth.getSession());
         }
 
-        const userId = sessionData.session.user.id;
+        const userId = sessionData.session!.user.id;
         const finalGender = gender === 'outros' ? customGender : gender;
+
+        // Garante que exista um registro em profiles
+        const { data: existingProfile } = await supabase
+          .from('profiles')
+          .select('id')
+          .eq('id', userId)
+          .maybeSingle();
+
+        if (!existingProfile) {
+          const { error: insertProfileError } = await supabase
+            .from('profiles')
+            .insert({ id: userId, full_name: `${fullName} ${lastName}`, state, city });
+          if (insertProfileError) throw insertProfileError;
+        }
         
-        // Salva apenas o gênero, sem foto
+        // Atualiza apenas o gênero
         const { error: updateError } = await supabase
           .from('profiles')
-          .update({ 
-            gender: finalGender
-          })
+          .update({ gender: finalGender })
           .eq('id', userId);
 
         if (updateError) throw updateError;
@@ -1226,14 +1241,29 @@ export default function Register() {
         }
 
         // 3) Garante que temos sessão antes de subir a foto
-        const { data: sessionData } = await supabase.auth.getSession();
+        let { data: sessionData } = await supabase.auth.getSession();
         if (!sessionData.session) {
-          throw new Error("Não foi possível confirmar o login. Verifique seu email e tente novamente.");
+          const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+          if (signInError) throw signInError;
+          ({ data: sessionData } = await supabase.auth.getSession());
         }
 
-        const userId = sessionData.session.user.id;
+        const userId = sessionData.session!.user.id;
 
-        // 4) Upload da foto
+        // 4) Garante que o perfil exista antes de salvar a foto
+        const { data: existingProfile } = await supabase
+          .from('profiles')
+          .select('id')
+          .eq('id', userId)
+          .maybeSingle();
+        if (!existingProfile) {
+          const { error: insertProfileError } = await supabase
+            .from('profiles')
+            .insert({ id: userId, full_name: `${fullName} ${lastName}`, state, city });
+          if (insertProfileError) throw insertProfileError;
+        }
+
+        // 5) Upload da foto
         const fileExt = photo!.name.split('.').pop();
         const fileName = `${userId}/profile.${fileExt}`;
 
@@ -1246,12 +1276,12 @@ export default function Register() {
 
         if (uploadError) throw uploadError;
 
-        // 5) URL pública
+        // 6) URL pública
         const { data: { publicUrl } } = supabase.storage
           .from('profile-photos')
           .getPublicUrl(fileName);
 
-        // 6) Salva URL e gênero na tabela de perfis
+        // 7) Salva URL e gênero na tabela de perfis
         const finalGender = gender === 'outros' ? customGender : gender;
         
         const { error: updateError } = await supabase
@@ -2100,8 +2130,28 @@ export default function Register() {
           throw authError;
         }
 
-        const userId = authData.user?.id;
+        // Garante sessão e obtém userId
+        let userId = authData.user?.id;
+        if (!authData.session) {
+          const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+          if (signInError) throw signInError;
+          const { data: userResp } = await supabase.auth.getUser();
+          userId = userResp.user?.id || userId;
+        }
         if (!userId) throw new Error("Erro ao obter ID do usuário");
+
+        // Garante que exista um registro na company_profiles
+        const { data: existingCompany } = await supabase
+          .from('company_profiles')
+          .select('user_id')
+          .eq('user_id', userId)
+          .maybeSingle();
+        if (!existingCompany) {
+          const { error: insertCompanyError } = await supabase
+            .from('company_profiles')
+            .insert({ user_id: userId, fantasy_name: companyName, cnpj, state, city });
+          if (insertCompanyError) throw insertCompanyError;
+        }
 
         // Upload logo to storage
         const fileExt = logo.name.split('.').pop();
