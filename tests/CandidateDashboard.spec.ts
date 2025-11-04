@@ -19,7 +19,7 @@ test.describe('Dashboard do Candidato', () => {
     await page.getByRole('link', { name: 'Meus Matches' }).click();
 
     // Verifica se estamos na página de matches
-    await expect(page).toHaveURL(/\/candidate-matches$/);
+    await expect(page).toHaveURL(/\/matches-candidate$/);
 
     // Verifica se há matches
     const matches = page.locator('.match-card');
@@ -35,7 +35,7 @@ test.describe('Dashboard do Candidato', () => {
   test('Botão de logout deve funcionar', async ({ page }) => {
     await page.locator('header button').first().click(); // abre o menu
     await page.getByRole('button', { name: 'Sair' }).click();
-    await expect(page).toHaveURL(/\/login$/);
+    await expect(page).toHaveURL(/\/auth$/);
   });
 
 });
