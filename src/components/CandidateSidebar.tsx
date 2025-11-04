@@ -18,18 +18,18 @@ export function CandidateSidebar({ showSidebar, setShowSidebar }: CandidateSideb
 
   const fullName = user?.user_metadata?.full_name || "Usuário";
   
-  // Formatar nome: NOME SOBRENOME em maiúsculas
+  // Formatar nome: Primeira letra maiúscula em cada palavra
   const formatName = (name: string) => {
     const parts = name.trim().split(' ').filter(Boolean);
-    if (parts.length === 0) return "USUÁRIO";
+    if (parts.length === 0) return "Usuário";
     
     if (parts.length === 1) {
-      return parts[0].toUpperCase();
+      return parts[0].charAt(0).toUpperCase() + parts[0].slice(1).toLowerCase();
     }
     
-    // Primeiro nome + último sobrenome em maiúsculas
-    const firstName = parts[0].toUpperCase();
-    const lastName = parts[parts.length - 1].toUpperCase();
+    // Primeiro nome + último sobrenome capitalizados
+    const firstName = parts[0].charAt(0).toUpperCase() + parts[0].slice(1).toLowerCase();
+    const lastName = parts[parts.length - 1].charAt(0).toUpperCase() + parts[parts.length - 1].slice(1).toLowerCase();
     return `${firstName} ${lastName}`;
   };
   
