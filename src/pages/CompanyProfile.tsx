@@ -95,6 +95,42 @@ export default function CompanyProfile() {
     loadProfile();
   }, [user?.id]);
 
+  useEffect(() => {
+    const loadJobs = async () => {
+      if (!user?.id) return;
+      
+      const { data: jobsData } = await supabase
+        .from("jobs")
+        .select("id, title, job_type, location")
+        .eq("company_id", user.id);
+      
+      if (jobsData) {
+        const jobsWithApplicants = await Promise.all(
+          jobsData.map(async (job) => {
+            const { count } = await supabase
+              .from("applications")
+              .select("*", { count: "exact", head: true })
+              .eq("job_id", job.id);
+            
+            return {
+              id: Number(job.id),
+              title: job.title,
+              type: job.job_type,
+              applicants: count || 0
+            };
+          })
+        );
+        
+        setCompanyData(prev => ({
+          ...prev,
+          jobs: jobsWithApplicants
+        }));
+      }
+    };
+    
+    loadJobs();
+  }, [user?.id]);
+
   const calculateCompletion = () => {
     const fields = [
       logoUrl,
