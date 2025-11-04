@@ -30,6 +30,7 @@ import CandidateCommunityRules from "./pages/CandidateCommunityRules";
 import CandidateContractAcceptance from "./pages/CandidateContractAcceptance";
 import MatchesCandidate from "./pages/MatchesCandidate";
 import TermsCandidate from "./pages/TermsCandidate";
+import CommunityRules from "./pages/CommunityRules";
 
 // Company Pages
 import CompanyDashboard from "./pages/CompanyDashboard";
@@ -99,6 +100,7 @@ const App = () => (
             <Route path="/candidate-contract-acceptance" element={<CandidateContractAcceptance />} />
             <Route path="/matches-candidate" element={<MatchesCandidate />} />
             <Route path="/terms-candidate" element={<TermsCandidate />} />
+            <Route path="/community-rules" element={<CommunityRules />} />
             
             {/* Company Routes */}
             <Route path="/company-dashboard" element={<CompanyDashboard />} />
