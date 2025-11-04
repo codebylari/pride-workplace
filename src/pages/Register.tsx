@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Eye, EyeOff, Check, ArrowLeft } from "lucide-react";
 import { PhotoEditor } from "@/components/PhotoEditor";
+import Auth from "./Auth";
 
 interface City {
   id: number;
@@ -24,6 +25,13 @@ export default function Register() {
   // ------------------- ESTADOS GERAIS -------------------
   const [step, setStep] = useState(1);
   const [role, setRole] = useState<"candidate" | "company" | "">("");
+  
+  // Debug logs
+  useEffect(() => {
+    console.log("Current step:", step);
+    console.log("Current role:", role);
+  }, [step, role]);
+  const [loading, setLoading] = useState(false);
 
   // ------------------- API IBGE -------------------
   const [states, setStates] = useState<State[]>([]);
@@ -99,17 +107,112 @@ export default function Register() {
     checkSession();
   }, [navigate]);
 
+  // ------------------- FUNÇÃO DE CADASTRO -------------------
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Validação de senha completa
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    
+    if (password.length < 6) {
+      setPasswordError("A senha deve ter pelo menos 6 caracteres");
+      toast({
+        title: "Erro",
+        description: "A senha deve ter pelo menos 6 caracteres.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (!hasUpperCase || !hasLowerCase || !hasNumber) {
+      setPasswordError("A senha deve conter pelo menos 1 letra maiúscula, 1 letra minúscula e 1 número");
+      toast({
+        title: "Erro",
+        description: "A senha deve conter pelo menos 1 letra maiúscula, 1 letra minúscula e 1 número.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setConfirmPasswordError("As senhas não coincidem");
+      toast({
+        title: "Erro",
+        description: "As senhas não coincidem.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/`,
+          data: {
+            full_name: role === "candidate" ? `${fullName} ${lastName}` : `${fullName} ${companyContactLastName}`,
+            role,
+            state,
+            city,
+            ...(role === "company" && {
+              company_name: companyName,
+              cnpj,
+              phone,
+              position,
+              diversity,
+            }),
+            ...(role === "candidate" && {
+              birth_date: birthDate,
+              social_name: socialName,
+              cpf,
+              rg,
+              phone,
+            }),
+          },
+        },
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Cadastro realizado!",
+        description: "Você já pode fazer login na plataforma.",
+      });
+
+      // Redirect based on role
+      if (role === "company") {
+        navigate("/company-dashboard");
+      } else {
+        navigate("/candidate-dashboard");
+      }
+    } catch (error: any) {
+      toast({
+        title: "Erro no cadastro",
+        description: error.message || "Ocorreu um erro ao realizar o cadastro.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // ------------------- STEP 1 -------------------
   const Step1 = () => (
     <div className="flex flex-col items-center space-y-6 md:space-y-8 px-4">
-      <Button
-        variant="ghost"
-        onClick={() => navigate("/auth")}
-        className="self-start mb-2 text-white hover:text-white/80 hover:bg-white/10"
-      >
-        <ArrowLeft className="w-5 h-5 mr-2" />
-        Voltar
-      </Button>
+      
+       <button
+          onClick={() =>  setStep(0)}
+          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+        >
+          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+          <span className="font-medium">Voltar</span>
+        </button>
+
       <h2 className="text-2xl md:text-3xl font-bold text-center text-white">
         Quem é você na nossa plataforma?
       </h2>
@@ -701,24 +804,18 @@ export default function Register() {
     );
   };
 
-  // Função para verificar formato do email
+  // Função para verificar se o email já está em uso (validação básica local)
   const checkEmailAvailability = async (emailToCheck: string) => {
     setCheckingEmail(true);
     setEmailError("");
     try {
-      if (!emailToCheck) return false;
-      
-      // Validação básica de formato
+      if (!emailToCheck) return;
       const basicEmailRegex = /.+@.+\..+/;
       if (!basicEmailRegex.test(emailToCheck)) {
         setEmailError("Email inválido. Verifique e tente novamente.");
-        return false;
       }
-      
-      return true;
     } catch (error) {
       console.error("Erro ao validar email:", error);
-      return true; // Em caso de erro, permite continuar
     } finally {
       setCheckingEmail(false);
     }
@@ -769,10 +866,10 @@ export default function Register() {
       }
       
       // Verifica o email antes de avançar
-      const emailIsValid = await checkEmailAvailability(email);
+      await checkEmailAvailability(email);
       
-      // Se o email não for válido ou já estiver cadastrado, não avança
-      if (!emailIsValid || emailError) {
+      // Se houver erro de email, não avança
+      if (emailError) {
         return;
       }
       
@@ -961,13 +1058,9 @@ export default function Register() {
                   }}
                   required
                   minLength={6}
-                  autoComplete="new-password"
-                  data-lpignore="true"
-                  data-form-type="other"
                   className={`w-full p-3 pr-10 rounded-lg bg-white text-black focus:ring-2 ${
                     passwordError ? "ring-2 ring-red-500" : "focus:ring-primary"
                   }`}
-                  style={{ WebkitTextSecurity: showPassword ? 'none' : 'disc' } as React.CSSProperties}
                 />
                 <button
                   type="button"
@@ -978,7 +1071,6 @@ export default function Register() {
                   }}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800 z-10"
                   tabIndex={-1}
-                  aria-label="Mostrar/Ocultar senha"
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
@@ -1018,13 +1110,9 @@ export default function Register() {
                   }}
                   required
                   minLength={6}
-                  autoComplete="new-password"
-                  data-lpignore="true"
-                  data-form-type="other"
                   className={`w-full p-3 pr-10 rounded-lg bg-white text-black focus:ring-2 ${
                     confirmPasswordError ? "ring-2 ring-red-500" : "focus:ring-primary"
                   }`}
-                  style={{ WebkitTextSecurity: showConfirmPassword ? 'none' : 'disc' } as React.CSSProperties}
                 />
                 <button
                   type="button"
@@ -1035,7 +1123,6 @@ export default function Register() {
                   }}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800 z-10"
                   tabIndex={-1}
-                  aria-label="Mostrar/Ocultar confirmação de senha"
                 >
                   {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
@@ -1142,7 +1229,7 @@ export default function Register() {
       setUploadingPhoto(true);
 
       try {
-        // Cadastra o usuário sem foto
+        // Cadastrar usuário sem foto
         const { data: authData, error: authError } = await supabase.auth.signUp({
           email,
           password,
@@ -1163,42 +1250,27 @@ export default function Register() {
           },
         });
 
-        if (authError) {
-          if (authError.message?.includes('already') || authError.message?.includes('registered')) {
-            throw new Error('Este email já está cadastrado. Por favor, faça login ou use outro email.');
-          }
+        if (authError && (authError.message?.includes('already') || authError.message?.includes('registered'))) {
+          const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+          if (signInError) throw signInError;
+        } else if (authError) {
           throw authError;
         }
 
-        // Garante sessão (auto-confirm habilitado; se não, tenta login)
-        let { data: sessionData } = await supabase.auth.getSession();
+        const { data: sessionData } = await supabase.auth.getSession();
         if (!sessionData.session) {
-          const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
-          if (signInError) throw signInError;
-          ({ data: sessionData } = await supabase.auth.getSession());
+          throw new Error("Não foi possível confirmar o login. Verifique seu email e tente novamente.");
         }
 
-        const userId = sessionData.session!.user.id;
+        const userId = sessionData.session.user.id;
         const finalGender = gender === 'outros' ? customGender : gender;
-
-        // Garante que exista um registro em profiles
-        const { data: existingProfile } = await supabase
-          .from('profiles')
-          .select('id')
-          .eq('id', userId)
-          .maybeSingle();
-
-        if (!existingProfile) {
-          const { error: insertProfileError } = await supabase
-            .from('profiles')
-            .insert({ id: userId, full_name: `${fullName} ${lastName}`, state, city });
-          if (insertProfileError) throw insertProfileError;
-        }
         
-        // Atualiza apenas o gênero
+        // Salva apenas o gênero, sem foto
         const { error: updateError } = await supabase
           .from('profiles')
-          .update({ gender: finalGender })
+          .update({ 
+            gender: finalGender
+          })
           .eq('id', userId);
 
         if (updateError) throw updateError;
@@ -1221,7 +1293,7 @@ export default function Register() {
       setUploadingPhoto(true);
 
       try {
-        // 1) Cadastra o usuário
+        // 1) Tenta cadastrar usuário
         const { data: authData, error: authError } = await supabase.auth.signUp({
           email,
           password,
@@ -1242,38 +1314,23 @@ export default function Register() {
           },
         });
 
-        // 2) Se houver erro, mostra mensagem apropriada
-        if (authError) {
-          if (authError.message?.includes('already') || authError.message?.includes('registered')) {
-            throw new Error('Este email já está cadastrado. Por favor, faça login ou use outro email.');
-          }
+        // 2) Se já for cadastrado, faz login para obter sessão
+        if (authError && (authError.message?.includes('already') || authError.message?.includes('registered'))) {
+          const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+          if (signInError) throw signInError;
+        } else if (authError) {
           throw authError;
         }
 
         // 3) Garante que temos sessão antes de subir a foto
-        let { data: sessionData } = await supabase.auth.getSession();
+        const { data: sessionData } = await supabase.auth.getSession();
         if (!sessionData.session) {
-          const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
-          if (signInError) throw signInError;
-          ({ data: sessionData } = await supabase.auth.getSession());
+          throw new Error("Não foi possível confirmar o login. Verifique seu email e tente novamente.");
         }
 
-        const userId = sessionData.session!.user.id;
+        const userId = sessionData.session.user.id;
 
-        // 4) Garante que o perfil exista antes de salvar a foto
-        const { data: existingProfile } = await supabase
-          .from('profiles')
-          .select('id')
-          .eq('id', userId)
-          .maybeSingle();
-        if (!existingProfile) {
-          const { error: insertProfileError } = await supabase
-            .from('profiles')
-            .insert({ id: userId, full_name: `${fullName} ${lastName}`, state, city });
-          if (insertProfileError) throw insertProfileError;
-        }
-
-        // 5) Upload da foto
+        // 4) Upload da foto
         const fileExt = photo!.name.split('.').pop();
         const fileName = `${userId}/profile.${fileExt}`;
 
@@ -1286,12 +1343,12 @@ export default function Register() {
 
         if (uploadError) throw uploadError;
 
-        // 6) URL pública
+        // 5) URL pública
         const { data: { publicUrl } } = supabase.storage
           .from('profile-photos')
           .getPublicUrl(fileName);
 
-        // 7) Salva URL e gênero na tabela de perfis
+        // 6) Salva URL e gênero na tabela de perfis
         const finalGender = gender === 'outros' ? customGender : gender;
         
         const { error: updateError } = await supabase
@@ -1373,16 +1430,16 @@ export default function Register() {
 
   const Step10Success = () => (
     <div className="flex flex-col items-center text-white space-y-6 text-center">
-      <h2 className="text-4xl md:text-5xl font-bold text-white drop-shadow-lg">SUCESSO!</h2>
-      <p className="text-lg md:text-xl text-white max-w-md">
+      <h2 className="text-4xl font-bold text-green-300">SUCESSO!</h2>
+      <p className="text-lg max-w-md">
         Perfil criado com sucesso.<br />
         Agradecemos a sua confiança em nossa plataforma!
       </p>
       <Button
-        onClick={() => navigate("/candidate-dashboard")}
-        className="bg-success hover:bg-success/90 text-success-foreground py-4 px-8 md:px-10 rounded-full font-semibold w-full md:w-auto text-lg"
+        onClick={() => navigate("/")}
+        className="bg-success hover:bg-success/90 text-success-foreground py-4 px-8 md:px-10 rounded-full font-semibold w-full md:w-auto"
       >
-        Ir para Dashboard do Candidato
+        Ir para página inicial
       </Button>
     </div>
   );
@@ -1682,10 +1739,10 @@ export default function Register() {
       }
       
       // Verifica o email antes de avançar
-      const emailIsValid = await checkEmailAvailability(email);
+      await checkEmailAvailability(email);
       
-      // Se o email não for válido ou já estiver cadastrado, não avança
-      if (!emailIsValid || emailError) {
+      // Se houver erro de email, não avança
+      if (emailError) {
         return;
       }
       
@@ -1865,13 +1922,9 @@ export default function Register() {
                   }}
                   required
                   minLength={6}
-                  autoComplete="new-password"
-                  data-lpignore="true"
-                  data-form-type="other"
                   className={`w-full p-3 pr-10 rounded-lg bg-white text-black focus:ring-2 ${
                     passwordError ? "ring-2 ring-red-500" : "focus:ring-primary"
                   }`}
-                  style={{ WebkitTextSecurity: showPassword ? 'none' : 'disc' } as React.CSSProperties}
                 />
                 <button
                   type="button"
@@ -1882,7 +1935,6 @@ export default function Register() {
                   }}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800 z-10"
                   tabIndex={-1}
-                  aria-label="Mostrar/Ocultar senha"
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
@@ -1922,13 +1974,9 @@ export default function Register() {
                   }}
                   required
                   minLength={6}
-                  autoComplete="new-password"
-                  data-lpignore="true"
-                  data-form-type="other"
                   className={`w-full p-3 pr-10 rounded-lg bg-white text-black focus:ring-2 ${
                     confirmPasswordError ? "ring-2 ring-red-500" : "focus:ring-primary"
                   }`}
-                  style={{ WebkitTextSecurity: showConfirmPassword ? 'none' : 'disc' } as React.CSSProperties}
                 />
                 <button
                   type="button"
@@ -1939,7 +1987,6 @@ export default function Register() {
                   }}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800 z-10"
                   tabIndex={-1}
-                  aria-label="Mostrar/Ocultar confirmação de senha"
                 >
                   {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
@@ -2000,99 +2047,39 @@ export default function Register() {
   }, [companyName, fullName, companyContactLastName, cnpj, position, state, city, phone, email, password, confirmPassword, diversity, states, cities, loadingCities, checkingEmail, emailError, passwordError, confirmPasswordError, showPassword, showConfirmPassword]);
 
   const Step7Company = () => (
-    <div className="text-white space-y-6 max-w-4xl mx-auto px-4 max-h-[75vh] overflow-y-auto">
+    <div className="text-white space-y-6 max-w-3xl mx-auto text-justify px-4">
       <button
         onClick={() => setStep(6)}
-        className="flex items-center gap-2 text-white/80 hover:text-white transition-colors group mb-4 sticky top-0 bg-[#6E4062] py-2 z-10"
+        className="flex items-center gap-2 text-white/80 hover:text-white transition-colors group mb-4"
       >
         <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
         <span className="font-medium">Voltar</span>
       </button>
-      
-      <div className="text-center mb-8">
-        <h2 className="text-3xl md:text-4xl font-bold mb-3">
-          📌 Termos e Condições de Uso
-        </h2>
-        <p className="text-lg text-white/90">
-          Empresas Parceiras
-        </p>
-        <div className="w-24 h-1 mx-auto mt-4 bg-gradient-to-r from-success to-success/60"></div>
-      </div>
+      <h2 className="text-3xl font-bold text-center mb-6">
+        📌 Termos e Condições – Empresas Apoiadoras
+      </h2>
 
-      <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 md:p-8 space-y-6">
-        <div className="space-y-4 leading-relaxed">
-          <p className="text-lg font-medium">
-            Prezada Empresa,
-          </p>
+      <p>
+        Bem-vindo(a) à nossa plataforma. O cadastro e participação de empresas aqui representam
+        um compromisso com um ambiente inclusivo, justo e respeitoso.
+      </p>
 
-          <p>
-            O cadastro e a participação nesta plataforma representam um compromisso institucional com a promoção de um ambiente de trabalho inclusivo, justo e respeitoso. Ao aceitar os presentes termos, sua organização passa a integrar uma rede que reconhece e valoriza a diversidade, comprometendo-se com a oferta de oportunidades seguras e igualitárias para mulheres e pessoas da comunidade LGBTIAPN+.
-          </p>
-        </div>
+      <ol className="list-decimal pl-5 space-y-3">
+        <li><strong>Compromisso com o Respeito e a Inclusão:</strong> a empresa declara que todas as vagas e interações estarão alinhadas com princípios de igualdade e respeito.</li>
+        <li><strong>Profissionalismo e Cordialidade:</strong> a comunicação com candidatos deve ser ética e transparente.</li>
+        <li><strong>Clareza e Honestidade nas Vagas:</strong> descrições claras e verdadeiras, sem anúncios enganosos.</li>
+        <li><strong>Valorização da Diversidade:</strong> incentivo à presença de mulheres e pessoas LGBT+ em seus processos seletivos.</li>
+        <li><strong>Confiabilidade e Responsabilidade:</strong> manutenção dos dados institucionais atualizados e válidos.</li>
+      </ol>
 
-        <div className="h-px bg-white/20"></div>
+      <p className="mt-6 text-center">
+        Ao prosseguir, a empresa declara ter lido e aceitado todos os termos acima.
+      </p>
 
-        <div className="space-y-6">
-          <section className="space-y-3">
-            <h3 className="text-xl md:text-2xl font-bold">
-              1. Compromisso com a Inclusão e o Respeito
-            </h3>
-            <p className="leading-relaxed">
-              A empresa declara que todas as vagas divulgadas e as interações realizadas dentro da plataforma estarão em conformidade com os princípios de inclusão, igualdade e respeito à diversidade. É expressamente vedada a publicação de anúncios discriminatórios, o uso de linguagem preconceituosa ou a imposição de restrições que não possuam justificativa técnica ou legal.
-            </p>
-          </section>
-
-          <section className="space-y-3">
-            <h3 className="text-xl md:text-2xl font-bold">
-              2. Conduta Ética e Profissional
-            </h3>
-            <p className="leading-relaxed">
-              A comunicação com os candidatos deve ser conduzida com ética, transparência e profissionalismo em todas as etapas do processo seletivo. A empresa reconhece que cada candidato possui uma trajetória única e merece ser tratado com consideração e respeito durante todo o processo de recrutamento e seleção.
-            </p>
-          </section>
-
-          <section className="space-y-3">
-            <h3 className="text-xl md:text-2xl font-bold">
-              3. Transparência nas Oportunidades Oferecidas
-            </h3>
-            <p className="leading-relaxed">
-              A empresa compromete-se a fornecer descrições de vagas completas, claras e verdadeiras, incluindo informações essenciais como: título do cargo, principais atribuições, requisitos obrigatórios e desejáveis, tipo de contratação, faixa salarial ou remuneração, benefícios oferecidos e modalidade de trabalho (presencial, remoto ou híbrido). É proibido o uso da plataforma para fins diversos da oferta legítima de oportunidades de trabalho.
-            </p>
-          </section>
-
-          <section className="space-y-3">
-            <h3 className="text-xl md:text-2xl font-bold">
-              4. Valorização da Diversidade
-            </h3>
-            <p className="leading-relaxed">
-              Ao utilizar esta plataforma, a empresa reconhece estar em um espaço dedicado ao fortalecimento de grupos historicamente marginalizados no mercado de trabalho. Compromete-se, portanto, não apenas a respeitar, mas também a promover ativamente a participação de mulheres e pessoas LGBTIAPN+ em seus processos seletivos, contribuindo para a construção de um mercado de trabalho mais equitativo e diverso.
-            </p>
-          </section>
-
-          <section className="space-y-3">
-            <h3 className="text-xl md:text-2xl font-bold">
-              5. Responsabilidade e Conformidade Legal
-            </h3>
-            <p className="leading-relaxed mb-3">
-              A empresa deve manter seus dados cadastrais atualizados e disponibilizar informações institucionais verificáveis (tais como CNPJ ativo e identificação do representante legal). O descumprimento dos princípios e normas estabelecidos nestes termos poderá resultar em advertência, suspensão temporária ou exclusão definitiva da conta, sem prejuízo das medidas legais cabíveis.
-            </p>
-            <p className="leading-relaxed">
-              Ao prosseguir com o cadastro, a empresa declara ter lido, compreendido e aceito integralmente todos os termos aqui estabelecidos, assumindo o compromisso de manter um ambiente profissional seguro, respeitoso e inclusivo dentro da plataforma.
-            </p>
-          </section>
-        </div>
-
-        <div className="h-px bg-white/20"></div>
-
-        <div className="text-center text-sm text-white/70">
-          <p>Última atualização: Janeiro de 2025</p>
-        </div>
-      </div>
-
-      <div className="text-center px-4 py-6 sticky bottom-0 bg-gradient-to-t from-[#6E4062] via-[#6E4062] to-transparent pt-8">
+      <div className="text-center px-4">
         <Button
           onClick={() => setStep(8)}
-          className="bg-success hover:bg-success/90 text-success-foreground py-4 px-8 md:px-10 rounded-full font-semibold transition-all w-full md:w-auto"
+          className="bg-success hover:bg-success/90 text-success-foreground py-4 px-8 md:px-10 rounded-full font-semibold mt-4 transition-all w-full md:w-auto"
         >
           Concordo com os termos e quero apoiar
         </Button>
@@ -2123,7 +2110,7 @@ export default function Register() {
       setUploadingLogo(true);
 
       try {
-        // Cadastra a empresa
+        // First, register the user
         const { data: authData, error: authError } = await supabase.auth.signUp({
           email,
           password,
@@ -2143,35 +2130,10 @@ export default function Register() {
           },
         });
 
-        if (authError) {
-          if (authError.message?.includes('already') || authError.message?.includes('registered')) {
-            throw new Error('Este email já está cadastrado. Por favor, faça login ou use outro email.');
-          }
-          throw authError;
-        }
+        if (authError) throw authError;
 
-        // Garante sessão e obtém userId
-        let userId = authData.user?.id;
-        if (!authData.session) {
-          const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
-          if (signInError) throw signInError;
-          const { data: userResp } = await supabase.auth.getUser();
-          userId = userResp.user?.id || userId;
-        }
+        const userId = authData.user?.id;
         if (!userId) throw new Error("Erro ao obter ID do usuário");
-
-        // Garante que exista um registro na company_profiles
-        const { data: existingCompany } = await supabase
-          .from('company_profiles')
-          .select('user_id')
-          .eq('user_id', userId)
-          .maybeSingle();
-        if (!existingCompany) {
-          const { error: insertCompanyError } = await supabase
-            .from('company_profiles')
-            .insert({ user_id: userId, fantasy_name: companyName, cnpj, state, city });
-          if (insertCompanyError) throw insertCompanyError;
-        }
 
         // Upload logo to storage
         const fileExt = logo.name.split('.').pop();
@@ -2260,16 +2222,16 @@ export default function Register() {
 
   const Step9Company = () => (
     <div className="flex flex-col items-center text-white space-y-6 text-center">
-      <h2 className="text-4xl md:text-5xl font-bold text-white drop-shadow-lg">Cadastro concluído!</h2>
-      <p className="text-lg md:text-xl text-white max-w-md">
+      <h2 className="text-4xl font-bold text-primary">Cadastro concluído!</h2>
+      <p className="text-lg max-w-md">
         Sua empresa agora faz parte de uma rede que apoia a diversidade e a inclusão.
         Obrigado por se juntar a nós 💜
       </p>
       <Button
-        onClick={() => navigate("/company-dashboard")}
-        className="bg-success hover:bg-success/90 text-success-foreground py-4 px-8 md:px-10 rounded-full font-semibold w-full md:w-auto text-lg"
+        onClick={() => navigate("/")}
+        className="bg-success hover:bg-success/90 text-success-foreground py-4 px-8 md:px-10 rounded-full font-semibold w-full md:w-auto"
       >
-        Ir para Dashboard da Empresa
+        Ir para login
       </Button>
     </div>
   );
