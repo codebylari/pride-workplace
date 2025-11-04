@@ -126,6 +126,7 @@ export default function CandidateDashboard() {
             <div className="space-y-2">
               <h1 className={`text-2xl sm:text-3xl md:text-4xl font-bold ${darkMode ? "text-white" : "text-gray-800"}`}>
                 Bem-vindo(a), {candidateName}
+                Bem-vindo(a),{candidateName}.
               </h1>
               <div className="flex justify-center">
                 <div className="w-16 h-1 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full"></div>
