@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, Briefcase, Building2, FileText } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Users, Briefcase, Building2, FileText, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
-  const { userRole, loading } = useAuth();
+  const { userRole, loading, signOut } = useAuth();
   const [stats, setStats] = useState({
     totalCandidates: 0,
     totalCompanies: 0,
@@ -58,12 +59,27 @@ export default function AdminDashboard() {
     return null;
   }
 
+  const handleLogout = async () => {
+    await signOut();
+    navigate("/auth");
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-background">
       <div className="container mx-auto p-6">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">Dashboard Administrativo</h1>
-          <p className="text-muted-foreground">Visão geral da plataforma Linka+</p>
+        <div className="mb-8 flex justify-between items-center">
+          <div>
+            <h1 className="text-4xl font-bold mb-2">Dashboard Administrativo</h1>
+            <p className="text-muted-foreground">Visão geral da plataforma Linka+</p>
+          </div>
+          <Button 
+            onClick={handleLogout}
+            variant="outline"
+            className="flex items-center gap-2"
+          >
+            <LogOut className="h-4 w-4" />
+            Sair
+          </Button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
