@@ -5,7 +5,9 @@ import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { toast } from "@/hooks/use-toast";
+import { ArrowLeft, Trash2 } from "lucide-react";
 
 interface Job {
   id: string;
@@ -27,6 +29,7 @@ export default function AdminJobs() {
   const { userRole, loading } = useAuth();
   const [jobs, setJobs] = useState<Job[]>([]);
   const [companies, setCompanies] = useState<Record<string, string>>({});
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!loading && userRole !== "admin") {
@@ -63,6 +66,34 @@ export default function AdminJobs() {
       setCompanies(companiesMap);
     } catch (error) {
       console.error("Error fetching jobs:", error);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!deletingId) return;
+
+    try {
+      const { error } = await supabase
+        .from("jobs")
+        .delete()
+        .eq("id", deletingId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Vaga deletada",
+        description: "A vaga foi removida com sucesso.",
+      });
+
+      setDeletingId(null);
+      fetchJobs();
+    } catch (error) {
+      console.error("Error deleting job:", error);
+      toast({
+        title: "Erro",
+        description: "Não foi possível deletar a vaga.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -104,6 +135,7 @@ export default function AdminJobs() {
                   <TableHead>Tipo</TableHead>
                   <TableHead>Salário</TableHead>
                   <TableHead>Data de Publicação</TableHead>
+                  <TableHead className="text-right">Ações</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -117,12 +149,36 @@ export default function AdminJobs() {
                     <TableCell>
                       {new Date(job.created_at).toLocaleDateString("pt-BR")}
                     </TableCell>
+                    <TableCell className="text-right">
+                      <Button
+                        size="sm"
+                        variant="destructive"
+                        onClick={() => setDeletingId(job.id)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </CardContent>
         </Card>
+
+        <AlertDialog open={!!deletingId} onOpenChange={() => setDeletingId(null)}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Confirmar Exclusão</AlertDialogTitle>
+              <AlertDialogDescription>
+                Tem certeza que deseja deletar esta vaga? Esta ação não pode ser desfeita.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancelar</AlertDialogCancel>
+              <AlertDialogAction onClick={handleDelete}>Deletar</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </div>
   );
