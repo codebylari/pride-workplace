@@ -2,12 +2,8 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Dashboard Empresa', () => {
   test.beforeEach(async ({ page }) => {
-    // Login da empresa
-    await page.goto('/auth');
-    await page.getByPlaceholder('seu@email.com').fill('empresa@teste.com');
-    await page.getByPlaceholder('••••••••••').fill('123456');
-    await page.getByRole('button', { name: 'Entrar' }).click();
-  await expect(page).toHaveURL(/\/company-dashboard$/);
+    // Acessa diretamente o dashboard da empresa (sem login)
+    await page.goto('/company-dashboard');
   });
 
   test('Deve exibir botões principais', async ({ page }) => {

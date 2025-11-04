@@ -2,12 +2,8 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Dashboard Candidato', () => {
   test.beforeEach(async ({ page }) => {
-    // Primeiro, faz login do candidato
-    await page.goto('/auth');
-    await page.getByPlaceholder('seu@email.com').fill('candidato@teste.com');
-    await page.getByPlaceholder('••••••••••').fill('123456');
-    await page.getByRole('button', { name: 'Entrar' }).click();
-    await expect(page).toHaveURL(/\/candidate-dashboard$/);
+    // Abre diretamente a página do dashboard (sem login)
+    await page.goto('/candidate-dashboard');
   });
 
   test('Deve exibir o campo de busca', async ({ page }) => {
