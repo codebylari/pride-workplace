@@ -33,19 +33,24 @@ export default function EditCompanyJob() {
   const [period, setPeriod] = useState("");
 
   useEffect(() => {
-    if (jobId && user) {
+    if (jobId) {
       fetchJobData();
     }
-  }, [jobId, user]);
+  }, [jobId]);
 
   const fetchJobData = async () => {
     try {
       setLoading(true);
+      
+      if (!user?.id) {
+        throw new Error("Usuário não autenticado");
+      }
+      
       const { data, error } = await supabase
         .from("jobs")
         .select("*")
         .eq("id", jobId)
-        .eq("company_id", user?.id)
+        .eq("company_id", user.id)
         .single();
 
       if (error) throw error;
