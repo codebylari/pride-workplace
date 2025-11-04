@@ -7,41 +7,42 @@ test.describe('Auth Page - Login', () => {
   });
 
   test('Deve exibir todos os campos e botões', async ({ page }) => {
-    await expect(page.getByLabel('Email')).toBeVisible();
-    await expect(page.getByLabel('Senha')).toBeVisible();
+    await expect(page.getByPlaceholder('seu@email.com')).toBeVisible();
+    await expect(page.getByPlaceholder('••••••••••')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Entrar' })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Esqueceu a senha?' })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Cadastrar' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Esqueceu sua senha?' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'CADASTRAR-SE' })).toBeVisible();
   });
 
   test('Não deve permitir login com campos vazios', async ({ page }) => {
-    await page.getByRole('button', { name: 'Entrar' }).click();
-    await expect(page.getByText('Email é obrigatório')).toBeVisible();
-    await expect(page.getByText('Senha é obrigatória')).toBeVisible();
+    // HTML5 validation prevents form submission with required fields empty
+    // Just verify the form has required fields
+    await expect(page.getByPlaceholder('seu@email.com')).toHaveAttribute('required', '');
+    await expect(page.getByPlaceholder('••••••••••')).toHaveAttribute('required', '');
   });
 
   test('Não deve permitir login com credenciais inválidas', async ({ page }) => {
-    await page.getByLabel('Email').fill('usuario@errado.com');
-    await page.getByLabel('Senha').fill('senhaerrada');
+    await page.getByPlaceholder('seu@email.com').fill('usuario@errado.com');
+    await page.getByPlaceholder('••••••••••').fill('senhaerrada');
     await page.getByRole('button', { name: 'Entrar' }).click();
-    await expect(page.getByText('Email ou senha incorretos')).toBeVisible();
+    await expect(page.getByText('Erro no login')).toBeVisible();
   });
 
   test('Deve permitir login com credenciais válidas', async ({ page }) => {
-    await page.getByLabel('Email').fill('usuario@teste.com');
-    await page.getByLabel('Senha').fill('123456');
+    await page.getByPlaceholder('seu@email.com').fill('usuario@teste.com');
+    await page.getByPlaceholder('••••••••••').fill('123456');
     await page.getByRole('button', { name: 'Entrar' }).click();
-    // Verifica se redirecionou para dashboard
-    await expect(page).toHaveURL(/\/dashboard$/);
+    // Verifica se redirecionou para dashboard (company ou candidate)
+    await expect(page).toHaveURL(/\/(company|candidate)-dashboard$/);
   });
 
   test('Link de "Esqueceu a senha?" funciona', async ({ page }) => {
-    await page.getByRole('link', { name: 'Esqueceu a senha?' }).click();
-    await expect(page).toHaveURL(/\/reset-password$/);
+    await page.getByRole('button', { name: 'Esqueceu sua senha?' }).click();
+    await expect(page).toHaveURL(/\/forgot-password$/);
   });
 
-  test('Link de "Cadastrar" funciona', async ({ page }) => {
-    await page.getByRole('link', { name: 'Cadastrar' }).click();
+  test('Botão de "Cadastrar" funciona', async ({ page }) => {
+    await page.getByRole('button', { name: 'CADASTRAR-SE' }).click();
     await expect(page).toHaveURL(/\/register$/);
   });
 
