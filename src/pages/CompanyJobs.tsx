@@ -103,7 +103,7 @@ export default function CompanyJobs() {
 
   const handleEditClick = (jobId: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    navigate(`/edit-job/${jobId}`);
+    navigate(`/edit-company-job/${jobId}`);
   };
 
   return (
