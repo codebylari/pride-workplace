@@ -2,10 +2,8 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Auth Page - Login', () => {
   
-  const baseURL = 'http://localhost:3000'; // ou a URL do seu projeto
-
   test.beforeEach(async ({ page }) => {
-    await page.goto(`${baseURL}/login`);
+    await page.goto('/login');
   });
 
   test('Deve exibir todos os campos e botões', async ({ page }) => {
@@ -34,17 +32,17 @@ test.describe('Auth Page - Login', () => {
     await page.getByLabel('Senha').fill('123456');
     await page.getByRole('button', { name: 'Entrar' }).click();
     // Verifica se redirecionou para dashboard
-    await expect(page).toHaveURL(`${baseURL}/dashboard`);
+    await expect(page).toHaveURL(/\/dashboard$/);
   });
 
   test('Link de "Esqueceu a senha?" funciona', async ({ page }) => {
     await page.getByRole('link', { name: 'Esqueceu a senha?' }).click();
-    await expect(page).toHaveURL(`${baseURL}/reset-password`);
+    await expect(page).toHaveURL(/\/reset-password$/);
   });
 
   test('Link de "Cadastrar" funciona', async ({ page }) => {
     await page.getByRole('link', { name: 'Cadastrar' }).click();
-    await expect(page).toHaveURL(`${baseURL}/register`);
+    await expect(page).toHaveURL(/\/register$/);
   });
 
 });

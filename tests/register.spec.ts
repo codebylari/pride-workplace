@@ -17,7 +17,7 @@ async function responderPerguntasEmpresa(page: any) {
 test.describe('Cadastro de Candidato', () => {
 
   test('cadastro com sucesso', async ({ page }) => {
-    await page.goto('http://localhost:3000/register');
+    await page.goto('/register');
 
     // Seleciona fluxo candidato
     await page.click('button#candidato');
@@ -38,7 +38,7 @@ test.describe('Cadastro de Candidato', () => {
   });
 
   test('validação: campos obrigatórios', async ({ page }) => {
-    await page.goto('http://localhost:3000/register');
+    await page.goto('/register');
     await page.click('button#candidato');
 
     // Não preenche nada e tenta submeter
@@ -48,7 +48,7 @@ test.describe('Cadastro de Candidato', () => {
   });
 
   test('validação: email inválido', async ({ page }) => {
-    await page.goto('http://localhost:3000/register');
+    await page.goto('/register');
     await page.click('button#candidato');
 
     await page.fill('input[name="email"]', 'emailinvalido');
@@ -61,7 +61,7 @@ test.describe('Cadastro de Candidato', () => {
 test.describe('Cadastro de Empresa', () => {
 
   test('cadastro com sucesso', async ({ page }) => {
-    await page.goto('http://localhost:3000/register');
+    await page.goto('/register');
 
     // Seleciona fluxo empresa
     await page.click('button#empresa');
@@ -82,7 +82,7 @@ test.describe('Cadastro de Empresa', () => {
   });
 
   test('validação: campos obrigatórios', async ({ page }) => {
-    await page.goto('http://localhost:3000/register');
+    await page.goto('/register');
     await page.click('button#empresa');
 
     await page.click('button[type="submit"]');
@@ -91,7 +91,7 @@ test.describe('Cadastro de Empresa', () => {
   });
 
   test('validação: email inválido', async ({ page }) => {
-    await page.goto('http://localhost:3000/register');
+    await page.goto('/register');
     await page.click('button#empresa');
 
     await page.fill('input[name="email"]', 'emailinvalido');

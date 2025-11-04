@@ -1,15 +1,13 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Dashboard Empresa', () => {
-  const baseURL = 'http://localhost:3000'; // mude para a URL do seu projeto
-
   test.beforeEach(async ({ page }) => {
     // Login da empresa
-    await page.goto(`${baseURL}/login`);
+    await page.goto('/login');
     await page.getByLabel('Email').fill('empresa@teste.com');
     await page.getByLabel('Senha').fill('123456');
     await page.getByRole('button', { name: 'Entrar' }).click();
-    await expect(page).toHaveURL(`${baseURL}/dashboard-empresa`);
+    await expect(page).toHaveURL(/\/dashboard-empresa$/);
   });
 
   test('Deve exibir botão de cadastrar vaga', async ({ page }) => {
@@ -39,6 +37,6 @@ test.describe('Dashboard Empresa', () => {
     await expect(page.getByRole('button', { name: 'Menu' })).toBeVisible();
     await page.getByRole('button', { name: 'Menu' }).click();
     await page.getByRole('link', { name: 'Sair' }).click();
-    await expect(page).toHaveURL(`${baseURL}/login`);
+    await expect(page).toHaveURL(/\/login$/);
   });
 });

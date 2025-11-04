@@ -1,15 +1,13 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Dashboard Candidato', () => {
-  const baseURL = 'http://localhost:3000'; // mude para a URL do seu projeto
-
   test.beforeEach(async ({ page }) => {
     // Primeiro, faz login do candidato
-    await page.goto(`${baseURL}/login`);
+    await page.goto('/login');
     await page.getByLabel('Email').fill('candidato@teste.com');
     await page.getByLabel('Senha').fill('123456');
     await page.getByRole('button', { name: 'Entrar' }).click();
-    await expect(page).toHaveURL(`${baseURL}/dashboard-candidato`);
+    await expect(page).toHaveURL(/\/dashboard-candidato$/);
   });
 
   test('Deve exibir o campo de busca', async ({ page }) => {
@@ -41,7 +39,7 @@ test.describe('Dashboard Candidato', () => {
     await expect(page.getByRole('button', { name: 'Menu' })).toBeVisible();
     await page.getByRole('button', { name: 'Menu' }).click();
     await page.getByRole('link', { name: 'Sair' }).click();
-    await expect(page).toHaveURL(`${baseURL}/login`);
+    await expect(page).toHaveURL(/\/login$/);
   });
 
 });
