@@ -146,7 +146,7 @@ class AuthUser(HttpUser):
             "/auth/v1/signup",
             json=payload,
             headers=self.headers,
-            name="POST /auth/signup"
+            name="POST /auth/v1/signup-candidate"
         )
     
     @task(1)
@@ -158,14 +158,15 @@ class AuthUser(HttpUser):
             "password": "TestPassword123!",
             "data": {
                 "role": "company",
-                "full_name": f"Company Test {random.randint(1, 1000)}"
+                "full_name": f"Company Test {random.randint(1, 1000)}",
+                "cnpj": f"{random.randint(10000000, 99999999)}{random.randint(1000, 9999)}{random.randint(10, 99)}"
             }
         }
         self.client.post(
             "/auth/v1/signup",
             json=payload,
             headers=self.headers,
-            name="POST /auth/signup-company"
+            name="POST /auth/v1/signup-company"
         )
 
 
