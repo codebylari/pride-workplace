@@ -23,6 +23,8 @@ export default function CompanyProfile() {
   const { darkMode } = useTheme();
   const [showSidebar, setShowSidebar] = useState(false);
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
+  const [expandedJobId, setExpandedJobId] = useState<string | null>(null);
+  const [jobDetails, setJobDetails] = useState<any>(null);
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
   const [rating, setRating] = useState(5.0);
   const [totalRatings, setTotalRatings] = useState(0);
@@ -149,6 +151,25 @@ export default function CompanyProfile() {
 
   const toggleSection = (section: string) => {
     setExpandedSection(expandedSection === section ? null : section);
+  };
+
+  const toggleJobDetails = async (jobId: string) => {
+    if (expandedJobId === jobId) {
+      setExpandedJobId(null);
+      setJobDetails(null);
+    } else {
+      setExpandedJobId(jobId);
+      
+      const { data } = await supabase
+        .from("jobs")
+        .select("*")
+        .eq("id", jobId)
+        .maybeSingle();
+      
+      if (data) {
+        setJobDetails(data);
+      }
+    }
   };
 
   return (
@@ -476,26 +497,99 @@ export default function CompanyProfile() {
                         {companyData.jobs.map((job) => (
                           <div
                             key={job.id}
-                            className={`p-4 rounded-xl border ${darkMode ? "bg-gray-700 border-gray-600" : "bg-gray-50 border-gray-200"}`}
+                            className={`rounded-xl border ${darkMode ? "bg-gray-700 border-gray-600" : "bg-gray-50 border-gray-200"}`}
                           >
-                            <h4 className={`font-semibold mb-2 ${darkMode ? "text-white" : "text-gray-800"}`}>
-                              {job.title}
-                            </h4>
-                            <p className={`text-sm mb-2 ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
-                              {job.type}
-                            </p>
-                            <div className="flex items-center justify-between">
-                              <span className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
-                                {job.applicants} candidatos
-                              </span>
-                              <Button
-                                onClick={() => navigate(`/job/${job.id}`)}
-                                variant="link"
-                                className="text-blue-600 hover:text-blue-700 p-0 h-auto"
-                              >
-                                Ver detalhes →
-                              </Button>
+                            <div className="p-4">
+                              <h4 className={`font-semibold mb-2 ${darkMode ? "text-white" : "text-gray-800"}`}>
+                                {job.title}
+                              </h4>
+                              <p className={`text-sm mb-2 ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+                                {job.type}
+                              </p>
+                              <div className="flex items-center justify-between">
+                                <span className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+                                  {job.applicants} candidatos
+                                </span>
+                                <Button
+                                  onClick={() => toggleJobDetails(job.id.toString())}
+                                  variant="link"
+                                  className="text-blue-600 hover:text-blue-700 p-0 h-auto flex items-center gap-1"
+                                >
+                                  {expandedJobId === job.id.toString() ? (
+                                    <>Ocultar detalhes <ChevronUp size={16} /></>
+                                  ) : (
+                                    <>Ver detalhes <ChevronDown size={16} /></>
+                                  )}
+                                </Button>
+                              </div>
                             </div>
+                            
+                            {expandedJobId === job.id.toString() && jobDetails && (
+                              <div className={`border-t p-4 ${darkMode ? "border-gray-600 bg-gray-800" : "border-gray-200 bg-white"}`}>
+                                <div className="space-y-3">
+                                  <div>
+                                    <h5 className={`font-semibold mb-1 ${darkMode ? "text-white" : "text-gray-800"}`}>
+                                      Descrição
+                                    </h5>
+                                    <p className={`text-sm ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+                                      {jobDetails.description}
+                                    </p>
+                                  </div>
+                                  
+                                  {jobDetails.requirements && (
+                                    <div>
+                                      <h5 className={`font-semibold mb-1 ${darkMode ? "text-white" : "text-gray-800"}`}>
+                                        Requisitos
+                                      </h5>
+                                      <p className={`text-sm ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+                                        {jobDetails.requirements}
+                                      </p>
+                                    </div>
+                                  )}
+                                  
+                                  <div className="flex gap-4 flex-wrap">
+                                    {jobDetails.location && (
+                                      <div>
+                                        <h5 className={`font-semibold mb-1 text-sm ${darkMode ? "text-white" : "text-gray-800"}`}>
+                                          Localização
+                                        </h5>
+                                        <p className={`text-sm ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+                                          {jobDetails.location}
+                                        </p>
+                                      </div>
+                                    )}
+                                    
+                                    {jobDetails.salary && (
+                                      <div>
+                                        <h5 className={`font-semibold mb-1 text-sm ${darkMode ? "text-white" : "text-gray-800"}`}>
+                                          Salário
+                                        </h5>
+                                        <p className={`text-sm ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+                                          {jobDetails.salary}
+                                        </p>
+                                      </div>
+                                    )}
+                                  </div>
+                                  
+                                  <div className="flex gap-2 pt-2">
+                                    <Button
+                                      onClick={() => navigate(`/edit-company-job/${job.id}`)}
+                                      variant="outline"
+                                      size="sm"
+                                    >
+                                      Editar vaga
+                                    </Button>
+                                    <Button
+                                      onClick={() => navigate(`/company-job-candidates/${job.id}`)}
+                                      variant="default"
+                                      size="sm"
+                                    >
+                                      Ver candidatos
+                                    </Button>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
                           </div>
                         ))}
                       </div>
