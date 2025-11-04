@@ -16,7 +16,8 @@ test.describe('Dashboard Empresa', () => {
 
   test('Deve exibir vagas existentes', async ({ page }) => {
     const vagas = page.locator('.vaga-card'); // supondo que cada vaga tenha a classe vaga-card
-    await expect(vagas).toHaveCountGreaterThan(0);
+    const count = await vagas.count();
+    expect(count).toBeGreaterThan(0); // Verifica se há pelo menos uma vaga
   });
 
   test('Deve permitir clicar em uma vaga e ver candidatos', async ({ page }) => {
@@ -24,7 +25,10 @@ test.describe('Dashboard Empresa', () => {
     await primeiraVaga.click();
     await expect(page.getByRole('button', { name: 'Ver Candidatos' })).toBeVisible();
     await page.getByRole('button', { name: 'Ver Candidatos' }).click();
-    await expect(page.locator('.candidato-card')).toHaveCountGreaterThan(0); // verifica candidatos
+    
+    const candidatos = page.locator('.candidato-card');
+    const count = await candidatos.count();
+    expect(count).toBeGreaterThan(0); // Verifica se há pelo menos um candidato
   });
 
   test('Cadastrar nova vaga funciona', async ({ page }) => {
