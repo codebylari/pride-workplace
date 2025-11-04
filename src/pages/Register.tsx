@@ -206,7 +206,7 @@ export default function Register() {
     <div className="flex flex-col items-center space-y-6 md:space-y-8 px-4">
       
        <button
-          onClick={() =>  setStep(0)}
+          onClick={() => navigate("/auth")}
           className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
         >
           <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
