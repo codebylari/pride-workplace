@@ -58,6 +58,7 @@ import Matches from "./pages/Matches";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminCandidates from "./pages/AdminCandidates";
 import AdminCompanies from "./pages/AdminCompanies";
+import InitAdmin from "./pages/InitAdmin";
 
 const queryClient = new QueryClient();
 
@@ -72,6 +73,7 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/register" element={<Register />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/init-admin" element={<InitAdmin />} />
             <Route path="/" element={<Index />} />
             
             {/* Candidate Routes */}
