@@ -1,0 +1,16 @@
+Count,Message,Traceback,Nodes
+13500,Expecting value: line 1 column 1 (char 0),"  File ""C:\Users\laris\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\locust\user\task.py"", line 355, in run
+    self.execute_next_task()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File ""C:\Users\laris\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\locust\user\task.py"", line 388, in execute_next_task
+    self.execute_task(self._task_queue.popleft())
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""C:\Users\laris\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\locust\user\task.py"", line 505, in execute_task
+    task(self.user)
+    ~~~~^^^^^^^^^^^
+  File ""C:\Users\laris\OneDrive\Área de Trabalho\PIE2\pride-workplace\locustfile.py"", line 38, in list_jobs
+    self.jobs = response.json()
+                ~~~~~~~~~~~~~^^
+  File ""C:\Users\laris\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\requests\models.py"", line 980, in json
+    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+",local

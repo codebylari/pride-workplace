@@ -1,0 +1,9 @@
+Method,Name,Error,Occurrences
+GET,GET /notifications,"ConnectionAbortedError(10053, 'Uma conexão estabelecida foi anulada pelo software no computador host', None, 10053, None)",2
+POST,POST /auth/signup-company,"ConnectionResetError(10054, 'Foi forçado o cancelamento de uma conexão existente pelo host remoto', None, 10054, None)",2
+POST,POST /auth/signup-company,HTTPError('404 Client Error: Not Found for url: POST /auth/signup-company'),4278
+GET,GET /notifications,"ConnectionResetError(10054, 'Foi forçado o cancelamento de uma conexão existente pelo host remoto', None, 10054, None)",4
+POST,POST /auth/signup,HTTPError('404 Client Error: Not Found for url: POST /auth/signup'),4216
+GET,GET /search-jobs,"ConnectionAbortedError(10053, 'Uma conexão estabelecida foi anulada pelo software no computador host', None, 10053, None)",1
+GET,GET /notifications/unread-count,"ConnectionAbortedError(10053, 'Uma conexão estabelecida foi anulada pelo software no computador host', None, 10053, None)",1
+POST,POST /auth/signup,"ConnectionAbortedError(10053, 'Uma conexão estabelecida foi anulada pelo software no computador host', None, 10053, None)",3
