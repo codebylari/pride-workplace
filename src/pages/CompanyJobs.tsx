@@ -132,6 +132,17 @@ export default function CompanyJobs() {
           <div className="w-24 h-1 mx-auto" style={{ background: 'linear-gradient(to right, hsl(315, 26%, 40%), hsl(320, 30%, 50%))' }}></div>
         </div>
 
+        {!loading && jobs.length > 0 && (
+          <div className="mb-6 text-center">
+            <Button
+              onClick={() => navigate("/company-create-job")}
+              className="px-8 py-3 bg-green-300 hover:bg-green-400 text-green-900 font-semibold rounded-full"
+            >
+              + Criar Nova Vaga
+            </Button>
+          </div>
+        )}
+
         {loading ? (
           <div className="space-y-4">
             {[1, 2, 3].map((i) => (
@@ -145,7 +156,7 @@ export default function CompanyJobs() {
             </p>
             <div className="mt-8 text-center">
               <button
-                onClick={() => navigate("/create-job")}
+                onClick={() => navigate("/company-create-job")}
                 className="px-8 py-3 bg-green-300 hover:bg-green-400 text-green-900 font-semibold rounded-full transition"
               >
                 Cadastrar Primeira Vaga
