@@ -23,7 +23,7 @@ import {
 
 export default function CompanyJobDetails() {
   const navigate = useNavigate();
-  const { jobId } = useParams();
+  const { id } = useParams();
   const { user } = useAuth();
   const { darkMode } = useTheme();
   const { toast } = useToast();
@@ -35,11 +35,11 @@ export default function CompanyJobDetails() {
   const [applicationsCount, setApplicationsCount] = useState(0);
 
   useEffect(() => {
-    if (jobId && user) {
+    if (id && user) {
       fetchJob();
       fetchApplicationsCount();
     }
-  }, [jobId, user]);
+  }, [id, user]);
 
   const fetchJob = async () => {
     try {
@@ -47,7 +47,7 @@ export default function CompanyJobDetails() {
       const { data, error } = await supabase
         .from("jobs")
         .select("*")
-        .eq("id", jobId)
+        .eq("id", id)
         .eq("company_id", user?.id)
         .maybeSingle();
 
@@ -81,7 +81,7 @@ export default function CompanyJobDetails() {
       const { count, error } = await supabase
         .from("applications")
         .select("*", { count: "exact", head: true })
-        .eq("job_id", jobId);
+        .eq("job_id", id);
 
       if (error) throw error;
       setApplicationsCount(count || 0);
@@ -96,7 +96,7 @@ export default function CompanyJobDetails() {
       const { error } = await supabase
         .from("jobs")
         .delete()
-        .eq("id", jobId)
+        .eq("id", id)
         .eq("company_id", user?.id);
 
       if (error) throw error;

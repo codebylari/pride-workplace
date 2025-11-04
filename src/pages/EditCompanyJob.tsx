@@ -13,7 +13,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
 export default function EditCompanyJob() {
-  const { jobId } = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
   const { darkMode } = useTheme();
@@ -33,10 +33,10 @@ export default function EditCompanyJob() {
   const [period, setPeriod] = useState("");
 
   useEffect(() => {
-    if (jobId) {
+    if (id && user?.id) {
       fetchJobData();
     }
-  }, [jobId]);
+  }, [id, user?.id]);
 
   const fetchJobData = async () => {
     try {
@@ -55,7 +55,7 @@ export default function EditCompanyJob() {
       const { data, error } = await supabase
         .from("jobs")
         .select("*")
-        .eq("id", jobId)
+        .eq("id", id)
         .eq("company_id", user.id)
         .maybeSingle();
 
@@ -121,7 +121,7 @@ export default function EditCompanyJob() {
           salary,
           requirements: benefits,
         })
-        .eq("id", jobId)
+        .eq("id", id)
         .eq("company_id", user?.id);
 
       if (error) throw error;

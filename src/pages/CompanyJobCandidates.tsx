@@ -16,7 +16,7 @@ import { ContractDialog } from "@/components/ContractDialog";
 
 export default function JobCandidates() {
   const navigate = useNavigate();
-  const { jobId } = useParams();
+  const { id } = useParams();
   const { user } = useAuth();
   const { darkMode } = useTheme();
   const { toast } = useToast();
@@ -38,10 +38,10 @@ export default function JobCandidates() {
   } | null>(null);
 
   useEffect(() => {
-    if (jobId && user) {
+    if (id && user) {
       fetchJobAndCandidates();
     }
-  }, [jobId, user]);
+  }, [id, user]);
 
   const fetchJobAndCandidates = async () => {
     try {
@@ -51,7 +51,7 @@ export default function JobCandidates() {
       const { data: jobData, error: jobError } = await supabase
         .from("jobs")
         .select("*")
-        .eq("id", jobId)
+        .eq("id", id)
         .eq("company_id", user?.id)
         .single();
 
@@ -75,7 +75,7 @@ export default function JobCandidates() {
             rater_id
           )
         `)
-        .eq("job_id", jobId);
+        .eq("job_id", id);
 
       if (applicationsError) throw applicationsError;
       setApplications(applicationsData || []);
