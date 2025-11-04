@@ -18,7 +18,27 @@ export default function CandidateDashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [jobs, setJobs] = useState<any[]>([]);
+  const [candidateName, setCandidateName] = useState<string>("Candidato");
   const jobsPerPage = 9;
+
+  // Fetch candidate name
+  useEffect(() => {
+    const fetchCandidateName = async () => {
+      if (!user?.id) return;
+      
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("full_name")
+        .eq("id", user.id)
+        .maybeSingle();
+      
+      if (data?.full_name) {
+        setCandidateName(data.full_name.split(' ')[0]); // Apenas o primeiro nome
+      }
+    };
+    
+    fetchCandidateName();
+  }, [user]);
 
   // Fetch jobs from database
   useEffect(() => {
@@ -99,6 +119,19 @@ export default function CandidateDashboard() {
 
       {/* Main Content */}
       <main className="container mx-auto px-3 sm:px-4 py-6 sm:py-8 max-w-6xl">
+        {/* Card de Boas-vindas */}
+        <div className={`rounded-2xl p-6 sm:p-8 shadow-lg mb-6 sm:mb-8 ${darkMode ? "bg-gray-700" : "bg-white"}`}>
+          <div className="text-center space-y-3 sm:space-y-4">
+            <h1 className={`text-2xl sm:text-3xl md:text-4xl font-bold ${darkMode ? "text-white" : "text-gray-800"}`}>
+              Bem-vindo, {candidateName}!
+            </h1>
+            
+            <p className={`text-base sm:text-lg ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+              Encontre as melhores oportunidades para sua carreira
+            </p>
+          </div>
+        </div>
+
         {/* Job Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
           {currentJobs.length === 0 ? (
