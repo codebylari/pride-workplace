@@ -125,17 +125,12 @@ export default function EditCompanyProfile() {
     }
 
     try {
-      const updates: any = {};
-
-      if (about !== originalValues.about) {
-        updates.about = about;
-      }
-      if (seeking !== originalValues.seeking) {
-        updates.seeking = seeking;
-      }
-      if (sector !== originalValues.sector) {
-        updates.sector = sector;
-      }
+      const updates: any = {
+        fantasy_name: displayName.trim(),
+        about: about.trim(),
+        seeking: seeking.trim(),
+        sector: sector.trim(),
+      };
 
       // Handle logo upload if there's a new one
       if (logo && logo !== originalValues.logo) {
@@ -158,14 +153,48 @@ export default function EditCompanyProfile() {
         updates.logo_url = `${urlData.publicUrl}?t=${Date.now()}`;
       }
 
-      // Update company profile
-      if (Object.keys(updates).length > 0) {
+      // Check if profile exists
+      const { data: existingProfile } = await supabase
+        .from("company_profiles")
+        .select("user_id")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      if (existingProfile) {
+        // Update existing profile
         const { error: updateError } = await supabase
           .from("company_profiles")
           .update(updates)
           .eq("user_id", user.id);
 
-        if (updateError) throw updateError;
+        if (updateError) {
+          console.error("Erro ao atualizar perfil:", updateError);
+          throw updateError;
+        }
+      } else {
+        // Create new profile - need CNPJ from user metadata
+        const cnpj = user.user_metadata?.cnpj;
+        if (!cnpj) {
+          toast({
+            title: "Erro",
+            description: "CNPJ não encontrado. Por favor, faça login novamente.",
+            variant: "destructive",
+          });
+          return;
+        }
+
+        const { error: insertError } = await supabase
+          .from("company_profiles")
+          .insert({
+            user_id: user.id,
+            cnpj: cnpj,
+            ...updates
+          });
+
+        if (insertError) {
+          console.error("Erro ao criar perfil:", insertError);
+          throw insertError;
+        }
       }
 
       toast({
@@ -180,15 +209,24 @@ export default function EditCompanyProfile() {
         about,
         seeking,
         sector,
-        logo
+        logo: updates.logo_url || logo
       });
 
       navigate("/company-profile");
     } catch (err: any) {
       console.error("Erro ao salvar alterações:", err);
+      
+      let errorMessage = "Não foi possível salvar as alterações.";
+      
+      if (err.message?.includes("permission denied")) {
+        errorMessage = "Você não tem permissão para editar este perfil.";
+      } else if (err.message) {
+        errorMessage = err.message;
+      }
+      
       toast({
         title: "Erro ao salvar",
-        description: err.message || "Não foi possível salvar as alterações.",
+        description: errorMessage,
         variant: "destructive",
       });
     }
