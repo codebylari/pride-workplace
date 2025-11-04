@@ -52,9 +52,14 @@ import CompanySupport from "./pages/CompanySupport";
 import CompanyAbout from "./pages/CompanyAbout";
 import CompanyCommunityRules from "./pages/CompanyCommunityRules";
 import CompanyTestimonials from "./pages/CompanyTestimonials";
+import CompanyChangeEmail from "./pages/CompanyChangeEmail";
+import CompanyChangePassword from "./pages/CompanyChangePassword";
+import CompanyDeactivateAccount from "./pages/CompanyDeactivateAccount";
+import CompanyDeleteAccount from "./pages/CompanyDeleteAccount";
 import MatchesCompany from "./pages/MatchesCompany";
 import TermsCompany from "./pages/TermsCompany";
 import Matches from "./pages/Matches";
+import Company from "./pages/Company";
 
 // Admin Pages
 import AdminDashboard from "./pages/AdminDashboard";
@@ -119,6 +124,10 @@ const App = () => (
             <Route path="/company-view-candidate-profile-alias/:alias" element={<CompanyViewCandidateProfileAlias />} />
             <Route path="/company-settings" element={<CompanySettings />} />
             <Route path="/company-account" element={<CompanyAccount />} />
+            <Route path="/company-change-email" element={<CompanyChangeEmail />} />
+            <Route path="/company-change-password" element={<CompanyChangePassword />} />
+            <Route path="/company-deactivate-account" element={<CompanyDeactivateAccount />} />
+            <Route path="/company-delete-account" element={<CompanyDeleteAccount />} />
             <Route path="/company-support" element={<CompanySupport />} />
             <Route path="/company-about" element={<CompanyAbout />} />
             <Route path="/company-community-rules" element={<CompanyCommunityRules />} />
@@ -126,6 +135,7 @@ const App = () => (
             <Route path="/matches-company" element={<MatchesCompany />} />
             <Route path="/terms-company" element={<TermsCompany />} />
             <Route path="/matches" element={<Matches />} />
+            <Route path="/company" element={<Company />} />
             
             {/* Admin Routes */}
             <Route path="/admin-dashboard" element={<AdminDashboard />} />
