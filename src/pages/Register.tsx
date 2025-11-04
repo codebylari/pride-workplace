@@ -149,40 +149,67 @@ export default function Register() {
     setLoading(true);
 
     try {
+      console.log("Iniciando registro...", { email, role });
+      
       const { data, error } = await supabase.auth.signUp({
-        email,
+        email: email.trim().toLowerCase(),
         password,
         options: {
           emailRedirectTo: `${window.location.origin}/`,
           data: {
-            full_name: role === "candidate" ? `${fullName} ${lastName}` : `${fullName} ${companyContactLastName}`,
+            full_name: role === "candidate" ? `${fullName} ${lastName}`.trim() : `${fullName} ${companyContactLastName}`.trim(),
             role,
             state,
             city,
+            email_verified: true,
             ...(role === "company" && {
-              company_name: companyName,
-              cnpj,
-              phone,
-              position,
+              company_name: companyName.trim(),
+              cnpj: cnpj.trim(),
+              phone: phone.trim(),
+              position: position.trim(),
               diversity,
             }),
             ...(role === "candidate" && {
               birth_date: birthDate,
-              social_name: socialName,
-              cpf,
-              rg,
-              phone,
+              social_name: socialName.trim(),
+              cpf: cpf.trim(),
+              rg: rg.trim(),
+              phone: phone.trim(),
             }),
           },
         },
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error("Erro no signup:", error);
+        throw error;
+      }
+
+      if (!data.user) {
+        throw new Error("Falha ao criar usuário");
+      }
+
+      console.log("Usuário criado com sucesso:", data.user.id);
 
       toast({
         title: "Cadastro realizado!",
-        description: "Você já pode fazer login na plataforma.",
+        description: "Você já pode acessar a plataforma.",
       });
+
+      // Aguardar um pouco para garantir que as triggers foram executadas
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // Fazer login automaticamente após registro
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: email.trim().toLowerCase(),
+        password,
+      });
+
+      if (signInError) {
+        console.error("Erro ao fazer login automático:", signInError);
+        navigate("/auth");
+        return;
+      }
 
       // Redirect based on role
       if (role === "company") {
@@ -191,9 +218,25 @@ export default function Register() {
         navigate("/candidate-dashboard");
       }
     } catch (error: any) {
+      console.error("Erro completo no cadastro:", error);
+      
+      let errorMessage = "Ocorreu um erro ao realizar o cadastro.";
+      
+      if (error.message?.includes("User already registered")) {
+        errorMessage = "Este e-mail já está cadastrado. Tente fazer login.";
+      } else if (error.message?.includes("Invalid email")) {
+        errorMessage = "E-mail inválido. Verifique e tente novamente.";
+      } else if (error.message?.includes("Password")) {
+        errorMessage = "Senha inválida. A senha deve ter pelo menos 6 caracteres.";
+      } else if (error.message?.includes("404")) {
+        errorMessage = "Erro de conexão com o servidor. Tente novamente em alguns instantes.";
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
       toast({
         title: "Erro no cadastro",
-        description: error.message || "Ocorreu um erro ao realizar o cadastro.",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
