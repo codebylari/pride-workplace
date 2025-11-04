@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -14,10 +14,11 @@ import { supabase } from "@/integrations/supabase/client";
 
 export default function CreateJob() {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, userRole, loading } = useAuth();
   const { darkMode } = useTheme();
   const { toast } = useToast();
   const [showSidebar, setShowSidebar] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Form states
   const [title, setTitle] = useState("");
@@ -30,8 +31,31 @@ export default function CreateJob() {
   const [experience, setExperience] = useState("");
   const [period, setPeriod] = useState("");
 
+  // Verificar autenticação e role
+  useEffect(() => {
+    if (!loading && (!user || userRole !== "company")) {
+      toast({
+        title: "Acesso negado",
+        description: "Apenas empresas podem cadastrar vagas.",
+        variant: "destructive",
+      });
+      navigate("/auth");
+    }
+  }, [user, userRole, loading, navigate, toast]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validação de autenticação
+    if (!user) {
+      toast({
+        title: "Erro de autenticação",
+        description: "Você precisa estar logado para cadastrar uma vaga.",
+        variant: "destructive",
+      });
+      navigate("/auth");
+      return;
+    }
 
     // Validação de campos obrigatórios
     if (!title || !description || !area || !benefits || !salary || !workModel || !city || !experience || !period) {
@@ -43,18 +67,23 @@ export default function CreateJob() {
       return;
     }
 
-    try {
-      const { error } = await supabase.from("jobs").insert({
-        company_id: user?.id,
-        title,
-        description: `${description}\n\nÁrea: ${area}\nBenefícios: ${benefits}\nExperiência: ${experience}\nPeríodo: ${period}`,
-        job_type: workModel,
-        location: city,
-        salary,
-        requirements: benefits,
-      });
+    setIsSubmitting(true);
 
-      if (error) throw error;
+    try {
+      const { data, error } = await supabase.from("jobs").insert({
+        company_id: user.id,
+        title: title.trim(),
+        description: `${description.trim()}\n\nÁrea: ${area.trim()}\nBenefícios: ${benefits.trim()}\nExperiência: ${experience.trim()}\nPeríodo: ${period.trim()}`,
+        job_type: workModel.trim(),
+        location: city.trim(),
+        salary: salary.trim(),
+        requirements: benefits.trim(),
+      }).select();
+
+      if (error) {
+        console.error("Erro ao cadastrar vaga:", error);
+        throw error;
+      }
 
       toast({
         title: "Vaga cadastrada!",
@@ -75,11 +104,23 @@ export default function CreateJob() {
       // Redirecionar para lista de vagas
       setTimeout(() => navigate("/company-jobs"), 1500);
     } catch (error: any) {
+      console.error("Erro detalhado:", error);
+      
+      let errorMessage = "Erro ao cadastrar vaga. Tente novamente.";
+      
+      if (error.message?.includes("permission denied")) {
+        errorMessage = "Você não tem permissão para cadastrar vagas. Verifique se está logado como empresa.";
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
       toast({
         title: "Erro ao cadastrar vaga",
-        description: error.message,
+        description: errorMessage,
         variant: "destructive",
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -238,9 +279,10 @@ export default function CreateJob() {
             <div className="flex justify-center pt-4">
               <Button
                 type="submit"
-                className="px-12 py-6 bg-green-300 hover:bg-green-400 text-green-900 font-semibold text-lg rounded-full"
+                disabled={isSubmitting}
+                className="px-12 py-6 bg-green-300 hover:bg-green-400 text-green-900 font-semibold text-lg rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Cadastrar a Vaga
+                {isSubmitting ? "Cadastrando..." : "Cadastrar a Vaga"}
               </Button>
             </div>
           </form>
