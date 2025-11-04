@@ -20,7 +20,9 @@ const Index = () => {
         .eq("user_id", session.user.id)
         .single();
 
-      if (roleData?.role === "company") {
+      if (roleData?.role === "admin") {
+        navigate("/admin-dashboard");
+      } else if (roleData?.role === "company") {
         navigate("/company-dashboard");
       } else {
         navigate("/candidate-dashboard");
