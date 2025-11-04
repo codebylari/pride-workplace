@@ -13,6 +13,7 @@ export default function Auth(Auth: unknown) {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [userType, setUserType] = useState<"candidate" | "company" | "admin">("candidate");
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -28,7 +29,9 @@ export default function Auth(Auth: unknown) {
           .eq("user_id", session.user.id)
           .single();
 
-        if (roleData?.role === "company") {
+        if (roleData?.role === "admin") {
+          navigate("/admin-dashboard");
+        } else if (roleData?.role === "company") {
           navigate("/company-dashboard");
         } else {
           navigate("/candidate-dashboard");
@@ -63,7 +66,9 @@ export default function Auth(Auth: unknown) {
         .eq("user_id", data.session.user.id)
         .single();
 
-      if (roleData?.role === "company") {
+      if (roleData?.role === "admin") {
+        navigate("/admin-dashboard");
+      } else if (roleData?.role === "company") {
         navigate("/company-dashboard");
       } else {
         navigate("/candidate-dashboard");
@@ -153,6 +158,43 @@ export default function Auth(Auth: unknown) {
             <div className="text-center space-y-3 relative z-10">
               <h2 className="text-3xl sm:text-4xl font-bold text-white">Entrar</h2>
               <p className="text-white/70 text-sm">Acesse sua conta</p>
+            </div>
+
+            {/* User Type Selection */}
+            <div className="flex gap-2 relative z-10">
+              <button
+                type="button"
+                onClick={() => setUserType("candidate")}
+                className={`flex-1 py-3 rounded-xl font-medium transition-all ${
+                  userType === "candidate"
+                    ? "bg-gradient-to-r from-orange-400 to-pink-500 text-white shadow-lg"
+                    : "bg-white/20 text-white/70 hover:bg-white/30"
+                }`}
+              >
+                Candidato
+              </button>
+              <button
+                type="button"
+                onClick={() => setUserType("company")}
+                className={`flex-1 py-3 rounded-xl font-medium transition-all ${
+                  userType === "company"
+                    ? "bg-gradient-to-r from-orange-400 to-pink-500 text-white shadow-lg"
+                    : "bg-white/20 text-white/70 hover:bg-white/30"
+                }`}
+              >
+                Empresa
+              </button>
+              <button
+                type="button"
+                onClick={() => setUserType("admin")}
+                className={`flex-1 py-3 rounded-xl font-medium transition-all ${
+                  userType === "admin"
+                    ? "bg-gradient-to-r from-orange-400 to-pink-500 text-white shadow-lg"
+                    : "bg-white/20 text-white/70 hover:bg-white/30"
+                }`}
+              >
+                Admin
+              </button>
             </div>
             
             <form onSubmit={handleLogin} className="space-y-6 relative z-10">
