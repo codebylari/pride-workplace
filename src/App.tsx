@@ -41,6 +41,7 @@ import CompanySwipe from "./pages/CompanySwipe";
 import CompanyJobs from "./pages/CompanyJobs";
 import CompanyCreateJob from "./pages/CompanyCreateJob";
 import EditCompanyJob from "./pages/EditCompanyJob";
+import CreateJob from "./pages/CreateJob";
 import CompanyJobDetails from "./pages/CompanyJobDetails";
 import CompanyJobCandidates from "./pages/CompanyJobCandidates";
 import CompanyViewCandidateProfile from "./pages/CompanyViewCandidateProfile";
@@ -110,6 +111,7 @@ const App = () => (
             <Route path="/company-swipe" element={<CompanySwipe />} />
             <Route path="/company-jobs" element={<CompanyJobs />} />
             <Route path="/company-create-job" element={<CompanyCreateJob />} />
+            <Route path="/create-job" element={<CreateJob />} />
             <Route path="/edit-company-job/:id" element={<EditCompanyJob />} />
             <Route path="/company-job-details/:id" element={<CompanyJobDetails />} />
             <Route path="/company-job-candidates/:id" element={<CompanyJobCandidates />} />
