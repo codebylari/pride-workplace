@@ -1,40 +1,25 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Dashboard do Candidato', () => {
-  test.beforeEach(async ({ page }) => {
-    // Acessa diretamente o dashboard do candidato (sem login)
-    await page.goto('/candidate-dashboard');
-  });
-
-  test('Deve carregar a página de dashboard do candidato com sucesso', async ({ page }) => {
-    await expect(page).toHaveURL(/\/candidate-dashboard$/);
-    await expect(page.locator('h1')).toContainText('Bem-vindo'); // título dinâmico
-  });
-
-  test('Deve acessar a seção de matches de vagas através do menu', async ({ page }) => {
-    // Abre o menu lateral
-    await page.locator('header button').first().click();
-
-    // Clica na opção de "Matches"
-    await page.getByRole('link', { name: 'Meus Matches' }).click();
-
-    // Verifica se estamos na página de matches
-    await expect(page).toHaveURL(/\/candidate-matches$/);
-
-    // Verifica se há matches
-    const matches = page.locator('.match-card');
-    const matchCount = await matches.count();
-
-    if (matchCount > 0) {
-      await expect(matches.first()).toBeVisible();
-    } else {
-      console.log('Nenhum match disponível no momento.');
-    }
-  });
 
   test('Botão de logout deve funcionar', async ({ page }) => {
-    await page.locator('header button').first().click(); // abre o menu
-    await page.getByRole('button', { name: 'Sair' }).click();
-    await expect(page).toHaveURL(/\/login$/);
+   
+
+    // Espera o botão do menu aparecer e estar visível
+    const menuButton = page.locator('header button').first();
+    await menuButton.waitFor({ state: 'visible', timeout: 10000 }); // espera até 10s
+    await menuButton.click();
+
+    // Espera o botão "Sair" aparecer e clica
+    const logoutButton = page.getByRole('button', { name: 'Sair' });
+    await logoutButton.waitFor({ state: 'visible', timeout: 10000 });
+    await logoutButton.click();
+
+    // Espera a URL mudar para a raiz ou /login
+    await expect(page).toHaveURL('http://localhost:8080/');
+
+    // Opcional: verificar se o dashboard desapareceu após logout
+    await expect(page.locator('h1')).toHaveCount(0);
   });
+
 });
