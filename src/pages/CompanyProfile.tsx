@@ -43,7 +43,7 @@ export default function CompanyProfile() {
       text: string;
     }>,
     jobs: [] as Array<{
-      id: number;
+      id: string;
       title: string;
       type: string;
       applicants: number;
@@ -113,7 +113,7 @@ export default function CompanyProfile() {
               .eq("job_id", job.id);
             
             return {
-              id: Number(job.id),
+              id: job.id,
               title: job.title,
               type: job.job_type,
               applicants: count || 0
