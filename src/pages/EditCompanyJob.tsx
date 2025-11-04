@@ -179,7 +179,7 @@ export default function EditCompanyJob() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 required
-                className={darkMode ? "bg-gray-700 text-white border-gray-600" : ""}
+                className={`${darkMode ? "bg-gray-700 text-white border-gray-600" : "border-blue-400"} focus:border-blue-500 focus:ring-blue-500`}
               />
             </div>
 
@@ -290,15 +290,7 @@ export default function EditCompanyJob() {
               />
             </div>
 
-            <div className="flex justify-center gap-4 pt-4">
-              <Button
-                type="button"
-                onClick={() => navigate("/company-jobs")}
-                variant="outline"
-                className="px-8 py-6 text-lg"
-              >
-                Cancelar
-              </Button>
+            <div className="flex justify-center pt-4">
               <Button
                 type="submit"
                 className="px-12 py-6 bg-green-300 hover:bg-green-400 text-green-900 font-semibold text-lg rounded-full"
