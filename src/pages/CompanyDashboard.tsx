@@ -147,12 +147,17 @@ export default function CompanyDashboard() {
           {/* Card de Boas-vindas */}
           <div className={`rounded-2xl p-6 sm:p-12 shadow-lg mb-6 sm:mb-8 ${darkMode ? "bg-gray-700" : "bg-white"}`}>
             <div className="text-center space-y-4 sm:space-y-8">
-              <h1 className={`text-2xl sm:text-3xl md:text-4xl font-bold ${darkMode ? "text-white" : "text-gray-800"}`}>
-                Bem-vindo, {companyName}!
-              </h1>
+              <div className="space-y-2">
+                <h1 className={`text-2xl sm:text-3xl md:text-4xl font-bold ${darkMode ? "text-white" : "text-gray-800"}`}>
+                  Bem-vindo(a), {companyName}
+                </h1>
+                <div className="flex justify-center">
+                  <div className="w-16 h-1 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full"></div>
+                </div>
+              </div>
               
               <p className={`text-base sm:text-lg md:text-xl ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
-                "Gerencie suas oportunidades de forma simples e rápida."
+                Gerencie suas oportunidades de forma simples e rápida
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center pt-4 sm:pt-6">

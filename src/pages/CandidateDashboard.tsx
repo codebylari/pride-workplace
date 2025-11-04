@@ -122,9 +122,14 @@ export default function CandidateDashboard() {
         {/* Card de Boas-vindas */}
         <div className={`rounded-2xl p-6 sm:p-8 shadow-lg mb-6 sm:mb-8 ${darkMode ? "bg-gray-700" : "bg-white"}`}>
           <div className="text-center space-y-3 sm:space-y-4">
-            <h1 className={`text-2xl sm:text-3xl md:text-4xl font-bold ${darkMode ? "text-white" : "text-gray-800"}`}>
-              Bem-vindo, {candidateName}!
-            </h1>
+            <div className="space-y-2">
+              <h1 className={`text-2xl sm:text-3xl md:text-4xl font-bold ${darkMode ? "text-white" : "text-gray-800"}`}>
+                Bem-vindo(a), {candidateName}
+              </h1>
+              <div className="flex justify-center">
+                <div className="w-16 h-1 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full"></div>
+              </div>
+            </div>
             
             <p className={`text-base sm:text-lg ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
               Encontre as melhores oportunidades para sua carreira
