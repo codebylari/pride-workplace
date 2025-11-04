@@ -49,9 +49,20 @@ export default function CompanyJobDetails() {
         .select("*")
         .eq("id", jobId)
         .eq("company_id", user?.id)
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
+      
+      if (!data) {
+        toast({
+          title: "Vaga não encontrada",
+          description: "Esta vaga não existe ou você não tem permissão para visualizá-la.",
+          variant: "destructive",
+        });
+        navigate("/company-jobs");
+        return;
+      }
+      
       setJob(data);
     } catch (error: any) {
       toast({
@@ -197,7 +208,7 @@ export default function CompanyJobDetails() {
 
             <div className="flex flex-wrap gap-4 justify-center">
               <Button
-                onClick={() => navigate(`/edit-job/${job.id}`)}
+                onClick={() => navigate(`/edit-company-job/${job.id}`)}
                 className="px-8 py-6 bg-blue-500 hover:bg-blue-600 text-white font-semibold text-lg rounded-full flex items-center gap-2"
               >
                 <Pencil size={20} />
@@ -211,7 +222,7 @@ export default function CompanyJobDetails() {
                 Excluir Vaga
               </Button>
               <Button
-                onClick={() => navigate(`/job-candidates/${job.id}`)}
+                onClick={() => navigate(`/company-job-candidates/${job.id}`)}
                 className="px-8 py-6 bg-green-300 hover:bg-green-400 text-green-900 font-semibold text-lg rounded-full flex items-center gap-2"
               >
                 <Users size={20} />

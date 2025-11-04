@@ -43,7 +43,13 @@ export default function EditCompanyJob() {
       setLoading(true);
       
       if (!user?.id) {
-        throw new Error("Usuário não autenticado");
+        toast({
+          title: "Não autenticado",
+          description: "Você precisa estar logado para editar uma vaga.",
+          variant: "destructive",
+        });
+        navigate("/auth");
+        return;
       }
       
       const { data, error } = await supabase
@@ -51,27 +57,35 @@ export default function EditCompanyJob() {
         .select("*")
         .eq("id", jobId)
         .eq("company_id", user.id)
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
 
-      if (data) {
-        setTitle(data.title);
-        setWorkModel(data.job_type);
-        setCity(data.location);
-        setSalary(data.salary || "");
-        setBenefits(data.requirements || "");
-        
-        // Parse description to extract fields
-        const descParts = data.description.split("\n\n");
-        setDescription(descParts[0] || "");
-        
-        descParts.slice(1).forEach((part: string) => {
-          if (part.startsWith("Área: ")) setArea(part.replace("Área: ", ""));
-          if (part.startsWith("Experiência: ")) setExperience(part.replace("Experiência: ", ""));
-          if (part.startsWith("Período: ")) setPeriod(part.replace("Período: ", ""));
+      if (!data) {
+        toast({
+          title: "Vaga não encontrada",
+          description: "Esta vaga não existe ou você não tem permissão para editá-la.",
+          variant: "destructive",
         });
+        navigate("/company-jobs");
+        return;
       }
+
+      setTitle(data.title);
+      setWorkModel(data.job_type);
+      setCity(data.location);
+      setSalary(data.salary || "");
+      setBenefits(data.requirements || "");
+      
+      // Parse description to extract fields
+      const descParts = data.description.split("\n\n");
+      setDescription(descParts[0] || "");
+      
+      descParts.slice(1).forEach((part: string) => {
+        if (part.startsWith("Área: ")) setArea(part.replace("Área: ", ""));
+        if (part.startsWith("Experiência: ")) setExperience(part.replace("Experiência: ", ""));
+        if (part.startsWith("Período: ")) setPeriod(part.replace("Período: ", ""));
+      });
     } catch (error: any) {
       toast({
         title: "Erro ao carregar vaga",
