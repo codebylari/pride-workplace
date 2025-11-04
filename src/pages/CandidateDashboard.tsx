@@ -33,7 +33,8 @@ export default function CandidateDashboard() {
         .maybeSingle();
       
       if (data?.full_name) {
-        setCandidateName(data.full_name.split(' ')[0]); // Apenas o primeiro nome
+        const firstName = data.full_name.split(' ')[0];
+        setCandidateName(firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase());
       }
     };
     
