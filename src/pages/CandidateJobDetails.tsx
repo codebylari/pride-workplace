@@ -30,24 +30,42 @@ export default function JobDetails() {
   const fetchJobDetails = async () => {
     try {
       setLoading(true);
+      console.log("Fetching job with ID:", id);
       
       // Buscar dados da vaga
       const { data: jobData, error: jobError } = await supabase
         .from("jobs")
         .select("*")
         .eq("id", id)
-        .single();
+        .maybeSingle();
 
-      if (jobError) throw jobError;
+      console.log("Job data:", jobData);
+      console.log("Job error:", jobError);
+
+      if (jobError) {
+        console.error("Error fetching job:", jobError);
+        throw jobError;
+      }
+
+      if (!jobData) {
+        console.log("No job found with ID:", id);
+        setJob(null);
+        return;
+      }
 
       // Buscar dados da empresa
       const { data: companyData, error: companyError } = await supabase
         .from("company_profiles")
         .select("fantasy_name, logo_url, city, state")
         .eq("user_id", jobData.company_id)
-        .single();
+        .maybeSingle();
 
-      if (companyError) throw companyError;
+      console.log("Company data:", companyData);
+      console.log("Company error:", companyError);
+
+      if (companyError) {
+        console.error("Error fetching company:", companyError);
+      }
 
       setJob({
         ...jobData,
@@ -60,9 +78,10 @@ export default function JobDetails() {
       console.error("Error fetching job details:", error);
       toast({
         title: "Erro ao carregar vaga",
-        description: "Não foi possível carregar os detalhes da vaga.",
+        description: error.message || "Não foi possível carregar os detalhes da vaga.",
         variant: "destructive",
       });
+      setJob(null);
     } finally {
       setLoading(false);
     }
