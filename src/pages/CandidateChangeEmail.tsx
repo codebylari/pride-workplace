@@ -5,7 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
 import { useTheme } from "@/contexts/ThemeContext";
 import { supabase } from "@/integrations/supabase/client";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { CandidateSidebar } from "@/components/CandidateSidebar";
 import { CompanySidebar } from "@/components/CompanySidebar";
@@ -27,6 +27,7 @@ export default function ChangeEmail() {
   const [newEmail, setNewEmail] = useState("");
   const [confirmNewEmail, setConfirmNewEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const [pendingEmail, setPendingEmail] = useState("");
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -69,12 +70,15 @@ export default function ChangeEmail() {
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.updateUser({
-        email: newEmail
-      });
+      const targetEmail = newEmail;
+      const { error } = await supabase.auth.updateUser(
+        { email: targetEmail },
+        { emailRedirectTo: `${window.location.origin}/` }
+      );
 
       if (error) throw error;
 
+      setPendingEmail(targetEmail);
       setCurrentEmail("");
       setNewEmail("");
       setConfirmNewEmail("");
@@ -180,11 +184,11 @@ export default function ChangeEmail() {
             <div className="w-16 h-16 bg-green-400 rounded-full flex items-center justify-center">
               <CheckCircle2 className="w-10 h-10 text-white" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900">Email de Confirmação Enviado!</h2>
-            <p className="text-center text-gray-600 px-4">
-              Enviamos um email de confirmação para <strong>{newEmail}</strong>. 
+            <DialogTitle className="text-2xl font-bold text-gray-900">Email de Confirmação Enviado!</DialogTitle>
+            <DialogDescription className="text-center text-gray-600 px-4">
+              Enviamos um email de confirmação para <strong>{pendingEmail}</strong>. 
               Por favor, verifique sua caixa de entrada e clique no link de confirmação para finalizar a alteração do seu email.
-            </p>
+            </DialogDescription>
             <p className="text-sm text-center text-gray-500 px-4">
               Seu email atual continuará ativo até que você confirme o novo email.
             </p>
