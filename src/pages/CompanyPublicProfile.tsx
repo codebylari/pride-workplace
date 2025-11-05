@@ -18,12 +18,50 @@ export default function CompanyPublicProfile() {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
   const [testimonials, setTestimonials] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [companyData, setCompanyData] = useState<any>(null);
+  const [companyJobs, setCompanyJobs] = useState<any[]>([]);
 
   useEffect(() => {
     if (id) {
+      fetchCompanyData();
       fetchTestimonials();
+      fetchCompanyJobs();
     }
   }, [id]);
+
+  const fetchCompanyData = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("company_profiles")
+        .select("*")
+        .eq("user_id", id)
+        .maybeSingle();
+
+      if (error) throw error;
+
+      if (data) {
+        setCompanyData(data);
+      }
+    } catch (error) {
+      console.error("Erro ao carregar dados da empresa:", error);
+    }
+  };
+
+  const fetchCompanyJobs = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("jobs")
+        .select("*")
+        .eq("company_id", id)
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+
+      setCompanyJobs(data || []);
+    } catch (error) {
+      console.error("Erro ao carregar vagas:", error);
+    }
+  };
 
   const fetchTestimonials = async () => {
     try {
@@ -64,85 +102,13 @@ export default function CompanyPublicProfile() {
     setExpandedSection(expandedSection === section ? null : section);
   };
 
-  // Mock data - será substituído por dados reais do banco baseado no ID
-  const companyData = {
-    name: "Mercado Livre",
-    logo: "🛒",
-    rating: 4.5,
-    about: `O Mercado Livre Tech é uma unidade fictícia de tecnologia do Mercado Livre, liderada por uma empresária visionária. Aqui, não há distinção de gênero: valorizamos talento, comprometimento e criatividade de cada pessoa.`,
-    seeking: [
-      "Pessoas apaixonadas por tecnologia",
-      "Vontade de aprender e crescer junto",
-      "Gosto por assumir responsabilidade nas entregas",
-      "Trabalho em equipe e boa comunicação",
-      "Criatividade para resolver problemas de forma prática"
-    ],
-    training: {
-      name: "Razão Social: Mercado Livre Tech Soluções em Tecnologia LTDA",
-      fantasyName: "Nome Fantasia: Mercado Livre Tech",
-      foundingDate: "Data de Fundação: 15/03/2018",
-      location: "Sede: São Paulo – SP, Brasil",
-      founder: "Fundadora/Diretora: Maria Fernanda Silva"
-    },
-    testimonials: [
-      {
-        name: "Camila R.",
-        role: "Designer Júnior",
-        icon: "🖤",
-        text: "Foi minha primeira experiência de freelance e fiquei com receio, mas a equipe me tratou com respeito."
-      },
-      {
-        name: "Mariana L.",
-        role: "Programadora Back-end (trans)",
-        icon: "💖",
-        text: "O processo foi super organizado e transparente. A empresa me passou confiança desde o início e respeitou meus pronomes e nome social."
-      },
-      {
-        name: "Felipe T.",
-        role: "Estudante de Sistemas (gay)",
-        icon: "🌈",
-        text: "Me senti seguro durante todo o projeto. Nunca houve comentários preconceituosos e o time me ajudou com as dificuldades."
-      },
-      {
-        name: "Bianca S.",
-        role: "Analista de Dados Júnior",
-        icon: "💜",
-        text: "Foi incrível trabalhar em um ambiente onde minha opinião foi ouvida. Senti que realmente importava para o resultado final."
-      },
-      {
-        name: "Rafa M.",
-        role: "Designer Gráfico (não-binário)",
-        icon: "⭐",
-        text: "Foi minha primeira experiência de freelance e fiquei com receio, mas a equipe me tratou com respeito."
-      },
-      {
-        name: "Carla V.",
-        role: "QA Tester Freelancer (lésbica)",
-        icon: "🌈",
-        text: "Foi minha primeira experiência de freelance e fiquei com receio, mas a equipe me tratou com respeito."
-      }
-    ],
-    jobs: [
-      {
-        id: 1,
-        title: "Vaga Temporária - Analista de TI",
-        type: "Freelancer · Remoto · Part-time",
-        applicants: 15
-      },
-      {
-        id: 2,
-        title: "Desenvolvedor Full Stack",
-        type: "CLT · Híbrido · Full-time",
-        applicants: 23
-      },
-      {
-        id: 3,
-        title: "Designer UX/UI",
-        type: "Freelancer · Remoto · Part-time",
-        applicants: 8
-      }
-    ]
-  };
+  if (loading || !companyData) {
+    return (
+      <div className={`min-h-screen ${darkMode ? "bg-gray-800" : "bg-gray-50"} flex items-center justify-center`}>
+        <p className={darkMode ? "text-white" : "text-gray-800"}>Carregando...</p>
+      </div>
+    );
+  }
 
   return (
     <div className={`min-h-screen ${darkMode ? "bg-gray-800" : "bg-gray-50"}`}>
@@ -168,23 +134,17 @@ export default function CompanyPublicProfile() {
           <div className={`rounded-3xl shadow-lg p-8 ${darkMode ? "bg-gray-700" : "bg-white"}`}>
             {/* Logo Section - Visão pública sem edição */}
             <div className="flex justify-center mb-6">
-              {companyData.logo ? (
-                typeof companyData.logo === 'string' && companyData.logo.startsWith('http') ? (
-                  <img
-                    src={companyData.logo}
-                    alt={`Logo de ${companyData.name}`}
-                    className="w-32 h-32 rounded-full object-cover shadow-lg"
-                    loading="lazy"
-                  />
-                ) : (
-                  <div className="w-32 h-32 bg-yellow-400 rounded-full flex items-center justify-center shadow-lg text-6xl">
-                    {companyData.logo}
-                  </div>
-                )
+              {companyData.logo_url ? (
+                <img
+                  src={companyData.logo_url}
+                  alt={`Logo de ${companyData.fantasy_name}`}
+                  className="w-32 h-32 rounded-full object-cover shadow-lg"
+                  loading="lazy"
+                />
               ) : (
-                <div className="w-32 h-32 bg-yellow-400 rounded-full flex items-center justify-center shadow-lg">
+                <div className="w-32 h-32 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg">
                   <span className="text-4xl font-bold text-white">
-                    {companyData.name.substring(0, 2).toUpperCase()}
+                    {companyData.fantasy_name?.substring(0, 2).toUpperCase() || "EM"}
                   </span>
                 </div>
               )}
@@ -193,8 +153,9 @@ export default function CompanyPublicProfile() {
             {/* Rating */}
             <div className="flex justify-center items-center gap-2 mb-4">
               {[1, 2, 3, 4, 5].map((star) => {
-                const isFullStar = star <= Math.floor(companyData.rating);
-                const isHalfStar = star === Math.ceil(companyData.rating) && companyData.rating % 1 !== 0;
+                const rating = companyData.rating || 5.0;
+                const isFullStar = star <= Math.floor(rating);
+                const isHalfStar = star === Math.ceil(rating) && rating % 1 !== 0;
                 
                 if (isFullStar) {
                   return <Star key={star} size={24} className="fill-green-500 text-green-500" />;
@@ -212,13 +173,13 @@ export default function CompanyPublicProfile() {
                 }
               })}
               <span className={`ml-2 font-semibold ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
-                {companyData.rating}
+                {companyData.rating || 5.0}
               </span>
             </div>
 
             {/* Company Name */}
             <h1 className={`text-2xl font-semibold text-center mb-8 ${darkMode ? "text-white" : "text-gray-800"}`}>
-              Nome Empresa: {companyData.name}
+              {companyData.fantasy_name}
             </h1>
 
             {/* Expandable Sections */}
@@ -244,7 +205,7 @@ export default function CompanyPublicProfile() {
                       Conheça a Empresa
                     </h3>
                     <p className={`leading-relaxed ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-                      {companyData.about}
+                      {companyData.about || companyData.description || "Informações não disponíveis"}
                     </p>
                   </div>
                 )}
@@ -270,11 +231,20 @@ export default function CompanyPublicProfile() {
                     <h3 className={`text-xl font-bold mb-4 ${darkMode ? "text-white" : "text-gray-800"}`}>
                       O que buscamos
                     </h3>
-                    <ul className={`list-disc pl-6 space-y-2 ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-                      {companyData.seeking.map((item, index) => (
-                        <li key={index}>{item}</li>
-                      ))}
-                    </ul>
+                    <div className={`${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+                      {companyData.seeking ? (
+                        <ul className="list-disc pl-6 space-y-2">
+                          {(typeof companyData.seeking === 'string' 
+                            ? companyData.seeking.split('\n') 
+                            : companyData.seeking
+                          ).map((item: string, index: number) => (
+                            <li key={index}>{item}</li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p>Informações não disponíveis</p>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
@@ -362,14 +332,20 @@ export default function CompanyPublicProfile() {
                       ×
                     </button>
                     <h3 className={`text-xl font-bold mb-4 ${darkMode ? "text-white" : "text-gray-800"}`}>
-                      Formação
+                      Informações da Empresa
                     </h3>
                     <div className={`space-y-2 ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-                      <p>{companyData.training.name}</p>
-                      <p>{companyData.training.fantasyName}</p>
-                      <p>{companyData.training.foundingDate}</p>
-                      <p>{companyData.training.location}</p>
-                      <p>{companyData.training.founder}</p>
+                      <p><strong>CNPJ:</strong> {companyData.cnpj}</p>
+                      <p><strong>Nome Fantasia:</strong> {companyData.fantasy_name}</p>
+                      {companyData.city && companyData.state && (
+                        <p><strong>Localização:</strong> {companyData.city}, {companyData.state}</p>
+                      )}
+                      {companyData.sector && (
+                        <p><strong>Setor:</strong> {companyData.sector}</p>
+                      )}
+                      {companyData.training && (
+                        <p><strong>Formação:</strong> {companyData.training}</p>
+                      )}
                     </div>
                   </div>
                 )}
@@ -395,33 +371,41 @@ export default function CompanyPublicProfile() {
                     <h3 className={`text-xl font-bold mb-6 ${darkMode ? "text-white" : "text-gray-800"}`}>
                       Vagas Disponíveis
                     </h3>
-                    <div className="space-y-4">
-                      {companyData.jobs.map((job) => (
-                        <div
-                          key={job.id}
-                          className={`p-4 rounded-xl border ${darkMode ? "bg-gray-700 border-gray-600" : "bg-gray-50 border-gray-200"}`}
-                        >
-                          <h4 className={`font-semibold mb-2 ${darkMode ? "text-white" : "text-gray-800"}`}>
-                            {job.title}
-                          </h4>
-                          <p className={`text-sm mb-2 ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
-                            {job.type}
-                          </p>
-                          <div className="flex items-center justify-between">
-                            <span className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
-                              {job.applicants} candidatos
-                            </span>
-                            <Button
-                              onClick={() => navigate(`/job/${job.id}`)}
-                              variant="link"
-                              className="text-blue-600 hover:text-blue-700 p-0 h-auto"
-                            >
-                              Ver detalhes →
-                            </Button>
+                    {companyJobs.length === 0 ? (
+                      <p className={darkMode ? "text-gray-400" : "text-gray-600"}>
+                        Nenhuma vaga disponível no momento.
+                      </p>
+                    ) : (
+                      <div className="space-y-4">
+                        {companyJobs.map((job) => (
+                          <div
+                            key={job.id}
+                            className={`p-4 rounded-xl border ${darkMode ? "bg-gray-700 border-gray-600" : "bg-gray-50 border-gray-200"}`}
+                          >
+                            <h4 className={`font-semibold mb-2 ${darkMode ? "text-white" : "text-gray-800"}`}>
+                              {job.title}
+                            </h4>
+                            <p className={`text-sm mb-2 ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+                              {job.job_type} · {job.location}
+                            </p>
+                            <div className="flex items-center justify-between">
+                              {job.salary && (
+                                <span className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+                                  R$ {job.salary}
+                                </span>
+                              )}
+                              <Button
+                                onClick={() => navigate(`/job/${job.id}`)}
+                                variant="link"
+                                className="text-blue-600 hover:text-blue-700 p-0 h-auto ml-auto"
+                              >
+                                Ver detalhes →
+                              </Button>
+                            </div>
                           </div>
-                        </div>
-                      ))}
-                    </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

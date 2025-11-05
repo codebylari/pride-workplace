@@ -35,23 +35,36 @@ export default function JobApplication() {
       if (!id) return;
       
       try {
-        const { data: jobData, error } = await supabase
+        // Buscar dados da vaga
+        const { data: jobData, error: jobError } = await supabase
           .from("jobs")
-          .select(`
-            *,
-            company_profiles!jobs_company_id_fkey (
-              fantasy_name,
-              logo_url,
-              city,
-              state
-            )
-          `)
+          .select("*")
           .eq("id", id)
-          .single();
+          .maybeSingle();
 
-        if (error) throw error;
+        if (jobError) throw jobError;
         
-        setJob(jobData);
+        if (!jobData) {
+          setJob(null);
+          setLoading(false);
+          return;
+        }
+
+        // Buscar dados da empresa
+        const { data: companyData, error: companyError } = await supabase
+          .from("company_profiles")
+          .select("fantasy_name, logo_url, city, state")
+          .eq("user_id", jobData.company_id)
+          .maybeSingle();
+
+        if (companyError) {
+          console.error("Erro ao buscar empresa:", companyError);
+        }
+
+        setJob({
+          ...jobData,
+          company_profiles: companyData || { fantasy_name: "Empresa", logo_url: null, city: "", state: "" }
+        });
       } catch (error) {
         console.error("Error fetching job:", error);
         toast({
