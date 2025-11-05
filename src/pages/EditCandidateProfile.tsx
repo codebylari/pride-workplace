@@ -37,6 +37,10 @@ export default function EditCandidateProfile() {
   const [genderEdit, setGenderEdit] = useState<"feminino" | "masculino" | "outros" | "">("");
   const [customGenderEdit, setCustomGenderEdit] = useState("");
   const [linkedinUrl, setLinkedinUrl] = useState("");
+  const [state, setState] = useState("");
+  const [city, setCity] = useState("");
+  const [states, setStates] = useState<Array<{ sigla: string; nome: string }>>([]);
+  const [cities, setCities] = useState<string[]>([]);
 
   // Load existing data
   useEffect(() => {
@@ -50,7 +54,7 @@ export default function EditCandidateProfile() {
       
       const { data } = await supabase
         .from("profiles")
-        .select("gender, linkedin_url, about_me, experience, education, journey, resume_url, photo_url")
+        .select("gender, linkedin_url, about_me, experience, education, journey, resume_url, photo_url, state, city")
         .eq("id", user.id)
         .maybeSingle();
       
@@ -69,10 +73,32 @@ export default function EditCandidateProfile() {
         setEducation(data.education || "");
         setMyJourney(data.journey || "");
         setCurrentPhotoUrl(data.photo_url || null);
+        setState(data.state || "");
+        setCity(data.city || "");
       }
     };
     loadProfile();
   }, [user?.id, user?.user_metadata?.full_name]);
+
+  // Load states from IBGE API
+  useEffect(() => {
+    fetch("https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome")
+      .then((res) => res.json())
+      .then((data) => setStates(data))
+      .catch((err) => console.error("Erro ao carregar estados:", err));
+  }, []);
+
+  // Load cities when state changes
+  useEffect(() => {
+    if (state) {
+      fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${state}/municipios?orderBy=nome`)
+        .then((res) => res.json())
+        .then((data) => setCities(data.map((city: any) => city.nome)))
+        .catch((err) => console.error("Erro ao carregar cidades:", err));
+    } else {
+      setCities([]);
+    }
+  }, [state]);
 
   const userName = user?.user_metadata?.full_name?.split(" ")[0] || "Usuário";
   const fullName = user?.user_metadata?.full_name || "Usuário";
@@ -158,7 +184,9 @@ export default function EditCandidateProfile() {
       resume !== null ||
       aiGeneratedResumeUrl !== null ||
       hasGenderChange ||
-      linkedinUrl.trim() !== "";
+      linkedinUrl.trim() !== "" ||
+      state.trim() !== "" ||
+      city.trim() !== "";
 
     if (!hasChanges) {
       toast({
@@ -194,6 +222,12 @@ export default function EditCandidateProfile() {
       }
       if (myJourney.trim() !== "") {
         updates.journey = myJourney;
+      }
+      if (state.trim() !== "") {
+        updates.state = state;
+      }
+      if (city.trim() !== "") {
+        updates.city = city;
       }
 
       // Handle AI-generated resume
@@ -349,6 +383,46 @@ export default function EditCandidateProfile() {
                     />
                   )}
                 </div>
+              </div>
+
+              <div>
+                <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-800"}`}>
+                  Estado
+                </label>
+                <select
+                  value={state}
+                  onChange={(e) => {
+                    setState(e.target.value);
+                    setCity("");
+                  }}
+                  className={`w-full p-3 rounded-lg border ${darkMode ? "bg-gray-600 text-white border-gray-500" : "bg-gray-100 text-gray-800 border-gray-300"}`}
+                >
+                  <option value="">Selecione o estado</option>
+                  {states.map((st) => (
+                    <option key={st.sigla} value={st.sigla}>
+                      {st.nome}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-800"}`}>
+                  Cidade
+                </label>
+                <select
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  disabled={!state}
+                  className={`w-full p-3 rounded-lg border ${darkMode ? "bg-gray-600 text-white border-gray-500" : "bg-gray-100 text-gray-800 border-gray-300"} ${!state ? "opacity-50 cursor-not-allowed" : ""}`}
+                >
+                  <option value="">Selecione a cidade</option>
+                  {cities.map((ct) => (
+                    <option key={ct} value={ct}>
+                      {ct}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
 

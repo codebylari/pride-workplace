@@ -31,6 +31,8 @@ export default function CandidateProfile() {
   const [photoUrl, setPhotoUrl] = useState<string | null>(null);
   const [userGender, setUserGender] = useState<string>("");
   const [userLinkedin, setUserLinkedin] = useState<string>("");
+  const [userState, setUserState] = useState<string>("");
+  const [userCity, setUserCity] = useState<string>("");
   const [profileData, setProfileData] = useState<{
     about_me?: string;
     experience?: string;
@@ -44,13 +46,15 @@ export default function CandidateProfile() {
       if (!user?.id) return;
       const { data } = await supabase
         .from("profiles")
-        .select("photo_url, full_name, gender, linkedin_url, about_me, experience, education, journey, resume_url, rating, total_ratings")
+        .select("photo_url, full_name, gender, linkedin_url, about_me, experience, education, journey, resume_url, rating, total_ratings, state, city")
         .eq("id", user.id)
         .maybeSingle();
       
       setPhotoUrl(data?.photo_url ?? null);
       setUserGender(data?.gender ?? "");
       setUserLinkedin(data?.linkedin_url ?? "");
+      setUserState(data?.state ?? "");
+      setUserCity(data?.city ?? "");
       setRating(data?.rating ?? 5.0);
       setTotalRatings(data?.total_ratings ?? 0);
       
@@ -72,6 +76,8 @@ export default function CandidateProfile() {
       photoUrl, // Foto de perfil
       userGender, // Gênero
       userLinkedin, // LinkedIn
+      userState, // Estado
+      userCity, // Cidade
       profileData.about_me, // Sobre Mim
       profileData.experience, // Experiência
       profileData.education, // Formação
@@ -266,6 +272,11 @@ export default function CandidateProfile() {
               {userGender && (
                 <p className={`text-lg ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
                   Gênero: {userGender.charAt(0).toUpperCase() + userGender.slice(1)}
+                </p>
+              )}
+              {(userCity || userState) && (
+                <p className={`text-lg ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+                  Localização: {userCity}{userCity && userState ? ", " : ""}{userState}
                 </p>
               )}
             </div>
