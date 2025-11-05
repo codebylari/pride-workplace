@@ -93,6 +93,7 @@ const App = () => (
             <Route path="/candidate-swipe" element={<CandidateSwipe />} />
             <Route path="/candidate-job-details/:id" element={<CandidateJobDetails />} />
             <Route path="/job/:id" element={<CandidateJobDetails />} />
+            <Route path="/job-details/:id" element={<CandidateJobDetails />} />
             <Route path="/job/:id/apply" element={<CandidateJobApplication />} />
             <Route path="/candidate-job-application/:id" element={<CandidateJobApplication />} />
             <Route path="/candidate-my-applications" element={<CandidateMyApplications />} />
