@@ -27,6 +27,12 @@ export default function EditCandidateProfile() {
 
   // Form fields
   const [displayName, setDisplayName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [birthDate, setBirthDate] = useState("");
+  const [socialName, setSocialName] = useState("");
+  const [cpf, setCpf] = useState("");
+  const [rg, setRg] = useState("");
+  const [phone, setPhone] = useState("");
   const [aboutMe, setAboutMe] = useState("");
   const [experience, setExperience] = useState("");
   const [education, setEducation] = useState("");
@@ -52,6 +58,23 @@ export default function EditCandidateProfile() {
         setDisplayName(user.user_metadata.full_name);
       }
       
+      // Get user metadata for full name
+      const fullNameFromMeta = user.user_metadata?.full_name || "";
+      const nameParts = fullNameFromMeta.split(" ");
+      if (nameParts.length > 0) {
+        setDisplayName(nameParts[0]);
+        if (nameParts.length > 1) {
+          setLastName(nameParts.slice(1).join(" "));
+        }
+      }
+
+      // Get birth_date, social_name, cpf, rg, phone from user metadata
+      setBirthDate(user.user_metadata?.birth_date || "");
+      setSocialName(user.user_metadata?.social_name || "");
+      setCpf(user.user_metadata?.cpf || "");
+      setRg(user.user_metadata?.rg || "");
+      setPhone(user.user_metadata?.phone || "");
+
       const { data } = await supabase
         .from("profiles")
         .select("gender, linkedin_url, about_me, experience, education, journey, resume_url, photo_url, state, city")
@@ -176,6 +199,12 @@ export default function EditCandidateProfile() {
 
     const hasChanges = 
       displayName.trim() !== "" || 
+      lastName.trim() !== "" ||
+      birthDate.trim() !== "" ||
+      socialName.trim() !== "" ||
+      cpf.trim() !== "" ||
+      rg.trim() !== "" ||
+      phone.trim() !== "" ||
       aboutMe.trim() !== "" || 
       experience.trim() !== "" || 
       education.trim() !== "" || 
@@ -199,6 +228,28 @@ export default function EditCandidateProfile() {
 
     try {
       const updates: any = {};
+      const metadataUpdates: any = {};
+
+      // Update full_name in auth metadata
+      if (displayName.trim() !== "" || lastName.trim() !== "") {
+        const newFullName = `${displayName.trim()} ${lastName.trim()}`.trim();
+        metadataUpdates.full_name = newFullName;
+      }
+
+      // Update other metadata fields
+      if (birthDate.trim() !== "") metadataUpdates.birth_date = birthDate;
+      if (socialName.trim() !== "") metadataUpdates.social_name = socialName;
+      if (cpf.trim() !== "") metadataUpdates.cpf = cpf;
+      if (rg.trim() !== "") metadataUpdates.rg = rg;
+      if (phone.trim() !== "") metadataUpdates.phone = phone;
+
+      // Update user metadata if there are changes
+      if (Object.keys(metadataUpdates).length > 0) {
+        const { error: metaError } = await supabase.auth.updateUser({
+          data: metadataUpdates
+        });
+        if (metaError) throw metaError;
+      }
 
       // Save gender
       if (hasGenderChange) {
@@ -317,17 +368,115 @@ export default function EditCandidateProfile() {
           {/* Photo Section */}
           <div className="flex flex-col md:flex-row gap-8 items-start">
             <div className="flex-1 space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-800"}`}>
+                    Nome
+                  </label>
+                  <input
+                    type="text"
+                    value={displayName}
+                    onChange={(e) => setDisplayName(e.target.value)}
+                    className={`w-full p-3 rounded-lg border ${darkMode ? "bg-gray-600 text-white border-gray-500" : "bg-gray-100 text-gray-800 border-gray-300"}`}
+                    placeholder="Digite seu nome"
+                  />
+                </div>
+
+                <div>
+                  <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-800"}`}>
+                    Sobrenome
+                  </label>
+                  <input
+                    type="text"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    className={`w-full p-3 rounded-lg border ${darkMode ? "bg-gray-600 text-white border-gray-500" : "bg-gray-100 text-gray-800 border-gray-300"}`}
+                    placeholder="Digite seu sobrenome"
+                  />
+                </div>
+              </div>
+
               <div>
                 <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-800"}`}>
-                  Nome exibido
+                  Data de Nascimento
+                </label>
+                <input
+                  type="date"
+                  value={birthDate}
+                  onChange={(e) => setBirthDate(e.target.value)}
+                  className={`w-full p-3 rounded-lg border ${darkMode ? "bg-gray-600 text-white border-gray-500" : "bg-gray-100 text-gray-800 border-gray-300"}`}
+                />
+              </div>
+
+              <div>
+                <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-800"}`}>
+                  Nome Social (opcional)
                 </label>
                 <input
                   type="text"
-                  value={displayName}
-                  onChange={(e) => setDisplayName(e.target.value)}
+                  value={socialName}
+                  onChange={(e) => setSocialName(e.target.value)}
                   className={`w-full p-3 rounded-lg border ${darkMode ? "bg-gray-600 text-white border-gray-500" : "bg-gray-100 text-gray-800 border-gray-300"}`}
-                  placeholder="Digite seu nome"
+                  placeholder="Digite seu nome social"
                 />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-800"}`}>
+                    CPF
+                  </label>
+                  <input
+                    type="text"
+                    value={cpf}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, '');
+                      setCpf(value);
+                    }}
+                    maxLength={11}
+                    className={`w-full p-3 rounded-lg border ${darkMode ? "bg-gray-600 text-white border-gray-500" : "bg-gray-100 text-gray-800 border-gray-300"}`}
+                    placeholder="00000000000"
+                  />
+                </div>
+
+                <div>
+                  <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-800"}`}>
+                    RG
+                  </label>
+                  <input
+                    type="text"
+                    value={rg}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, '');
+                      setRg(value);
+                    }}
+                    maxLength={15}
+                    className={`w-full p-3 rounded-lg border ${darkMode ? "bg-gray-600 text-white border-gray-500" : "bg-gray-100 text-gray-800 border-gray-300"}`}
+                    placeholder="000000000"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-800"}`}>
+                  Telefone/WhatsApp
+                </label>
+                <div className="relative">
+                  <span className={`${darkMode ? "text-gray-400" : "text-gray-500"} absolute left-3 top-1/2 -translate-y-1/2 font-medium`}>
+                    +55
+                  </span>
+                  <input
+                    type="text"
+                    value={phone}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, '');
+                      setPhone(value);
+                    }}
+                    maxLength={11}
+                    placeholder="11999999999"
+                    className={`w-full p-3 pl-14 rounded-lg border ${darkMode ? "bg-gray-600 text-white border-gray-500" : "bg-gray-100 text-gray-800 border-gray-300"}`}
+                  />
+                </div>
               </div>
 
               <div>
