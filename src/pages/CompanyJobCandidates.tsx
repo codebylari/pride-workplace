@@ -72,7 +72,7 @@ export default function JobCandidates() {
           // Fetch candidate profile
           const { data: profile } = await supabase
             .from("profiles")
-            .select("full_name, city, state, rating")
+            .select("full_name, city, state, rating, photo_url")
             .eq("id", app.candidate_id)
             .single();
 
@@ -281,11 +281,19 @@ export default function JobCandidates() {
                     className={`p-6 rounded-xl shadow-sm ${darkMode ? "bg-gray-700" : "bg-white"}`}
                   >
                     <div className="flex items-start gap-6">
-                      <div className="w-24 h-24 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
-                        <span className="text-2xl font-bold text-white">
-                          {application.profiles?.full_name?.substring(0, 2).toUpperCase() || "??"}
-                        </span>
-                      </div>
+                      {application.profiles?.photo_url ? (
+                        <img
+                          src={application.profiles.photo_url}
+                          alt={application.profiles.full_name}
+                          className="w-24 h-24 rounded-full object-cover flex-shrink-0"
+                        />
+                      ) : (
+                        <div className="w-24 h-24 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+                          <span className="text-2xl font-bold text-white">
+                            {application.profiles?.full_name?.substring(0, 2).toUpperCase() || "??"}
+                          </span>
+                        </div>
+                      )}
                       
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
@@ -314,7 +322,7 @@ export default function JobCandidates() {
 
                         <div className="flex gap-3 mt-4 flex-wrap">
                           <Button
-                            onClick={() => navigate(`/candidate-profile/${application.candidate_id}`)}
+                            onClick={() => navigate(`/company-view-candidate-profile/${application.candidate_id}`)}
                             variant="outline"
                             size="sm"
                           >
