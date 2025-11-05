@@ -465,12 +465,12 @@ export default function CandidateDashboard() {
                 className={`rounded-xl shadow-md hover:shadow-lg transition p-4 sm:p-6 space-y-3 sm:space-y-4 ${darkMode ? "bg-gray-700" : "bg-white"}`}
               >
                 {/* Company Logo */}
-                <div className="flex items-start justify-between">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center overflow-hidden">
+                <div className="flex items-start justify-between mb-2">
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center overflow-hidden shadow-md">
                     {job.company_profiles?.logo_url ? (
                       <img src={job.company_profiles.logo_url} alt="Logo" className="w-full h-full object-cover" />
                     ) : (
-                      <span className="text-xs font-bold text-white">
+                      <span className="text-xl sm:text-2xl font-bold text-white">
                         {job.company_profiles?.fantasy_name?.charAt(0) || "E"}
                       </span>
                     )}
@@ -485,7 +485,7 @@ export default function CandidateDashboard() {
                 </div>
 
                 {/* Company Name */}
-                <h3 className={`text-sm sm:text-base font-semibold ${darkMode ? "text-white" : "text-gray-800"}`}>
+                <h3 className={`text-base sm:text-lg font-bold mb-1 ${darkMode ? "text-white" : "text-gray-900"}`}>
                   {job.company_profiles?.fantasy_name || "Empresa"}
                 </h3>
 
