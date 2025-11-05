@@ -162,42 +162,13 @@ export default function JobDetails() {
             </button>
           </div>
 
-          {/* Location */}
-          <div className="flex items-center gap-2 mb-4">
-            <MapPin size={20} className="text-pink-500" />
-            <span className={`text-lg ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-              {job.location}
-              {job.companyCity && job.companyState && ` · ${job.companyCity}, ${job.companyState}`}
-            </span>
-          </div>
-
-          {/* Job Title and Type */}
-          <h2 className={`text-2xl font-bold mb-2 ${darkMode ? "text-white" : "text-gray-800"}`}>
-            {job.job_type} – {job.title}
+          {/* Job Title */}
+          <h2 className={`text-2xl font-bold mb-4 ${darkMode ? "text-white" : "text-gray-800"}`}>
+            {job.title}
           </h2>
-
-          {/* Tags */}
-          <div className="flex gap-2 mb-6">
-            <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 px-4 py-1">
-              {job.job_type}
-            </Badge>
-            {job.location && (
-              <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 px-4 py-1">
-                {job.location}
-              </Badge>
-            )}
-          </div>
 
           {/* Job Details Grid */}
           <div className="grid grid-cols-2 gap-4 mb-6">
-            {job.salary && (
-              <div className="flex items-center gap-2">
-                <DollarSign size={20} className="text-pink-500" />
-                <span className={darkMode ? "text-gray-300" : "text-gray-700"}>
-                  R$ {job.salary}
-                </span>
-              </div>
-            )}
             <div className="flex items-center gap-2">
               <Briefcase size={20} className="text-pink-500" />
               <span className={darkMode ? "text-gray-300" : "text-gray-700"}>
@@ -205,15 +176,23 @@ export default function JobDetails() {
               </span>
             </div>
             <div className="flex items-center gap-2">
+              <MapPin size={20} className="text-pink-500" />
+              <span className={darkMode ? "text-gray-300" : "text-gray-700"}>
+                {job.location}
+              </span>
+            </div>
+            {job.salary && (
+              <div className="flex items-center gap-2">
+                <DollarSign size={20} className="text-pink-500" />
+                <span className={darkMode ? "text-gray-300" : "text-gray-700"}>
+                  {job.salary}
+                </span>
+              </div>
+            )}
+            <div className="flex items-center gap-2">
               <Calendar size={20} className="text-pink-500" />
               <span className={darkMode ? "text-gray-300" : "text-gray-700"}>
                 Publicado em {new Date(job.created_at).toLocaleDateString('pt-BR')}
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Home size={20} className="text-pink-500" />
-              <span className={darkMode ? "text-gray-300" : "text-gray-700"}>
-                {job.location}
               </span>
             </div>
           </div>
