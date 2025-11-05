@@ -111,12 +111,21 @@ export default function EditCompanyJob() {
     fetchCompanyLocation();
   }, [user]);
 
-  // Atualizar cidade automaticamente quando modelo de trabalho mudar
+  // Atualizar cidade automaticamente quando modelo de trabalho mudar ou dados da vaga carregarem
   useEffect(() => {
     if (workModel === "Presencial" || workModel === "Híbrido") {
       setCity(companyCity);
     } else if (workModel === "Remoto") {
       setCity("Remoto");
+    }
+  }, [workModel, companyCity]);
+
+  // Atualizar cidade ao carregar os dados da vaga
+  useEffect(() => {
+    if (workModel && companyCity) {
+      if (workModel === "Presencial" || workModel === "Híbrido") {
+        setCity(companyCity);
+      }
     }
   }, [workModel, companyCity]);
 
