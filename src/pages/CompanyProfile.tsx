@@ -51,6 +51,7 @@ export default function CompanyProfile() {
     description: "",
     sector: "",
     city: "",
+    state: "",
     fantasy_name: "",
     cnpj: ""
   });
@@ -63,7 +64,7 @@ export default function CompanyProfile() {
       
       const { data } = await supabase
         .from("company_profiles")
-        .select("logo_url, about, seeking, training, description, sector, city, fantasy_name, cnpj, rating, total_ratings")
+        .select("logo_url, about, seeking, training, description, sector, city, state, fantasy_name, cnpj, rating, total_ratings")
         .eq("user_id", user.id)
         .maybeSingle();
       
@@ -78,7 +79,7 @@ export default function CompanyProfile() {
             name: "",
             fantasyName: "",
             foundingDate: "",
-            location: "",
+            location: data.city && data.state ? `${data.city}, ${data.state}` : "",
             founder: ""
           },
           testimonials: [],
@@ -86,6 +87,7 @@ export default function CompanyProfile() {
           description: data.description || "",
           sector: data.sector || "",
           city: data.city || "",
+          state: data.state || "",
           fantasy_name: data.fantasy_name || "",
           cnpj: data.cnpj || ""
         });
@@ -137,7 +139,8 @@ export default function CompanyProfile() {
       companyData.about,
       companyData.seeking.length > 0 ? "has_seeking" : null,
       companyData.sector,
-      companyData.city
+      companyData.city,
+      companyData.state
     ];
     
     const filledFields = fields.filter(field => field && field.toString().trim() !== "").length;
@@ -278,9 +281,16 @@ export default function CompanyProfile() {
             </div>
 
             {/* Company Name */}
-            <h1 className={`text-2xl font-semibold text-center mb-8 ${darkMode ? "text-white" : "text-gray-800"}`}>
+            <h1 className={`text-2xl font-semibold text-center mb-2 ${darkMode ? "text-white" : "text-gray-800"}`}>
               Nome Empresa: {companyName}
             </h1>
+
+            {/* Location */}
+            {(companyData.city && companyData.state) && (
+              <p className={`text-center mb-8 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+                📍 {companyData.city}, {companyData.state}
+              </p>
+            )}
 
             {/* Action Buttons and Expandable Sections */}
             <div className="space-y-3 max-w-2xl mx-auto px-2 sm:px-4">

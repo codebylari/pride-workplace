@@ -29,8 +29,15 @@ export default function EditCompanyProfile() {
   const [about, setAbout] = useState("");
   const [seeking, setSeeking] = useState("");
   const [sector, setSector] = useState("");
+  const [state, setState] = useState("");
+  const [city, setCity] = useState("");
   const [logo, setLogo] = useState<string | null>(null);
   const [currentLogoUrl, setCurrentLogoUrl] = useState<string | null>(null);
+
+  // Estados e cidades
+  const [states, setStates] = useState<Array<{ id: number; sigla: string; nome: string }>>([]);
+  const [cities, setCities] = useState<Array<{ id: number; nome: string }>>([]);
+  const [loadingCities, setLoadingCities] = useState(false);
 
   // Original values to track changes
   const [originalValues, setOriginalValues] = useState({
@@ -38,8 +45,38 @@ export default function EditCompanyProfile() {
     about: "",
     seeking: "",
     sector: "",
+    state: "",
+    city: "",
     logo: null as string | null
   });
+
+  // Carregar estados da API do IBGE
+  useEffect(() => {
+    fetch("https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome")
+      .then((res) => res.json())
+      .then((data) => setStates(data))
+      .catch((err) => console.error("Erro ao carregar estados:", err));
+  }, []);
+
+  // Carregar cidades quando estado muda
+  useEffect(() => {
+    if (!state) {
+      setCities([]);
+      return;
+    }
+
+    setLoadingCities(true);
+    fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${state}/municipios?orderBy=nome`)
+      .then((res) => res.json())
+      .then((data) => {
+        setCities(data);
+        setLoadingCities(false);
+      })
+      .catch((err) => {
+        console.error("Erro ao carregar cidades:", err);
+        setLoadingCities(false);
+      });
+  }, [state]);
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -52,7 +89,7 @@ export default function EditCompanyProfile() {
       
       const { data } = await supabase
         .from("company_profiles")
-        .select("logo_url, about, seeking, sector")
+        .select("logo_url, about, seeking, sector, state, city")
         .eq("user_id", user.id)
         .maybeSingle();
       
@@ -61,6 +98,8 @@ export default function EditCompanyProfile() {
         about: data?.about || "",
         seeking: data?.seeking || "",
         sector: data?.sector || "",
+        state: data?.state || "",
+        city: data?.city || "",
         logo: data?.logo_url || null
       };
 
@@ -68,6 +107,8 @@ export default function EditCompanyProfile() {
       setAbout(initialData.about);
       setSeeking(initialData.seeking);
       setSector(initialData.sector);
+      setState(initialData.state);
+      setCity(initialData.city);
       setCurrentLogoUrl(data?.logo_url || null);
       setOriginalValues(initialData);
     };
@@ -100,6 +141,8 @@ export default function EditCompanyProfile() {
       about !== originalValues.about ||
       seeking !== originalValues.seeking ||
       sector !== originalValues.sector ||
+      state !== originalValues.state ||
+      city !== originalValues.city ||
       logo !== originalValues.logo
     );
   };
@@ -130,6 +173,8 @@ export default function EditCompanyProfile() {
         about: about.trim(),
         seeking: seeking.trim(),
         sector: sector.trim(),
+        state: state,
+        city: city,
       };
 
       // Handle logo upload if there's a new one
@@ -209,6 +254,8 @@ export default function EditCompanyProfile() {
         about,
         seeking,
         sector,
+        state,
+        city,
         logo: updates.logo_url || logo
       });
 
@@ -305,6 +352,48 @@ export default function EditCompanyProfile() {
                   placeholder="Ex: Tecnologia, Educação, Saúde"
                   className={darkMode ? "bg-gray-700 text-white" : ""}
                 />
+              </div>
+
+              <div>
+                <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-900"}`}>
+                  Estado (UF)
+                </label>
+                <select
+                  value={state}
+                  onChange={(e) => {
+                    setState(e.target.value);
+                    setCity("");
+                  }}
+                  className={`w-full p-3 rounded-md border ${darkMode ? "bg-gray-700 text-white border-gray-600" : "border-input"} focus:outline-none focus:ring-2 focus:ring-ring`}
+                >
+                  <option value="">Selecione o estado</option>
+                  {states.map((st) => (
+                    <option key={st.id} value={st.sigla}>
+                      {st.nome} ({st.sigla})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-900"}`}>
+                  Cidade
+                </label>
+                <select
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  disabled={!state || loadingCities}
+                  className={`w-full p-3 rounded-md border ${darkMode ? "bg-gray-700 text-white border-gray-600" : "border-input"} focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50`}
+                >
+                  <option value="">
+                    {loadingCities ? "Carregando..." : !state ? "Selecione o estado primeiro" : "Selecione a cidade"}
+                  </option>
+                  {cities.map((c) => (
+                    <option key={c.id} value={c.nome}>
+                      {c.nome}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
 
