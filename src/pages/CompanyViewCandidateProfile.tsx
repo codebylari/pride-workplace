@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/dialog";
 
 export default function CompanyViewCandidateProfile() {
-  const { candidateId } = useParams();
+  const { id: candidateId } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
   const { darkMode } = useTheme();
