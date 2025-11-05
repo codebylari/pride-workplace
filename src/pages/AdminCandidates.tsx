@@ -11,11 +11,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
-import { ArrowLeft, Edit, Trash2 } from "lucide-react";
+import { ArrowLeft, Edit, Trash2, FileText } from "lucide-react";
 
 interface Candidate {
   id: string;
   full_name: string;
+  email: string;
   city: string;
   state: string;
   gender: string;
@@ -38,17 +39,11 @@ export default function AdminCandidates() {
   const [editingCandidate, setEditingCandidate] = useState<Candidate | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState({ 
-    full_name: "", 
-    city: "", 
-    state: "", 
-    gender: "",
-    photo_url: "",
     linkedin_url: "",
     about_me: "",
     experience: "",
     education: "",
-    journey: "",
-    resume_url: ""
+    journey: ""
   });
 
   useEffect(() => {
@@ -64,13 +59,25 @@ export default function AdminCandidates() {
 
   const fetchCandidates = async () => {
     try {
-      const { data, error } = await supabase
+      const { data: profilesData, error: profilesError } = await supabase
         .from("profiles")
         .select("id, full_name, city, state, gender, photo_url, linkedin_url, about_me, experience, education, journey, resume_url, rating, total_ratings, created_at")
         .order("created_at", { ascending: false });
 
-      if (error) throw error;
-      setCandidates(data || []);
+      if (profilesError) throw profilesError;
+
+      // Fetch emails from auth.users
+      const candidatesWithEmail = await Promise.all(
+        (profilesData || []).map(async (profile) => {
+          const { data: userData } = await supabase.auth.admin.getUserById(profile.id);
+          return {
+            ...profile,
+            email: userData?.user?.email || "Não disponível"
+          };
+        })
+      );
+
+      setCandidates(candidatesWithEmail);
     } catch (error) {
       console.error("Error fetching candidates:", error);
     }
@@ -79,17 +86,11 @@ export default function AdminCandidates() {
   const handleEdit = (candidate: Candidate) => {
     setEditingCandidate(candidate);
     setEditForm({
-      full_name: candidate.full_name,
-      city: candidate.city || "",
-      state: candidate.state || "",
-      gender: candidate.gender || "",
-      photo_url: candidate.photo_url || "",
       linkedin_url: candidate.linkedin_url || "",
       about_me: candidate.about_me || "",
       experience: candidate.experience || "",
       education: candidate.education || "",
-      journey: candidate.journey || "",
-      resume_url: candidate.resume_url || "",
+      journey: candidate.journey || ""
     });
   };
 
@@ -182,6 +183,7 @@ export default function AdminCandidates() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Nome</TableHead>
+                  <TableHead>Email</TableHead>
                   <TableHead>Localização</TableHead>
                   <TableHead>Gênero</TableHead>
                   <TableHead>Avaliação</TableHead>
@@ -193,9 +195,10 @@ export default function AdminCandidates() {
                 {candidates.map((candidate) => (
                   <TableRow key={candidate.id}>
                     <TableCell className="font-medium">{candidate.full_name}</TableCell>
+                    <TableCell>{candidate.email}</TableCell>
                     <TableCell>
                       {candidate.city && candidate.state
-                        ? `${candidate.city} - ${candidate.state}`
+                        ? `${candidate.city}, ${candidate.state}`
                         : "Não informado"}
                     </TableCell>
                     <TableCell>{candidate.gender || "Não informado"}</TableCell>
@@ -233,116 +236,117 @@ export default function AdminCandidates() {
         <Dialog open={!!editingCandidate} onOpenChange={() => setEditingCandidate(null)}>
           <DialogContent className="max-h-[90vh] overflow-y-auto max-w-2xl">
             <DialogHeader>
-              <DialogTitle>Editar Candidato</DialogTitle>
+              <DialogTitle>Visualizar/Editar Candidato</DialogTitle>
             </DialogHeader>
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="full_name">Nome Completo</Label>
-                <Input
-                  id="full_name"
-                  value={editForm.full_name}
-                  onChange={(e) => setEditForm({ ...editForm, full_name: e.target.value })}
-                />
-              </div>
-              
-              <div className="grid grid-cols-2 gap-4">
+            {editingCandidate && (
+              <div className="space-y-4">
+                {/* Foto */}
+                <div className="flex justify-center mb-4">
+                  {editingCandidate.photo_url ? (
+                    <img 
+                      src={editingCandidate.photo_url} 
+                      alt={editingCandidate.full_name}
+                      className="w-32 h-32 rounded-full object-cover border-4 border-primary"
+                    />
+                  ) : (
+                    <div className="w-32 h-32 rounded-full bg-muted flex items-center justify-center">
+                      <span className="text-4xl text-muted-foreground">
+                        {editingCandidate.full_name.charAt(0).toUpperCase()}
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Campos não editáveis */}
                 <div>
-                  <Label htmlFor="city">Cidade</Label>
+                  <Label>Nome Completo</Label>
+                  <Input value={editingCandidate.full_name} disabled />
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label>Cidade</Label>
+                    <Input value={editingCandidate.city || "Não informado"} disabled />
+                  </div>
+                  <div>
+                    <Label>Estado</Label>
+                    <Input value={editingCandidate.state || "Não informado"} disabled />
+                  </div>
+                </div>
+
+                <div>
+                  <Label>Gênero</Label>
+                  <Input value={editingCandidate.gender || "Não informado"} disabled />
+                </div>
+
+                {/* Campos editáveis */}
+                <div>
+                  <Label htmlFor="linkedin_url">LinkedIn URL</Label>
                   <Input
-                    id="city"
-                    value={editForm.city}
-                    onChange={(e) => setEditForm({ ...editForm, city: e.target.value })}
+                    id="linkedin_url"
+                    value={editForm.linkedin_url}
+                    onChange={(e) => setEditForm({ ...editForm, linkedin_url: e.target.value })}
+                    placeholder="https://linkedin.com/in/..."
                   />
                 </div>
+
                 <div>
-                  <Label htmlFor="state">Estado</Label>
-                  <Input
-                    id="state"
-                    value={editForm.state}
-                    onChange={(e) => setEditForm({ ...editForm, state: e.target.value })}
+                  <Label htmlFor="about_me">Sobre Mim</Label>
+                  <Textarea
+                    id="about_me"
+                    value={editForm.about_me}
+                    onChange={(e) => setEditForm({ ...editForm, about_me: e.target.value })}
+                    rows={3}
                   />
                 </div>
-              </div>
 
-              <div>
-                <Label htmlFor="gender">Gênero</Label>
-                <Input
-                  id="gender"
-                  value={editForm.gender}
-                  onChange={(e) => setEditForm({ ...editForm, gender: e.target.value })}
-                />
-              </div>
+                <div>
+                  <Label htmlFor="experience">Experiência</Label>
+                  <Textarea
+                    id="experience"
+                    value={editForm.experience}
+                    onChange={(e) => setEditForm({ ...editForm, experience: e.target.value })}
+                    rows={3}
+                  />
+                </div>
 
-              <div>
-                <Label htmlFor="linkedin_url">LinkedIn URL</Label>
-                <Input
-                  id="linkedin_url"
-                  value={editForm.linkedin_url}
-                  onChange={(e) => setEditForm({ ...editForm, linkedin_url: e.target.value })}
-                  placeholder="https://linkedin.com/in/..."
-                />
-              </div>
+                <div>
+                  <Label htmlFor="education">Formação</Label>
+                  <Textarea
+                    id="education"
+                    value={editForm.education}
+                    onChange={(e) => setEditForm({ ...editForm, education: e.target.value })}
+                    rows={2}
+                  />
+                </div>
 
-              <div>
-                <Label htmlFor="photo_url">URL da Foto</Label>
-                <Input
-                  id="photo_url"
-                  value={editForm.photo_url}
-                  onChange={(e) => setEditForm({ ...editForm, photo_url: e.target.value })}
-                  placeholder="https://..."
-                />
-              </div>
+                <div>
+                  <Label htmlFor="journey">Jornada</Label>
+                  <Textarea
+                    id="journey"
+                    value={editForm.journey}
+                    onChange={(e) => setEditForm({ ...editForm, journey: e.target.value })}
+                    rows={2}
+                  />
+                </div>
 
-              <div>
-                <Label htmlFor="about_me">Sobre Mim</Label>
-                <Textarea
-                  id="about_me"
-                  value={editForm.about_me}
-                  onChange={(e) => setEditForm({ ...editForm, about_me: e.target.value })}
-                  rows={3}
-                />
+                {/* Currículo */}
+                <div>
+                  <Label>Currículo</Label>
+                  {editingCandidate.resume_url ? (
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      onClick={() => window.open(editingCandidate.resume_url, '_blank')}
+                    >
+                      Visualizar Currículo
+                    </Button>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">Nenhum currículo cadastrado</p>
+                  )}
+                </div>
               </div>
-
-              <div>
-                <Label htmlFor="experience">Experiência</Label>
-                <Textarea
-                  id="experience"
-                  value={editForm.experience}
-                  onChange={(e) => setEditForm({ ...editForm, experience: e.target.value })}
-                  rows={3}
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="education">Formação</Label>
-                <Textarea
-                  id="education"
-                  value={editForm.education}
-                  onChange={(e) => setEditForm({ ...editForm, education: e.target.value })}
-                  rows={2}
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="journey">Jornada</Label>
-                <Textarea
-                  id="journey"
-                  value={editForm.journey}
-                  onChange={(e) => setEditForm({ ...editForm, journey: e.target.value })}
-                  rows={2}
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="resume_url">URL do Currículo</Label>
-                <Input
-                  id="resume_url"
-                  value={editForm.resume_url}
-                  onChange={(e) => setEditForm({ ...editForm, resume_url: e.target.value })}
-                  placeholder="https://..."
-                />
-              </div>
-            </div>
+            )}
             <DialogFooter>
               <Button variant="outline" onClick={() => setEditingCandidate(null)}>
                 Cancelar
