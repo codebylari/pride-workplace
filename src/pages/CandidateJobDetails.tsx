@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Menu, Star, MapPin, DollarSign, Briefcase, Calendar, Home } from "lucide-react";
 import { NotificationsPanel } from "@/components/NotificationsPanel";
@@ -7,30 +7,82 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
 import { useTheme } from "@/contexts/ThemeContext";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 export default function JobDetails() {
   const navigate = useNavigate();
   const { id } = useParams();
   const { user } = useAuth();
   const { darkMode } = useTheme();
+  const { toast } = useToast();
   const [showSidebar, setShowSidebar] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [job, setJob] = useState<any>(null);
 
-  // Mock data - será substituído por dados reais do banco
-  const job = {
-    id: id,
-    company: "Mercado Livre",
-    logo: "🛒",
-    title: "Analista de TI",
-    type: "Vaga Temporária",
-    location: "Remoto | Freelancer",
-    tags: ["Freelancer", "Remoto", "Part-time"],
-    salary: "R$ a combinar",
-    contractType: "Freelancer",
-    publishedDate: "18/09/2025",
-    workType: "Trabalho 100% remoto",
-    description: `A empresa busca profissional de TI para atuação temporária em suporte e manutenção de sistemas voltados ao comércio eletrônico. O contratado(a) será responsável por auxiliar a equipe de vendas online na resolução de problemas técnicos, garantindo o bom funcionamento das operações digitais e da infraestrutura de TI.`
+  useEffect(() => {
+    if (id) {
+      fetchJobDetails();
+    }
+  }, [id]);
+
+  const fetchJobDetails = async () => {
+    try {
+      setLoading(true);
+      
+      // Buscar dados da vaga
+      const { data: jobData, error: jobError } = await supabase
+        .from("jobs")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+      if (jobError) throw jobError;
+
+      // Buscar dados da empresa
+      const { data: companyData, error: companyError } = await supabase
+        .from("company_profiles")
+        .select("fantasy_name, logo_url, city, state")
+        .eq("user_id", jobData.company_id)
+        .single();
+
+      if (companyError) throw companyError;
+
+      setJob({
+        ...jobData,
+        companyName: companyData?.fantasy_name || "Empresa",
+        companyLogo: companyData?.logo_url || "🏢",
+        companyCity: companyData?.city,
+        companyState: companyData?.state
+      });
+    } catch (error: any) {
+      console.error("Error fetching job details:", error);
+      toast({
+        title: "Erro ao carregar vaga",
+        description: "Não foi possível carregar os detalhes da vaga.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
+
+  if (loading) {
+    return (
+      <div className={`min-h-screen ${darkMode ? "bg-gray-800" : "bg-gray-50"} flex items-center justify-center`}>
+        <p className={darkMode ? "text-white" : "text-gray-800"}>Carregando...</p>
+      </div>
+    );
+  }
+
+  if (!job) {
+    return (
+      <div className={`min-h-screen ${darkMode ? "bg-gray-800" : "bg-gray-50"} flex items-center justify-center`}>
+        <p className={darkMode ? "text-white" : "text-gray-800"}>Vaga não encontrada</p>
+      </div>
+    );
+  }
 
   return (
     <div className={`min-h-screen ${darkMode ? "bg-gray-800" : "bg-gray-50"}`}>
@@ -55,15 +107,23 @@ export default function JobDetails() {
           {/* Company Header */}
           <div className="flex items-start justify-between mb-6">
             <div className="flex items-center gap-6">
-              <div className="w-32 h-32 rounded-full bg-yellow-400 flex items-center justify-center text-6xl shadow-lg">
-                {job.logo}
-              </div>
+              {job.companyLogo && job.companyLogo.startsWith('http') ? (
+                <img 
+                  src={job.companyLogo} 
+                  alt={job.companyName}
+                  className="w-32 h-32 rounded-full object-cover shadow-lg"
+                />
+              ) : (
+                <div className="w-32 h-32 rounded-full bg-yellow-400 flex items-center justify-center text-6xl shadow-lg">
+                  {job.companyLogo}
+                </div>
+              )}
               <div>
                 <h1 className={`text-3xl font-bold mb-2 ${darkMode ? "text-white" : "text-gray-800"}`}>
-                  {job.company}
+                  {job.companyName}
                 </h1>
               <Button
-                onClick={() => navigate("/company/1/profile")}
+                onClick={() => navigate(`/company-public-profile/${job.company_id}`)}
                 className="bg-[#FFF8D6] hover:bg-[#FFF2A9] text-gray-800 rounded-full px-6"
               >
                 Ver perfil da Empresa
@@ -87,50 +147,53 @@ export default function JobDetails() {
             <MapPin size={20} className="text-pink-500" />
             <span className={`text-lg ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
               {job.location}
+              {job.companyCity && job.companyState && ` · ${job.companyCity}, ${job.companyState}`}
             </span>
           </div>
 
           {/* Job Title and Type */}
           <h2 className={`text-2xl font-bold mb-2 ${darkMode ? "text-white" : "text-gray-800"}`}>
-            {job.type} – {job.title}
+            {job.job_type} – {job.title}
           </h2>
 
           {/* Tags */}
           <div className="flex gap-2 mb-6">
-            {job.tags.map((tag) => (
-              <Badge
-                key={tag}
-                className="bg-blue-100 text-blue-800 hover:bg-blue-200 px-4 py-1"
-              >
-                {tag}
+            <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 px-4 py-1">
+              {job.job_type}
+            </Badge>
+            {job.location && (
+              <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 px-4 py-1">
+                {job.location}
               </Badge>
-            ))}
+            )}
           </div>
 
           {/* Job Details Grid */}
           <div className="grid grid-cols-2 gap-4 mb-6">
-            <div className="flex items-center gap-2">
-              <DollarSign size={20} className="text-pink-500" />
-              <span className={darkMode ? "text-gray-300" : "text-gray-700"}>
-                {job.salary}
-              </span>
-            </div>
+            {job.salary && (
+              <div className="flex items-center gap-2">
+                <DollarSign size={20} className="text-pink-500" />
+                <span className={darkMode ? "text-gray-300" : "text-gray-700"}>
+                  R$ {job.salary}
+                </span>
+              </div>
+            )}
             <div className="flex items-center gap-2">
               <Briefcase size={20} className="text-pink-500" />
               <span className={darkMode ? "text-gray-300" : "text-gray-700"}>
-                {job.contractType}
+                {job.job_type}
               </span>
             </div>
             <div className="flex items-center gap-2">
               <Calendar size={20} className="text-pink-500" />
               <span className={darkMode ? "text-gray-300" : "text-gray-700"}>
-                Publicado em {job.publishedDate}
+                Publicado em {new Date(job.created_at).toLocaleDateString('pt-BR')}
               </span>
             </div>
             <div className="flex items-center gap-2">
               <Home size={20} className="text-pink-500" />
               <span className={darkMode ? "text-gray-300" : "text-gray-700"}>
-                {job.workType}
+                {job.location}
               </span>
             </div>
           </div>
