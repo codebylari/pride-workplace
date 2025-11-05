@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
 import { ArrowLeft, Edit, Trash2 } from "lucide-react";
 
@@ -19,6 +20,11 @@ interface Company {
   city: string;
   state: string;
   sector: string;
+  description: string;
+  about: string;
+  training: string;
+  seeking: string;
+  logo_url: string;
   rating: number;
   total_ratings: number;
   created_at: string;
@@ -30,7 +36,18 @@ export default function AdminCompanies() {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [editingCompany, setEditingCompany] = useState<Company | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
-  const [editForm, setEditForm] = useState({ fantasy_name: "", city: "", state: "", sector: "" });
+  const [editForm, setEditForm] = useState({ 
+    fantasy_name: "", 
+    cnpj: "",
+    city: "", 
+    state: "", 
+    sector: "",
+    description: "",
+    about: "",
+    training: "",
+    seeking: "",
+    logo_url: ""
+  });
 
   useEffect(() => {
     if (!loading && userRole !== "admin") {
@@ -61,9 +78,15 @@ export default function AdminCompanies() {
     setEditingCompany(company);
     setEditForm({
       fantasy_name: company.fantasy_name,
+      cnpj: company.cnpj || "",
       city: company.city || "",
       state: company.state || "",
       sector: company.sector || "",
+      description: company.description || "",
+      about: company.about || "",
+      training: company.training || "",
+      seeking: company.seeking || "",
+      logo_url: company.logo_url || "",
     });
   };
 
@@ -207,41 +230,105 @@ export default function AdminCompanies() {
         </Card>
 
         <Dialog open={!!editingCompany} onOpenChange={() => setEditingCompany(null)}>
-          <DialogContent>
+          <DialogContent className="max-h-[90vh] overflow-y-auto max-w-2xl">
             <DialogHeader>
               <DialogTitle>Editar Empresa</DialogTitle>
             </DialogHeader>
             <div className="space-y-4">
-              <div>
-                <Label htmlFor="fantasy_name">Nome Fantasia</Label>
-                <Input
-                  id="fantasy_name"
-                  value={editForm.fantasy_name}
-                  onChange={(e) => setEditForm({ ...editForm, fantasy_name: e.target.value })}
-                />
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="fantasy_name">Nome Fantasia</Label>
+                  <Input
+                    id="fantasy_name"
+                    value={editForm.fantasy_name}
+                    onChange={(e) => setEditForm({ ...editForm, fantasy_name: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="cnpj">CNPJ</Label>
+                  <Input
+                    id="cnpj"
+                    value={editForm.cnpj}
+                    onChange={(e) => setEditForm({ ...editForm, cnpj: e.target.value })}
+                  />
+                </div>
               </div>
-              <div>
-                <Label htmlFor="city">Cidade</Label>
-                <Input
-                  id="city"
-                  value={editForm.city}
-                  onChange={(e) => setEditForm({ ...editForm, city: e.target.value })}
-                />
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="city">Cidade</Label>
+                  <Input
+                    id="city"
+                    value={editForm.city}
+                    onChange={(e) => setEditForm({ ...editForm, city: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="state">Estado</Label>
+                  <Input
+                    id="state"
+                    value={editForm.state}
+                    onChange={(e) => setEditForm({ ...editForm, state: e.target.value })}
+                  />
+                </div>
               </div>
-              <div>
-                <Label htmlFor="state">Estado</Label>
-                <Input
-                  id="state"
-                  value={editForm.state}
-                  onChange={(e) => setEditForm({ ...editForm, state: e.target.value })}
-                />
-              </div>
+
               <div>
                 <Label htmlFor="sector">Setor</Label>
                 <Input
                   id="sector"
                   value={editForm.sector}
                   onChange={(e) => setEditForm({ ...editForm, sector: e.target.value })}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="description">Descrição</Label>
+                <Textarea
+                  id="description"
+                  value={editForm.description}
+                  onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
+                  rows={3}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="about">Sobre a Empresa</Label>
+                <Textarea
+                  id="about"
+                  value={editForm.about}
+                  onChange={(e) => setEditForm({ ...editForm, about: e.target.value })}
+                  rows={3}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="training">Treinamentos Oferecidos</Label>
+                <Textarea
+                  id="training"
+                  value={editForm.training}
+                  onChange={(e) => setEditForm({ ...editForm, training: e.target.value })}
+                  rows={2}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="seeking">O que a Empresa Busca</Label>
+                <Textarea
+                  id="seeking"
+                  value={editForm.seeking}
+                  onChange={(e) => setEditForm({ ...editForm, seeking: e.target.value })}
+                  rows={2}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="logo_url">URL do Logo</Label>
+                <Input
+                  id="logo_url"
+                  value={editForm.logo_url}
+                  onChange={(e) => setEditForm({ ...editForm, logo_url: e.target.value })}
+                  placeholder="https://..."
                 />
               </div>
             </div>
