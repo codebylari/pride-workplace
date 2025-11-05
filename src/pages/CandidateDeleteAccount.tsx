@@ -61,24 +61,7 @@ export default function DeleteAccount() {
         throw new Error("Senha incorreta");
       }
 
-      // First, delete all related data
-      if (isCompany) {
-        // Delete company-related data
-        await supabase.from('company_profiles').delete().eq('user_id', user?.id);
-        await supabase.from('jobs').delete().eq('company_id', user?.id);
-      } else {
-        // Delete candidate-related data
-        await supabase.from('profiles').delete().eq('id', user?.id);
-        await supabase.from('applications').delete().eq('candidate_id', user?.id);
-      }
-
-      // Delete notifications
-      await supabase.from('notifications').delete().eq('user_id', user?.id);
-      
-      // Delete user role
-      await supabase.from('user_roles').delete().eq('user_id', user?.id);
-
-      // Finally, delete the auth user using edge function (this allows re-registration with same email)
+      // Delete the auth user and all related data using edge function
       const { data: { session } } = await supabase.auth.getSession();
       const { error: deleteError } = await supabase.functions.invoke('delete-user-account', {
         headers: {
@@ -131,8 +114,13 @@ export default function DeleteAccount() {
           </h1>
 
           <div className={`${darkMode ? "bg-gray-700" : "bg-white"} rounded-2xl p-8 shadow-lg space-y-6`}>
+            <div className={`${darkMode ? "bg-red-400/10 border-red-400/20" : "bg-red-50 border-red-200"} border rounded-lg p-4 mb-4`}>
+              <p className={`text-center ${darkMode ? "text-red-300" : "text-red-800"} font-medium`}>
+                ⚠️ ATENÇÃO: Esta ação deletará PERMANENTEMENTE sua conta e todos os seus dados do banco de dados!
+              </p>
+            </div>
             <p className={`text-center ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
-              Para deletar sua conta <strong>permanentemente</strong>, basta confirmar sua senha. Esta ação não pode ser desfeita, mas você poderá criar uma nova conta usando o mesmo email no futuro, se desejar.
+              Todos os seus dados serão apagados permanentemente. Esta ação não pode ser desfeita! Você poderá criar uma nova conta usando o mesmo email no futuro, mas seus dados atuais serão perdidos.
             </p>
 
             <div>
@@ -189,13 +177,21 @@ export default function DeleteAccount() {
               </div>
             </div>
 
-            <button
-              onClick={handleDelete}
-              disabled={loading}
-              className="w-full py-3 bg-green-400 hover:bg-green-500 text-white rounded-lg transition disabled:opacity-50 font-medium"
-            >
-              {loading ? "Deletando..." : "Confirmar"}
-            </button>
+            <div className="flex gap-4 pt-4">
+              <button
+                onClick={() => navigate(isCompany ? "/company-account" : "/candidate-account")}
+                className="flex-1 py-3 bg-gray-400 hover:bg-gray-500 text-white rounded-lg transition font-medium"
+              >
+                Voltar
+              </button>
+              <button
+                onClick={handleDelete}
+                disabled={loading}
+                className="flex-1 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg transition disabled:opacity-50 font-medium"
+              >
+                {loading ? "Deletando..." : "Deletar Permanentemente"}
+              </button>
+            </div>
           </div>
         </div>
       </main>

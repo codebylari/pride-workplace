@@ -45,7 +45,38 @@ serve(async (req) => {
 
     const userId = user.id;
 
-    // Delete user using admin privileges
+    // First, get user role to determine what data to delete
+    const { data: userRole } = await supabaseAdmin
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', userId)
+      .single();
+
+    // Delete all related data using admin client (bypasses RLS)
+    if (userRole?.role === 'company') {
+      // Delete company-specific data
+      await supabaseAdmin.from('jobs').delete().eq('company_id', userId);
+      await supabaseAdmin.from('company_profiles').delete().eq('user_id', userId);
+      await supabaseAdmin.from('matches').delete().eq('company_id', userId);
+      await supabaseAdmin.from('testimonials').delete().eq('company_id', userId);
+      await supabaseAdmin.from('ratings').delete().eq('rater_id', userId);
+      await supabaseAdmin.from('ratings').delete().eq('rated_user_id', userId);
+    } else {
+      // Delete candidate-specific data
+      await supabaseAdmin.from('applications').delete().eq('candidate_id', userId);
+      await supabaseAdmin.from('profiles').delete().eq('id', userId);
+      await supabaseAdmin.from('matches').delete().eq('candidate_id', userId);
+      await supabaseAdmin.from('testimonials').delete().eq('candidate_id', userId);
+      await supabaseAdmin.from('ratings').delete().eq('rater_id', userId);
+      await supabaseAdmin.from('ratings').delete().eq('rated_user_id', userId);
+    }
+
+    // Delete common data
+    await supabaseAdmin.from('swipes').delete().eq('user_id', userId);
+    await supabaseAdmin.from('notifications').delete().eq('user_id', userId);
+    await supabaseAdmin.from('user_roles').delete().eq('user_id', userId);
+
+    // Finally, delete user from auth
     const { error: deleteError } = await supabaseAdmin.auth.admin.deleteUser(userId);
 
     if (deleteError) {

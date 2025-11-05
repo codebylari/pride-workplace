@@ -186,8 +186,8 @@ export default function DeactivateAccount() {
 
             <div className="flex gap-4 pt-4">
               <button
-                onClick={() => navigate(isCompany ? "/company-account" : "/account")}
-                className="flex-1 py-3 bg-green-400 hover:bg-green-500 text-white rounded-lg transition font-medium"
+                onClick={() => navigate(isCompany ? "/company-account" : "/candidate-account")}
+                className="flex-1 py-3 bg-gray-400 hover:bg-gray-500 text-white rounded-lg transition font-medium"
               >
                 Voltar
               </button>
