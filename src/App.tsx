@@ -60,6 +60,7 @@ import MatchesCompany from "./pages/MatchesCompany";
 import TermsCompany from "./pages/TermsCompany";
 import Matches from "./pages/Matches";
 import Company from "./pages/Company";
+import Account from "./pages/Account";
 
 // Admin Pages
 import AdminDashboard from "./pages/AdminDashboard";
@@ -138,6 +139,7 @@ const App = () => (
             <Route path="/terms-company" element={<TermsCompany />} />
             <Route path="/matches" element={<Matches />} />
             <Route path="/company" element={<Company />} />
+            <Route path="/account" element={<Account />} />
             
             {/* Admin Routes */}
             <Route path="/admin-dashboard" element={<AdminDashboard />} />
