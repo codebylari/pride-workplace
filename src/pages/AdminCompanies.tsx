@@ -64,7 +64,7 @@ export default function AdminCompanies() {
     try {
       const { data, error } = await supabase
         .from("company_profiles")
-        .select("*")
+        .select("id, user_id, fantasy_name, cnpj, city, state, sector, description, about, training, seeking, logo_url, rating, total_ratings, created_at")
         .order("created_at", { ascending: false });
 
       if (error) throw error;
