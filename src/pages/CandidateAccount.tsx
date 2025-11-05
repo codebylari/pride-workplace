@@ -6,7 +6,7 @@ import { ChatBot } from "@/components/ChatBot";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 
-export default function Account() {
+export default function CandidateAccount() {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
   const [showSidebar, setShowSidebar] = useState(false);
@@ -174,7 +174,7 @@ export default function Account() {
             {/* Alterar senha */}
             <button 
               className={`w-full flex justify-between items-center py-4 border-b ${darkMode ? "border-gray-600 text-gray-300 hover:text-white" : "border-gray-200 text-gray-700 hover:text-gray-900"} transition text-left`}
-              onClick={() => navigate("/change-password")}
+              onClick={() => navigate("/candidate-change-password")}
             >
               <span className="text-lg">Alterar senha</span>
             </button>
@@ -182,7 +182,7 @@ export default function Account() {
             {/* Alterar email */}
             <button 
               className={`w-full flex justify-between items-center py-4 border-b ${darkMode ? "border-gray-600 text-gray-300 hover:text-white" : "border-gray-200 text-gray-700 hover:text-gray-900"} transition text-left`}
-              onClick={() => navigate("/change-email")}
+              onClick={() => navigate("/candidate-change-email")}
             >
               <span className="text-lg">Alterar email</span>
             </button>
@@ -226,7 +226,7 @@ export default function Account() {
               <button
                 onClick={() => {
                   setShowDeactivateDialog(false);
-                  navigate("/deactivate-account");
+                  navigate("/candidate-deactivate-account");
                 }}
                 className="flex-1 py-3 bg-green-400 hover:bg-green-500 text-white rounded-lg transition font-medium"
               >
@@ -255,7 +255,7 @@ export default function Account() {
               <button
                 onClick={() => {
                   setShowDeleteDialog(false);
-                  navigate("/delete-account");
+                  navigate("/candidate-delete-account");
                 }}
                 className="flex-1 py-3 bg-green-400 hover:bg-green-500 text-white rounded-lg transition font-medium"
               >
