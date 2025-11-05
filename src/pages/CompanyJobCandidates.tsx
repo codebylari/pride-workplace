@@ -58,27 +58,39 @@ export default function JobCandidates() {
       if (jobError) throw jobError;
       setJob(jobData);
 
-      // Fetch applications for this job with ratings info
+      // Fetch applications for this job
       const { data: applicationsData, error: applicationsError } = await supabase
         .from("applications")
-        .select(`
-          *,
-          profiles:candidate_id (
-            full_name,
-            city,
-            state,
-            rating
-          ),
-          ratings!ratings_application_id_fkey (
-            id,
-            rating,
-            rater_id
-          )
-        `)
+        .select("*")
         .eq("job_id", id);
 
       if (applicationsError) throw applicationsError;
-      setApplications(applicationsData || []);
+
+      // Fetch profiles and ratings separately for each application
+      const enrichedApplications = await Promise.all(
+        (applicationsData || []).map(async (app) => {
+          // Fetch candidate profile
+          const { data: profile } = await supabase
+            .from("profiles")
+            .select("full_name, city, state, rating")
+            .eq("id", app.candidate_id)
+            .single();
+
+          // Fetch ratings
+          const { data: ratings } = await supabase
+            .from("ratings")
+            .select("id, rating, rater_id")
+            .eq("application_id", app.id);
+
+          return {
+            ...app,
+            profiles: profile,
+            ratings: ratings || []
+          };
+        })
+      );
+
+      setApplications(enrichedApplications);
     } catch (error: any) {
       toast({
         title: "Erro ao carregar candidatos",
