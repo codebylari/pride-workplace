@@ -115,7 +115,7 @@ export default function CreateJob() {
     if (workModel === "Presencial" || workModel === "Híbrido") {
       setCity(companyCity);
     } else if (workModel === "Remoto") {
-      setCity("");
+      setCity("Remoto");
     }
   }, [workModel, companyCity]);
 
@@ -340,11 +340,11 @@ export default function CreateJob() {
                 </label>
                 <Input
                   value={city}
-                  disabled={workModel === "Presencial" || workModel === "Híbrido"}
+                  disabled={true}
                   onChange={(e) => setCity(e.target.value)}
                   required={workModel === "Presencial" || workModel === "Híbrido"}
-                  className={`${darkMode ? "bg-gray-700 text-white border-gray-600" : ""} ${(workModel === "Presencial" || workModel === "Híbrido") ? "opacity-70 cursor-not-allowed" : ""}`}
-                  placeholder={workModel === "Remoto" ? "Não aplicável para remoto" : companyCity || "Cidade da empresa"}
+                  className={`${darkMode ? "bg-gray-700 text-white border-gray-600" : ""} opacity-70 cursor-not-allowed`}
+                  placeholder="Selecione o modelo de trabalho primeiro"
                 />
               </div>
 
