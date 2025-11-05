@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, Camera, Upload, X, Linkedin, Sparkles, FileUp } from "lucide-react";
+import { Menu, Camera, Upload, X, Linkedin, Sparkles, FileUp, Lock, AlertCircle } from "lucide-react";
 import { CandidateSidebar } from "@/components/CandidateSidebar";
 import { NotificationsPanel } from "@/components/NotificationsPanel";
 import { Button } from "@/components/ui/button";
@@ -206,9 +206,7 @@ export default function EditCandidateProfile() {
     const hasChanges = 
       displayName.trim() !== "" || 
       lastName.trim() !== "" ||
-      birthDate.trim() !== "" ||
       socialName.trim() !== "" ||
-      cpf.trim() !== "" ||
       rg.trim() !== "" ||
       phone.trim() !== "" ||
       aboutMe.trim() !== "" || 
@@ -242,10 +240,8 @@ export default function EditCandidateProfile() {
         metadataUpdates.full_name = newFullName;
       }
 
-      // Update other metadata fields
-      if (birthDate.trim() !== "") metadataUpdates.birth_date = birthDate;
+      // Update other metadata fields (excluding fixed fields: cpf, birthDate)
       if (socialName.trim() !== "") metadataUpdates.social_name = socialName;
-      if (cpf.trim() !== "") metadataUpdates.cpf = cpf;
       if (rg.trim() !== "") metadataUpdates.rg = rg;
       if (phone.trim() !== "") metadataUpdates.phone = phone;
 
@@ -374,44 +370,96 @@ export default function EditCandidateProfile() {
           {/* Photo Section */}
           <div className="flex flex-col md:flex-row gap-8 items-start">
             <div className="flex-1 space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-800"}`}>
-                    Nome
-                  </label>
-                  <input
-                    type="text"
-                    value={displayName}
-                    onChange={(e) => setDisplayName(e.target.value)}
-                    className={`w-full p-3 rounded-lg border ${darkMode ? "bg-gray-600 text-white border-gray-500" : "bg-gray-100 text-gray-800 border-gray-300"}`}
-                    placeholder="Digite seu nome"
-                  />
+              {/* Seção de campos restritos */}
+              <div className={`p-4 rounded-lg border-2 ${darkMode ? "bg-gray-800 border-yellow-600" : "bg-yellow-50 border-yellow-400"}`}>
+                <div className="flex items-center gap-2 mb-3">
+                  <Lock className="text-yellow-600" size={20} />
+                  <span className={`text-sm font-medium ${darkMode ? "text-yellow-400" : "text-yellow-700"}`}>
+                    Campos com edição restrita - Requer validação especial
+                  </span>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-800"}`}>
+                      Nome
+                    </label>
+                    <input
+                      type="text"
+                      value={displayName}
+                      onChange={(e) => setDisplayName(e.target.value)}
+                      className={`w-full p-3 rounded-lg border ${darkMode ? "bg-gray-700 text-white border-yellow-600" : "bg-white text-gray-800 border-yellow-400"}`}
+                      placeholder="Digite seu nome"
+                    />
+                  </div>
+
+                  <div>
+                    <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-800"}`}>
+                      Sobrenome
+                    </label>
+                    <input
+                      type="text"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      className={`w-full p-3 rounded-lg border ${darkMode ? "bg-gray-700 text-white border-yellow-600" : "bg-white text-gray-800 border-yellow-400"}`}
+                      placeholder="Digite seu sobrenome"
+                    />
+                  </div>
                 </div>
 
-                <div>
+                <div className="mt-4">
                   <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-800"}`}>
-                    Sobrenome
+                    RG
                   </label>
                   <input
                     type="text"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    className={`w-full p-3 rounded-lg border ${darkMode ? "bg-gray-600 text-white border-gray-500" : "bg-gray-100 text-gray-800 border-gray-300"}`}
-                    placeholder="Digite seu sobrenome"
+                    value={rg}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, '');
+                      setRg(value);
+                    }}
+                    maxLength={15}
+                    className={`w-full p-3 rounded-lg border ${darkMode ? "bg-gray-700 text-white border-yellow-600" : "bg-white text-gray-800 border-yellow-400"}`}
+                    placeholder="000000000"
                   />
                 </div>
               </div>
 
-              <div>
-                <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-800"}`}>
-                  Data de Nascimento
-                </label>
-                <input
-                  type="date"
-                  value={birthDate}
-                  onChange={(e) => setBirthDate(e.target.value)}
-                  className={`w-full p-3 rounded-lg border ${darkMode ? "bg-gray-600 text-white border-gray-500" : "bg-gray-100 text-gray-800 border-gray-300"}`}
-                />
+              {/* Seção de campos fixos */}
+              <div className={`p-4 rounded-lg border-2 ${darkMode ? "bg-gray-800 border-gray-600" : "bg-gray-100 border-gray-300"}`}>
+                <div className="flex items-center gap-2 mb-3">
+                  <AlertCircle className={darkMode ? "text-gray-400" : "text-gray-600"} size={20} />
+                  <span className={`text-sm font-medium ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Campos fixos - Não editáveis
+                  </span>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className={`block mb-2 font-medium ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+                      CPF
+                    </label>
+                    <input
+                      type="text"
+                      value={cpf}
+                      disabled
+                      className={`w-full p-3 rounded-lg border cursor-not-allowed ${darkMode ? "bg-gray-900 text-gray-500 border-gray-700" : "bg-gray-200 text-gray-500 border-gray-400"}`}
+                      placeholder="00000000000"
+                    />
+                  </div>
+
+                  <div>
+                    <label className={`block mb-2 font-medium ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+                      Data de Nascimento
+                    </label>
+                    <input
+                      type="date"
+                      value={birthDate}
+                      disabled
+                      className={`w-full p-3 rounded-lg border cursor-not-allowed ${darkMode ? "bg-gray-900 text-gray-500 border-gray-700" : "bg-gray-200 text-gray-500 border-gray-400"}`}
+                    />
+                  </div>
+                </div>
               </div>
 
               <div>
@@ -427,41 +475,6 @@ export default function EditCandidateProfile() {
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-800"}`}>
-                    CPF
-                  </label>
-                  <input
-                    type="text"
-                    value={cpf}
-                    onChange={(e) => {
-                      const value = e.target.value.replace(/\D/g, '');
-                      setCpf(value);
-                    }}
-                    maxLength={11}
-                    className={`w-full p-3 rounded-lg border ${darkMode ? "bg-gray-600 text-white border-gray-500" : "bg-gray-100 text-gray-800 border-gray-300"}`}
-                    placeholder="00000000000"
-                  />
-                </div>
-
-                <div>
-                  <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-800"}`}>
-                    RG
-                  </label>
-                  <input
-                    type="text"
-                    value={rg}
-                    onChange={(e) => {
-                      const value = e.target.value.replace(/\D/g, '');
-                      setRg(value);
-                    }}
-                    maxLength={15}
-                    className={`w-full p-3 rounded-lg border ${darkMode ? "bg-gray-600 text-white border-gray-500" : "bg-gray-100 text-gray-800 border-gray-300"}`}
-                    placeholder="000000000"
-                  />
-                </div>
-              </div>
 
               <div>
                 <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-800"}`}>
