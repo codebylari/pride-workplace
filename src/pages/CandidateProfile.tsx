@@ -267,7 +267,7 @@ export default function CandidateProfile() {
             {/* Name and Gender */}
             <div className="text-center mb-4 space-y-1">
               <h1 className={`text-2xl font-bold ${darkMode ? "text-white" : "text-gray-800"}`}>
-                Nome: {fullName}
+                {fullName}
               </h1>
               {userGender && (
                 <p className={`text-lg ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
