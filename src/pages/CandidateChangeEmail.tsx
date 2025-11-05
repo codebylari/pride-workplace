@@ -70,7 +70,7 @@ export default function ChangeEmail() {
 
     try {
       const { error } = await supabase.auth.updateUser({
-        email: newEmail,
+        email: newEmail
       });
 
       if (error) throw error;
@@ -180,8 +180,14 @@ export default function ChangeEmail() {
             <div className="w-16 h-16 bg-green-400 rounded-full flex items-center justify-center">
               <CheckCircle2 className="w-10 h-10 text-white" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900">SUCESSO!</h2>
-            <p className="text-center text-gray-600">Seu email foi alterado com Sucesso!</p>
+            <h2 className="text-2xl font-bold text-gray-900">Email de Confirmação Enviado!</h2>
+            <p className="text-center text-gray-600 px-4">
+              Enviamos um email de confirmação para <strong>{newEmail}</strong>. 
+              Por favor, verifique sua caixa de entrada e clique no link de confirmação para finalizar a alteração do seu email.
+            </p>
+            <p className="text-sm text-center text-gray-500 px-4">
+              Seu email atual continuará ativo até que você confirme o novo email.
+            </p>
             <button
               onClick={() => {
                 setShowSuccessDialog(false);
