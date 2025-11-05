@@ -96,8 +96,14 @@ export default function EditCandidateProfile() {
         setEducation(data.education || "");
         setMyJourney(data.journey || "");
         setCurrentPhotoUrl(data.photo_url || null);
-        setState(data.state || "");
-        setCity(data.city || "");
+        
+        // Load state and city from database or fallback to user metadata
+        setState(data.state || user.user_metadata?.state || "");
+        setCity(data.city || user.user_metadata?.city || "");
+      } else {
+        // If no profile data, load from metadata
+        setState(user.user_metadata?.state || "");
+        setCity(user.user_metadata?.city || "");
       }
     };
     loadProfile();
