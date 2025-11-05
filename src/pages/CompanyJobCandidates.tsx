@@ -12,7 +12,13 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { RatingDialog } from "@/components/RatingDialog";
-import { ContractDialog } from "@/components/ContractDialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export default function JobCandidates() {
   const navigate = useNavigate();
@@ -30,10 +36,9 @@ export default function JobCandidates() {
     candidateId: string;
     candidateName: string;
   } | null>(null);
-  const [contractDialog, setContractDialog] = useState<{
+  const [contactDialog, setContactDialog] = useState<{
     open: boolean;
-    applicationId: string;
-    candidateId: string;
+    candidateEmail: string;
     candidateName: string;
   } | null>(null);
 
@@ -76,6 +81,10 @@ export default function JobCandidates() {
             .eq("id", app.candidate_id)
             .single();
 
+          // Fetch candidate email
+          const { data: contactInfo } = await supabase
+            .rpc("get_candidate_contact_info", { _candidate_id: app.candidate_id });
+
           // Fetch ratings
           const { data: ratings } = await supabase
             .from("ratings")
@@ -85,7 +94,8 @@ export default function JobCandidates() {
           return {
             ...app,
             profiles: profile,
-            ratings: ratings || []
+            ratings: ratings || [],
+            candidateEmail: contactInfo?.[0]?.email || null
           };
         })
       );
@@ -133,48 +143,32 @@ export default function JobCandidates() {
     }
   };
 
-  const handleDefineContract = async (startDate: string, endDate: string) => {
-    if (!contractDialog) return;
+  const handleContactCandidate = (candidateEmail: string, candidateName: string) => {
+    setContactDialog({
+      open: true,
+      candidateEmail,
+      candidateName
+    });
+  };
 
-    try {
-      const { error } = await supabase
-        .from("applications")
-        .update({
-          status: 'accepted',
-          contract_status: 'pending',
-          start_date: startDate,
-          end_date: endDate,
-          candidate_accepted: false
-        })
-        .eq("id", contractDialog.applicationId);
+  const handleSendEmail = () => {
+    if (!contactDialog) return;
 
-      if (error) throw error;
+    const subject = encodeURIComponent(`Oportunidade: ${job?.title}`);
+    const body = encodeURIComponent(
+      `Olá ${contactDialog.candidateName},\n\n` +
+      `Gostaria de conversar sobre a vaga de ${job?.title}.\n\n` +
+      `Atenciosamente,\n` +
+      `${user?.user_metadata?.company_name || 'Nossa equipe'}`
+    );
 
-      // Criar notificação para o candidato
-      await supabase
-        .from("notifications")
-        .insert({
-          user_id: contractDialog.candidateId,
-          title: "Nova Proposta de Contrato",
-          message: `Você recebeu uma proposta de contrato de ${job?.title}. Revise e responda.`,
-          type: "contract_proposal",
-          related_id: contractDialog.applicationId
-        });
+    // Abrir Gmail com email pré-preenchido
+    window.open(
+      `https://mail.google.com/mail/?view=cm&fs=1&to=${contactDialog.candidateEmail}&su=${subject}&body=${body}`,
+      '_blank'
+    );
 
-      toast({
-        title: "Contrato enviado!",
-        description: "O candidato receberá uma notificação para aceitar.",
-      });
-
-      setContractDialog(null);
-      fetchJobAndCandidates();
-    } catch (error: any) {
-      toast({
-        title: "Erro ao enviar contrato",
-        description: error.message,
-        variant: "destructive",
-      });
-    }
+    setContactDialog(null);
   };
 
   const handleUpdateContractStatus = async (applicationId: string, newStatus: string) => {
@@ -329,27 +323,31 @@ export default function JobCandidates() {
                             Ver Perfil
                           </Button>
                           
-                          {application.status === 'pending' && (
-                            <>
-                              <Button
-                                onClick={() => setContractDialog({
-                                  open: true,
-                                  applicationId: application.id,
-                                  candidateId: application.candidate_id,
-                                  candidateName: application.profiles?.full_name || "Candidato"
-                                })}
-                                size="sm"
-                              >
-                                Aceitar e Definir Contrato
-                              </Button>
-                              <Button
-                                onClick={() => handleUpdateStatus(application.id, 'contact_requested')}
-                                variant="secondary"
-                                size="sm"
-                              >
-                                Solicitar Contato
-                              </Button>
-                            </>
+                          {application.status === 'pending' && application.candidateEmail && (
+                            <Button
+                              onClick={() => handleContactCandidate(
+                                application.candidateEmail,
+                                application.profiles?.full_name || "Candidato"
+                              )}
+                              size="sm"
+                              className="bg-green-500 hover:bg-green-600"
+                            >
+                              Entrar em Contato
+                            </Button>
+                          )}
+                          
+                          {application.status === 'pending' && !application.candidateEmail && (
+                            <Button
+                              onClick={() => toast({
+                                title: "Email não disponível",
+                                description: "Não foi possível obter o email do candidato.",
+                                variant: "destructive"
+                              })}
+                              size="sm"
+                              disabled
+                            >
+                              Email Indisponível
+                            </Button>
                           )}
                           
                           {(application.status === 'accepted' || application.status === 'contact_requested') && application.contract_status === 'pending' && (
@@ -416,14 +414,41 @@ export default function JobCandidates() {
         />
       )}
       
-      {contractDialog && (
-        <ContractDialog
-          open={contractDialog.open}
-          onOpenChange={(open) => !open && setContractDialog(null)}
-          candidateName={contractDialog.candidateName}
-          onConfirm={handleDefineContract}
-        />
-      )}
+      {/* Contact Dialog */}
+      <Dialog open={contactDialog?.open || false} onOpenChange={(open) => !open && setContactDialog(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Contato com {contactDialog?.candidateName}</DialogTitle>
+            <DialogDescription>
+              Use o email abaixo para entrar em contato com o candidato diretamente.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-6 py-4">
+            <div className={`p-4 rounded-lg ${darkMode ? "bg-gray-800" : "bg-gray-100"}`}>
+              <p className={`text-sm mb-2 ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+                Email do candidato:
+              </p>
+              <p className={`text-lg font-semibold ${darkMode ? "text-white" : "text-gray-900"}`}>
+                {contactDialog?.candidateEmail}
+              </p>
+            </div>
+            <div className="flex gap-3">
+              <Button
+                onClick={handleSendEmail}
+                className="flex-1 bg-green-500 hover:bg-green-600"
+              >
+                Abrir Gmail para Enviar Mensagem
+              </Button>
+              <Button
+                onClick={() => setContactDialog(null)}
+                variant="outline"
+              >
+                Fechar
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
       
       <ChatBot />
     </div>
