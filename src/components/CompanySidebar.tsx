@@ -82,11 +82,11 @@ export function CompanySidebar({ showSidebar, setShowSidebar }: CompanySidebarPr
       >
         {/* Profile Section */}
         <div className="p-5 flex items-center gap-3 border-b border-white/20 flex-shrink-0">
-          <div className="w-16 h-16 rounded-full bg-gray-300 overflow-hidden border-3 border-white/30 flex-shrink-0">
+          <div className="w-20 h-20 rounded-full bg-gray-300 overflow-hidden border-3 border-white/30 flex-shrink-0">
             {logoUrl ? (
               <img src={logoUrl} alt={`Logo ${companyName}`} className="w-full h-full object-cover" loading="lazy" />
             ) : (
-              <div className="w-full h-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-xl font-bold text-white">
+              <div className="w-full h-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-2xl font-bold text-white">
                 {companyName.charAt(0).toUpperCase()}
               </div>
             )}
