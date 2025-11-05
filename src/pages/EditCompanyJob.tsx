@@ -4,6 +4,7 @@ import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { NotificationsPanel } from "@/components/NotificationsPanel";
 import { CompanySidebar } from "@/components/CompanySidebar";
 import { useAuth } from "@/hooks/useAuth";
@@ -11,6 +12,56 @@ import { ChatBot } from "@/components/ChatBot";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+
+// Áreas da tecnologia
+const techAreas = [
+  "Desenvolvimento Web",
+  "Desenvolvimento Mobile",
+  "DevOps",
+  "Data Science",
+  "Inteligência Artificial",
+  "Machine Learning",
+  "Banco de Dados",
+  "Segurança da Informação",
+  "UI/UX Design",
+  "Cloud Computing",
+  "Quality Assurance (QA)",
+  "Suporte Técnico",
+  "Análise de Sistemas",
+  "Gestão de Projetos",
+  "Infraestrutura de TI",
+];
+
+// Cidades por estado
+const citiesByState: Record<string, string[]> = {
+  AC: ["Rio Branco", "Cruzeiro do Sul", "Sena Madureira"],
+  AL: ["Maceió", "Arapiraca", "Palmeira dos Índios"],
+  AP: ["Macapá", "Santana", "Laranjal do Jari"],
+  AM: ["Manaus", "Parintins", "Itacoatiara"],
+  BA: ["Salvador", "Feira de Santana", "Vitória da Conquista", "Camaçari", "Ilhéus"],
+  CE: ["Fortaleza", "Caucaia", "Juazeiro do Norte", "Sobral"],
+  DF: ["Brasília"],
+  ES: ["Vitória", "Vila Velha", "Serra", "Cariacica"],
+  GO: ["Goiânia", "Aparecida de Goiânia", "Anápolis", "Rio Verde"],
+  MA: ["São Luís", "Imperatriz", "São José de Ribamar", "Timon"],
+  MT: ["Cuiabá", "Várzea Grande", "Rondonópolis", "Sinop"],
+  MS: ["Campo Grande", "Dourados", "Três Lagoas", "Corumbá"],
+  MG: ["Belo Horizonte", "Uberlândia", "Contagem", "Juiz de Fora", "Betim"],
+  PA: ["Belém", "Ananindeua", "Santarém", "Marabá"],
+  PB: ["João Pessoa", "Campina Grande", "Santa Rita", "Patos"],
+  PR: ["Curitiba", "Londrina", "Maringá", "Ponta Grossa", "Cascavel"],
+  PE: ["Recife", "Jaboatão dos Guararapes", "Olinda", "Caruaru"],
+  PI: ["Teresina", "Parnaíba", "Picos", "Floriano"],
+  RJ: ["Rio de Janeiro", "São Gonçalo", "Duque de Caxias", "Nova Iguaçu", "Niterói"],
+  RN: ["Natal", "Mossoró", "Parnamirim", "São Gonçalo do Amarante"],
+  RS: ["Porto Alegre", "Caxias do Sul", "Pelotas", "Canoas", "Santa Maria"],
+  RO: ["Porto Velho", "Ji-Paraná", "Ariquemes", "Cacoal"],
+  RR: ["Boa Vista", "Rorainópolis", "Caracaraí"],
+  SC: ["Florianópolis", "Joinville", "Blumenau", "São José", "Chapecó"],
+  SP: ["São Paulo", "Guarulhos", "Campinas", "São Bernardo do Campo", "Santos", "Ribeirão Preto"],
+  SE: ["Aracaju", "Nossa Senhora do Socorro", "Lagarto", "Itabaiana"],
+  TO: ["Palmas", "Araguaína", "Gurupi", "Porto Nacional"],
+};
 
 export default function EditCompanyJob() {
   const { id } = useParams();
@@ -20,6 +71,9 @@ export default function EditCompanyJob() {
   const { toast } = useToast();
   const [showSidebar, setShowSidebar] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [companyState, setCompanyState] = useState<string>("");
+  const [companyCity, setCompanyCity] = useState<string>("");
+  const [availableCities, setAvailableCities] = useState<string[]>([]);
 
   // Form states
   const [title, setTitle] = useState("");
@@ -31,6 +85,40 @@ export default function EditCompanyJob() {
   const [city, setCity] = useState("");
   const [experience, setExperience] = useState("");
   const [period, setPeriod] = useState("");
+
+  // Buscar estado e cidade da empresa
+  useEffect(() => {
+    const fetchCompanyLocation = async () => {
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from("company_profiles")
+        .select("state, city")
+        .eq("user_id", user.id)
+        .single();
+
+      if (data) {
+        if (data.state) {
+          setCompanyState(data.state);
+          setAvailableCities(citiesByState[data.state] || []);
+        }
+        if (data.city) {
+          setCompanyCity(data.city);
+        }
+      }
+    };
+
+    fetchCompanyLocation();
+  }, [user]);
+
+  // Atualizar cidade automaticamente quando modelo de trabalho mudar
+  useEffect(() => {
+    if (workModel === "Presencial" || workModel === "Híbrido") {
+      setCity(companyCity);
+    } else if (workModel === "Remoto") {
+      setCity("Remoto");
+    }
+  }, [workModel, companyCity]);
 
   useEffect(() => {
     if (id && user?.id) {
@@ -200,12 +288,18 @@ export default function EditCompanyJob() {
               <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-900"}`}>
                 Área
               </label>
-              <Input
-                value={area}
-                onChange={(e) => setArea(e.target.value)}
-                required
-                className={darkMode ? "bg-gray-700 text-white border-gray-600" : ""}
-              />
+              <Select value={area} onValueChange={setArea} required>
+                <SelectTrigger className={darkMode ? "bg-gray-700 text-white border-gray-600" : ""}>
+                  <SelectValue placeholder="Selecione a área" />
+                </SelectTrigger>
+                <SelectContent className="z-50 bg-white dark:bg-gray-700">
+                  {techAreas.map((techArea) => (
+                    <SelectItem key={techArea} value={techArea}>
+                      {techArea}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             <div>
@@ -227,11 +321,14 @@ export default function EditCompanyJob() {
                   Piso Salarial
                 </label>
                 <Input
+                  type="number"
                   value={salary}
                   onChange={(e) => setSalary(e.target.value)}
                   required
                   className={darkMode ? "bg-gray-700 text-white border-gray-600" : ""}
-                  placeholder="Ex: R$ 3.000,00"
+                  placeholder="3000"
+                  min="0"
+                  step="0.01"
                 />
               </div>
 
@@ -239,27 +336,31 @@ export default function EditCompanyJob() {
                 <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-900"}`}>
                   Modelo de Trabalho
                 </label>
-                <Input
-                  value={workModel}
-                  onChange={(e) => setWorkModel(e.target.value)}
-                  required
-                  className={darkMode ? "bg-gray-700 text-white border-gray-600" : ""}
-                  placeholder="Ex: Remoto, Presencial, Híbrido"
-                />
+                <Select value={workModel} onValueChange={setWorkModel} required>
+                  <SelectTrigger className={darkMode ? "bg-gray-700 text-white border-gray-600" : ""}>
+                    <SelectValue placeholder="Selecione o modelo" />
+                  </SelectTrigger>
+                  <SelectContent className="z-50 bg-white dark:bg-gray-700">
+                    <SelectItem value="Remoto">Remoto</SelectItem>
+                    <SelectItem value="Presencial">Presencial</SelectItem>
+                    <SelectItem value="Híbrido">Híbrido</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 
             <div className="grid md:grid-cols-2 gap-6">
               <div>
                 <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-900"}`}>
-                  Cidade (se for presencial ou híbrido)
+                  Cidade {(workModel === "Presencial" || workModel === "Híbrido") && "(Localização da empresa)"}
                 </label>
                 <Input
                   value={city}
+                  disabled={true}
                   onChange={(e) => setCity(e.target.value)}
-                  required
-                  className={darkMode ? "bg-gray-700 text-white border-gray-600" : ""}
-                  placeholder="Ex: São Paulo - SP"
+                  required={workModel === "Presencial" || workModel === "Híbrido"}
+                  className={`${darkMode ? "bg-gray-700 text-white border-gray-600" : ""} opacity-70 cursor-not-allowed`}
+                  placeholder="Selecione o modelo de trabalho primeiro"
                 />
               </div>
 
@@ -279,15 +380,22 @@ export default function EditCompanyJob() {
 
             <div>
               <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-900"}`}>
-                Período
+                Tipo de Contratação
               </label>
-              <Input
-                value={period}
-                onChange={(e) => setPeriod(e.target.value)}
-                required
-                className={darkMode ? "bg-gray-700 text-white border-gray-600" : ""}
-                placeholder="Ex: Full-time, Part-time, Freelancer"
-              />
+              <Select value={period} onValueChange={setPeriod} required>
+                <SelectTrigger className={darkMode ? "bg-gray-700 text-white border-gray-600" : ""}>
+                  <SelectValue placeholder="Selecione o tipo" />
+                </SelectTrigger>
+                <SelectContent className="z-50 bg-white dark:bg-gray-700">
+                  <SelectItem value="CLT - Full-time">CLT - Full-time</SelectItem>
+                  <SelectItem value="CLT - Part-time">CLT - Part-time</SelectItem>
+                  <SelectItem value="Freelancer">Freelancer</SelectItem>
+                  <SelectItem value="PJ">PJ (Pessoa Jurídica)</SelectItem>
+                  <SelectItem value="Estágio">Estágio</SelectItem>
+                  <SelectItem value="Temporário">Temporário</SelectItem>
+                  <SelectItem value="Contrato">Contrato por tempo determinado</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="flex justify-center pt-4">
