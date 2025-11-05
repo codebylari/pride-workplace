@@ -354,15 +354,22 @@ export default function CreateJob() {
             {/* Período */}
             <div>
               <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-900"}`}>
-                Período
+                Tipo de Contratação
               </label>
-              <Input
-                value={period}
-                onChange={(e) => setPeriod(e.target.value)}
-                required
-                className={darkMode ? "bg-gray-700 text-white border-gray-600" : ""}
-                placeholder="Ex: Full-time, Part-time, Freelancer"
-              />
+              <Select value={period} onValueChange={setPeriod} required>
+                <SelectTrigger className={darkMode ? "bg-gray-700 text-white border-gray-600" : ""}>
+                  <SelectValue placeholder="Selecione o tipo" />
+                </SelectTrigger>
+                <SelectContent className="z-50 bg-white dark:bg-gray-700">
+                  <SelectItem value="CLT - Full-time">CLT - Full-time</SelectItem>
+                  <SelectItem value="CLT - Part-time">CLT - Part-time</SelectItem>
+                  <SelectItem value="Freelancer">Freelancer</SelectItem>
+                  <SelectItem value="PJ">PJ (Pessoa Jurídica)</SelectItem>
+                  <SelectItem value="Estágio">Estágio</SelectItem>
+                  <SelectItem value="Temporário">Temporário</SelectItem>
+                  <SelectItem value="Contrato">Contrato por tempo determinado</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             {/* Botão de Cadastrar */}
