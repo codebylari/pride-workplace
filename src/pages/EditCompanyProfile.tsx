@@ -65,33 +65,38 @@ export default function EditCompanyProfile() {
       return;
     }
 
-    setLoadingCities(true);
-    fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${state}/municipios?orderBy=nome`)
-      .then((res) => res.json())
-      .then((data) => {
+    const loadCities = async () => {
+      setLoadingCities(true);
+      try {
+        const response = await fetch(
+          `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${state}/municipios?orderBy=nome`
+        );
+        const data = await response.json();
         setCities(data);
-        setLoadingCities(false);
-      })
-      .catch((err) => {
+      } catch (err) {
         console.error("Erro ao carregar cidades:", err);
+      } finally {
         setLoadingCities(false);
-      });
+      }
+    };
+
+    loadCities();
   }, [state]);
 
   useEffect(() => {
     const loadProfile = async () => {
       if (!user?.id) return;
       
-      // Set display name from user metadata
-      if (user.user_metadata?.company_name) {
-        setDisplayName(user.user_metadata.company_name);
-      }
-      
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("company_profiles")
         .select("logo_url, about, seeking, sector, state, city")
         .eq("user_id", user.id)
         .maybeSingle();
+      
+      if (error) {
+        console.error("Erro ao carregar perfil:", error);
+        return;
+      }
       
       const initialData = {
         displayName: user.user_metadata?.company_name || companyName,
@@ -103,12 +108,22 @@ export default function EditCompanyProfile() {
         logo: data?.logo_url || null
       };
 
+      // Set all form values
       setDisplayName(initialData.displayName);
       setAbout(initialData.about);
       setSeeking(initialData.seeking);
       setSector(initialData.sector);
-      setState(initialData.state);
-      setCity(initialData.city);
+      
+      // Set state first, which will trigger the cities useEffect
+      if (initialData.state) {
+        setState(initialData.state);
+      }
+      
+      // Set city after state is set
+      if (initialData.city) {
+        setCity(initialData.city);
+      }
+      
       setCurrentLogoUrl(data?.logo_url || null);
       setOriginalValues(initialData);
     };
