@@ -71,6 +71,7 @@ export default function CreateJob() {
   const [showSidebar, setShowSidebar] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [companyState, setCompanyState] = useState<string>("");
+  const [companyCity, setCompanyCity] = useState<string>("");
   const [availableCities, setAvailableCities] = useState<string[]>([]);
 
   // Form states
@@ -84,25 +85,39 @@ export default function CreateJob() {
   const [experience, setExperience] = useState("");
   const [period, setPeriod] = useState("");
 
-  // Buscar estado da empresa
+  // Buscar estado e cidade da empresa
   useEffect(() => {
-    const fetchCompanyState = async () => {
+    const fetchCompanyLocation = async () => {
       if (!user) return;
 
       const { data, error } = await supabase
         .from("company_profiles")
-        .select("state")
+        .select("state, city")
         .eq("user_id", user.id)
         .single();
 
-      if (data && data.state) {
-        setCompanyState(data.state);
-        setAvailableCities(citiesByState[data.state] || []);
+      if (data) {
+        if (data.state) {
+          setCompanyState(data.state);
+          setAvailableCities(citiesByState[data.state] || []);
+        }
+        if (data.city) {
+          setCompanyCity(data.city);
+        }
       }
     };
 
-    fetchCompanyState();
+    fetchCompanyLocation();
   }, [user]);
+
+  // Atualizar cidade automaticamente quando modelo de trabalho mudar
+  useEffect(() => {
+    if (workModel === "Presencial" || workModel === "Híbrido") {
+      setCity(companyCity);
+    } else if (workModel === "Remoto") {
+      setCity("");
+    }
+  }, [workModel, companyCity]);
 
   // Verificar autenticação e role
   useEffect(() => {
@@ -321,20 +336,16 @@ export default function CreateJob() {
             <div className="grid md:grid-cols-2 gap-6">
               <div>
                 <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-900"}`}>
-                  Cidade (se for presencial ou híbrido)
+                  Cidade {(workModel === "Presencial" || workModel === "Híbrido") && "(Localização da empresa)"}
                 </label>
-                <Select value={city} onValueChange={setCity} required>
-                  <SelectTrigger className={darkMode ? "bg-gray-700 text-white border-gray-600" : ""}>
-                    <SelectValue placeholder={availableCities.length > 0 ? "Selecione a cidade" : "Configure seu estado primeiro"} />
-                  </SelectTrigger>
-                  <SelectContent className="z-50 bg-white dark:bg-gray-700">
-                    {availableCities.map((cityOption) => (
-                      <SelectItem key={cityOption} value={cityOption}>
-                        {cityOption}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <Input
+                  value={city}
+                  disabled={workModel === "Presencial" || workModel === "Híbrido"}
+                  onChange={(e) => setCity(e.target.value)}
+                  required={workModel === "Presencial" || workModel === "Híbrido"}
+                  className={`${darkMode ? "bg-gray-700 text-white border-gray-600" : ""} ${(workModel === "Presencial" || workModel === "Híbrido") ? "opacity-70 cursor-not-allowed" : ""}`}
+                  placeholder={workModel === "Remoto" ? "Não aplicável para remoto" : companyCity || "Cidade da empresa"}
+                />
               </div>
 
               <div>
