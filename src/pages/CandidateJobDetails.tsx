@@ -56,7 +56,7 @@ export default function JobDetails() {
       // Buscar dados da empresa
       const { data: companyData, error: companyError } = await supabase
         .from("company_profiles")
-        .select("fantasy_name, logo_url, city, state")
+        .select("user_id, fantasy_name, logo_url, city, state")
         .eq("user_id", jobData.company_id)
         .maybeSingle();
 
@@ -69,8 +69,9 @@ export default function JobDetails() {
 
       setJob({
         ...jobData,
+        company_id: jobData.company_id,
         companyName: companyData?.fantasy_name || "Empresa",
-        companyLogo: companyData?.logo_url || "🏢",
+        companyLogo: companyData?.logo_url,
         companyCity: companyData?.city,
         companyState: companyData?.state
       });
@@ -126,15 +127,15 @@ export default function JobDetails() {
           {/* Company Header */}
           <div className="flex items-start justify-between mb-6">
             <div className="flex items-center gap-6">
-              {job.companyLogo && job.companyLogo.startsWith('http') ? (
+              {job.companyLogo ? (
                 <img 
                   src={job.companyLogo} 
                   alt={job.companyName}
                   className="w-32 h-32 rounded-full object-cover shadow-lg"
                 />
               ) : (
-                <div className="w-32 h-32 rounded-full bg-yellow-400 flex items-center justify-center text-6xl shadow-lg">
-                  {job.companyLogo}
+                <div className="w-32 h-32 rounded-full bg-muted flex items-center justify-center shadow-lg">
+                  <div className="text-4xl text-muted-foreground">🏢</div>
                 </div>
               )}
               <div>
