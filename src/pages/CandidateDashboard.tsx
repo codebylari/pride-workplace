@@ -479,8 +479,14 @@ export default function CandidateDashboard() {
                         alt={`Logo ${job.company_profiles?.fantasy_name || 'Empresa'}`}
                         className="w-full h-full object-cover"
                         onError={(e) => {
-                          e.currentTarget.style.display = 'none';
-                          e.currentTarget.parentElement!.innerHTML = `<span class="text-xl sm:text-2xl font-bold text-white">${job.company_profiles?.fantasy_name?.charAt(0) || "E"}</span>`;
+                          const parent = e.currentTarget.parentElement;
+                          if (parent) {
+                            e.currentTarget.style.display = 'none';
+                            const span = document.createElement('span');
+                            span.className = 'text-xl sm:text-2xl font-bold text-white';
+                            span.textContent = job.company_profiles?.fantasy_name?.charAt(0) || "E";
+                            parent.appendChild(span);
+                          }
                         }}
                       />
                     ) : (

@@ -12,7 +12,25 @@ Deno.serve(async (req) => {
   }
 
   try {
+    // Verify request is authenticated
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      throw new Error('Missing authorization header');
+    }
+
     console.log('Creating admin user...');
+
+    // Get admin credentials from request body
+    const { email, password } = await req.json();
+    
+    if (!email || !password) {
+      throw new Error('Email and password are required');
+    }
+
+    // Validate password strength
+    if (password.length < 8) {
+      throw new Error('Password must be at least 8 characters long');
+    }
 
     // Create Supabase client with service role key (has admin privileges)
     const supabaseAdmin = createClient(
@@ -26,8 +44,8 @@ Deno.serve(async (req) => {
       }
     );
 
-    const adminEmail = 'admLinka@gmail.com';
-    const adminPassword = 'Adm@123';
+    const adminEmail = email;
+    const adminPassword = password;
 
     // Check if admin user already exists
     const { data: existingUser } = await supabaseAdmin.auth.admin.listUsers();

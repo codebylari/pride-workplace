@@ -1,10 +1,10 @@
 project_id = "nvtgmcqromdzmrapbkrg"
 
 [functions.chat-assistant]
-verify_jwt = false
+verify_jwt = true
 
 [functions.generate-resume]
 verify_jwt = true
 
 [functions.create-admin-user]
-verify_jwt = false
+verify_jwt = true

@@ -9,41 +9,10 @@ export default function InitAdmin() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const createAdminUser = async () => {
-      try {
-        console.log("Calling create-admin-user function...");
-        
-        const { data, error } = await supabase.functions.invoke('create-admin-user', {
-          body: {}
-        });
-
-        if (error) {
-          console.error("Error calling function:", error);
-          throw error;
-        }
-
-        console.log("Function response:", data);
-        
-        if (data.success) {
-          setStatus("success");
-          setMessage(data.message);
-          
-          // Redirect to login after 2 seconds
-          setTimeout(() => {
-            navigate("/auth");
-          }, 2000);
-        } else {
-          setStatus("error");
-          setMessage(data.error || "Erro ao criar usuário admin");
-        }
-      } catch (err: any) {
-        console.error("Error:", err);
-        setStatus("error");
-        setMessage(err.message || "Erro ao criar usuário admin");
-      }
-    };
-
-    createAdminUser();
+    // Admin user creation now requires authentication and secure credentials
+    // This page is disabled for security reasons
+    setStatus("error");
+    setMessage("Admin user creation must be done through a secure, authenticated process. Please contact system administrator.");
   }, [navigate]);
 
   return (
@@ -67,10 +36,6 @@ export default function InitAdmin() {
               </div>
               <h2 className="text-2xl font-bold mb-2 text-green-600">Sucesso!</h2>
               <p className="text-muted-foreground mb-4">{message}</p>
-              <p className="text-sm text-muted-foreground">
-                Email: <strong>admLinka@gmail.com</strong><br />
-                Senha: <strong>Adm@123</strong>
-              </p>
               <p className="text-xs text-muted-foreground mt-4">
                 Redirecionando para o login...
               </p>
