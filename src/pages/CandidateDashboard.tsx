@@ -109,13 +109,19 @@ export default function CandidateDashboard() {
         jobsData.map(async (job) => {
           const { data: companyData } = await supabase
             .from("company_profiles")
-            .select("fantasy_name, logo_url")
+            .select("fantasy_name, logo_url, about, city, state")
             .eq("user_id", job.company_id)
-            .maybeSingle();
+            .single();
 
           return {
             ...job,
-            company_profiles: companyData || { fantasy_name: "Empresa", logo_url: null },
+            company_profiles: companyData || { 
+              fantasy_name: "Empresa", 
+              logo_url: null,
+              about: null,
+              city: null,
+              state: null
+            },
           };
         })
       );
@@ -466,9 +472,17 @@ export default function CandidateDashboard() {
               >
                 {/* Company Logo */}
                 <div className="flex items-start justify-between mb-2">
-                  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center overflow-hidden shadow-md">
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-purple-400 to-pink-400 rounded-lg flex items-center justify-center overflow-hidden shadow-md border-2 border-white">
                     {job.company_profiles?.logo_url ? (
-                      <img src={job.company_profiles.logo_url} alt="Logo" className="w-full h-full object-cover" />
+                      <img 
+                        src={job.company_profiles.logo_url} 
+                        alt={`Logo ${job.company_profiles?.fantasy_name || 'Empresa'}`}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                          e.currentTarget.parentElement!.innerHTML = `<span class="text-xl sm:text-2xl font-bold text-white">${job.company_profiles?.fantasy_name?.charAt(0) || "E"}</span>`;
+                        }}
+                      />
                     ) : (
                       <span className="text-xl sm:text-2xl font-bold text-white">
                         {job.company_profiles?.fantasy_name?.charAt(0) || "E"}
@@ -476,7 +490,7 @@ export default function CandidateDashboard() {
                     )}
                   </div>
                   {job.location?.toLowerCase().includes("remoto") && (
-                    <div className="flex items-center gap-1 text-orange-500 text-xs sm:text-sm">
+                    <div className="flex items-center gap-1 text-orange-500 text-xs sm:text-sm font-medium">
                       <MapPin size={14} className="sm:w-4 sm:h-4" />
                       <span className="hidden sm:inline">Remoto</span>
                       <span className="sm:hidden">R</span>
