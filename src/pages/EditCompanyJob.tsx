@@ -424,7 +424,15 @@ export default function EditCompanyJob() {
               </Select>
             </div>
 
-            <div className="flex justify-center pt-4">
+            <div className="flex justify-center gap-4 pt-4">
+              <Button
+                type="button"
+                onClick={() => navigate(-1)}
+                variant="outline"
+                className="px-12 py-6 font-semibold text-lg rounded-full"
+              >
+                Cancelar
+              </Button>
               <Button
                 type="submit"
                 className="px-12 py-6 bg-green-300 hover:bg-green-400 text-green-900 font-semibold text-lg rounded-full"
