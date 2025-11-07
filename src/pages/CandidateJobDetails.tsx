@@ -68,13 +68,42 @@ export default function JobDetails() {
         console.error("Error fetching company:", companyError);
       }
 
+      // Parse description to extract structured fields
+      const lines = jobData.description.split("\n");
+      let descriptionText = "";
+      let area = "";
+      let benefits = "";
+      let experience = "";
+      let period = "";
+      
+      lines.forEach((line: string) => {
+        if (line.startsWith("Área: ")) {
+          area = line.replace("Área: ", "").trim();
+        } else if (line.startsWith("Benefícios: ")) {
+          benefits = line.replace("Benefícios: ", "").trim();
+        } else if (line.startsWith("Experiência: ")) {
+          experience = line.replace("Experiência: ", "").trim();
+        } else if (line.startsWith("Período: ")) {
+          period = line.replace("Período: ", "").trim();
+        } else if (!line.startsWith("Área: ") && !line.startsWith("Benefícios: ") && !line.startsWith("Experiência: ") && !line.startsWith("Período: ")) {
+          if (line.trim()) {
+            descriptionText += (descriptionText ? "\n" : "") + line;
+          }
+        }
+      });
+
       setJob({
         ...jobData,
         company_id: jobData.company_id,
         companyName: companyData?.fantasy_name || "Empresa",
         companyLogo: companyData?.logo_url || null,
         companyCity: companyData?.city || null,
-        companyState: companyData?.state || null
+        companyState: companyData?.state || null,
+        parsedDescription: descriptionText.trim(),
+        parsedArea: area,
+        parsedBenefits: benefits,
+        parsedExperience: experience,
+        parsedPeriod: period
       });
     } catch (error: any) {
       console.error("Error fetching job details:", error);
@@ -190,11 +219,19 @@ export default function JobDetails() {
                 {job.location}
               </span>
             </div>
+            {(job.companyCity || job.companyState) && (
+              <div className="flex items-center gap-2">
+                <Home size={20} className="text-pink-500" />
+                <span className={darkMode ? "text-gray-300" : "text-gray-700"}>
+                  Sede: {job.companyCity}{job.companyCity && job.companyState ? ", " : ""}{job.companyState}
+                </span>
+              </div>
+            )}
             {job.salary && (
               <div className="flex items-center gap-2">
                 <DollarSign size={20} className="text-pink-500" />
                 <span className={darkMode ? "text-gray-300" : "text-gray-700"}>
-                  {job.salary}
+                  R$ {job.salary}
                 </span>
               </div>
             )}
@@ -207,14 +244,62 @@ export default function JobDetails() {
           </div>
 
           {/* Description */}
-          <div className={`mb-8 p-6 rounded-lg ${darkMode ? "bg-gray-600" : "bg-gray-100"}`}>
+          <div className={`mb-6 p-6 rounded-lg ${darkMode ? "bg-gray-600" : "bg-gray-100"}`}>
             <h3 className={`text-xl font-bold mb-3 ${darkMode ? "text-white" : "text-gray-800"}`}>
               Descrição da vaga
             </h3>
-            <p className={`leading-relaxed ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-              {job.description}
+            <p className={`leading-relaxed whitespace-pre-wrap ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+              {job.parsedDescription || job.description}
             </p>
           </div>
+
+          {/* Área */}
+          {job.parsedArea && (
+            <div className={`mb-6 p-6 rounded-lg ${darkMode ? "bg-gray-600" : "bg-gray-100"}`}>
+              <h3 className={`text-xl font-bold mb-3 ${darkMode ? "text-white" : "text-gray-800"}`}>
+                Área
+              </h3>
+              <p className={`leading-relaxed ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+                {job.parsedArea}
+              </p>
+            </div>
+          )}
+
+          {/* Benefícios */}
+          {job.parsedBenefits && (
+            <div className={`mb-6 p-6 rounded-lg ${darkMode ? "bg-gray-600" : "bg-gray-100"}`}>
+              <h3 className={`text-xl font-bold mb-3 ${darkMode ? "text-white" : "text-gray-800"}`}>
+                Benefícios
+              </h3>
+              <p className={`leading-relaxed whitespace-pre-wrap ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+                {job.parsedBenefits}
+              </p>
+            </div>
+          )}
+
+          {/* Experiência */}
+          {job.parsedExperience && (
+            <div className={`mb-6 p-6 rounded-lg ${darkMode ? "bg-gray-600" : "bg-gray-100"}`}>
+              <h3 className={`text-xl font-bold mb-3 ${darkMode ? "text-white" : "text-gray-800"}`}>
+                Experiência Necessária
+              </h3>
+              <p className={`leading-relaxed ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+                {job.parsedExperience}
+              </p>
+            </div>
+          )}
+
+          {/* Tipo de Contratação */}
+          {job.parsedPeriod && (
+            <div className={`mb-8 p-6 rounded-lg ${darkMode ? "bg-gray-600" : "bg-gray-100"}`}>
+              <h3 className={`text-xl font-bold mb-3 ${darkMode ? "text-white" : "text-gray-800"}`}>
+                Tipo de Contratação
+              </h3>
+              <p className={`leading-relaxed ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+                {job.parsedPeriod}
+              </p>
+            </div>
+          )}
 
           {/* Apply Button */}
           <Button
