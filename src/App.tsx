@@ -108,7 +108,7 @@ const App = () => (
             <Route path="/candidate-support" element={<CandidateSupport />} />
             <Route path="/candidate-about" element={<CandidateAbout />} />
             <Route path="/candidate-community-rules" element={<CandidateCommunityRules />} />
-            <Route path="/candidate-contract-acceptance" element={<CandidateContractAcceptance />} />
+            <Route path="/candidate-contract-acceptance/:applicationId" element={<CandidateContractAcceptance />} />
             <Route path="/matches-candidate" element={<MatchesCandidate />} />
             <Route path="/terms-candidate" element={<TermsCandidate />} />
             <Route path="/community-rules" element={<CommunityRules />} />
