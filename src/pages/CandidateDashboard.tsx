@@ -107,11 +107,17 @@ export default function CandidateDashboard() {
       // Buscar company_profiles separadamente para cada vaga
       const jobsWithCompanies = await Promise.all(
         jobsData.map(async (job) => {
-          const { data: companyData } = await supabase
+          const { data: companyData, error: companyError } = await supabase
             .from("company_profiles")
             .select("fantasy_name, logo_url, about, city, state")
             .eq("user_id", job.company_id)
-            .single();
+            .maybeSingle();
+
+          if (companyError) {
+            console.error("Error fetching company for job:", job.id, companyError);
+          }
+
+          console.log("Job:", job.id, "Company data:", companyData);
 
           return {
             ...job,

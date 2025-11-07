@@ -56,12 +56,13 @@ export default function JobDetails() {
       // Buscar dados da empresa
       const { data: companyData, error: companyError } = await supabase
         .from("company_profiles")
-        .select("user_id, fantasy_name, logo_url, city, state")
+        .select("user_id, fantasy_name, logo_url, city, state, about, rating")
         .eq("user_id", jobData.company_id)
         .maybeSingle();
 
       console.log("Company data:", companyData);
       console.log("Company error:", companyError);
+      console.log("Job company_id:", jobData.company_id);
 
       if (companyError) {
         console.error("Error fetching company:", companyError);
@@ -71,9 +72,9 @@ export default function JobDetails() {
         ...jobData,
         company_id: jobData.company_id,
         companyName: companyData?.fantasy_name || "Empresa",
-        companyLogo: companyData?.logo_url,
-        companyCity: companyData?.city,
-        companyState: companyData?.state
+        companyLogo: companyData?.logo_url || null,
+        companyCity: companyData?.city || null,
+        companyState: companyData?.state || null
       });
     } catch (error: any) {
       console.error("Error fetching job details:", error);
@@ -132,18 +133,26 @@ export default function JobDetails() {
                   src={job.companyLogo} 
                   alt={job.companyName}
                   className="w-32 h-32 rounded-full object-cover shadow-lg"
+                  onError={(e) => {
+                    console.error("Error loading company logo:", job.companyLogo);
+                    e.currentTarget.style.display = 'none';
+                    const fallback = e.currentTarget.nextElementSibling as HTMLElement;
+                    if (fallback) fallback.style.display = 'flex';
+                  }}
                 />
-              ) : (
-                <div className="w-32 h-32 rounded-full bg-muted flex items-center justify-center shadow-lg">
-                  <div className="text-4xl text-muted-foreground">🏢</div>
-                </div>
-              )}
+              ) : null}
+              <div className="w-32 h-32 rounded-full bg-muted flex items-center justify-center shadow-lg" style={{ display: job.companyLogo ? 'none' : 'flex' }}>
+                <div className="text-4xl text-muted-foreground">🏢</div>
+              </div>
               <div>
                 <h1 className={`text-3xl font-bold mb-2 ${darkMode ? "text-white" : "text-gray-800"}`}>
                   {job.companyName}
                 </h1>
               <Button
-                onClick={() => navigate(`/company-public-profile/${job.company_id}`)}
+                onClick={() => {
+                  console.log("Navigating to company profile:", job.company_id);
+                  navigate(`/company-public-profile/${job.company_id}`);
+                }}
                 className="bg-[#FFF8D6] hover:bg-[#FFF2A9] text-gray-800 rounded-full px-6"
               >
                 Ver perfil da Empresa
