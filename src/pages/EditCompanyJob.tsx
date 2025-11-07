@@ -175,14 +175,31 @@ export default function EditCompanyJob() {
       setBenefits(data.requirements || "");
       
       // Parse description to extract fields
-      const descParts = data.description.split("\n\n");
-      setDescription(descParts[0] || "");
+      const lines = data.description.split("\n");
       
-      descParts.slice(1).forEach((part: string) => {
-        if (part.startsWith("Área: ")) setArea(part.replace("Área: ", ""));
-        if (part.startsWith("Experiência: ")) setExperience(part.replace("Experiência: ", ""));
-        if (part.startsWith("Período: ")) setPeriod(part.replace("Período: ", ""));
+      // Primeira linha ou linhas até encontrar campos estruturados
+      let descriptionText = "";
+      let foundStructured = false;
+      
+      lines.forEach((line: string) => {
+        if (line.startsWith("Área: ")) {
+          setArea(line.replace("Área: ", "").trim());
+          foundStructured = true;
+        } else if (line.startsWith("Experiência: ")) {
+          setExperience(line.replace("Experiência: ", "").trim());
+          foundStructured = true;
+        } else if (line.startsWith("Período: ")) {
+          setPeriod(line.replace("Período: ", "").trim());
+          foundStructured = true;
+        } else if (line.startsWith("Benefícios: ")) {
+          // Ignora essa linha, já está em requirements
+          foundStructured = true;
+        } else if (!foundStructured) {
+          descriptionText += (descriptionText ? "\n" : "") + line;
+        }
       });
+      
+      setDescription(descriptionText.trim());
     } catch (error: any) {
       toast({
         title: "Erro ao carregar vaga",
