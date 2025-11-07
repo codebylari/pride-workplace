@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, Pencil, Trash2 } from "lucide-react";
+import { Menu, Pencil, Trash2, Users } from "lucide-react";
 import { NotificationsPanel } from "@/components/NotificationsPanel";
 import { CompanySidebar } from "@/components/CompanySidebar";
 import { useAuth } from "@/hooks/useAuth";
@@ -31,6 +31,7 @@ export default function CompanyJobs() {
   const [loading, setLoading] = useState(true);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [jobToDelete, setJobToDelete] = useState<string | null>(null);
+  const [applicationsCounts, setApplicationsCounts] = useState<Record<string, number>>({});
 
   const companyName = user?.user_metadata?.company_name || "Empresa";
 
@@ -53,7 +54,21 @@ export default function CompanyJobs() {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setJobs(data || []);
+      const jobsData = data || [];
+      setJobs(jobsData);
+
+      // Buscar contagem de aplicações para cada vaga
+      const counts: Record<string, number> = {};
+      await Promise.all(
+        jobsData.map(async (job) => {
+          const { count } = await supabase
+            .from("applications")
+            .select("*", { count: "exact", head: true })
+            .eq("job_id", job.id);
+          counts[job.id] = count || 0;
+        })
+      );
+      setApplicationsCounts(counts);
     } catch (error: any) {
       console.error("Erro ao carregar vagas:", error);
       toast({
@@ -177,16 +192,35 @@ export default function CompanyJobs() {
                   <h3 className={`text-xl font-semibold mb-2 ${darkMode ? "text-white" : "text-gray-900"}`}>
                     {job.title}
                   </h3>
-                  <p className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+                  <p className={`text-sm mb-2 ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
                     {job.job_type} • {job.location}
                   </p>
+                  <div className="flex items-center gap-2">
+                    <Users className={darkMode ? "text-green-400" : "text-green-600"} size={16} />
+                    <span className={`text-sm font-semibold ${darkMode ? "text-green-400" : "text-green-600"}`}>
+                      {applicationsCounts[job.id] || 0} candidaturas
+                    </span>
+                  </div>
                 </div>
                 <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
+                  <Button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/company-job-candidates/${job.id}`);
+                    }}
+                    variant="ghost"
+                    size="icon"
+                    className="hover:bg-green-100 dark:hover:bg-green-900"
+                    title="Ver Candidatos"
+                  >
+                    <Users className="w-5 h-5 text-green-600" />
+                  </Button>
                   <Button
                     onClick={(e) => handleEditClick(job.id, e)}
                     variant="ghost"
                     size="icon"
                     className="hover:bg-blue-100 dark:hover:bg-blue-900"
+                    title="Editar Vaga"
                   >
                     <Pencil className="w-5 h-5 text-blue-600" />
                   </Button>
@@ -195,6 +229,7 @@ export default function CompanyJobs() {
                     variant="ghost"
                     size="icon"
                     className="hover:bg-red-100 dark:hover:bg-red-900"
+                    title="Excluir Vaga"
                   >
                     <Trash2 className="w-5 h-5 text-red-600" />
                   </Button>
