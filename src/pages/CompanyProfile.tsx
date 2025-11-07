@@ -133,6 +133,44 @@ export default function CompanyProfile() {
     loadJobs();
   }, [user?.id]);
 
+  useEffect(() => {
+    const loadTestimonials = async () => {
+      if (!user?.id) return;
+      
+      const { data: testimonialsData } = await supabase
+        .from("testimonials")
+        .select("id, candidate_id, comment, job_title")
+        .eq("company_id", user.id)
+        .eq("status", "approved");
+      
+      if (testimonialsData && testimonialsData.length > 0) {
+        const testimonialsWithCandidates = await Promise.all(
+          testimonialsData.map(async (testimonial) => {
+            const { data: candidate } = await supabase
+              .from("profiles")
+              .select("full_name, photo_url")
+              .eq("id", testimonial.candidate_id)
+              .single();
+            
+            return {
+              name: candidate?.full_name || "Candidato",
+              role: testimonial.job_title,
+              icon: candidate?.photo_url || "👤",
+              text: testimonial.comment
+            };
+          })
+        );
+        
+        setCompanyData(prev => ({
+          ...prev,
+          testimonials: testimonialsWithCandidates
+        }));
+      }
+    };
+    
+    loadTestimonials();
+  }, [user?.id]);
+
   const calculateCompletion = () => {
     const fields = [
       logoUrl,
@@ -389,21 +427,26 @@ export default function CompanyProfile() {
                             key={index}
                             className={`p-4 rounded-xl ${darkMode ? "bg-gray-700" : "bg-gray-50"}`}
                           >
-                            <div className="flex items-start gap-3 mb-2">
-                              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center flex-shrink-0">
-                                <span className="text-lg">{testimonial.icon}</span>
-                              </div>
+                            <div className="flex items-start gap-3">
+                              {testimonial.icon.startsWith('http') ? (
+                                <img
+                                  src={testimonial.icon}
+                                  alt={testimonial.name}
+                                  className="w-12 h-12 rounded-full object-cover flex-shrink-0"
+                                />
+                              ) : (
+                                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center flex-shrink-0">
+                                  <span className="text-lg">{testimonial.icon}</span>
+                                </div>
+                              )}
                               <div className="flex-1">
-                                <div className="flex items-center justify-between">
-                                  <div>
-                                    <p className={`font-semibold ${darkMode ? "text-white" : "text-gray-800"}`}>
-                                      {testimonial.name}
-                                    </p>
-                                    <p className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
-                                      {testimonial.role}
-                                    </p>
-                                  </div>
-                                  <span className="text-xl">{testimonial.icon}</span>
+                                <div>
+                                  <p className={`font-semibold ${darkMode ? "text-white" : "text-gray-800"}`}>
+                                    {testimonial.name}
+                                  </p>
+                                  <p className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+                                    {testimonial.role}
+                                  </p>
                                 </div>
                                 <p className={`mt-2 text-sm ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
                                   {testimonial.text}
