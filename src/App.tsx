@@ -68,6 +68,7 @@ import AdminCandidates from "./pages/AdminCandidates";
 import AdminCompanies from "./pages/AdminCompanies";
 import AdminJobs from "./pages/AdminJobs";
 import AdminApplications from "./pages/AdminApplications";
+import AdminSeedData from "./pages/AdminSeedData";
 import InitAdmin from "./pages/InitAdmin";
 
 const queryClient = new QueryClient();
@@ -148,6 +149,7 @@ const App = () => (
             <Route path="/admin-companies" element={<AdminCompanies />} />
             <Route path="/admin-jobs" element={<AdminJobs />} />
             <Route path="/admin-applications" element={<AdminApplications />} />
+            <Route path="/admin-seed-data" element={<AdminSeedData />} />
             
             <Route path="*" element={<NotFound />} />
           </Routes>
