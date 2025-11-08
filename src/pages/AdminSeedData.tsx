@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { ArrowLeft } from "lucide-react";
 
 interface Account {
   tipo: string;
@@ -55,7 +56,17 @@ export default function AdminSeedData() {
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6">Gerar Dados de Teste</h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-3xl font-bold">Gerar Dados de Teste</h1>
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => navigate(-1)}
+          className="ml-auto"
+        >
+          <ArrowLeft className="h-4 w-4" />
+        </Button>
+      </div>
       
       <Card className="p-6 mb-6">
         <p className="mb-4">
