@@ -20,7 +20,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-export default function JobCandidates() {
+export default function CompanyJobCandidates() {
   const navigate = useNavigate();
   const { id } = useParams();
   const { user } = useAuth();
