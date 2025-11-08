@@ -325,13 +325,21 @@ export default function Register() {
 
     return (
       <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
-        <button
-          onClick={() => setStep(1)}
-          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
-        >
-          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-          <span className="font-medium">Voltar</span>
-        </button>
+        <div className="self-start flex items-center justify-between w-full mb-2">
+          <button
+            onClick={() => setStep(1)}
+            className="flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+          >
+            <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+            <span className="font-medium">Voltar</span>
+          </button>
+          <button
+            onClick={() => navigate("/auth")}
+            className="text-white/60 hover:text-white text-sm underline transition-colors"
+          >
+            Ir para login
+          </button>
+        </div>
         <h2 className="text-2xl md:text-3xl font-bold">Qual é o seu gênero?</h2>
         
         <Button
@@ -415,13 +423,21 @@ export default function Register() {
     
     return (
       <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
-        <button
-          onClick={() => setStep(2)}
-          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
-        >
-          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-          <span className="font-medium">Voltar</span>
-        </button>
+        <div className="self-start flex items-center justify-between w-full mb-2">
+          <button
+            onClick={() => setStep(2)}
+            className="flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+          >
+            <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+            <span className="font-medium">Voltar</span>
+          </button>
+          <button
+            onClick={() => navigate("/auth")}
+            className="text-white/60 hover:text-white text-sm underline transition-colors"
+          >
+            Ir para login
+          </button>
+        </div>
         <h2 className="text-2xl md:text-3xl font-bold">Qual é a sua orientação sexual?</h2>
         
         <Button
@@ -502,13 +518,21 @@ export default function Register() {
     
     return (
       <div className="flex flex-col items-center space-y-6 md:space-y-8 text-center text-white px-4">
-        <button
-          onClick={() => setStep(getPreviousStep())}
-          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
-        >
-          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-          <span className="font-medium">Voltar</span>
-        </button>
+        <div className="self-start flex items-center justify-between w-full mb-2">
+          <button
+            onClick={() => setStep(getPreviousStep())}
+            className="flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+          >
+            <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+            <span className="font-medium">Voltar</span>
+          </button>
+          <button
+            onClick={() => navigate("/auth")}
+            className="text-white/60 hover:text-white text-sm underline transition-colors"
+          >
+            Ir para login
+          </button>
+        </div>
         <h2 className="text-2xl md:text-3xl font-bold">Qual a sua experiência no mercado de trabalho?</h2>
         
         <div className="grid grid-cols-2 gap-4 w-full max-w-2xl">
@@ -558,13 +582,21 @@ export default function Register() {
     
     return (
       <div className="flex flex-col items-center space-y-6 md:space-y-8 text-center text-white px-4">
-        <button
-          onClick={() => setStep(2.5)}
-          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
-        >
-          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-          <span className="font-medium">Voltar</span>
-        </button>
+        <div className="self-start flex items-center justify-between w-full mb-2">
+          <button
+            onClick={() => setStep(2.5)}
+            className="flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+          >
+            <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+            <span className="font-medium">Voltar</span>
+          </button>
+          <button
+            onClick={() => navigate("/auth")}
+            className="text-white/60 hover:text-white text-sm underline transition-colors"
+          >
+            Ir para login
+          </button>
+        </div>
         <h2 className="text-2xl md:text-3xl font-bold">Selecione as suas áreas de especialização</h2>
         
         <div className="grid grid-cols-2 gap-4 w-full max-w-3xl">
@@ -615,13 +647,21 @@ export default function Register() {
     
     return (
       <div className="flex flex-col items-center space-y-6 md:space-y-8 text-center text-white px-4">
-        <button
-          onClick={() => setStep(2.7)}
-          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
-        >
-          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-          <span className="font-medium">Voltar</span>
-        </button>
+        <div className="self-start flex items-center justify-between w-full mb-2">
+          <button
+            onClick={() => setStep(2.7)}
+            className="flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+          >
+            <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+            <span className="font-medium">Voltar</span>
+          </button>
+          <button
+            onClick={() => navigate("/auth")}
+            className="text-white/60 hover:text-white text-sm underline transition-colors"
+          >
+            Ir para login
+          </button>
+        </div>
         <h2 className="text-2xl md:text-3xl font-bold">Em qual área você atua?</h2>
         
         <div className="grid grid-cols-2 gap-4 w-full max-w-2xl">
@@ -666,13 +706,21 @@ export default function Register() {
     
     return (
       <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
-        <button
-          onClick={() => setStep(3)}
-          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
-        >
-          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-          <span className="font-medium">Voltar</span>
-        </button>
+        <div className="self-start flex items-center justify-between w-full mb-2">
+          <button
+            onClick={() => setStep(3)}
+            className="flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+          >
+            <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+            <span className="font-medium">Voltar</span>
+          </button>
+          <button
+            onClick={() => navigate("/auth")}
+            className="text-white/60 hover:text-white text-sm underline transition-colors"
+          >
+            Ir para login
+          </button>
+        </div>
         <h2 className="text-2xl md:text-3xl font-bold">Qual o seu nível de experiência?</h2>
         {["Júnior", "Pleno", "Sênior", "Especialista"].map((option) => (
           <Button
@@ -705,13 +753,21 @@ export default function Register() {
     
     return (
       <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
-        <button
-          onClick={() => setStep(4)}
-          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
-        >
-          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-          <span className="font-medium">Voltar</span>
-        </button>
+        <div className="self-start flex items-center justify-between w-full mb-2">
+          <button
+            onClick={() => setStep(4)}
+            className="flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+          >
+            <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+            <span className="font-medium">Voltar</span>
+          </button>
+          <button
+            onClick={() => navigate("/auth")}
+            className="text-white/60 hover:text-white text-sm underline transition-colors"
+          >
+            Ir para login
+          </button>
+        </div>
         <h2 className="text-2xl md:text-3xl font-bold">Qual tipo de oportunidade procura?</h2>
         {["Estágio", "CLT", "Freelancer", "Trainee", "Temporário", "Aprendiz"].map(
           (option) => (
@@ -746,13 +802,21 @@ export default function Register() {
     
     return (
       <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
-        <button
-          onClick={() => setStep(5)}
-          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
-        >
-          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-          <span className="font-medium">Voltar</span>
-        </button>
+        <div className="self-start flex items-center justify-between w-full mb-2">
+          <button
+            onClick={() => setStep(5)}
+            className="flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+          >
+            <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+            <span className="font-medium">Voltar</span>
+          </button>
+          <button
+            onClick={() => navigate("/auth")}
+            className="text-white/60 hover:text-white text-sm underline transition-colors"
+          >
+            Ir para login
+          </button>
+        </div>
         <h2 className="text-2xl md:text-3xl font-bold">
           Qual é o seu nível de conhecimento em GitHub?
         </h2>
@@ -789,13 +853,21 @@ export default function Register() {
     
     return (
       <div className="flex flex-col items-center space-y-6 md:space-y-8 text-center text-white px-4">
-        <button
-          onClick={() => setStep(6)}
-          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
-        >
-          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-          <span className="font-medium">Voltar</span>
-        </button>
+        <div className="self-start flex items-center justify-between w-full mb-2">
+          <button
+            onClick={() => setStep(6)}
+            className="flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+          >
+            <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+            <span className="font-medium">Voltar</span>
+          </button>
+          <button
+            onClick={() => navigate("/auth")}
+            className="text-white/60 hover:text-white text-sm underline transition-colors"
+          >
+            Ir para login
+          </button>
+        </div>
         <h2 className="text-2xl md:text-3xl font-bold">
           Estou em busca de projetos remotos globais.
         </h2>
@@ -1494,13 +1566,21 @@ export default function Register() {
     
     return (
       <div className="flex flex-col items-center space-y-6 text-center text-white px-4">
-        <button
-          onClick={() => setStep(1)}
-          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
-        >
-          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-          <span className="font-medium">Voltar</span>
-        </button>
+        <div className="self-start flex items-center justify-between w-full mb-2">
+          <button
+            onClick={() => setStep(1)}
+            className="flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+          >
+            <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+            <span className="font-medium">Voltar</span>
+          </button>
+          <button
+            onClick={() => navigate("/auth")}
+            className="text-white/60 hover:text-white text-sm underline transition-colors"
+          >
+            Ir para login
+          </button>
+        </div>
         <h2 className="text-3xl font-bold">Tipo de projeto</h2>
         {[
           "Novas ideias/projeto",
@@ -1547,13 +1627,21 @@ export default function Register() {
     
     return (
       <div className="flex flex-col items-center space-y-6 text-center text-white px-4">
-        <button
-          onClick={() => setStep(2)}
-          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
-        >
-          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-          <span className="font-medium">Voltar</span>
-        </button>
+        <div className="self-start flex items-center justify-between w-full mb-2">
+          <button
+            onClick={() => setStep(2)}
+            className="flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+          >
+            <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+            <span className="font-medium">Voltar</span>
+          </button>
+          <button
+            onClick={() => navigate("/auth")}
+            className="text-white/60 hover:text-white text-sm underline transition-colors"
+          >
+            Ir para login
+          </button>
+        </div>
         <h2 className="text-3xl font-bold">Competências essenciais</h2>
         <p className="text-white/80 text-sm">Selecione uma ou mais opções</p>
         
@@ -1605,13 +1693,21 @@ export default function Register() {
     
     return (
       <div className="flex flex-col items-center space-y-6 text-center text-white px-4">
-        <button
-          onClick={() => setStep(3)}
-          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
-        >
-          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-          <span className="font-medium">Voltar</span>
-        </button>
+        <div className="self-start flex items-center justify-between w-full mb-2">
+          <button
+            onClick={() => setStep(3)}
+            className="flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+          >
+            <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+            <span className="font-medium">Voltar</span>
+          </button>
+          <button
+            onClick={() => navigate("/auth")}
+            className="text-white/60 hover:text-white text-sm underline transition-colors"
+          >
+            Ir para login
+          </button>
+        </div>
         <h2 className="text-3xl font-bold">Quanto tempo precisa do profissional?</h2>
         {["Decidir mais tarde", "< 1 semana", "1 semana - 6 meses", "+ 6 meses"].map((option) => (
           <Button
@@ -1644,13 +1740,21 @@ export default function Register() {
     
     return (
       <div className="flex flex-col items-center space-y-6 text-center text-white px-4">
-        <button
-          onClick={() => setStep(4)}
-          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
-        >
-          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-          <span className="font-medium">Voltar</span>
-        </button>
+        <div className="self-start flex items-center justify-between w-full mb-2">
+          <button
+            onClick={() => setStep(4)}
+            className="flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+          >
+            <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+            <span className="font-medium">Voltar</span>
+          </button>
+          <button
+            onClick={() => navigate("/auth")}
+            className="text-white/60 hover:text-white text-sm underline transition-colors"
+          >
+            Ir para login
+          </button>
+        </div>
         <h2 className="text-3xl font-bold">Experiência em GitHub?</h2>
         {["Sim, básico", "Sim, avançado", "Conhecimento teórico", "Não necessário"].map((option) => (
           <Button
@@ -1691,13 +1795,21 @@ export default function Register() {
     
     return (
       <div className="flex flex-col items-center space-y-6 text-center text-white px-4">
-        <button
-          onClick={() => setStep(5)}
-          className="self-start mb-2 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
-        >
-          <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-          <span className="font-medium">Voltar</span>
-        </button>
+        <div className="self-start flex items-center justify-between w-full mb-2">
+          <button
+            onClick={() => setStep(5)}
+            className="flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+          >
+            <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+            <span className="font-medium">Voltar</span>
+          </button>
+          <button
+            onClick={() => navigate("/auth")}
+            className="text-white/60 hover:text-white text-sm underline transition-colors"
+          >
+            Ir para login
+          </button>
+        </div>
         <h2 className="text-2xl md:text-3xl font-bold max-w-2xl">O que vocês valorizam mais em um candidato a longo prazo?</h2>
         <p className="text-white/80 text-sm">Selecione uma ou mais opções</p>
         
