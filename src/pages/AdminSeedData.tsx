@@ -15,9 +15,28 @@ interface Account {
   senha: string;
 }
 
+interface HistoricalProfile {
+  id: string;
+  full_name: string;
+  city: string | null;
+  state: string | null;
+  created_at: string;
+}
+
+interface HistoricalCompany {
+  id: string;
+  fantasy_name: string;
+  city: string | null;
+  state: string | null;
+  created_at: string;
+}
+
 export default function AdminSeedData() {
   const [loading, setLoading] = useState(false);
   const [accounts, setAccounts] = useState<Account[]>([]);
+  const [historicalCandidates, setHistoricalCandidates] = useState<HistoricalProfile[]>([]);
+  const [historicalCompanies, setHistoricalCompanies] = useState<HistoricalCompany[]>([]);
+  const [loadingHistory, setLoadingHistory] = useState(true);
   const { userRole } = useAuth();
   const navigate = useNavigate();
 
@@ -26,6 +45,41 @@ export default function AdminSeedData() {
       navigate("/");
     }
   }, [userRole, navigate]);
+
+  useEffect(() => {
+    if (userRole === "admin") {
+      fetchHistoricalData();
+    }
+  }, [userRole]);
+
+  const fetchHistoricalData = async () => {
+    setLoadingHistory(true);
+    try {
+      // Buscar candidatos
+      const { data: candidates, error: candidatesError } = await supabase
+        .from("profiles")
+        .select("id, full_name, city, state, created_at")
+        .order("created_at", { ascending: false });
+
+      if (candidatesError) throw candidatesError;
+
+      // Buscar empresas
+      const { data: companies, error: companiesError } = await supabase
+        .from("company_profiles")
+        .select("id, fantasy_name, city, state, created_at")
+        .order("created_at", { ascending: false });
+
+      if (companiesError) throw companiesError;
+
+      setHistoricalCandidates(candidates || []);
+      setHistoricalCompanies(companies || []);
+    } catch (error: any) {
+      console.error("Error fetching historical data:", error);
+      toast.error("Erro ao carregar histórico: " + error.message);
+    } finally {
+      setLoadingHistory(false);
+    }
+  };
 
   const handleSeedData = async () => {
     setLoading(true);
@@ -89,8 +143,8 @@ export default function AdminSeedData() {
       </Card>
 
       {accounts.length > 0 && (
-        <Card className="p-6">
-          <h2 className="text-2xl font-bold mb-4">Contas Criadas</h2>
+        <Card className="p-6 mb-6">
+          <h2 className="text-2xl font-bold mb-4">Contas Criadas Agora</h2>
           
           <div className="space-y-6">
             <div>
@@ -121,6 +175,58 @@ export default function AdminSeedData() {
           </div>
         </Card>
       )}
+
+      <Card className="p-6">
+        <h2 className="text-2xl font-bold mb-4">Histórico de Usuários</h2>
+        
+        {loadingHistory ? (
+          <p className="text-muted-foreground">Carregando histórico...</p>
+        ) : (
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-xl font-semibold mb-3">
+                Candidatos ({historicalCandidates.length})
+              </h3>
+              <div className="grid gap-2 max-h-96 overflow-y-auto">
+                {historicalCandidates.map((candidate) => (
+                  <div key={candidate.id} className="bg-muted p-3 rounded">
+                    <p className="font-medium">{candidate.full_name}</p>
+                    {(candidate.city || candidate.state) && (
+                      <p className="text-sm text-muted-foreground">
+                        {candidate.city}{candidate.city && candidate.state ? ", " : ""}{candidate.state}
+                      </p>
+                    )}
+                    <p className="text-xs text-muted-foreground">
+                      Criado em: {new Date(candidate.created_at).toLocaleDateString("pt-BR")}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-xl font-semibold mb-3">
+                Empresas ({historicalCompanies.length})
+              </h3>
+              <div className="grid gap-2 max-h-96 overflow-y-auto">
+                {historicalCompanies.map((company) => (
+                  <div key={company.id} className="bg-muted p-3 rounded">
+                    <p className="font-medium">{company.fantasy_name}</p>
+                    {(company.city || company.state) && (
+                      <p className="text-sm text-muted-foreground">
+                        {company.city}{company.city && company.state ? ", " : ""}{company.state}
+                      </p>
+                    )}
+                    <p className="text-xs text-muted-foreground">
+                      Criado em: {new Date(company.created_at).toLocaleDateString("pt-BR")}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </Card>
     </div>
   );
 }
