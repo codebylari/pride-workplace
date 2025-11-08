@@ -10,7 +10,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
-export default function JobDetails() {
+export default function CandidateJobDetails() {
   const navigate = useNavigate();
   const { id } = useParams();
   const { user } = useAuth();

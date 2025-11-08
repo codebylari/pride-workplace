@@ -11,7 +11,7 @@ import { CandidateSidebar } from "@/components/CandidateSidebar";
 import { CompanySidebar } from "@/components/CompanySidebar";
 import { NotificationsPanel } from "@/components/NotificationsPanel";
 
-export default function DeleteAccount() {
+export default function CandidateDeleteAccount() {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, signOut } = useAuth();

@@ -9,7 +9,7 @@ import { NotificationsPanel } from "@/components/NotificationsPanel";
 import { CandidateSidebar } from "@/components/CandidateSidebar";
 import { supabase } from "@/integrations/supabase/client";
 
-export default function JobApplication() {
+export default function CandidateJobApplication() {
   const navigate = useNavigate();
   const { id } = useParams();
   const { user, signOut } = useAuth();

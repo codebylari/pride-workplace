@@ -21,7 +21,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-export default function MyApplications() {
+export default function CandidateMyApplications() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { darkMode } = useTheme();

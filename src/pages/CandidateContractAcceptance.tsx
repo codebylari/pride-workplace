@@ -9,7 +9,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
-export default function ContractAcceptance() {
+export default function CandidateContractAcceptance() {
   const navigate = useNavigate();
   const { applicationId } = useParams();
   const { user, loading: authLoading } = useAuth();

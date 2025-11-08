@@ -8,7 +8,7 @@ import { Eye, EyeOff } from "lucide-react";
 import logo from "@/assets/logo-linkar.png";
 import icon from "@/assets/icon-linkar.png";
 
-export default function Auth(Auth: unknown) {
+export default function Auth() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);

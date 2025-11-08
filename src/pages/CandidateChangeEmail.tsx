@@ -11,7 +11,7 @@ import { CandidateSidebar } from "@/components/CandidateSidebar";
 import { CompanySidebar } from "@/components/CompanySidebar";
 import { NotificationsPanel } from "@/components/NotificationsPanel";
 
-export default function ChangeEmail() {
+export default function CandidateChangeEmail() {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, signOut } = useAuth();

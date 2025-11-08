@@ -63,7 +63,7 @@ const citiesByState: Record<string, string[]> = {
   TO: ["Palmas", "Araguaína", "Gurupi", "Porto Nacional"],
 };
 
-export default function CreateJob() {
+export default function CompanyCreateJob() {
   const navigate = useNavigate();
   const { user, userRole, loading } = useAuth();
   const { darkMode } = useTheme();
