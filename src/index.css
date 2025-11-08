@@ -133,4 +133,10 @@
   .transition-smooth {
     transition: var(--transition-smooth); /* Classe para transições suaves. */
   }
+  
+  /* Esconde o ícone nativo de mostrar senha dos navegadores */
+  input[type="password"]::-ms-reveal,
+  input[type="password"]::-ms-clear {
+    display: none !important;
+  }
 }
