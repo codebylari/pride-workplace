@@ -17,6 +17,12 @@ export default function Auth() {
   const { toast } = useToast();
 
   useEffect(() => {
+    // Load last used email from localStorage
+    const savedEmail = localStorage.getItem("lastLoginEmail");
+    if (savedEmail) {
+      setEmail(savedEmail);
+    }
+
     // Check if user is already logged in
     const checkSession = async () => {
       const { data: { session } } = await supabase.auth.getSession();
@@ -58,6 +64,9 @@ export default function Auth() {
         variant: "destructive",
       });
     } else if (data.session) {
+      // Save email to localStorage for next login
+      localStorage.setItem("lastLoginEmail", email);
+
       // Check user role to redirect appropriately
       const { data: roleData } = await supabase
         .from("user_roles")
