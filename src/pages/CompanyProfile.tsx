@@ -40,6 +40,7 @@ export default function CompanyProfile() {
       name: string;
       role: string;
       icon: string;
+      emoji?: string;
       text: string;
     }>,
     jobs: [] as Array<{
@@ -144,8 +145,9 @@ export default function CompanyProfile() {
         .eq("status", "approved");
       
       if (testimonialsData && testimonialsData.length > 0) {
+        const emojis = ['❤️', '⭐', '🌈', '💜', '🌸', '✨', '🎯', '💎'];
         const testimonialsWithCandidates = await Promise.all(
-          testimonialsData.map(async (testimonial) => {
+          testimonialsData.map(async (testimonial, index) => {
             const { data: candidate } = await supabase
               .from("profiles")
               .select("full_name, photo_url")
@@ -156,6 +158,7 @@ export default function CompanyProfile() {
               name: candidate?.full_name || "Candidato",
               role: testimonial.job_title,
               icon: candidate?.photo_url || "👤",
+              emoji: emojis[index % emojis.length],
               text: testimonial.comment
             };
           })
@@ -420,12 +423,12 @@ export default function CompanyProfile() {
                     <h3 className={`text-xl font-bold mb-6 ${darkMode ? "text-white" : "text-gray-800"}`}>
                       Relatos de pessoas que trabalharam na empresa
                     </h3>
-                    {companyData.testimonials.length > 0 ? (
+                     {companyData.testimonials.length > 0 ? (
                       <div className="space-y-4">
                         {companyData.testimonials.map((testimonial, index) => (
                           <div
                             key={index}
-                            className={`p-4 rounded-xl ${darkMode ? "bg-gray-700" : "bg-gray-50"}`}
+                            className="p-4 rounded-xl bg-white shadow-md border border-gray-100"
                           >
                             <div className="flex items-start gap-3">
                               {testimonial.icon.startsWith('http') ? (
@@ -435,20 +438,23 @@ export default function CompanyProfile() {
                                   className="w-12 h-12 rounded-full object-cover flex-shrink-0"
                                 />
                               ) : (
-                                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center flex-shrink-0">
-                                  <span className="text-lg">{testimonial.icon}</span>
+                                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-pink-400 to-pink-500 flex items-center justify-center flex-shrink-0 text-2xl">
+                                  {testimonial.icon}
                                 </div>
                               )}
                               <div className="flex-1">
-                                <div>
-                                  <p className={`font-semibold ${darkMode ? "text-white" : "text-gray-800"}`}>
-                                    {testimonial.name}
-                                  </p>
-                                  <p className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
-                                    {testimonial.role}
-                                  </p>
+                                <div className="flex items-start justify-between mb-2">
+                                  <div>
+                                    <h4 className="font-semibold text-gray-900">
+                                      {testimonial.name}
+                                    </h4>
+                                    <p className="text-sm text-gray-600">
+                                      {testimonial.role}
+                                    </p>
+                                  </div>
+                                  <span className="text-2xl">{testimonial.emoji || '❤️'}</span>
                                 </div>
-                                <p className={`mt-2 text-sm ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+                                <p className="text-sm leading-relaxed text-gray-700 mt-2">
                                   {testimonial.text}
                                 </p>
                               </div>
