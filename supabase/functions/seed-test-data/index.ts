@@ -19,6 +19,9 @@ serve(async (req: Request) => {
     );
 
     const accounts = [];
+    
+    // Timestamp único para evitar conflitos
+    const timestamp = Date.now();
 
     // Criar 10 candidatos
     const candidateNames = [
@@ -61,7 +64,7 @@ serve(async (req: Request) => {
     const remotePreferences = ["sim", "talvez", "nao"];
 
     for (let i = 0; i < 10; i++) {
-      const email = `candidato${i + 1}@teste.com`;
+      const email = `candidato${i + 1}.${timestamp}@teste.com`;
       const password = `Teste@${i + 1}23`;
       const cityIndex = i % cities.length;
 
@@ -72,7 +75,10 @@ serve(async (req: Request) => {
         user_metadata: { role: "candidate", full_name: candidateNames[i] },
       });
 
-      if (userError) throw userError;
+      if (userError) {
+        console.error(`Error creating candidate ${i + 1}:`, userError);
+        continue; // Skip this user and continue with the next
+      }
 
       await supabaseAdmin.from("user_roles").insert({
         user_id: userData.user.id,
@@ -111,7 +117,7 @@ serve(async (req: Request) => {
     ];
 
     for (let i = 0; i < 10; i++) {
-      const email = `empresa${i + 1}@teste.com`;
+      const email = `empresa${i + 1}.${timestamp}@teste.com`;
       const password = `Empresa@${i + 1}23`;
       const cityIndex = i % cities.length;
 
@@ -122,7 +128,10 @@ serve(async (req: Request) => {
         user_metadata: { role: "company" },
       });
 
-      if (userError) throw userError;
+      if (userError) {
+        console.error(`Error creating company ${i + 1}:`, userError);
+        continue; // Skip this company and continue with the next
+      }
 
       await supabaseAdmin.from("user_roles").insert({
         user_id: userData.user.id,
