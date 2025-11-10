@@ -244,6 +244,16 @@ export default function CandidateMyApplications() {
                         Ver Detalhes da Vaga
                       </Button>
                       
+                      {app.jobs?.company_id && (
+                        <Button
+                          onClick={() => navigate(`/company-public-profile/${app.jobs.company_id}`)}
+                          variant="outline"
+                          size="sm"
+                        >
+                          Ver Perfil da Empresa
+                        </Button>
+                      )}
+                      
                       {app.status === 'accepted' && !app.candidate_accepted && app.start_date && (
                         <Button
                           onClick={() => navigate(`/contract/${app.id}`)}
