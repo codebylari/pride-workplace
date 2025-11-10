@@ -387,7 +387,10 @@ export default function CandidateProfile() {
                       </h3>
                       <span className={`inline-block px-3 py-1 rounded-full text-sm ${darkMode ? "bg-gray-700 text-gray-200" : "bg-white text-gray-800"}`}>
                         {profileData.remote_preference === "sim" ? "Sim, busco projetos remotos" : 
-                         profileData.remote_preference === "talvez" ? "Talvez, estou aberto(a)" :
+                         profileData.remote_preference === "talvez" ? 
+                           userGender === "feminino" ? "Talvez, estou aberta" :
+                           userGender === "masculino" ? "Talvez, estou aberto" :
+                           "Talvez, estou aberto(a)" :
                          "Não busco projetos remotos"}
                       </span>
                     </div>
