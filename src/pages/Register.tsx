@@ -42,6 +42,8 @@ export default function Register() {
   const [gender, setGender] = useState<"feminino" | "masculino" | "outros" | "">("");
   const [customGender, setCustomGender] = useState("");
   const [orientation, setOrientation] = useState<"heterossexual" | "lgbt" | "">("");
+  const [isPcd, setIsPcd] = useState<boolean | null>(null);
+  const [pcdType, setPcdType] = useState("");
   const [fullName, setFullName] = useState("");
   const [lastName, setLastName] = useState("");
   const [birthDate, setBirthDate] = useState("");
@@ -175,6 +177,9 @@ export default function Register() {
               cpf: cpf.trim(),
               rg: rg.trim(),
               phone: phone.trim(),
+              is_pcd: isPcd || false,
+              pcd_type: isPcd ? pcdType : null,
+              is_lgbt: orientation === "lgbt" || gender === "feminino",
             }),
           },
         },
@@ -909,7 +914,99 @@ export default function Register() {
         
         {selectedRemote && (
           <Button
-            onClick={() => setStep(7)}
+            onClick={() => setStep(6.7)}
+            className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-5 md:py-6 rounded-full text-base md:text-lg font-semibold px-8 md:px-10 w-full md:w-80"
+          >
+            PRÓXIMO
+          </Button>
+        )}
+      </div>
+    );
+  };
+
+  // ------------------- STEP 6.7 - PERGUNTA SOBRE PCD -------------------
+  const Step6_7Candidate = () => {
+    const [selectedPcd, setSelectedPcd] = useState<boolean | null>(isPcd);
+    const [localPcdType, setLocalPcdType] = useState(pcdType);
+    
+    const handlePcdSelect = (value: boolean) => {
+      setSelectedPcd(value);
+      setIsPcd(value);
+      if (!value) {
+        setPcdType("");
+        setLocalPcdType("");
+      }
+    };
+    
+    const handleContinue = () => {
+      if (selectedPcd && localPcdType) {
+        setPcdType(localPcdType);
+      }
+      setStep(7);
+    };
+    
+    return (
+      <div className="flex flex-col items-center space-y-6 md:space-y-8 text-center text-white px-4">
+        <div className="self-start flex items-center justify-between w-full mb-2">
+          <button
+            onClick={() => setStep(6.5)}
+            className="flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+          >
+            <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
+            <span className="font-medium">Voltar</span>
+          </button>
+          <button
+            onClick={() => navigate("/auth")}
+            className="text-white/60 hover:text-white text-sm underline transition-colors"
+          >
+            Ir para login
+          </button>
+        </div>
+        <h2 className="text-2xl md:text-3xl font-bold">Você é uma pessoa com deficiência (PCD)?</h2>
+        
+        <div className="flex gap-6 justify-center items-center">
+          <button
+            onClick={() => handlePcdSelect(true)}
+            className={`p-8 rounded-2xl transition-all ${
+              selectedPcd === true
+                ? "bg-success text-success-foreground scale-110"
+                : "bg-white/20 text-white hover:bg-white/30"
+            }`}
+          >
+            <div className="text-6xl">✓</div>
+            <p className="mt-2 text-lg font-medium">Sim</p>
+          </button>
+          
+          <button
+            onClick={() => handlePcdSelect(false)}
+            className={`p-8 rounded-2xl transition-all ${
+              selectedPcd === false
+                ? "bg-success text-success-foreground scale-110"
+                : "bg-white/20 text-white hover:bg-white/30"
+            }`}
+          >
+            <div className="text-6xl">✗</div>
+            <p className="mt-2 text-lg font-medium">Não</p>
+          </button>
+        </div>
+        
+        {selectedPcd === true && (
+          <div className="w-full max-w-md space-y-3 animate-fade-in">
+            <label className="block text-white text-lg font-medium">Especifique o tipo de deficiência:</label>
+            <input
+              type="text"
+              value={localPcdType}
+              onChange={(e) => setLocalPcdType(e.target.value)}
+              placeholder="Ex: Física, Visual, Auditiva, Intelectual..."
+              autoFocus
+              className="w-full py-4 px-6 rounded-full bg-white/20 text-white placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-success focus:bg-white/30 text-base md:text-lg transition-all"
+            />
+          </div>
+        )}
+        
+        {(selectedPcd === false || (selectedPcd === true && localPcdType.trim())) && (
+          <Button
+            onClick={handleContinue}
             className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-5 md:py-6 rounded-full text-base md:text-lg font-semibold px-8 md:px-10 w-full md:w-80"
           >
             PRÓXIMO
@@ -995,7 +1092,7 @@ export default function Register() {
       <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6 max-w-4xl mx-auto px-4">
         <button
           type="button"
-          onClick={() => setStep(6)}
+          onClick={() => setStep(6.7)}
           className="flex items-center gap-2 text-white/80 hover:text-white transition-colors group mb-4"
         >
           <ArrowLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
@@ -2407,6 +2504,7 @@ export default function Register() {
       {role === "candidate" && step === 5 && <Step5Candidate />}
       {role === "candidate" && step === 6 && <Step6Candidate />}
       {role === "candidate" && step === 6.5 && <Step6_5Candidate />}
+      {role === "candidate" && step === 6.7 && <Step6_7Candidate />}
       {role === "candidate" && step === 7 && Step7Candidate}
       {role === "candidate" && step === 8 && <Step8Terms />}
       {role === "candidate" && step === 9 && <Step9Photo />}
