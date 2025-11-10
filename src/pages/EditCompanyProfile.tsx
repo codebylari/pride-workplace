@@ -28,6 +28,7 @@ export default function EditCompanyProfile() {
   const [displayName, setDisplayName] = useState("");
   const [about, setAbout] = useState("");
   const [seeking, setSeeking] = useState("");
+  const [training, setTraining] = useState("");
   const [sector, setSector] = useState("");
   const [state, setState] = useState("");
   const [city, setCity] = useState("");
@@ -44,6 +45,7 @@ export default function EditCompanyProfile() {
     displayName: "",
     about: "",
     seeking: "",
+    training: "",
     sector: "",
     state: "",
     city: "",
@@ -89,7 +91,7 @@ export default function EditCompanyProfile() {
       
       const { data, error } = await supabase
         .from("company_profiles")
-        .select("logo_url, about, seeking, sector, state, city")
+        .select("logo_url, about, seeking, training, sector, state, city")
         .eq("user_id", user.id)
         .maybeSingle();
       
@@ -102,6 +104,7 @@ export default function EditCompanyProfile() {
         displayName: user.user_metadata?.company_name || companyName,
         about: data?.about || "",
         seeking: data?.seeking || "",
+        training: data?.training || "",
         sector: data?.sector || "",
         state: data?.state || "",
         city: data?.city || "",
@@ -112,6 +115,7 @@ export default function EditCompanyProfile() {
       setDisplayName(initialData.displayName);
       setAbout(initialData.about);
       setSeeking(initialData.seeking);
+      setTraining(initialData.training);
       setSector(initialData.sector);
       
       // Set state first, which will trigger the cities useEffect
@@ -155,6 +159,7 @@ export default function EditCompanyProfile() {
       displayName !== originalValues.displayName ||
       about !== originalValues.about ||
       seeking !== originalValues.seeking ||
+      training !== originalValues.training ||
       sector !== originalValues.sector ||
       state !== originalValues.state ||
       city !== originalValues.city ||
@@ -187,6 +192,7 @@ export default function EditCompanyProfile() {
         fantasy_name: displayName.trim(),
         about: about.trim(),
         seeking: seeking.trim(),
+        training: training.trim(),
         sector: sector.trim(),
         state: state,
         city: city,
@@ -268,6 +274,7 @@ export default function EditCompanyProfile() {
         displayName,
         about,
         seeking,
+        training,
         sector,
         state,
         city,
@@ -354,6 +361,19 @@ export default function EditCompanyProfile() {
                   rows={5}
                   className={darkMode ? "bg-gray-700 text-white" : ""}
                   placeholder="Digite cada item em uma nova linha"
+                />
+              </div>
+
+              <div>
+                <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-900"}`}>
+                  Formação e Treinamentos Oferecidos
+                </label>
+                <Textarea
+                  value={training}
+                  onChange={(e) => setTraining(e.target.value)}
+                  rows={5}
+                  className={darkMode ? "bg-gray-700 text-white" : ""}
+                  placeholder="Descreva os treinamentos, capacitações e programas de formação que a empresa oferece aos colaboradores"
                 />
               </div>
 

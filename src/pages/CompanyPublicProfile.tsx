@@ -332,21 +332,11 @@ export default function CompanyPublicProfile() {
                       ×
                     </button>
                     <h3 className={`text-xl font-bold mb-4 ${darkMode ? "text-white" : "text-gray-800"}`}>
-                      Informações da Empresa
+                      Formação e Treinamentos
                     </h3>
-                    <div className={`space-y-2 ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-                      <p><strong>CNPJ:</strong> {companyData.cnpj}</p>
-                      <p><strong>Nome Fantasia:</strong> {companyData.fantasy_name}</p>
-                      {companyData.city && companyData.state && (
-                        <p><strong>Localização:</strong> {companyData.city}, {companyData.state}</p>
-                      )}
-                      {companyData.sector && (
-                        <p><strong>Setor:</strong> {companyData.sector}</p>
-                      )}
-                      {companyData.training && (
-                        <p><strong>Formação:</strong> {companyData.training}</p>
-                      )}
-                    </div>
+                    <p className={`leading-relaxed ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+                      {companyData.training || "A empresa ainda não informou sobre os treinamentos e capacitações oferecidos."}
+                    </p>
                   </div>
                 )}
               </div>
