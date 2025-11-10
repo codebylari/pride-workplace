@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Menu, CheckCircle2 } from "lucide-react";
+import { Menu, CheckCircle2, XCircle } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { CandidateSidebar } from "@/components/CandidateSidebar";
 import { CompanySidebar } from "@/components/CompanySidebar";
 import { NotificationsPanel } from "@/components/NotificationsPanel";
+import { z } from "zod";
 
 export default function CandidateChangeEmail() {
   const navigate = useNavigate();
@@ -28,6 +29,13 @@ export default function CandidateChangeEmail() {
   const [confirmNewEmail, setConfirmNewEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [pendingEmail, setPendingEmail] = useState("");
+
+  // Validação de email usando zod
+  const emailSchema = z.string().email();
+  
+  const isCurrentEmailValid = currentEmail.length > 0 && emailSchema.safeParse(currentEmail).success;
+  const isNewEmailValid = newEmail.length > 0 && emailSchema.safeParse(newEmail).success;
+  const isConfirmEmailValid = confirmNewEmail.length > 0 && confirmNewEmail === newEmail && isNewEmailValid;
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -130,39 +138,72 @@ export default function CandidateChangeEmail() {
               <label className={`block text-sm mb-2 ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
                 Digite seu email cadastrado
               </label>
-              <input
-                type="email"
-                value={currentEmail}
-                onChange={(e) => setCurrentEmail(e.target.value)}
-                className="w-full p-3 rounded-lg border border-gray-300 text-black"
-                placeholder="Email atual"
-              />
+              <div className="relative">
+                <input
+                  type="email"
+                  value={currentEmail}
+                  onChange={(e) => setCurrentEmail(e.target.value)}
+                  className="w-full p-3 pr-12 rounded-lg border border-gray-300 text-black"
+                  placeholder="Email atual"
+                />
+                {currentEmail.length > 0 && (
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                    {isCurrentEmailValid ? (
+                      <CheckCircle2 className="w-5 h-5 text-green-500" />
+                    ) : (
+                      <XCircle className="w-5 h-5 text-red-500" />
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
 
             <div>
               <label className={`block text-sm mb-2 ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
                 Digite o seu novo email
               </label>
-              <input
-                type="email"
-                value={newEmail}
-                onChange={(e) => setNewEmail(e.target.value)}
-                className="w-full p-3 rounded-lg border border-gray-300 text-black"
-                placeholder="Novo email"
-              />
+              <div className="relative">
+                <input
+                  type="email"
+                  value={newEmail}
+                  onChange={(e) => setNewEmail(e.target.value)}
+                  className="w-full p-3 pr-12 rounded-lg border border-gray-300 text-black"
+                  placeholder="Novo email"
+                />
+                {newEmail.length > 0 && (
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                    {isNewEmailValid ? (
+                      <CheckCircle2 className="w-5 h-5 text-green-500" />
+                    ) : (
+                      <XCircle className="w-5 h-5 text-red-500" />
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
 
             <div>
               <label className={`block text-sm mb-2 ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
                 Confirme seu novo email
               </label>
-              <input
-                type="email"
-                value={confirmNewEmail}
-                onChange={(e) => setConfirmNewEmail(e.target.value)}
-                className="w-full p-3 rounded-lg border border-gray-300 text-black"
-                placeholder="Confirme o novo email"
-              />
+              <div className="relative">
+                <input
+                  type="email"
+                  value={confirmNewEmail}
+                  onChange={(e) => setConfirmNewEmail(e.target.value)}
+                  className="w-full p-3 pr-12 rounded-lg border border-gray-300 text-black"
+                  placeholder="Confirme o novo email"
+                />
+                {confirmNewEmail.length > 0 && (
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                    {isConfirmEmailValid ? (
+                      <CheckCircle2 className="w-5 h-5 text-green-500" />
+                    ) : (
+                      <XCircle className="w-5 h-5 text-red-500" />
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
 
             <button
