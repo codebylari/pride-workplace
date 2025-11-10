@@ -70,6 +70,7 @@ import AdminJobs from "./pages/AdminJobs";
 import AdminApplications from "./pages/AdminApplications";
 import AdminSeedData from "./pages/AdminSeedData";
 import InitAdmin from "./pages/InitAdmin";
+import CreateTestAccounts from "./pages/CreateTestAccounts";
 
 const queryClient = new QueryClient();
 
@@ -84,6 +85,7 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/register" element={<Register />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/create-test-accounts" element={<CreateTestAccounts />} />
             <Route path="/init-admin" element={<InitAdmin />} />
             <Route path="/" element={<Index />} />
             

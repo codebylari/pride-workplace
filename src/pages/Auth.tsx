@@ -220,6 +220,16 @@ export default function Auth() {
               >
                 {loading ? "Entrando..." : "Entrar"}
               </Button>
+              
+              <div className="text-center pt-2">
+                <button
+                  type="button"
+                  onClick={() => navigate("/create-test-accounts")}
+                  className="text-white/50 text-xs hover:text-white/80 transition-colors underline-offset-2 hover:underline"
+                >
+                  🧪 Criar contas de teste
+                </button>
+              </div>
             </form>
           </div>
         </div>
