@@ -47,6 +47,14 @@ export default function EditCandidateProfile() {
   const [city, setCity] = useState("");
   const [states, setStates] = useState<Array<{ sigla: string; nome: string }>>([]);
   const [cities, setCities] = useState<string[]>([]);
+  
+  // Qualificações Profissionais
+  const [experienceLevel, setExperienceLevel] = useState("");
+  const [workArea, setWorkArea] = useState("");
+  const [githubLevel, setGithubLevel] = useState("");
+  const [remotePreference, setRemotePreference] = useState("");
+  const [specializationAreas, setSpecializationAreas] = useState<string[]>([]);
+  const [opportunityType, setOpportunityType] = useState<string[]>([]);
 
   // Display names - prioritizes social name
   const [userName, setUserName] = useState("Usuário");
@@ -81,7 +89,7 @@ export default function EditCandidateProfile() {
 
       const { data } = await supabase
         .from("profiles")
-        .select("gender, linkedin_url, about_me, experience, education, journey, resume_url, photo_url, state, city, social_name, full_name")
+        .select("gender, linkedin_url, about_me, experience, education, journey, resume_url, photo_url, state, city, social_name, full_name, experience_level, work_area, github_level, remote_preference, specialization_areas, opportunity_type")
         .eq("id", user.id)
         .maybeSingle();
       
@@ -109,6 +117,14 @@ export default function EditCandidateProfile() {
         // Load state and city from database or fallback to user metadata
         setState(data.state || user.user_metadata?.state || "");
         setCity(data.city || user.user_metadata?.city || "");
+        
+        // Load professional qualifications
+        setExperienceLevel(data.experience_level || "");
+        setWorkArea(data.work_area || "");
+        setGithubLevel(data.github_level || "");
+        setRemotePreference(data.remote_preference || "");
+        setSpecializationAreas(data.specialization_areas || []);
+        setOpportunityType(data.opportunity_type || []);
       } else {
         // If no profile data, load from metadata
         setState(user.user_metadata?.state || "");
@@ -225,7 +241,13 @@ export default function EditCandidateProfile() {
       hasGenderChange ||
       linkedinUrl.trim() !== "" ||
       state.trim() !== "" ||
-      city.trim() !== "";
+      city.trim() !== "" ||
+      experienceLevel.trim() !== "" ||
+      workArea.trim() !== "" ||
+      githubLevel.trim() !== "" ||
+      remotePreference.trim() !== "" ||
+      specializationAreas.length > 0 ||
+      opportunityType.length > 0;
 
     if (!hasChanges) {
       toast({
@@ -287,6 +309,26 @@ export default function EditCandidateProfile() {
       }
       if (city.trim() !== "") {
         updates.city = city;
+      }
+      
+      // Save professional qualifications
+      if (experienceLevel.trim() !== "") {
+        updates.experience_level = experienceLevel;
+      }
+      if (workArea.trim() !== "") {
+        updates.work_area = workArea;
+      }
+      if (githubLevel.trim() !== "") {
+        updates.github_level = githubLevel;
+      }
+      if (remotePreference.trim() !== "") {
+        updates.remote_preference = remotePreference;
+      }
+      if (specializationAreas.length > 0) {
+        updates.specialization_areas = specializationAreas;
+      }
+      if (opportunityType.length > 0) {
+        updates.opportunity_type = opportunityType;
       }
       
       // Handle AI-generated resume
@@ -597,6 +639,146 @@ export default function EditCandidateProfile() {
                     </option>
                   ))}
                 </select>
+              </div>
+
+              {/* Qualificações Profissionais */}
+              <div className={`p-6 rounded-xl border-2 ${darkMode ? "bg-gray-600 border-purple-600" : "bg-purple-50 border-purple-300"}`}>
+                <h3 className={`text-xl font-bold mb-4 ${darkMode ? "text-white" : "text-gray-800"}`}>
+                  Qualificações Profissionais
+                </h3>
+                
+                <div className="space-y-4">
+                  <div>
+                    <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-800"}`}>
+                      Nível de Experiência
+                    </label>
+                    <select
+                      value={experienceLevel}
+                      onChange={(e) => setExperienceLevel(e.target.value)}
+                      className={`w-full p-3 rounded-lg border ${darkMode ? "bg-gray-700 text-white border-gray-500" : "bg-white text-gray-800 border-gray-300"}`}
+                    >
+                      <option value="">Selecione</option>
+                      <option value="Estagiário">Estagiário</option>
+                      <option value="Júnior">Júnior</option>
+                      <option value="Pleno">Pleno</option>
+                      <option value="Sênior">Sênior</option>
+                      <option value="Especialista">Especialista</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-800"}`}>
+                      Área de Atuação
+                    </label>
+                    <select
+                      value={workArea}
+                      onChange={(e) => setWorkArea(e.target.value)}
+                      className={`w-full p-3 rounded-lg border ${darkMode ? "bg-gray-700 text-white border-gray-500" : "bg-white text-gray-800 border-gray-300"}`}
+                    >
+                      <option value="">Selecione</option>
+                      <option value="Desenvolvimento Front-end">Desenvolvimento Front-end</option>
+                      <option value="Desenvolvimento Back-end">Desenvolvimento Back-end</option>
+                      <option value="Desenvolvimento Full-stack">Desenvolvimento Full-stack</option>
+                      <option value="Mobile">Mobile</option>
+                      <option value="Data Science">Data Science</option>
+                      <option value="DevOps">DevOps</option>
+                      <option value="UI/UX Design">UI/UX Design</option>
+                      <option value="QA/Testes">QA/Testes</option>
+                      <option value="Gerenciamento de Projetos">Gerenciamento de Projetos</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-800"}`}>
+                      Conhecimento em GitHub
+                    </label>
+                    <select
+                      value={githubLevel}
+                      onChange={(e) => setGithubLevel(e.target.value)}
+                      className={`w-full p-3 rounded-lg border ${darkMode ? "bg-gray-700 text-white border-gray-500" : "bg-white text-gray-800 border-gray-300"}`}
+                    >
+                      <option value="">Selecione</option>
+                      <option value="Nenhum conhecimento">Nenhum conhecimento</option>
+                      <option value="Básico">Básico</option>
+                      <option value="Intermediário">Intermediário</option>
+                      <option value="Avançado">Avançado</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-800"}`}>
+                      Preferência de Trabalho Remoto
+                    </label>
+                    <select
+                      value={remotePreference}
+                      onChange={(e) => setRemotePreference(e.target.value)}
+                      className={`w-full p-3 rounded-lg border ${darkMode ? "bg-gray-700 text-white border-gray-500" : "bg-white text-gray-800 border-gray-300"}`}
+                    >
+                      <option value="">Selecione</option>
+                      <option value="sim">Sim, busco projetos remotos</option>
+                      <option value="talvez">Talvez, estou aberto(a)</option>
+                      <option value="nao">Não busco projetos remotos</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-800"}`}>
+                      Áreas de Especialização
+                    </label>
+                    <div className="grid grid-cols-2 gap-2">
+                      {["Desenvolvimento de Software", "Análise de Dados", "Design", "Marketing Digital", "Testes", "Segurança"].map((area) => (
+                        <label key={area} className={`flex items-center gap-2 p-2 rounded cursor-pointer ${
+                          specializationAreas.includes(area)
+                            ? darkMode ? "bg-purple-900" : "bg-purple-100"
+                            : darkMode ? "bg-gray-700" : "bg-white"
+                        }`}>
+                          <input
+                            type="checkbox"
+                            checked={specializationAreas.includes(area)}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setSpecializationAreas([...specializationAreas, area]);
+                              } else {
+                                setSpecializationAreas(specializationAreas.filter(a => a !== area));
+                              }
+                            }}
+                            className="rounded"
+                          />
+                          <span className={`text-sm ${darkMode ? "text-white" : "text-gray-800"}`}>{area}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-800"}`}>
+                      Tipos de Oportunidade
+                    </label>
+                    <div className="grid grid-cols-2 gap-2">
+                      {["CLT", "PJ", "Freela", "Temporário"].map((type) => (
+                        <label key={type} className={`flex items-center gap-2 p-2 rounded cursor-pointer ${
+                          opportunityType.includes(type)
+                            ? darkMode ? "bg-purple-900" : "bg-purple-100"
+                            : darkMode ? "bg-gray-700" : "bg-white"
+                        }`}>
+                          <input
+                            type="checkbox"
+                            checked={opportunityType.includes(type)}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setOpportunityType([...opportunityType, type]);
+                              } else {
+                                setOpportunityType(opportunityType.filter(t => t !== type));
+                              }
+                            }}
+                            className="rounded"
+                          />
+                          <span className={`text-sm ${darkMode ? "text-white" : "text-gray-800"}`}>{type}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
