@@ -46,14 +46,14 @@ Retorne APENAS o HTML completo, sem explicações adicionais.`;
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${LOVABLE_API_KEY}`,
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset=utf-8',
       },
       body: JSON.stringify({
         model: 'google/gemini-2.5-flash',
         messages: [
           {
             role: 'system',
-            content: 'Você é um especialista em criação de currículos profissionais. Crie currículos bem formatados em HTML com CSS inline.'
+            content: 'Você é um especialista em criação de currículos profissionais. Crie currículos bem formatados em HTML com CSS inline e encoding UTF-8 correto.'
           },
           {
             role: 'user',
@@ -70,7 +70,15 @@ Retorne APENAS o HTML completo, sem explicações adicionais.`;
     }
 
     const aiData = await aiResponse.json();
-    const htmlContent = aiData.choices[0].message.content;
+    let htmlContent = aiData.choices[0].message.content;
+    
+    // Ensure HTML has proper UTF-8 meta tag if not present
+    if (!htmlContent.includes('charset') && !htmlContent.includes('UTF-8')) {
+      htmlContent = htmlContent.replace(
+        /<head>/i,
+        '<head>\n    <meta charset="UTF-8">'
+      );
+    }
 
     // Initialize Supabase client with service role
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
@@ -91,11 +99,14 @@ Retorne APENAS o HTML completo, sem explicações adicionais.`;
     const fileName = `resume-${user.id}-${Date.now()}.html`;
     const filePath = `${user.id}/${fileName}`;
 
-    // Upload to Supabase Storage
+    // Upload to Supabase Storage with UTF-8 encoding
+    const encoder = new TextEncoder();
+    const htmlBytes = encoder.encode(htmlContent);
+    
     const { error: uploadError } = await supabaseClient.storage
       .from('profile-photos')
-      .upload(filePath, htmlContent, {
-        contentType: 'text/html',
+      .upload(filePath, htmlBytes, {
+        contentType: 'text/html; charset=utf-8',
         upsert: true,
       });
 

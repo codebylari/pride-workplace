@@ -457,15 +457,20 @@ export default function CandidateProfile() {
                       </h3>
                       {key === "curriculo" && section.content.trim() ? (
                         <div className="text-center">
-                          <a
-                            href={section.content}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                          <button
+                            onClick={() => {
+                              const link = document.createElement('a');
+                              link.href = section.content;
+                              link.download = `curriculo-${fullName.replace(/\s+/g, '-').toLowerCase()}.html`;
+                              document.body.appendChild(link);
+                              link.click();
+                              document.body.removeChild(link);
+                            }}
                             className="inline-flex items-center gap-2 px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
                           >
                             <FileText size={20} />
                             <span>Baixar Currículo</span>
-                          </a>
+                          </button>
                         </div>
                       ) : section.content.trim() ? (
                         <div className={`whitespace-pre-line text-sm leading-relaxed ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
