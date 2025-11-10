@@ -78,6 +78,25 @@ export default function CandidateChangeEmail() {
     setLoading(true);
 
     try {
+      // Verificar se o domínio do email é válido
+      const { data: verifyData, error: verifyError } = await supabase.functions.invoke('verify-email-domain', {
+        body: { email: newEmail }
+      });
+
+      if (verifyError) {
+        throw new Error('Erro ao verificar o domínio do email');
+      }
+
+      if (!verifyData.valid) {
+        toast({
+          title: "Email Inválido",
+          description: verifyData.error || "Este email não pode receber mensagens. Verifique o domínio.",
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
+
       const targetEmail = newEmail;
       const { data, error } = await supabase.auth.updateUser(
         { email: targetEmail }
