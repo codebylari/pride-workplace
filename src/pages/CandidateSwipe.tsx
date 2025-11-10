@@ -18,11 +18,24 @@ interface Job {
   job_type: string;
   requirements: string | null;
   company_id: string;
+  required_experience_level: string | null;
+  required_github_level: string | null;
+  required_specialization_areas: string[] | null;
+  is_remote: boolean | null;
   company_profiles?: {
     fantasy_name: string;
     logo_url: string | null;
     sector: string | null;
   };
+}
+
+interface CandidateProfile {
+  specialization_areas: string[] | null;
+  work_area: string | null;
+  experience_level: string | null;
+  opportunity_type: string[] | null;
+  github_level: string | null;
+  remote_preference: string | null;
 }
 
 export default function CandidateSwipe() {
@@ -34,10 +47,10 @@ export default function CandidateSwipe() {
   const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [swipedJobs, setSwipedJobs] = useState<Set<string>>(new Set());
+  const [candidateProfile, setCandidateProfile] = useState<CandidateProfile | null>(null);
 
   useEffect(() => {
     checkAuth();
-    fetchJobs();
   }, []);
 
   const checkAuth = async () => {
@@ -46,17 +59,27 @@ export default function CandidateSwipe() {
       navigate("/auth");
       return;
     }
+    
+    // Buscar perfil do candidato
+    const { data: profileData } = await supabase
+      .from("profiles")
+      .select("specialization_areas, work_area, experience_level, opportunity_type, github_level, remote_preference")
+      .eq("id", session.user.id)
+      .single();
+    
+    if (profileData) {
+      setCandidateProfile(profileData);
+    }
+    
+    fetchJobs(session.user.id);
   };
 
-  const fetchJobs = async () => {
+  const fetchJobs = async (userId: string) => {
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) return;
-
       const { data: swipesData } = await supabase
         .from("swipes")
         .select("target_id")
-        .eq("user_id", session.user.id)
+        .eq("user_id", userId)
         .eq("target_type", "job");
 
       const swipedJobIds = swipesData?.map(s => s.target_id) || [];
@@ -98,6 +121,55 @@ export default function CandidateSwipe() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const checkQualification = (job: Job): { isQualified: boolean; reasons: string[] } => {
+    if (!candidateProfile) return { isQualified: true, reasons: [] };
+    
+    const reasons: string[] = [];
+    
+    // Verificar nível de experiência
+    if (job.required_experience_level && candidateProfile.experience_level) {
+      const levels = ["Júnior", "Pleno", "Sênior", "Especialista"];
+      const requiredIndex = levels.indexOf(job.required_experience_level);
+      const candidateIndex = levels.indexOf(candidateProfile.experience_level);
+      
+      if (candidateIndex < requiredIndex) {
+        reasons.push(`Nível de experiência requerido: ${job.required_experience_level} (você tem: ${candidateProfile.experience_level})`);
+      }
+    }
+    
+    // Verificar GitHub
+    if (job.required_github_level && candidateProfile.github_level) {
+      const githubLevels = ["Nenhum conhecimento", "Básico", "Intermediário", "Avançado"];
+      const requiredIndex = githubLevels.indexOf(job.required_github_level);
+      const candidateIndex = githubLevels.indexOf(candidateProfile.github_level);
+      
+      if (candidateIndex < requiredIndex) {
+        reasons.push(`Conhecimento em GitHub requerido: ${job.required_github_level} (você tem: ${candidateProfile.github_level})`);
+      }
+    }
+    
+    // Verificar áreas de especialização
+    if (job.required_specialization_areas && job.required_specialization_areas.length > 0 && candidateProfile.specialization_areas) {
+      const hasMatchingArea = job.required_specialization_areas.some(area => 
+        candidateProfile.specialization_areas?.includes(area)
+      );
+      
+      if (!hasMatchingArea) {
+        reasons.push(`Áreas requeridas: ${job.required_specialization_areas.join(", ")} (você não possui nenhuma dessas áreas)`);
+      }
+    }
+    
+    // Verificar trabalho remoto
+    if (job.is_remote && candidateProfile.remote_preference === "nao") {
+      reasons.push("Esta vaga é remota, mas você indicou que não busca projetos remotos");
+    }
+    
+    return {
+      isQualified: reasons.length === 0,
+      reasons
+    };
   };
 
   const handleSwipe = async (action: "like" | "dislike" | "super_like") => {
@@ -265,6 +337,25 @@ export default function CandidateSwipe() {
                     </p>
                   </div>
                 )}
+                
+                {(() => {
+                  const { isQualified, reasons } = checkQualification(currentJob);
+                  if (!isQualified) {
+                    return (
+                      <div className="mt-4 p-4 bg-amber-500/20 border border-amber-500 rounded-lg">
+                        <h3 className="font-semibold mb-2 text-amber-600 dark:text-amber-400 flex items-center gap-2">
+                          ⚠️ Atenção: Perfil não totalmente qualificado
+                        </h3>
+                        <ul className="text-sm text-amber-700 dark:text-amber-300 space-y-1">
+                          {reasons.map((reason, index) => (
+                            <li key={index}>• {reason}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    );
+                  }
+                  return null;
+                })()}
               </div>
             </Card>
 

@@ -158,8 +158,12 @@ export type Database = {
           created_at: string
           description: string
           id: string
+          is_remote: boolean | null
           job_type: string
           location: string
+          required_experience_level: string | null
+          required_github_level: string | null
+          required_specialization_areas: string[] | null
           requirements: string | null
           salary: string | null
           title: string
@@ -170,8 +174,12 @@ export type Database = {
           created_at?: string
           description: string
           id?: string
+          is_remote?: boolean | null
           job_type: string
           location: string
+          required_experience_level?: string | null
+          required_github_level?: string | null
+          required_specialization_areas?: string[] | null
           requirements?: string | null
           salary?: string | null
           title: string
@@ -182,8 +190,12 @@ export type Database = {
           created_at?: string
           description?: string
           id?: string
+          is_remote?: boolean | null
           job_type?: string
           location?: string
+          required_experience_level?: string | null
+          required_github_level?: string | null
+          required_specialization_areas?: string[] | null
           requirements?: string | null
           salary?: string | null
           title?: string
@@ -266,22 +278,28 @@ export type Database = {
           created_at: string
           education: string | null
           experience: string | null
+          experience_level: string | null
           full_name: string
           gender: string | null
+          github_level: string | null
           id: string
           is_active: boolean
           is_lgbt: boolean | null
           is_pcd: boolean | null
           journey: string | null
           linkedin_url: string | null
+          opportunity_type: string[] | null
           pcd_type: string | null
           photo_url: string | null
           rating: number | null
+          remote_preference: string | null
           resume_url: string | null
           social_name: string | null
+          specialization_areas: string[] | null
           state: string | null
           total_ratings: number | null
           updated_at: string
+          work_area: string | null
         }
         Insert: {
           about_me?: string | null
@@ -289,22 +307,28 @@ export type Database = {
           created_at?: string
           education?: string | null
           experience?: string | null
+          experience_level?: string | null
           full_name: string
           gender?: string | null
+          github_level?: string | null
           id: string
           is_active?: boolean
           is_lgbt?: boolean | null
           is_pcd?: boolean | null
           journey?: string | null
           linkedin_url?: string | null
+          opportunity_type?: string[] | null
           pcd_type?: string | null
           photo_url?: string | null
           rating?: number | null
+          remote_preference?: string | null
           resume_url?: string | null
           social_name?: string | null
+          specialization_areas?: string[] | null
           state?: string | null
           total_ratings?: number | null
           updated_at?: string
+          work_area?: string | null
         }
         Update: {
           about_me?: string | null
@@ -312,22 +336,28 @@ export type Database = {
           created_at?: string
           education?: string | null
           experience?: string | null
+          experience_level?: string | null
           full_name?: string
           gender?: string | null
+          github_level?: string | null
           id?: string
           is_active?: boolean
           is_lgbt?: boolean | null
           is_pcd?: boolean | null
           journey?: string | null
           linkedin_url?: string | null
+          opportunity_type?: string[] | null
           pcd_type?: string | null
           photo_url?: string | null
           rating?: number | null
+          remote_preference?: string | null
           resume_url?: string | null
           social_name?: string | null
+          specialization_areas?: string[] | null
           state?: string | null
           total_ratings?: number | null
           updated_at?: string
+          work_area?: string | null
         }
         Relationships: []
       }

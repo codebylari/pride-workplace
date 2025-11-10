@@ -62,6 +62,14 @@ export default function Register() {
   const [checkingEmail, setCheckingEmail] = useState(false);
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  
+  // Novos campos para qualificações
+  const [specializationAreas, setSpecializationAreas] = useState<string[]>([]);
+  const [workArea, setWorkArea] = useState("");
+  const [experienceLevel, setExperienceLevel] = useState("");
+  const [opportunityTypes, setOpportunityTypes] = useState<string[]>([]);
+  const [githubLevel, setGithubLevel] = useState("");
+  const [remotePreference, setRemotePreference] = useState("");
 
   // ------------------- CAMPOS EMPRESA -------------------
   const [companyName, setCompanyName] = useState("");
@@ -195,6 +203,25 @@ export default function Register() {
       }
 
       console.log("Usuário criado com sucesso:", data.user.id);
+
+      // Se for candidato, salvar qualificações adicionais
+      if (role === "candidate") {
+        const { error: profileError } = await supabase
+          .from("profiles")
+          .update({
+            specialization_areas: specializationAreas,
+            work_area: workArea,
+            experience_level: experienceLevel,
+            opportunity_type: opportunityTypes,
+            github_level: githubLevel,
+            remote_preference: remotePreference,
+          })
+          .eq("id", data.user.id);
+
+        if (profileError) {
+          console.error("Erro ao salvar qualificações:", profileError);
+        }
+      }
 
       toast({
         title: "Cadastro realizado!",
@@ -575,7 +602,7 @@ export default function Register() {
   };
 
   const Step2_7Candidate = () => {
-    const [selectedAreas, setSelectedAreas] = useState<string[]>([]);
+    const [selectedAreas, setSelectedAreas] = useState<string[]>(specializationAreas);
     
     const toggleArea = (area: string) => {
       setSelectedAreas(prev => 
@@ -583,6 +610,11 @@ export default function Register() {
           ? prev.filter(a => a !== area)
           : [...prev, area]
       );
+    };
+    
+    const handleContinue = () => {
+      setSpecializationAreas(selectedAreas);
+      setStep(3);
     };
     
     return (
@@ -637,7 +669,7 @@ export default function Register() {
         
         {selectedAreas.length > 0 && (
           <Button
-            onClick={() => setStep(3)}
+            onClick={handleContinue}
             className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-5 md:py-6 rounded-full text-base md:text-lg font-semibold px-8 md:px-10 w-full md:w-80"
           >
             PRÓXIMO
@@ -648,7 +680,12 @@ export default function Register() {
   };
 
   const Step3Candidate = () => {
-    const [selectedArea, setSelectedArea] = useState("");
+    const [selectedArea, setSelectedArea] = useState(workArea);
+    
+    const handleContinue = () => {
+      setWorkArea(selectedArea);
+      setStep(4);
+    };
     
     return (
       <div className="flex flex-col items-center space-y-6 md:space-y-8 text-center text-white px-4">
@@ -696,7 +733,7 @@ export default function Register() {
         
         {selectedArea && (
           <Button
-            onClick={() => setStep(4)}
+            onClick={handleContinue}
             className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-5 md:py-6 rounded-full text-base md:text-lg font-semibold px-8 md:px-10 w-full md:w-80"
           >
             PRÓXIMO
@@ -707,7 +744,12 @@ export default function Register() {
   };
 
   const Step4Candidate = () => {
-    const [selectedLevel, setSelectedLevel] = useState("");
+    const [selectedLevel, setSelectedLevel] = useState(experienceLevel);
+    
+    const handleContinue = () => {
+      setExperienceLevel(selectedLevel);
+      setStep(5);
+    };
     
     return (
       <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
@@ -743,7 +785,7 @@ export default function Register() {
         
         {selectedLevel && (
           <Button
-            onClick={() => setStep(5)}
+            onClick={handleContinue}
             className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-5 md:py-6 rounded-full text-base md:text-lg font-semibold px-8 md:px-10 w-full md:w-80"
           >
             PRÓXIMO
@@ -754,7 +796,20 @@ export default function Register() {
   };
 
   const Step5Candidate = () => {
-    const [selectedType, setSelectedType] = useState("");
+    const [selectedTypes, setSelectedTypes] = useState<string[]>(opportunityTypes);
+    
+    const toggleType = (type: string) => {
+      setSelectedTypes(prev => 
+        prev.includes(type) 
+          ? prev.filter(t => t !== type)
+          : [...prev, type]
+      );
+    };
+    
+    const handleContinue = () => {
+      setOpportunityTypes(selectedTypes);
+      setStep(6);
+    };
     
     return (
       <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
@@ -774,13 +829,14 @@ export default function Register() {
           </button>
         </div>
         <h2 className="text-2xl md:text-3xl font-bold">Qual tipo de oportunidade procura?</h2>
+        <p className="text-sm text-white/80">Você pode selecionar mais de uma opção</p>
         {["Estágio", "CLT", "Freelancer", "Trainee", "Temporário", "Aprendiz"].map(
           (option) => (
             <Button
               key={option}
-              onClick={() => setSelectedType(option)}
+              onClick={() => toggleType(option)}
               className={`w-full md:w-80 py-5 md:py-6 rounded-full text-base md:text-lg transition-all ${
-                selectedType === option
+                selectedTypes.includes(option)
                   ? "bg-success hover:bg-success/90 text-success-foreground"
                   : "bg-white/20 hover:bg-white/30 text-white"
               }`}
@@ -790,9 +846,9 @@ export default function Register() {
           )
         )}
         
-        {selectedType && (
+        {selectedTypes.length > 0 && (
           <Button
-            onClick={() => setStep(6)}
+            onClick={handleContinue}
             className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-5 md:py-6 rounded-full text-base md:text-lg font-semibold px-8 md:px-10 w-full md:w-80"
           >
             PRÓXIMO
@@ -803,7 +859,12 @@ export default function Register() {
   };
 
   const Step6Candidate = () => {
-    const [selectedGit, setSelectedGit] = useState("");
+    const [selectedGit, setSelectedGit] = useState(githubLevel);
+    
+    const handleContinue = () => {
+      setGithubLevel(selectedGit);
+      setStep(6.5);
+    };
     
     return (
       <div className="flex flex-col items-center space-y-4 md:space-y-6 text-center text-white px-4">
@@ -843,7 +904,7 @@ export default function Register() {
         
         {selectedGit && (
           <Button
-            onClick={() => setStep(6.5)}
+            onClick={handleContinue}
             className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-5 md:py-6 rounded-full text-base md:text-lg font-semibold px-8 md:px-10 w-full md:w-80"
           >
             PRÓXIMO
@@ -854,7 +915,12 @@ export default function Register() {
   };
 
   const Step6_5Candidate = () => {
-    const [selectedRemote, setSelectedRemote] = useState("");
+    const [selectedRemote, setSelectedRemote] = useState(remotePreference);
+    
+    const handleContinue = () => {
+      setRemotePreference(selectedRemote);
+      setStep(6.7);
+    };
     
     return (
       <div className="flex flex-col items-center space-y-6 md:space-y-8 text-center text-white px-4">
@@ -914,7 +980,7 @@ export default function Register() {
         
         {selectedRemote && (
           <Button
-            onClick={() => setStep(6.7)}
+            onClick={handleContinue}
             className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-5 md:py-6 rounded-full text-base md:text-lg font-semibold px-8 md:px-10 w-full md:w-80"
           >
             PRÓXIMO

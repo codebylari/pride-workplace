@@ -42,6 +42,12 @@ export default function CandidateProfile() {
     is_pcd?: boolean;
     pcd_type?: string;
     is_lgbt?: boolean;
+    specialization_areas?: string[];
+    work_area?: string;
+    experience_level?: string;
+    opportunity_type?: string[];
+    github_level?: string;
+    remote_preference?: string;
   }>({});
 
   useEffect(() => {
@@ -49,7 +55,7 @@ export default function CandidateProfile() {
       if (!user?.id) return;
       const { data } = await supabase
         .from("profiles")
-        .select("photo_url, full_name, social_name, gender, linkedin_url, about_me, experience, education, journey, resume_url, rating, total_ratings, state, city, is_pcd, pcd_type, is_lgbt")
+        .select("photo_url, full_name, social_name, gender, linkedin_url, about_me, experience, education, journey, resume_url, rating, total_ratings, state, city, is_pcd, pcd_type, is_lgbt, specialization_areas, work_area, experience_level, opportunity_type, github_level, remote_preference")
         .eq("id", user.id)
         .maybeSingle();
       
@@ -76,6 +82,12 @@ export default function CandidateProfile() {
         is_pcd: data?.is_pcd,
         pcd_type: data?.pcd_type,
         is_lgbt: data?.is_lgbt,
+        specialization_areas: data?.specialization_areas,
+        work_area: data?.work_area,
+        experience_level: data?.experience_level,
+        opportunity_type: data?.opportunity_type,
+        github_level: data?.github_level,
+        remote_preference: data?.remote_preference,
       });
     };
     load();
@@ -324,6 +336,99 @@ export default function CandidateProfile() {
                   <Linkedin size={20} className="text-blue-600" />
                   <span className="font-medium">Ver LinkedIn</span>
                 </a>
+              </div>
+            )}
+
+            {/* Qualificações Profissionais */}
+            {(profileData.specialization_areas || profileData.work_area || profileData.experience_level || 
+              profileData.opportunity_type || profileData.github_level || profileData.remote_preference) && (
+              <div className={`mb-6 p-6 rounded-xl ${darkMode ? "bg-gray-600" : "bg-gradient-to-br from-purple-50 to-pink-50"}`}>
+                <h2 className={`text-xl font-bold mb-4 ${darkMode ? "text-white" : "text-gray-800"}`}>
+                  Qualificações Profissionais
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {profileData.experience_level && (
+                    <div>
+                      <h3 className={`text-sm font-semibold mb-1 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+                        Nível de Experiência
+                      </h3>
+                      <span className={`inline-block px-3 py-1 rounded-full text-sm ${darkMode ? "bg-gray-700 text-gray-200" : "bg-white text-gray-800"}`}>
+                        {profileData.experience_level}
+                      </span>
+                    </div>
+                  )}
+                  
+                  {profileData.work_area && (
+                    <div>
+                      <h3 className={`text-sm font-semibold mb-1 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+                        Área de Atuação
+                      </h3>
+                      <span className={`inline-block px-3 py-1 rounded-full text-sm ${darkMode ? "bg-gray-700 text-gray-200" : "bg-white text-gray-800"}`}>
+                        {profileData.work_area}
+                      </span>
+                    </div>
+                  )}
+                  
+                  {profileData.github_level && (
+                    <div>
+                      <h3 className={`text-sm font-semibold mb-1 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+                        Conhecimento em GitHub
+                      </h3>
+                      <span className={`inline-block px-3 py-1 rounded-full text-sm ${darkMode ? "bg-gray-700 text-gray-200" : "bg-white text-gray-800"}`}>
+                        {profileData.github_level}
+                      </span>
+                    </div>
+                  )}
+                  
+                  {profileData.remote_preference && (
+                    <div>
+                      <h3 className={`text-sm font-semibold mb-1 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+                        Trabalho Remoto
+                      </h3>
+                      <span className={`inline-block px-3 py-1 rounded-full text-sm ${darkMode ? "bg-gray-700 text-gray-200" : "bg-white text-gray-800"}`}>
+                        {profileData.remote_preference === "sim" ? "Sim, busco projetos remotos" : 
+                         profileData.remote_preference === "talvez" ? "Talvez, estou aberto(a)" :
+                         "Não busco projetos remotos"}
+                      </span>
+                    </div>
+                  )}
+                  
+                  {profileData.specialization_areas && profileData.specialization_areas.length > 0 && (
+                    <div className="md:col-span-2">
+                      <h3 className={`text-sm font-semibold mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+                        Áreas de Especialização
+                      </h3>
+                      <div className="flex flex-wrap gap-2">
+                        {profileData.specialization_areas.map((area, index) => (
+                          <span 
+                            key={index}
+                            className={`px-3 py-1 rounded-full text-sm ${darkMode ? "bg-gray-700 text-gray-200" : "bg-white text-gray-800"}`}
+                          >
+                            {area}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {profileData.opportunity_type && profileData.opportunity_type.length > 0 && (
+                    <div className="md:col-span-2">
+                      <h3 className={`text-sm font-semibold mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+                        Tipos de Oportunidade
+                      </h3>
+                      <div className="flex flex-wrap gap-2">
+                        {profileData.opportunity_type.map((type, index) => (
+                          <span 
+                            key={index}
+                            className={`px-3 py-1 rounded-full text-sm ${darkMode ? "bg-gray-700 text-gray-200" : "bg-white text-gray-800"}`}
+                          >
+                            {type}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
 
