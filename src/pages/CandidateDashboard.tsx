@@ -72,13 +72,17 @@ export default function CandidateDashboard() {
       
       const { data, error } = await supabase
         .from("profiles")
-        .select("full_name")
+        .select("full_name, social_name")
         .eq("id", user.id)
         .maybeSingle();
       
-      if (data?.full_name) {
-        const firstName = data.full_name.split(' ')[0];
-        setCandidateName(firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase());
+      if (data) {
+        // Prioriza nome social se disponível
+        const nameToUse = data.social_name || data.full_name;
+        if (nameToUse) {
+          const firstName = nameToUse.split(' ')[0];
+          setCandidateName(firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase());
+        }
       }
     };
     

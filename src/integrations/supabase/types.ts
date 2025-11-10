@@ -278,6 +278,7 @@ export type Database = {
           photo_url: string | null
           rating: number | null
           resume_url: string | null
+          social_name: string | null
           state: string | null
           total_ratings: number | null
           updated_at: string
@@ -300,6 +301,7 @@ export type Database = {
           photo_url?: string | null
           rating?: number | null
           resume_url?: string | null
+          social_name?: string | null
           state?: string | null
           total_ratings?: number | null
           updated_at?: string
@@ -322,6 +324,7 @@ export type Database = {
           photo_url?: string | null
           rating?: number | null
           resume_url?: string | null
+          social_name?: string | null
           state?: string | null
           total_ratings?: number | null
           updated_at?: string

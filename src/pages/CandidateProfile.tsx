@@ -24,8 +24,8 @@ export default function CandidateProfile() {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
 
   // Get user data
-  const userName = user?.user_metadata?.full_name?.split(" ")[0] || "Usuário";
-  const fullName = user?.user_metadata?.full_name || "Usuário";
+  const [userName, setUserName] = useState("Usuário");
+  const [fullName, setFullName] = useState("Usuário");
   const [rating, setRating] = useState(5.0);
   const [totalRatings, setTotalRatings] = useState(0);
   const [photoUrl, setPhotoUrl] = useState<string | null>(null);
@@ -49,9 +49,14 @@ export default function CandidateProfile() {
       if (!user?.id) return;
       const { data } = await supabase
         .from("profiles")
-        .select("photo_url, full_name, gender, linkedin_url, about_me, experience, education, journey, resume_url, rating, total_ratings, state, city, is_pcd, pcd_type, is_lgbt")
+        .select("photo_url, full_name, social_name, gender, linkedin_url, about_me, experience, education, journey, resume_url, rating, total_ratings, state, city, is_pcd, pcd_type, is_lgbt")
         .eq("id", user.id)
         .maybeSingle();
+      
+      // Prioriza nome social quando disponível
+      const nameToUse = data?.social_name || data?.full_name || "Usuário";
+      setFullName(nameToUse);
+      setUserName(nameToUse.split(" ")[0]);
       
       setPhotoUrl(data?.photo_url ?? null);
       setUserGender(data?.gender ?? "");

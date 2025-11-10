@@ -48,6 +48,9 @@ export default function EditCandidateProfile() {
   const [states, setStates] = useState<Array<{ sigla: string; nome: string }>>([]);
   const [cities, setCities] = useState<string[]>([]);
 
+  const [userName, setUserName] = useState("Usuário");
+  const [fullName, setFullName] = useState("Usuário");
+
   // Load existing data
   useEffect(() => {
     const loadProfile = async () => {
@@ -77,11 +80,16 @@ export default function EditCandidateProfile() {
 
       const { data } = await supabase
         .from("profiles")
-        .select("gender, linkedin_url, about_me, experience, education, journey, resume_url, photo_url, state, city")
+        .select("gender, linkedin_url, about_me, experience, education, journey, resume_url, photo_url, state, city, social_name, full_name")
         .eq("id", user.id)
         .maybeSingle();
       
       if (data) {
+        // Prioriza nome social quando disponível
+        const nameToUse = data.social_name || data.full_name || user.user_metadata?.full_name || "Usuário";
+        setFullName(nameToUse);
+        setUserName(nameToUse.split(" ")[0]);
+        
         if (data.gender) {
           if (["feminino", "masculino"].includes(data.gender)) {
             setGenderEdit(data.gender as "feminino" | "masculino");
@@ -128,9 +136,6 @@ export default function EditCandidateProfile() {
       setCities([]);
     }
   }, [state]);
-
-  const userName = user?.user_metadata?.full_name?.split(" ")[0] || "Usuário";
-  const fullName = user?.user_metadata?.full_name || "Usuário";
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {

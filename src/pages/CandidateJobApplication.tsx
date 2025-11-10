@@ -24,11 +24,32 @@ export default function CandidateJobApplication() {
   const [linkedinUrl, setLinkedinUrl] = useState("");
   const [job, setJob] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-
-  const userName = user?.user_metadata?.full_name?.split(" ")[0] || "Usuário";
-  const fullName = user?.user_metadata?.full_name || "Usuário";
+  
+  const [userName, setUserName] = useState("Usuário");
+  const [fullName, setFullName] = useState("Usuário");
   const userEmail = user?.email || "email@exemplo.com";
   const userPhone = "(27) 99999-9999"; // Mock - will be from profile
+
+  // Load user name prioritizing social name
+  useEffect(() => {
+    const loadUserName = async () => {
+      if (!user?.id) return;
+      
+      const { data } = await supabase
+        .from("profiles")
+        .select("full_name, social_name")
+        .eq("id", user.id)
+        .maybeSingle();
+      
+      if (data) {
+        const nameToUse = data.social_name || data.full_name || "Usuário";
+        setFullName(nameToUse);
+        setUserName(nameToUse.split(" ")[0]);
+      }
+    };
+    
+    loadUserName();
+  }, [user?.id]);
 
   useEffect(() => {
     const fetchJobData = async () => {
