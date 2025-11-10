@@ -48,6 +48,7 @@ export default function EditCandidateProfile() {
   const [states, setStates] = useState<Array<{ sigla: string; nome: string }>>([]);
   const [cities, setCities] = useState<string[]>([]);
 
+  // Display names - prioritizes social name
   const [userName, setUserName] = useState("Usuário");
   const [fullName, setFullName] = useState("Usuário");
 
