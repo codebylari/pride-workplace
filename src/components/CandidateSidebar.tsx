@@ -15,8 +15,8 @@ export function CandidateSidebar({ showSidebar, setShowSidebar }: CandidateSideb
   const { user, signOut } = useAuth();
   const [photoUrl, setPhotoUrl] = useState<string | null>(null);
   const [userGender, setUserGender] = useState<string>("");
-
-  const fullName = user?.user_metadata?.full_name || "Usuário";
+  const [fullName, setFullName] = useState("Usuário");
+  const [userName, setUserName] = useState("Usuário");
   
   // Formatar nome: Primeira letra maiúscula em cada palavra
   const formatName = (name: string) => {
@@ -34,19 +34,25 @@ export function CandidateSidebar({ showSidebar, setShowSidebar }: CandidateSideb
   };
   
   const displayName = formatName(fullName);
-  const userName = fullName.split(" ")[0] || "Usuário";
 
   useEffect(() => {
     const fetchUserData = async () => {
       if (!user?.id) return;
       const { data } = await supabase
         .from("profiles")
-        .select("photo_url, gender")
+        .select("photo_url, gender, full_name, social_name")
         .eq("id", user.id)
         .maybeSingle();
       
-      setPhotoUrl(data?.photo_url || null);
-      setUserGender(data?.gender || "");
+      if (data) {
+        setPhotoUrl(data.photo_url || null);
+        setUserGender(data.gender || "");
+        
+        // Prioriza nome social quando disponível
+        const nameToUse = data.social_name || data.full_name || "Usuário";
+        setFullName(nameToUse);
+        setUserName(nameToUse.split(" ")[0]);
+      }
     };
     fetchUserData();
   }, [user?.id]);
