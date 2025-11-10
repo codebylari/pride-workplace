@@ -1,0 +1,286 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1400" width="1600" height="1400">
+  <defs>
+    <style>
+      .table-box { fill: #ffffff; stroke: #2563eb; stroke-width: 2; }
+      .table-header { fill: #2563eb; }
+      .table-name { fill: #ffffff; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; }
+      .column-text { fill: #1f2937; font-family: 'Courier New', monospace; font-size: 11px; }
+      .pk { fill: #fbbf24; font-weight: bold; }
+      .fk { fill: #10b981; }
+      .relation-line { stroke: #6b7280; stroke-width: 2; fill: none; }
+      .relation-label { fill: #4b5563; font-family: Arial, sans-serif; font-size: 10px; }
+      .title-text { fill: #1f2937; font-family: Arial, sans-serif; font-size: 24px; font-weight: bold; }
+      .subtitle-text { fill: #4b5563; font-family: Arial, sans-serif; font-size: 14px; }
+    </style>
+  </defs>
+  
+  <!-- Title -->
+  <text x="800" y="30" text-anchor="middle" class="title-text">LINKAR - Database Entity Relationship Diagram</text>
+  <text x="800" y="50" text-anchor="middle" class="subtitle-text">Sistema de Matching entre Candidatos e Empresas</text>
+  
+  <!-- Legend -->
+  <rect x="20" y="70" width="200" height="80" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="5"/>
+  <text x="30" y="90" class="column-text" font-weight="bold">Legenda:</text>
+  <text x="30" y="110" class="pk">● PK - Primary Key</text>
+  <text x="30" y="130" class="fk">● FK - Foreign Key</text>
+  
+  <!-- AUTH.USERS (External Reference) -->
+  <g id="auth-users">
+    <rect x="700" y="170" width="200" height="60" class="table-box" opacity="0.5"/>
+    <rect x="700" y="170" width="200" height="30" class="table-header" opacity="0.5"/>
+    <text x="800" y="190" text-anchor="middle" class="table-name">AUTH.USERS</text>
+    <text x="710" y="215" class="column-text pk">● id (uuid)</text>
+  </g>
+  
+  <!-- USER_ROLES -->
+  <g id="user-roles">
+    <rect x="450" y="280" width="200" height="90" class="table-box"/>
+    <rect x="450" y="280" width="200" height="30" class="table-header"/>
+    <text x="550" y="300" text-anchor="middle" class="table-name">USER_ROLES</text>
+    <text x="460" y="325" class="column-text pk">● id (uuid)</text>
+    <text x="460" y="342" class="column-text fk">● user_id (uuid)</text>
+    <text x="460" y="359" class="column-text">  role (app_role)</text>
+  </g>
+  
+  <!-- PROFILES (Candidates) -->
+  <g id="profiles">
+    <rect x="50" y="280" width="280" height="280" class="table-box"/>
+    <rect x="50" y="280" width="280" height="30" class="table-header"/>
+    <text x="190" y="300" text-anchor="middle" class="table-name">PROFILES (Candidatos)</text>
+    <text x="60" y="325" class="column-text pk">● id (uuid)</text>
+    <text x="60" y="342" class="column-text">  full_name, social_name</text>
+    <text x="60" y="359" class="column-text">  photo_url, linkedin_url</text>
+    <text x="60" y="376" class="column-text">  resume_url, about_me</text>
+    <text x="60" y="393" class="column-text">  gender, city, state</text>
+    <text x="60" y="410" class="column-text">  experience, education</text>
+    <text x="60" y="427" class="column-text">  work_area, experience_level</text>
+    <text x="60" y="444" class="column-text">  github_level, remote_pref</text>
+    <text x="60" y="461" class="column-text">  specialization_areas[]</text>
+    <text x="60" y="478" class="column-text">  opportunity_type[]</text>
+    <text x="60" y="495" class="column-text">  is_pcd, pcd_type, is_lgbt</text>
+    <text x="60" y="512" class="column-text">  rating, total_ratings</text>
+    <text x="60" y="529" class="column-text">  is_active</text>
+    <text x="60" y="546" class="column-text">  created_at, updated_at</text>
+  </g>
+  
+  <!-- COMPANY_PROFILES -->
+  <g id="company-profiles">
+    <rect x="950" y="280" width="280" height="250" class="table-box"/>
+    <rect x="950" y="280" width="280" height="30" class="table-header"/>
+    <text x="1090" y="300" text-anchor="middle" class="table-name">COMPANY_PROFILES</text>
+    <text x="960" y="325" class="column-text pk">● id (uuid)</text>
+    <text x="960" y="342" class="column-text fk">● user_id (uuid)</text>
+    <text x="960" y="359" class="column-text">  fantasy_name, cnpj</text>
+    <text x="960" y="376" class="column-text">  logo_url, description</text>
+    <text x="960" y="393" class="column-text">  sector, city, state</text>
+    <text x="960" y="410" class="column-text">  about, seeking, training</text>
+    <text x="960" y="427" class="column-text">  testimonials (jsonb)</text>
+    <text x="960" y="444" class="column-text">  rating, total_ratings</text>
+    <text x="960" y="461" class="column-text">  is_active</text>
+    <text x="960" y="478" class="column-text">  created_at, updated_at</text>
+  </g>
+  
+  <!-- JOBS -->
+  <g id="jobs">
+    <rect x="700" y="600" width="280" height="220" class="table-box"/>
+    <rect x="700" y="600" width="280" height="30" class="table-header"/>
+    <text x="840" y="620" text-anchor="middle" class="table-name">JOBS</text>
+    <text x="710" y="645" class="column-text pk">● id (uuid)</text>
+    <text x="710" y="662" class="column-text fk">● company_id (uuid)</text>
+    <text x="710" y="679" class="column-text">  title, description</text>
+    <text x="710" y="696" class="column-text">  location, salary</text>
+    <text x="710" y="713" class="column-text">  requirements, job_type</text>
+    <text x="710" y="730" class="column-text">  is_remote</text>
+    <text x="710" y="747" class="column-text">  required_experience_level</text>
+    <text x="710" y="764" class="column-text">  required_github_level</text>
+    <text x="710" y="781" class="column-text">  required_specialization[]</text>
+    <text x="710" y="798" class="column-text">  created_at, updated_at</text>
+  </g>
+  
+  <!-- APPLICATIONS -->
+  <g id="applications">
+    <rect x="380" y="650" width="250" height="200" class="table-box"/>
+    <rect x="380" y="650" width="250" height="30" class="table-header"/>
+    <text x="505" y="670" text-anchor="middle" class="table-name">APPLICATIONS</text>
+    <text x="390" y="695" class="column-text pk">● id (uuid)</text>
+    <text x="390" y="712" class="column-text fk">● candidate_id (uuid)</text>
+    <text x="390" y="729" class="column-text fk">● job_id (uuid)</text>
+    <text x="390" y="746" class="column-text">  status (text)</text>
+    <text x="390" y="763" class="column-text">  start_date, end_date</text>
+    <text x="390" y="780" class="column-text">  candidate_accepted</text>
+    <text x="390" y="797" class="column-text">  contract_status</text>
+    <text x="390" y="814" class="column-text">  completed_at</text>
+    <text x="390" y="831" class="column-text">  created_at</text>
+  </g>
+  
+  <!-- SWIPES -->
+  <g id="swipes">
+    <rect x="50" y="650" width="250" height="140" class="table-box"/>
+    <rect x="50" y="650" width="250" height="30" class="table-header"/>
+    <text x="175" y="670" text-anchor="middle" class="table-name">SWIPES</text>
+    <text x="60" y="695" class="column-text pk">● id (uuid)</text>
+    <text x="60" y="712" class="column-text fk">● user_id (uuid)</text>
+    <text x="60" y="729" class="column-text">  target_id (uuid)</text>
+    <text x="60" y="746" class="column-text">  target_type (text)</text>
+    <text x="60" y="763" class="column-text">  action (like/dislike)</text>
+    <text x="60" y="780" class="column-text">  created_at</text>
+  </g>
+  
+  <!-- MATCHES -->
+  <g id="matches">
+    <rect x="1050" y="650" width="250" height="140" class="table-box"/>
+    <rect x="1050" y="650" width="250" height="30" class="table-header"/>
+    <text x="1175" y="670" text-anchor="middle" class="table-name">MATCHES</text>
+    <text x="1060" y="695" class="column-text pk">● id (uuid)</text>
+    <text x="1060" y="712" class="column-text fk">● candidate_id (uuid)</text>
+    <text x="1060" y="729" class="column-text fk">● job_id (uuid)</text>
+    <text x="1060" y="746" class="column-text fk">● company_id (uuid)</text>
+    <text x="1060" y="763" class="column-text">  status, matched_at</text>
+  </g>
+  
+  <!-- RATINGS -->
+  <g id="ratings">
+    <rect x="380" y="920" width="250" height="140" class="table-box"/>
+    <rect x="380" y="920" width="250" height="30" class="table-header"/>
+    <text x="505" y="940" text-anchor="middle" class="table-name">RATINGS</text>
+    <text x="390" y="965" class="column-text pk">● id (uuid)</text>
+    <text x="390" y="982" class="column-text fk">● rater_id (uuid)</text>
+    <text x="390" y="999" class="column-text fk">● rated_user_id (uuid)</text>
+    <text x="390" y="1016" class="column-text fk">● application_id (uuid)</text>
+    <text x="390" y="1033" class="column-text">  rating, comment</text>
+    <text x="390" y="1050" class="column-text">  created_at</text>
+  </g>
+  
+  <!-- TESTIMONIALS -->
+  <g id="testimonials">
+    <rect x="700" y="920" width="250" height="160" class="table-box"/>
+    <rect x="700" y="920" width="250" height="30" class="table-header"/>
+    <text x="825" y="940" text-anchor="middle" class="table-name">TESTIMONIALS</text>
+    <text x="710" y="965" class="column-text pk">● id (uuid)</text>
+    <text x="710" y="982" class="column-text fk">● candidate_id (uuid)</text>
+    <text x="710" y="999" class="column-text fk">● company_id (uuid)</text>
+    <text x="710" y="1016" class="column-text fk">● application_id (uuid)</text>
+    <text x="710" y="1033" class="column-text">  job_title, comment</text>
+    <text x="710" y="1050" class="column-text">  status (pending/approved)</text>
+    <text x="710" y="1067" class="column-text">  created_at, updated_at</text>
+  </g>
+  
+  <!-- NOTIFICATIONS -->
+  <g id="notifications">
+    <rect x="1050" y="920" width="250" height="140" class="table-box"/>
+    <rect x="1050" y="920" width="250" height="30" class="table-header"/>
+    <text x="1175" y="940" text-anchor="middle" class="table-name">NOTIFICATIONS</text>
+    <text x="1060" y="965" class="column-text pk">● id (uuid)</text>
+    <text x="1060" y="982" class="column-text fk">● user_id (uuid)</text>
+    <text x="1060" y="999" class="column-text">  title, message, type</text>
+    <text x="1060" y="1016" class="column-text">  related_id, read</text>
+    <text x="1060" y="1033" class="column-text">  created_at</text>
+  </g>
+  
+  <!-- ADMIN_LOGS -->
+  <g id="admin-logs">
+    <rect x="1350" y="920" width="220" height="120" class="table-box"/>
+    <rect x="1350" y="920" width="220" height="30" class="table-header"/>
+    <text x="1460" y="940" text-anchor="middle" class="table-name">ADMIN_LOGS</text>
+    <text x="1360" y="965" class="column-text pk">● id (uuid)</text>
+    <text x="1360" y="982" class="column-text fk">● admin_id (uuid)</text>
+    <text x="1360" y="999" class="column-text">  action, details</text>
+    <text x="1360" y="1016" class="column-text">  created_at</text>
+  </g>
+  
+  <!-- Relationships -->
+  
+  <!-- AUTH.USERS to USER_ROLES -->
+  <path d="M 700 200 L 650 200 L 650 325" class="relation-line" marker-end="url(#arrowhead)"/>
+  <text x="655" y="260" class="relation-label">1:N</text>
+  
+  <!-- AUTH.USERS to PROFILES -->
+  <path d="M 700 210 L 400 210 L 400 280" class="relation-line"/>
+  <text x="410" y="245" class="relation-label">1:1</text>
+  
+  <!-- AUTH.USERS to COMPANY_PROFILES -->
+  <path d="M 900 200 L 1090 200 L 1090 280" class="relation-line"/>
+  <text x="1000" y="245" class="relation-label">1:1</text>
+  
+  <!-- COMPANY_PROFILES to JOBS -->
+  <path d="M 1090 530 L 1090 580 L 840 580 L 840 600" class="relation-line"/>
+  <text x="950" y="565" class="relation-label">1:N</text>
+  
+  <!-- PROFILES to APPLICATIONS -->
+  <path d="M 190 560 L 190 620 L 505 620 L 505 650" class="relation-line"/>
+  <text x="340" y="615" class="relation-label">1:N</text>
+  
+  <!-- JOBS to APPLICATIONS -->
+  <path d="M 700 710 L 630 710" class="relation-line"/>
+  <text x="645" y="705" class="relation-label">1:N</text>
+  
+  <!-- PROFILES to SWIPES -->
+  <path d="M 175 560 L 175 650" class="relation-line"/>
+  <text x="180" y="605" class="relation-label">1:N</text>
+  
+  <!-- PROFILES to MATCHES -->
+  <path d="M 330 420 L 1020 420 L 1020 720 L 1050 720" class="relation-line"/>
+  <text x="680" y="415" class="relation-label">1:N (candidates)</text>
+  
+  <!-- JOBS to MATCHES -->
+  <path d="M 980 710 L 1050 710" class="relation-line"/>
+  <text x="990" y="705" class="relation-label">1:N</text>
+  
+  <!-- COMPANY_PROFILES to MATCHES -->
+  <path d="M 1230 530 L 1230 600 L 1175 600 L 1175 650" class="relation-line"/>
+  <text x="1180" y="580" class="relation-label">1:N</text>
+  
+  <!-- APPLICATIONS to RATINGS -->
+  <path d="M 505 850 L 505 920" class="relation-line"/>
+  <text x="510" y="885" class="relation-label">1:N</text>
+  
+  <!-- APPLICATIONS to TESTIMONIALS -->
+  <path d="M 630 810 L 660 810 L 660 1000 L 700 1000" class="relation-line"/>
+  <text x="665" y="905" class="relation-label">1:N</text>
+  
+  <!-- PROFILES to RATINGS (rater) -->
+  <path d="M 50 470 L 20 470 L 20 990 L 380 990" class="relation-line"/>
+  <text x="190" y="985" class="relation-label">1:N (as rater)</text>
+  
+  <!-- PROFILES to RATINGS (rated) -->
+  <path d="M 50 490 L 10 490 L 10 1010 L 380 1010" class="relation-line"/>
+  <text x="190" y="1005" class="relation-label">1:N (as rated)</text>
+  
+  <!-- PROFILES to TESTIMONIALS -->
+  <path d="M 330 510 L 360 510 L 360 1030 L 700 1030" class="relation-line"/>
+  <text x="520" y="1025" class="relation-label">1:N (candidate)</text>
+  
+  <!-- COMPANY_PROFILES to TESTIMONIALS -->
+  <path d="M 950 470 L 920 470 L 920 1050 L 950 1050" class="relation-line"/>
+  <text x="870" y="760" class="relation-label">1:N</text>
+  
+  <!-- AUTH.USERS to NOTIFICATIONS -->
+  <path d="M 900 220 L 1400 220 L 1400 990 L 1300 990" class="relation-line"/>
+  <text x="1150" y="600" class="relation-label">1:N</text>
+  
+  <!-- USER_ROLES to ADMIN_LOGS -->
+  <path d="M 650 325 L 1500 325 L 1500 920" class="relation-line"/>
+  <text x="1070" y="620" class="relation-label">1:N (admin)</text>
+  
+  <!-- Arrow marker definition -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#6b7280"/>
+    </marker>
+  </defs>
+  
+  <!-- Footer Notes -->
+  <rect x="50" y="1120" width="1520" height="240" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="5"/>
+  <text x="60" y="1145" class="column-text" font-weight="bold" font-size="13px">Notas Importantes:</text>
+  
+  <text x="60" y="1170" class="column-text">• USER_ROLES: Armazena os papéis dos usuários (admin, candidate, company) separadamente por segurança</text>
+  <text x="60" y="1190" class="column-text">• PROFILES: Perfil de candidatos com qualificações profissionais, experiência e preferências</text>
+  <text x="60" y="1210" class="column-text">• COMPANY_PROFILES: Perfil de empresas com informações corporativas e depoimentos</text>
+  <text x="60" y="1230" class="column-text">• JOBS: Vagas criadas pelas empresas com requisitos específicos</text>
+  <text x="60" y="1250" class="column-text">• APPLICATIONS: Candidaturas dos candidatos às vagas, com status e informações contratuais</text>
+  <text x="60" y="1270" class="column-text">• SWIPES: Sistema de match - likes/dislikes entre candidatos e vagas ou empresas e candidatos</text>
+  <text x="60" y="1290" class="column-text">• MATCHES: Matches criados automaticamente quando ambos dão like (candidato na vaga + empresa no candidato)</text>
+  <text x="60" y="1310" class="column-text">• RATINGS: Avaliações mútuas entre candidatos e empresas após conclusão de contratos</text>
+  <text x="60" y="1330" class="column-text">• TESTIMONIALS: Depoimentos de candidatos sobre empresas, com aprovação moderada</text>
+  <text x="60" y="1350" class="column-text">• NOTIFICATIONS: Sistema de notificações para eventos importantes (candidaturas, matches, contratos, etc)</text>
+</svg>
