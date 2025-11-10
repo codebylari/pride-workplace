@@ -97,11 +97,86 @@ export default function AdminSeedData() {
         toast.error(data.error);
       } else {
         setAccounts(data.accounts);
+        await fetchHistoricalData(); // Atualizar lista
         toast.success(data.message);
       }
     } catch (error: any) {
       console.error("Error seeding data:", error);
       toast.error("Erro ao criar dados de teste: " + error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleClearTestData = async () => {
+    if (!confirm("Tem certeza que deseja deletar TODOS os dados de teste? Esta ação não pode ser desfeita.")) {
+      return;
+    }
+
+    setLoading(true);
+    try {
+      // Buscar perfis de teste pelos nomes conhecidos
+      const candidateNames = [
+        "Ana Silva", "Bruno Costa", "Carla Souza", "Daniel Lima", "Elisa Martins",
+        "Felipe Santos", "Gabriela Rocha", "Henrique Alves", "Isabela Ferreira", "João Oliveira"
+      ];
+      
+      const companyNames = [
+        "TechNova", "InnovaCorp", "DataSolutions", "WebMasters", "DesignPro",
+        "CodeFactory", "CloudServices", "AppCreators", "DigitalHub", "FutureTech"
+      ];
+
+      // Buscar candidatos
+      const { data: candidates } = await supabase
+        .from("profiles")
+        .select("id")
+        .in("full_name", candidateNames);
+
+      // Buscar empresas
+      const { data: companies } = await supabase
+        .from("company_profiles")
+        .select("user_id")
+        .in("fantasy_name", companyNames);
+
+      const candidateIds = candidates?.map(c => c.id) || [];
+      const companyIds = companies?.map(c => c.user_id) || [];
+      const allUserIds = [...candidateIds, ...companyIds];
+
+      if (allUserIds.length === 0) {
+        toast.info("Nenhum dado de teste encontrado para deletar.");
+        setLoading(false);
+        return;
+      }
+
+      // Deletar dados relacionados primeiro (para evitar constraint violations)
+      await supabase.from("swipes").delete().in("user_id", allUserIds);
+      await supabase.from("applications").delete().in("candidate_id", candidateIds);
+      
+      if (companyIds.length > 0) {
+        await supabase.from("matches").delete().in("company_id", companyIds);
+        await supabase.from("jobs").delete().in("company_id", companyIds);
+      }
+      
+      if (candidateIds.length > 0) {
+        await supabase.from("matches").delete().in("candidate_id", candidateIds);
+      }
+      
+      await supabase.from("notifications").delete().in("user_id", allUserIds);
+      await supabase.from("ratings").delete().in("rater_id", allUserIds);
+      await supabase.from("ratings").delete().in("rated_user_id", allUserIds);
+      await supabase.from("testimonials").delete().in("candidate_id", candidateIds);
+
+      // Deletar perfis
+      await supabase.from("profiles").delete().in("id", candidateIds);
+      await supabase.from("company_profiles").delete().in("user_id", companyIds);
+      await supabase.from("user_roles").delete().in("user_id", allUserIds);
+
+      toast.success(`${allUserIds.length} contas de teste deletadas com sucesso!`);
+      setAccounts([]);
+      await fetchHistoricalData();
+    } catch (error: any) {
+      console.error("Error clearing test data:", error);
+      toast.error("Erro ao deletar dados de teste: " + error.message);
     } finally {
       setLoading(false);
     }
@@ -137,13 +212,26 @@ export default function AdminSeedData() {
           <li>Sistema de filtragem e alertas de compatibilidade</li>
         </ul>
         
-        <Button 
-          onClick={handleSeedData} 
-          disabled={loading}
-          size="lg"
-        >
-          {loading ? "Gerando..." : "Gerar Dados de Teste"}
-        </Button>
+        <div className="flex gap-3">
+          <Button 
+            onClick={handleSeedData} 
+            disabled={loading}
+            size="lg"
+            className="flex-1"
+          >
+            {loading ? "Gerando..." : "Gerar Dados de Teste"}
+          </Button>
+          
+          <Button 
+            onClick={handleClearTestData} 
+            disabled={loading}
+            size="lg"
+            variant="destructive"
+            className="flex-1"
+          >
+            {loading ? "Deletando..." : "Limpar Dados de Teste"}
+          </Button>
+        </div>
       </Card>
 
       {accounts.length > 0 && (

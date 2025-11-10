@@ -12,30 +12,6 @@ serve(async (req: Request) => {
   }
 
   try {
-    // Verificar se já existem dados de teste
-    const supabaseCheck = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
-      { auth: { autoRefreshToken: false, persistSession: false } }
-    );
-    
-    const { data: existingTest } = await supabaseCheck
-      .from("profiles")
-      .select("id")
-      .eq("full_name", "Ana Silva")
-      .maybeSingle();
-    
-    if (existingTest) {
-      return new Response(
-        JSON.stringify({ 
-          error: "Dados de teste já existem. Delete-os antes de criar novos." 
-        }),
-        { 
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-          status: 400 
-        }
-      );
-    }
     const supabaseAdmin = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
