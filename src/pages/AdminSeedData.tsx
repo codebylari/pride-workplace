@@ -21,6 +21,9 @@ interface HistoricalProfile {
   city: string | null;
   state: string | null;
   created_at: string;
+  experience_level?: string;
+  github_level?: string;
+  specialization_areas?: string[];
 }
 
 interface HistoricalCompany {
@@ -58,7 +61,7 @@ export default function AdminSeedData() {
       // Buscar candidatos
       const { data: candidates, error: candidatesError } = await supabase
         .from("profiles")
-        .select("id, full_name, city, state, created_at")
+        .select("id, full_name, city, state, created_at, experience_level, github_level, specialization_areas")
         .order("created_at", { ascending: false });
 
       if (candidatesError) throw candidatesError;
@@ -124,13 +127,14 @@ export default function AdminSeedData() {
       
       <Card className="p-6 mb-6">
         <p className="mb-4">
-          Esta ferramenta criará:
+          Esta ferramenta criará candidatos e empresas com perfis completos incluindo:
         </p>
         <ul className="list-disc list-inside mb-6 space-y-2">
-          <li>10 candidatos com perfis completos</li>
+          <li>10 candidatos com qualificações (áreas, experiência, GitHub, preferências)</li>
           <li>10 empresas com perfis completos</li>
-          <li>3-5 vagas por empresa</li>
+          <li>3-5 vagas por empresa com requisitos específicos</li>
           <li>Inscrições automáticas de candidatos em vagas compatíveis</li>
+          <li>Sistema de filtragem e alertas de compatibilidade</li>
         </ul>
         
         <Button 
@@ -193,10 +197,20 @@ export default function AdminSeedData() {
                     <p className="font-medium">{candidate.full_name}</p>
                     {(candidate.city || candidate.state) && (
                       <p className="text-sm text-muted-foreground">
-                        {candidate.city}{candidate.city && candidate.state ? ", " : ""}{candidate.state}
+                        📍 {candidate.city}{candidate.city && candidate.state ? ", " : ""}{candidate.state}
                       </p>
                     )}
-                    <p className="text-xs text-muted-foreground">
+                    {candidate.experience_level && (
+                      <p className="text-sm text-muted-foreground">
+                        💼 {candidate.experience_level} | 🔧 GitHub: {candidate.github_level}
+                      </p>
+                    )}
+                    {candidate.specialization_areas && candidate.specialization_areas.length > 0 && (
+                      <p className="text-xs text-muted-foreground">
+                        🎯 {candidate.specialization_areas.join(", ")}
+                      </p>
+                    )}
+                    <p className="text-xs text-muted-foreground mt-1">
                       Criado em: {new Date(candidate.created_at).toLocaleDateString("pt-BR")}
                     </p>
                   </div>
