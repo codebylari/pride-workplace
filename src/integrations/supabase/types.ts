@@ -270,8 +270,11 @@ export type Database = {
           gender: string | null
           id: string
           is_active: boolean
+          is_lgbt: boolean | null
+          is_pcd: boolean | null
           journey: string | null
           linkedin_url: string | null
+          pcd_type: string | null
           photo_url: string | null
           rating: number | null
           resume_url: string | null
@@ -289,8 +292,11 @@ export type Database = {
           gender?: string | null
           id: string
           is_active?: boolean
+          is_lgbt?: boolean | null
+          is_pcd?: boolean | null
           journey?: string | null
           linkedin_url?: string | null
+          pcd_type?: string | null
           photo_url?: string | null
           rating?: number | null
           resume_url?: string | null
@@ -308,8 +314,11 @@ export type Database = {
           gender?: string | null
           id?: string
           is_active?: boolean
+          is_lgbt?: boolean | null
+          is_pcd?: boolean | null
           journey?: string | null
           linkedin_url?: string | null
+          pcd_type?: string | null
           photo_url?: string | null
           rating?: number | null
           resume_url?: string | null

@@ -178,6 +178,22 @@ export default function CompanyViewCandidateProfile() {
                       Localização: {profile.city}{profile.city && profile.state ? ", " : ""}{profile.state}
                     </p>
                   )}
+                  
+                  {/* Inclusão e Diversidade */}
+                  {(profile.is_pcd || profile.is_lgbt) && (
+                    <div className="flex flex-wrap justify-center gap-2 mt-3">
+                      {profile.is_pcd && (
+                        <span className={`px-3 py-1 rounded-full text-sm font-medium ${darkMode ? "bg-blue-900 text-blue-200" : "bg-blue-100 text-blue-800"}`}>
+                          PcD{profile.pcd_type ? `: ${profile.pcd_type}` : ""}
+                        </span>
+                      )}
+                      {profile.is_lgbt && (
+                        <span className={`px-3 py-1 rounded-full text-sm font-medium ${darkMode ? "bg-purple-900 text-purple-200" : "bg-purple-100 text-purple-800"}`}>
+                          LGBTQIA+
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 {/* LinkedIn */}

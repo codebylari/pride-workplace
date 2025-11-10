@@ -47,6 +47,9 @@ export default function EditCandidateProfile() {
   const [city, setCity] = useState("");
   const [states, setStates] = useState<Array<{ sigla: string; nome: string }>>([]);
   const [cities, setCities] = useState<string[]>([]);
+  const [isPcd, setIsPcd] = useState(false);
+  const [pcdType, setPcdType] = useState("");
+  const [isLgbt, setIsLgbt] = useState(false);
 
   // Load existing data
   useEffect(() => {
@@ -77,7 +80,7 @@ export default function EditCandidateProfile() {
 
       const { data } = await supabase
         .from("profiles")
-        .select("gender, linkedin_url, about_me, experience, education, journey, resume_url, photo_url, state, city")
+        .select("gender, linkedin_url, about_me, experience, education, journey, resume_url, photo_url, state, city, is_pcd, pcd_type, is_lgbt")
         .eq("id", user.id)
         .maybeSingle();
       
@@ -100,6 +103,11 @@ export default function EditCandidateProfile() {
         // Load state and city from database or fallback to user metadata
         setState(data.state || user.user_metadata?.state || "");
         setCity(data.city || user.user_metadata?.city || "");
+        
+        // Load inclusion fields
+        setIsPcd(data.is_pcd || false);
+        setPcdType(data.pcd_type || "");
+        setIsLgbt(data.is_lgbt || false);
       } else {
         // If no profile data, load from metadata
         setState(user.user_metadata?.state || "");
@@ -219,7 +227,9 @@ export default function EditCandidateProfile() {
       hasGenderChange ||
       linkedinUrl.trim() !== "" ||
       state.trim() !== "" ||
-      city.trim() !== "";
+      city.trim() !== "" ||
+      isPcd !== false ||
+      isLgbt !== false;
 
     if (!hasChanges) {
       toast({
@@ -282,6 +292,15 @@ export default function EditCandidateProfile() {
       if (city.trim() !== "") {
         updates.city = city;
       }
+      
+      // Save inclusion fields
+      updates.is_pcd = isPcd;
+      if (isPcd && pcdType.trim() !== "") {
+        updates.pcd_type = pcdType;
+      } else if (!isPcd) {
+        updates.pcd_type = null;
+      }
+      updates.is_lgbt = isLgbt;
 
       // Handle AI-generated resume
       if (aiGeneratedResumeUrl) {
@@ -591,6 +610,71 @@ export default function EditCandidateProfile() {
                     </option>
                   ))}
                 </select>
+              </div>
+            </div>
+
+            {/* Inclusão e Diversidade */}
+            <div className={`p-4 rounded-lg border-2 ${darkMode ? "bg-gray-800 border-blue-600" : "bg-blue-50 border-blue-400"}`}>
+              <div className="flex items-center gap-2 mb-3">
+                <span className={`text-sm font-medium ${darkMode ? "text-blue-400" : "text-blue-700"}`}>
+                  Inclusão e Diversidade
+                </span>
+              </div>
+              
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <input
+                    type="checkbox"
+                    id="is_pcd"
+                    checked={isPcd}
+                    onChange={(e) => {
+                      setIsPcd(e.target.checked);
+                      if (!e.target.checked) setPcdType("");
+                    }}
+                    className="mt-1 h-5 w-5 rounded border-gray-300"
+                  />
+                  <div className="flex-1">
+                    <label htmlFor="is_pcd" className={`font-medium cursor-pointer ${darkMode ? "text-white" : "text-gray-800"}`}>
+                      Sou Pessoa com Deficiência (PcD)
+                    </label>
+                    <p className={`text-sm mt-1 ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+                      Empresas buscam cumprir cotas de contratação de pessoas PcD
+                    </p>
+                  </div>
+                </div>
+
+                {isPcd && (
+                  <div className="ml-8">
+                    <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-800"}`}>
+                      Tipo de Deficiência (opcional)
+                    </label>
+                    <input
+                      type="text"
+                      value={pcdType}
+                      onChange={(e) => setPcdType(e.target.value)}
+                      className={`w-full p-3 rounded-lg border ${darkMode ? "bg-gray-700 text-white border-gray-600" : "bg-white text-gray-800 border-gray-300"}`}
+                      placeholder="Ex: Visual, Auditiva, Física, etc."
+                    />
+                  </div>
+                )}
+
+                <div className="flex items-start gap-3">
+                  <input
+                    type="checkbox"
+                    id="is_lgbt"
+                    checked={isLgbt}
+                    onChange={(e) => setIsLgbt(e.target.checked)}
+                    className="mt-1 h-5 w-5 rounded border-gray-300"
+                  />
+                  <div className="flex-1">
+                    <label htmlFor="is_lgbt" className={`font-medium cursor-pointer ${darkMode ? "text-white" : "text-gray-800"}`}>
+                      Faço parte da comunidade LGBTQIA+
+                    </label>
+                    <p className={`text-sm mt-1 ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+                      Empresas valorizam a diversidade e inclusão
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
 

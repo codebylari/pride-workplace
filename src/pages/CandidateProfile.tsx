@@ -39,6 +39,9 @@ export default function CandidateProfile() {
     education?: string;
     journey?: string;
     resume_url?: string;
+    is_pcd?: boolean;
+    pcd_type?: string;
+    is_lgbt?: boolean;
   }>({});
 
   useEffect(() => {
@@ -46,7 +49,7 @@ export default function CandidateProfile() {
       if (!user?.id) return;
       const { data } = await supabase
         .from("profiles")
-        .select("photo_url, full_name, gender, linkedin_url, about_me, experience, education, journey, resume_url, rating, total_ratings, state, city")
+        .select("photo_url, full_name, gender, linkedin_url, about_me, experience, education, journey, resume_url, rating, total_ratings, state, city, is_pcd, pcd_type, is_lgbt")
         .eq("id", user.id)
         .maybeSingle();
       
@@ -65,6 +68,9 @@ export default function CandidateProfile() {
         education: data?.education,
         journey: data?.journey,
         resume_url: data?.resume_url,
+        is_pcd: data?.is_pcd,
+        pcd_type: data?.pcd_type,
+        is_lgbt: data?.is_lgbt,
       });
     };
     load();
@@ -278,6 +284,22 @@ export default function CandidateProfile() {
                 <p className={`text-lg ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
                   Localização: {userCity}{userCity && userState ? ", " : ""}{userState}
                 </p>
+              )}
+              
+              {/* Inclusão e Diversidade */}
+              {(profileData.is_pcd || profileData.is_lgbt) && (
+                <div className="flex flex-wrap justify-center gap-2 mt-3">
+                  {profileData.is_pcd && (
+                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${darkMode ? "bg-blue-900 text-blue-200" : "bg-blue-100 text-blue-800"}`}>
+                      PcD{profileData.pcd_type ? `: ${profileData.pcd_type}` : ""}
+                    </span>
+                  )}
+                  {profileData.is_lgbt && (
+                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${darkMode ? "bg-purple-900 text-purple-200" : "bg-purple-100 text-purple-800"}`}>
+                      LGBTQIA+
+                    </span>
+                  )}
+                </div>
               )}
             </div>
 
