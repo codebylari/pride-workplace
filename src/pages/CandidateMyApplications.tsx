@@ -236,6 +236,14 @@ export default function CandidateMyApplications() {
                     </p>
 
                     <div className="flex gap-2 mt-3 flex-wrap">
+                      <Button
+                        onClick={() => navigate(`/job-details/${app.jobs?.id}`)}
+                        variant="outline"
+                        size="sm"
+                      >
+                        Ver Detalhes da Vaga
+                      </Button>
+                      
                       {app.jobs?.company_id && (
                         <Button
                           onClick={() => navigate(`/company-public-profile/${app.jobs.company_id}`)}
