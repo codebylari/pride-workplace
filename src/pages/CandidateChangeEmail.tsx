@@ -71,9 +71,8 @@ export default function CandidateChangeEmail() {
 
     try {
       const targetEmail = newEmail;
-      const { error } = await supabase.auth.updateUser(
-        { email: targetEmail },
-        { emailRedirectTo: `${window.location.origin}/` }
+      const { data, error } = await supabase.auth.updateUser(
+        { email: targetEmail }
       );
 
       if (error) throw error;
@@ -184,13 +183,20 @@ export default function CandidateChangeEmail() {
             <div className="w-16 h-16 bg-green-400 rounded-full flex items-center justify-center">
               <CheckCircle2 className="w-10 h-10 text-white" />
             </div>
-            <DialogTitle className="text-2xl font-bold text-gray-900">Email de Confirmação Enviado!</DialogTitle>
+            <DialogTitle className="text-2xl font-bold text-gray-900">Confirmação Necessária!</DialogTitle>
             <DialogDescription className="text-center text-gray-600 px-4">
-              Enviamos um email de confirmação para <strong>{pendingEmail}</strong>. 
-              Por favor, verifique sua caixa de entrada e clique no link de confirmação para finalizar a alteração do seu email.
+              <strong>Importante:</strong> Enviamos emails de confirmação para:
+              <br/>
+              <br/>
+              1. Seu email atual: <strong>{user?.email}</strong>
+              <br/>
+              2. Seu novo email: <strong>{pendingEmail}</strong>
+              <br/>
+              <br/>
+              Você precisa confirmar em <strong>ambos os emails</strong> para concluir a alteração.
             </DialogDescription>
             <p className="text-sm text-center text-gray-500 px-4">
-              Seu email atual continuará ativo até que você confirme o novo email.
+              Verifique a caixa de entrada e spam de ambos os emails. Seu email atual continuará ativo até a confirmação completa.
             </p>
             <button
               onClick={() => {
