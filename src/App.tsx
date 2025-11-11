@@ -71,6 +71,7 @@ import AdminApplications from "./pages/AdminApplications";
 import AdminSeedData from "./pages/AdminSeedData";
 import InitAdmin from "./pages/InitAdmin";
 import CreateTestAccounts from "./pages/CreateTestAccounts";
+import DatabaseDiagram from "./pages/DatabaseDiagram";
 
 const queryClient = new QueryClient();
 
@@ -152,6 +153,9 @@ const App = () => (
             <Route path="/admin-jobs" element={<AdminJobs />} />
             <Route path="/admin-applications" element={<AdminApplications />} />
             <Route path="/admin-seed-data" element={<AdminSeedData />} />
+            
+            {/* Database Diagram */}
+            <Route path="/database-diagram" element={<DatabaseDiagram />} />
             
             <Route path="*" element={<NotFound />} />
           </Routes>
