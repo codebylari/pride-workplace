@@ -15,20 +15,20 @@
   </defs>
   
   <!-- Title -->
-  <text x="800" y="30" text-anchor="middle" class="title-text">LINKAR - Database Entity Relationship Diagram</text>
+  <text x="800" y="30" text-anchor="middle" class="title-text">LINKAR - Diagrama de Entidades e Relacionamentos</text>
   <text x="800" y="50" text-anchor="middle" class="subtitle-text">Sistema de Matching entre Candidatos e Empresas</text>
   
   <!-- Legend -->
   <rect x="20" y="70" width="200" height="80" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="5"/>
   <text x="30" y="90" class="column-text" font-weight="bold">Legenda:</text>
-  <text x="30" y="110" class="pk">● PK - Primary Key</text>
-  <text x="30" y="130" class="fk">● FK - Foreign Key</text>
+  <text x="30" y="110" class="pk">● CP - Chave Primária</text>
+  <text x="30" y="130" class="fk">● CE - Chave Estrangeira</text>
   
   <!-- AUTH.USERS (External Reference) -->
   <g id="auth-users">
     <rect x="700" y="170" width="200" height="60" class="table-box" opacity="0.5"/>
     <rect x="700" y="170" width="200" height="30" class="table-header" opacity="0.5"/>
-    <text x="800" y="190" text-anchor="middle" class="table-name">AUTH.USERS</text>
+    <text x="800" y="190" text-anchor="middle" class="table-name">AUTH.USERS (Autenticação)</text>
     <text x="710" y="215" class="column-text pk">● id (uuid)</text>
   </g>
   
@@ -36,17 +36,17 @@
   <g id="user-roles">
     <rect x="450" y="280" width="200" height="90" class="table-box"/>
     <rect x="450" y="280" width="200" height="30" class="table-header"/>
-    <text x="550" y="300" text-anchor="middle" class="table-name">USER_ROLES</text>
+    <text x="550" y="300" text-anchor="middle" class="table-name">PAPÉIS DE USUÁRIOS</text>
     <text x="460" y="325" class="column-text pk">● id (uuid)</text>
     <text x="460" y="342" class="column-text fk">● user_id (uuid)</text>
-    <text x="460" y="359" class="column-text">  role (app_role)</text>
+    <text x="460" y="359" class="column-text">  papel (admin/candidato/empresa)</text>
   </g>
   
   <!-- PROFILES (Candidates) -->
   <g id="profiles">
     <rect x="50" y="280" width="280" height="280" class="table-box"/>
     <rect x="50" y="280" width="280" height="30" class="table-header"/>
-    <text x="190" y="300" text-anchor="middle" class="table-name">PROFILES (Candidatos)</text>
+    <text x="190" y="300" text-anchor="middle" class="table-name">PERFIS (Candidatos)</text>
     <text x="60" y="325" class="column-text pk">● id (uuid)</text>
     <text x="60" y="342" class="column-text">  full_name, social_name</text>
     <text x="60" y="359" class="column-text">  photo_url, linkedin_url</text>
@@ -67,7 +67,7 @@
   <g id="company-profiles">
     <rect x="950" y="280" width="280" height="250" class="table-box"/>
     <rect x="950" y="280" width="280" height="30" class="table-header"/>
-    <text x="1090" y="300" text-anchor="middle" class="table-name">COMPANY_PROFILES</text>
+    <text x="1090" y="300" text-anchor="middle" class="table-name">PERFIS DE EMPRESAS</text>
     <text x="960" y="325" class="column-text pk">● id (uuid)</text>
     <text x="960" y="342" class="column-text fk">● user_id (uuid)</text>
     <text x="960" y="359" class="column-text">  fantasy_name, cnpj</text>
@@ -84,7 +84,7 @@
   <g id="jobs">
     <rect x="700" y="600" width="280" height="220" class="table-box"/>
     <rect x="700" y="600" width="280" height="30" class="table-header"/>
-    <text x="840" y="620" text-anchor="middle" class="table-name">JOBS</text>
+    <text x="840" y="620" text-anchor="middle" class="table-name">VAGAS</text>
     <text x="710" y="645" class="column-text pk">● id (uuid)</text>
     <text x="710" y="662" class="column-text fk">● company_id (uuid)</text>
     <text x="710" y="679" class="column-text">  title, description</text>
@@ -101,7 +101,7 @@
   <g id="applications">
     <rect x="380" y="650" width="250" height="200" class="table-box"/>
     <rect x="380" y="650" width="250" height="30" class="table-header"/>
-    <text x="505" y="670" text-anchor="middle" class="table-name">APPLICATIONS</text>
+    <text x="505" y="670" text-anchor="middle" class="table-name">CANDIDATURAS</text>
     <text x="390" y="695" class="column-text pk">● id (uuid)</text>
     <text x="390" y="712" class="column-text fk">● candidate_id (uuid)</text>
     <text x="390" y="729" class="column-text fk">● job_id (uuid)</text>
@@ -130,7 +130,7 @@
   <g id="matches">
     <rect x="1050" y="650" width="250" height="140" class="table-box"/>
     <rect x="1050" y="650" width="250" height="30" class="table-header"/>
-    <text x="1175" y="670" text-anchor="middle" class="table-name">MATCHES</text>
+    <text x="1175" y="670" text-anchor="middle" class="table-name">CORRESPONDÊNCIAS</text>
     <text x="1060" y="695" class="column-text pk">● id (uuid)</text>
     <text x="1060" y="712" class="column-text fk">● candidate_id (uuid)</text>
     <text x="1060" y="729" class="column-text fk">● job_id (uuid)</text>
@@ -142,7 +142,7 @@
   <g id="ratings">
     <rect x="380" y="920" width="250" height="140" class="table-box"/>
     <rect x="380" y="920" width="250" height="30" class="table-header"/>
-    <text x="505" y="940" text-anchor="middle" class="table-name">RATINGS</text>
+    <text x="505" y="940" text-anchor="middle" class="table-name">AVALIAÇÕES</text>
     <text x="390" y="965" class="column-text pk">● id (uuid)</text>
     <text x="390" y="982" class="column-text fk">● rater_id (uuid)</text>
     <text x="390" y="999" class="column-text fk">● rated_user_id (uuid)</text>
@@ -155,7 +155,7 @@
   <g id="testimonials">
     <rect x="700" y="920" width="250" height="160" class="table-box"/>
     <rect x="700" y="920" width="250" height="30" class="table-header"/>
-    <text x="825" y="940" text-anchor="middle" class="table-name">TESTIMONIALS</text>
+    <text x="825" y="940" text-anchor="middle" class="table-name">DEPOIMENTOS</text>
     <text x="710" y="965" class="column-text pk">● id (uuid)</text>
     <text x="710" y="982" class="column-text fk">● candidate_id (uuid)</text>
     <text x="710" y="999" class="column-text fk">● company_id (uuid)</text>
@@ -169,7 +169,7 @@
   <g id="notifications">
     <rect x="1050" y="920" width="250" height="140" class="table-box"/>
     <rect x="1050" y="920" width="250" height="30" class="table-header"/>
-    <text x="1175" y="940" text-anchor="middle" class="table-name">NOTIFICATIONS</text>
+    <text x="1175" y="940" text-anchor="middle" class="table-name">NOTIFICAÇÕES</text>
     <text x="1060" y="965" class="column-text pk">● id (uuid)</text>
     <text x="1060" y="982" class="column-text fk">● user_id (uuid)</text>
     <text x="1060" y="999" class="column-text">  title, message, type</text>
@@ -181,7 +181,7 @@
   <g id="admin-logs">
     <rect x="1350" y="920" width="220" height="120" class="table-box"/>
     <rect x="1350" y="920" width="220" height="30" class="table-header"/>
-    <text x="1460" y="940" text-anchor="middle" class="table-name">ADMIN_LOGS</text>
+    <text x="1460" y="940" text-anchor="middle" class="table-name">LOGS DE ADMIN</text>
     <text x="1360" y="965" class="column-text pk">● id (uuid)</text>
     <text x="1360" y="982" class="column-text fk">● admin_id (uuid)</text>
     <text x="1360" y="999" class="column-text">  action, details</text>
@@ -273,14 +273,14 @@
   <rect x="50" y="1120" width="1520" height="240" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" rx="5"/>
   <text x="60" y="1145" class="column-text" font-weight="bold" font-size="13px">Notas Importantes:</text>
   
-  <text x="60" y="1170" class="column-text">• USER_ROLES: Armazena os papéis dos usuários (admin, candidate, company) separadamente por segurança</text>
-  <text x="60" y="1190" class="column-text">• PROFILES: Perfil de candidatos com qualificações profissionais, experiência e preferências</text>
-  <text x="60" y="1210" class="column-text">• COMPANY_PROFILES: Perfil de empresas com informações corporativas e depoimentos</text>
-  <text x="60" y="1230" class="column-text">• JOBS: Vagas criadas pelas empresas com requisitos específicos</text>
-  <text x="60" y="1250" class="column-text">• APPLICATIONS: Candidaturas dos candidatos às vagas, com status e informações contratuais</text>
-  <text x="60" y="1270" class="column-text">• SWIPES: Sistema de match - likes/dislikes entre candidatos e vagas ou empresas e candidatos</text>
-  <text x="60" y="1290" class="column-text">• MATCHES: Matches criados automaticamente quando ambos dão like (candidato na vaga + empresa no candidato)</text>
-  <text x="60" y="1310" class="column-text">• RATINGS: Avaliações mútuas entre candidatos e empresas após conclusão de contratos</text>
-  <text x="60" y="1330" class="column-text">• TESTIMONIALS: Depoimentos de candidatos sobre empresas, com aprovação moderada</text>
-  <text x="60" y="1350" class="column-text">• NOTIFICATIONS: Sistema de notificações para eventos importantes (candidaturas, matches, contratos, etc)</text>
+  <text x="60" y="1170" class="column-text">• PAPÉIS DE USUÁRIOS: Armazena os papéis dos usuários (admin, candidato, empresa) separadamente por segurança</text>
+  <text x="60" y="1190" class="column-text">• PERFIS: Perfil de candidatos com qualificações profissionais, experiência e preferências</text>
+  <text x="60" y="1210" class="column-text">• PERFIS DE EMPRESAS: Perfil de empresas com informações corporativas e depoimentos</text>
+  <text x="60" y="1230" class="column-text">• VAGAS: Vagas criadas pelas empresas com requisitos específicos</text>
+  <text x="60" y="1250" class="column-text">• CANDIDATURAS: Candidaturas dos candidatos às vagas, com status e informações contratuais</text>
+  <text x="60" y="1270" class="column-text">• SWIPES: Sistema de match - curtidas/descurtidas entre candidatos e vagas ou empresas e candidatos</text>
+  <text x="60" y="1290" class="column-text">• CORRESPONDÊNCIAS: Matches criados automaticamente quando ambos dão like (candidato na vaga + empresa no candidato)</text>
+  <text x="60" y="1310" class="column-text">• AVALIAÇÕES: Avaliações mútuas entre candidatos e empresas após conclusão de contratos</text>
+  <text x="60" y="1330" class="column-text">• DEPOIMENTOS: Depoimentos de candidatos sobre empresas, com aprovação moderada</text>
+  <text x="60" y="1350" class="column-text">• NOTIFICAÇÕES: Sistema de notificações para eventos importantes (candidaturas, matches, contratos, etc)</text>
 </svg>
