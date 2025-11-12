@@ -1,16 +1,16 @@
 -- ============================================
 -- SCRIPT SQL - PROJETO LINKA+
 -- Trabalho Acadêmico - Banco de Dados
--- ============================================
-
 -- Database: linkar_db
+-- ============================================
 
 -- ============================================
 -- 1. CRIAÇÃO DAS TABELAS
 -- ============================================
 
 -- Tabela: papeis_usuarios (user_roles)
--- Armazena os papéis/funções dos usuários no sistema
+-- Descrição: Armazena os papéis/funções dos usuários no sistema
+-- Relacionamentos: Referenciada por perfis_candidatos, perfis_empresas e logs_admin
 CREATE TABLE papeis_usuarios (
     id_papel SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL,
@@ -20,7 +20,8 @@ CREATE TABLE papeis_usuarios (
 );
 
 -- Tabela: perfis_candidatos (profiles)
--- Armazena informações dos candidatos
+-- Descrição: Armazena informações dos candidatos
+-- Relacionamentos: Possui chave estrangeira para papeis_usuarios
 CREATE TABLE perfis_candidatos (
     id_candidato SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL UNIQUE,
@@ -37,11 +38,12 @@ CREATE TABLE perfis_candidatos (
     esta_ativo BOOLEAN DEFAULT TRUE,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     data_atualizacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES papeis_usuarios(user_id)
+    FOREIGN KEY (user_id) REFERENCES papeis_usuarios(user_id) ON DELETE CASCADE
 );
 
 -- Tabela: perfis_empresas (company_profiles)
--- Armazena informações das empresas
+-- Descrição: Armazena informações das empresas
+-- Relacionamentos: Possui chave estrangeira para papeis_usuarios
 CREATE TABLE perfis_empresas (
     id_empresa SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL UNIQUE,
@@ -57,18 +59,19 @@ CREATE TABLE perfis_empresas (
     esta_ativo BOOLEAN DEFAULT TRUE,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     data_atualizacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES papeis_usuarios(user_id)
+    FOREIGN KEY (user_id) REFERENCES papeis_usuarios(user_id) ON DELETE CASCADE
 );
 
 -- Tabela: logs_admin (admin_logs)
--- Registra ações administrativas no sistema
+-- Descrição: Registra ações administrativas no sistema
+-- Relacionamentos: Possui chave estrangeira para papeis_usuarios
 CREATE TABLE logs_admin (
     id_log SERIAL PRIMARY KEY,
     admin_id INTEGER NOT NULL,
     acao VARCHAR(100) NOT NULL,
     detalhes JSONB,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (admin_id) REFERENCES papeis_usuarios(user_id)
+    FOREIGN KEY (admin_id) REFERENCES papeis_usuarios(user_id) ON DELETE CASCADE
 );
 
 -- ============================================
