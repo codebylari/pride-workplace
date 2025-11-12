@@ -36,27 +36,19 @@ export default function AdminGeneratePhotos() {
 
         setProgress(`Gerando foto ${i + 1}/${candidates.length} - ${candidate.full_name}...`);
 
-        // Gerar imagem usando Lovable AI
-        const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${import.meta.env.VITE_LOVABLE_API_KEY || 'lov_t1xW8Ib7QeBNbFzJlc2aaQ'}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            model: "google/gemini-2.5-flash-image-preview",
-            messages: [
-              {
-                role: "user",
-                content: `Generate a professional headshot photo of a ${genderPrompt}, neutral background, business casual attire, smiling, high quality portrait`
-              }
-            ],
-            modalities: ["image", "text"]
-          })
-        });
+        // Gerar imagem via edge function
+        const { data: imageData, error: imageError } = await supabase.functions.invoke(
+          "generate-profile-image",
+          {
+            body: {
+              prompt: `Generate a professional headshot photo of a ${genderPrompt}, neutral background, business casual attire, smiling, high quality portrait`,
+              type: "candidate"
+            }
+          }
+        );
 
-        const data = await response.json();
-        const imageUrl = data.choices?.[0]?.message?.images?.[0]?.image_url?.url;
+        if (imageError) throw imageError;
+        const imageUrl = imageData?.imageUrl;
 
         if (imageUrl) {
           // Converter base64 para blob
@@ -121,27 +113,19 @@ export default function AdminGeneratePhotos() {
 
         setProgress(`Gerando logo ${i + 1}/${companies.length} - ${company.fantasy_name}...`);
 
-        // Gerar logo usando Lovable AI
-        const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${import.meta.env.VITE_LOVABLE_API_KEY || 'lov_t1xW8Ib7QeBNbFzJlc2aaQ'}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            model: "google/gemini-2.5-flash-image-preview",
-            messages: [
-              {
-                role: "user",
-                content: `Generate a modern, professional company logo for "${company.fantasy_name}", clean design, minimalist, suitable for tech/business company, square format`
-              }
-            ],
-            modalities: ["image", "text"]
-          })
-        });
+        // Gerar logo via edge function
+        const { data: imageData, error: imageError } = await supabase.functions.invoke(
+          "generate-profile-image",
+          {
+            body: {
+              prompt: `Generate a modern, professional company logo for "${company.fantasy_name}", clean design, minimalist, suitable for tech/business company, square format`,
+              type: "company"
+            }
+          }
+        );
 
-        const data = await response.json();
-        const imageUrl = data.choices?.[0]?.message?.images?.[0]?.image_url?.url;
+        if (imageError) throw imageError;
+        const imageUrl = imageData?.imageUrl;
 
         if (imageUrl) {
           // Converter base64 para blob
