@@ -69,6 +69,7 @@ import AdminCompanies from "./pages/AdminCompanies";
 import AdminJobs from "./pages/AdminJobs";
 import AdminApplications from "./pages/AdminApplications";
 import AdminSeedData from "./pages/AdminSeedData";
+import AdminGeneratePhotos from "./pages/AdminGeneratePhotos";
 import InitAdmin from "./pages/InitAdmin";
 import CreateTestAccounts from "./pages/CreateTestAccounts";
 import DatabaseDiagram from "./pages/DatabaseDiagram";
@@ -153,6 +154,7 @@ const App = () => (
             <Route path="/admin-jobs" element={<AdminJobs />} />
             <Route path="/admin-applications" element={<AdminApplications />} />
             <Route path="/admin-seed-data" element={<AdminSeedData />} />
+            <Route path="/admin-generate-photos" element={<AdminGeneratePhotos />} />
             
             {/* Database Diagram */}
             <Route path="/database-diagram" element={<DatabaseDiagram />} />
