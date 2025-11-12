@@ -28,14 +28,8 @@ export default function CompanyProfile() {
   const [totalRatings, setTotalRatings] = useState(0);
   const [companyData, setCompanyData] = useState({
     about: "",
-    seeking: [] as string[],
-    training: {
-      name: "",
-      fantasyName: "",
-      foundingDate: "",
-      location: "",
-      founder: ""
-    },
+    seeking: "",
+    training: "",
     testimonials: [] as Array<{
       name: string;
       role: string;
@@ -75,14 +69,8 @@ export default function CompanyProfile() {
         setTotalRatings(data.total_ratings ?? 0);
         setCompanyData({
           about: data.about || "",
-          seeking: data.seeking ? data.seeking.split('\n').filter(s => s.trim()) : [],
-          training: {
-            name: "",
-            fantasyName: "",
-            foundingDate: "",
-            location: data.city && data.state ? `${data.city}, ${data.state}` : "",
-            founder: ""
-          },
+          seeking: data.seeking || "",
+          training: data.training || "",
           testimonials: [],
           jobs: [],
           description: data.description || "",
@@ -178,7 +166,7 @@ export default function CompanyProfile() {
     const fields = [
       logoUrl,
       companyData.about,
-      companyData.seeking.length > 0 ? "has_seeking" : null,
+      companyData.seeking,
       companyData.sector,
       companyData.city,
       companyData.state
@@ -321,17 +309,33 @@ export default function CompanyProfile() {
               )}
             </div>
 
-            {/* Company Name */}
-            <h1 className={`text-2xl font-semibold text-center mb-2 ${darkMode ? "text-white" : "text-gray-800"}`}>
-              Nome Empresa: {companyName}
-            </h1>
-
-            {/* Location */}
-            {(companyData.city && companyData.state) && (
-              <p className={`text-center mb-8 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
-                📍 {companyData.city}, {companyData.state}
-              </p>
-            )}
+            {/* Company Info */}
+            <div className="text-center mb-6 space-y-2">
+              <h1 className={`text-2xl font-bold ${darkMode ? "text-white" : "text-gray-800"}`}>
+                {companyData.fantasy_name || companyName}
+              </h1>
+              
+              {/* CNPJ */}
+              {companyData.cnpj && (
+                <p className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+                  CNPJ: {companyData.cnpj}
+                </p>
+              )}
+              
+              {/* Sector */}
+              {companyData.sector && (
+                <p className={`text-lg ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+                  Setor: {companyData.sector}
+                </p>
+              )}
+              
+              {/* Location */}
+              {(companyData.city || companyData.state) && (
+                <p className={`text-lg ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+                  Localização: {companyData.city}{companyData.city && companyData.state ? ", " : ""}{companyData.state}
+                </p>
+              )}
+            </div>
 
             {/* Action Buttons and Expandable Sections */}
             <div className="space-y-3 max-w-2xl mx-auto px-2 sm:px-4">
@@ -388,12 +392,10 @@ export default function CompanyProfile() {
                     <h3 className={`text-xl font-bold mb-4 ${darkMode ? "text-white" : "text-gray-800"}`}>
                       O que buscamos
                     </h3>
-                    {companyData.seeking.length > 0 ? (
-                      <ul className={`list-disc pl-6 space-y-2 ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-                        {companyData.seeking.map((item, index) => (
-                          <li key={index}>{item}</li>
-                        ))}
-                      </ul>
+                    {companyData.seeking ? (
+                      <p className={`leading-relaxed whitespace-pre-line ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+                        {companyData.seeking}
+                      </p>
                     ) : (
                       <p className={`text-center py-4 ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
                         Nenhuma informação adicionada ainda
@@ -471,13 +473,13 @@ export default function CompanyProfile() {
                 )}
               </div>
 
-              {/* Formação */}
+              {/* Formação e Treinamentos */}
               <div>
                 <Button
                   onClick={() => toggleSection("training")}
                   className="w-full bg-[#FFF8D6] hover:bg-[#FFF2A9] text-gray-800 py-6 rounded-full text-lg font-medium shadow-md flex items-center justify-center gap-2"
                 >
-                  <span>Formação</span>
+                  <span>Formação e Treinamentos</span>
                   {expandedSection === "training" ? <ChevronUp size={24} /> : <ChevronDown size={24} />}
                 </Button>
                 {expandedSection === "training" && (
@@ -489,18 +491,12 @@ export default function CompanyProfile() {
                       ×
                     </button>
                     <h3 className={`text-xl font-bold mb-4 ${darkMode ? "text-white" : "text-gray-800"}`}>
-                      Formação
+                      Formação e Treinamentos Oferecidos
                     </h3>
-                    {(companyData.training.name || companyData.training.fantasyName || 
-                      companyData.training.foundingDate || companyData.training.location || 
-                      companyData.training.founder) ? (
-                      <div className={`space-y-2 ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-                        {companyData.training.name && <p>{companyData.training.name}</p>}
-                        {companyData.training.fantasyName && <p>{companyData.training.fantasyName}</p>}
-                        {companyData.training.foundingDate && <p>{companyData.training.foundingDate}</p>}
-                        {companyData.training.location && <p>{companyData.training.location}</p>}
-                        {companyData.training.founder && <p>{companyData.training.founder}</p>}
-                      </div>
+                    {companyData.training ? (
+                      <p className={`leading-relaxed whitespace-pre-line ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+                        {companyData.training}
+                      </p>
                     ) : (
                       <p className={`text-center py-4 ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
                         Nenhuma informação adicionada ainda
