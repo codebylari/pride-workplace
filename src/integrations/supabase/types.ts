@@ -96,6 +96,7 @@ export type Database = {
           cnpj: string
           created_at: string
           description: string | null
+          essential_skills: string[] | null
           fantasy_name: string
           id: string
           is_active: boolean
@@ -116,6 +117,7 @@ export type Database = {
           cnpj: string
           created_at?: string
           description?: string | null
+          essential_skills?: string[] | null
           fantasy_name: string
           id?: string
           is_active?: boolean
@@ -136,6 +138,7 @@ export type Database = {
           cnpj?: string
           created_at?: string
           description?: string | null
+          essential_skills?: string[] | null
           fantasy_name?: string
           id?: string
           is_active?: boolean

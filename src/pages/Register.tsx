@@ -78,6 +78,7 @@ export default function Register() {
   const [companyContactLastName, setCompanyContactLastName] = useState("");
   const [diversity, setDiversity] = useState<"sim" | "nao" | null>(null);
   const [candidateValue, setCandidateValue] = useState("");
+  const [essentialSkills, setEssentialSkills] = useState<string[]>([]);
 
   // ------------------- CARREGAR ESTADOS -------------------
   useEffect(() => {
@@ -1778,10 +1779,8 @@ export default function Register() {
   };
 
   const Step3Company = () => {
-    const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
-    
     const toggleSkill = (skill: string) => {
-      setSelectedSkills(prev => 
+      setEssentialSkills(prev => 
         prev.includes(skill) 
           ? prev.filter(s => s !== skill)
           : [...prev, skill]
@@ -1829,7 +1828,7 @@ export default function Register() {
               key={option}
               onClick={() => toggleSkill(option)}
               className={`py-6 rounded-2xl text-base transition-all ${
-                selectedSkills.includes(option)
+                essentialSkills.includes(option)
                   ? "bg-success hover:bg-success/90 text-success-foreground scale-105"
                   : "bg-white/20 hover:bg-white/30 text-white"
               }`}
@@ -1839,7 +1838,7 @@ export default function Register() {
           ))}
         </div>
         
-        {selectedSkills.length > 0 && (
+        {essentialSkills.length > 0 && (
           <Button
             onClick={() => setStep(4)}
             className="mt-4 bg-success hover:bg-success/90 text-success-foreground py-6 rounded-full text-lg font-semibold px-10 w-80"
@@ -2471,10 +2470,13 @@ export default function Register() {
           .from('profile-photos')
           .getPublicUrl(fileName);
 
-        // Update company profile with logo URL
+        // Update company profile with logo URL and essential skills
         const { error: updateError } = await supabase
           .from('company_profiles')
-          .update({ logo_url: `${publicUrl}?t=${Date.now()}` })
+          .update({ 
+            logo_url: `${publicUrl}?t=${Date.now()}`,
+            essential_skills: essentialSkills
+          })
           .eq('user_id', userId);
 
         if (updateError) throw updateError;

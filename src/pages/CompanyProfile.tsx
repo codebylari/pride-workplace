@@ -48,7 +48,8 @@ export default function CompanyProfile() {
     city: "",
     state: "",
     fantasy_name: "",
-    cnpj: ""
+    cnpj: "",
+    essential_skills: [] as string[]
   });
 
   const companyName = user?.user_metadata?.company_name || user?.user_metadata?.fantasy_name || "Empresa";
@@ -59,7 +60,7 @@ export default function CompanyProfile() {
       
       const { data } = await supabase
         .from("company_profiles")
-        .select("logo_url, about, seeking, training, description, sector, city, state, fantasy_name, cnpj, rating, total_ratings")
+        .select("logo_url, about, seeking, training, description, sector, city, state, fantasy_name, cnpj, rating, total_ratings, essential_skills")
         .eq("user_id", user.id)
         .maybeSingle();
       
@@ -78,7 +79,8 @@ export default function CompanyProfile() {
           city: data.city || "",
           state: data.state || "",
           fantasy_name: data.fantasy_name || "",
-          cnpj: data.cnpj || ""
+          cnpj: data.cnpj || "",
+          essential_skills: data.essential_skills || []
         });
       }
     };
@@ -336,6 +338,29 @@ export default function CompanyProfile() {
                 </p>
               )}
             </div>
+
+            {/* Competências Essenciais */}
+            {companyData.essential_skills && companyData.essential_skills.length > 0 && (
+              <div className={`mb-6 p-6 rounded-xl ${darkMode ? "bg-gray-600" : "bg-gradient-to-br from-purple-50 to-pink-50"}`}>
+                <h2 className={`text-xl font-bold mb-4 ${darkMode ? "text-white" : "text-gray-800"}`}>
+                  Competências Essenciais
+                </h2>
+                <div className="flex flex-wrap gap-2">
+                  {companyData.essential_skills.map((skill, index) => (
+                    <span 
+                      key={index}
+                      className={`px-4 py-2 rounded-full text-sm font-medium ${
+                        darkMode 
+                          ? "bg-gray-700 text-gray-200" 
+                          : "bg-white text-gray-800 shadow-sm"
+                      }`}
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Action Buttons and Expandable Sections */}
             <div className="space-y-3 max-w-2xl mx-auto px-2 sm:px-4">

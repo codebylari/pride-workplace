@@ -34,6 +34,7 @@ export default function EditCompanyProfile() {
   const [city, setCity] = useState("");
   const [logo, setLogo] = useState<string | null>(null);
   const [currentLogoUrl, setCurrentLogoUrl] = useState<string | null>(null);
+  const [essentialSkills, setEssentialSkills] = useState<string[]>([]);
 
   // Estados e cidades
   const [states, setStates] = useState<Array<{ id: number; sigla: string; nome: string }>>([]);
@@ -49,7 +50,8 @@ export default function EditCompanyProfile() {
     sector: "",
     state: "",
     city: "",
-    logo: null as string | null
+    logo: null as string | null,
+    essentialSkills: [] as string[]
   });
 
   // Carregar estados da API do IBGE
@@ -91,7 +93,7 @@ export default function EditCompanyProfile() {
       
       const { data, error } = await supabase
         .from("company_profiles")
-        .select("logo_url, about, seeking, training, sector, state, city")
+        .select("logo_url, about, seeking, training, sector, state, city, essential_skills")
         .eq("user_id", user.id)
         .maybeSingle();
       
@@ -108,7 +110,8 @@ export default function EditCompanyProfile() {
         sector: data?.sector || "",
         state: data?.state || "",
         city: data?.city || "",
-        logo: data?.logo_url || null
+        logo: data?.logo_url || null,
+        essentialSkills: data?.essential_skills || []
       };
 
       // Set all form values
@@ -117,6 +120,7 @@ export default function EditCompanyProfile() {
       setSeeking(initialData.seeking);
       setTraining(initialData.training);
       setSector(initialData.sector);
+      setEssentialSkills(initialData.essentialSkills);
       
       // Set state first, which will trigger the cities useEffect
       if (initialData.state) {
@@ -163,7 +167,8 @@ export default function EditCompanyProfile() {
       sector !== originalValues.sector ||
       state !== originalValues.state ||
       city !== originalValues.city ||
-      logo !== originalValues.logo
+      logo !== originalValues.logo ||
+      JSON.stringify(essentialSkills) !== JSON.stringify(originalValues.essentialSkills)
     );
   };
 
@@ -196,6 +201,7 @@ export default function EditCompanyProfile() {
         sector: sector.trim(),
         state: state,
         city: city,
+        essential_skills: essentialSkills
       };
 
       // Handle logo upload if there's a new one
@@ -278,7 +284,8 @@ export default function EditCompanyProfile() {
         sector,
         state,
         city,
-        logo: updates.logo_url || logo
+        logo: updates.logo_url || logo,
+        essentialSkills
       });
 
       navigate("/company-profile");
@@ -429,6 +436,56 @@ export default function EditCompanyProfile() {
                     </option>
                   ))}
                 </select>
+              </div>
+
+              <div>
+                <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-900"}`}>
+                  Competências Essenciais
+                </label>
+                <p className={`text-sm mb-3 ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+                  Selecione uma ou mais competências que você busca em candidatos
+                </p>
+                <div className="grid grid-cols-2 gap-3">
+                  {[
+                    "Ciência de Dados",
+                    "Testes",
+                    "Cibersegurança",
+                    "Infraestrutura",
+                    "Desenvolvimento de Software",
+                    "Blockchain",
+                    "Inteligência Artificial",
+                    "Arquitetura",
+                    "Engenharia de Dados",
+                    "Suporte Técnico",
+                    "Design",
+                    "Análise de Dados",
+                    "Nuvem",
+                    "Outros",
+                  ].map((skill) => (
+                    <button
+                      key={skill}
+                      type="button"
+                      onClick={() => {
+                        setEssentialSkills(prev =>
+                          prev.includes(skill)
+                            ? prev.filter(s => s !== skill)
+                            : [...prev, skill]
+                        );
+                      }}
+                      className={`p-3 rounded-lg text-sm font-medium transition-all ${
+                        essentialSkills.includes(skill)
+                          ? darkMode
+                            ? "bg-green-600 text-white"
+                            : "bg-green-500 text-white"
+                          : darkMode
+                          ? "bg-gray-600 text-gray-300 hover:bg-gray-500"
+                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      }`}
+                    >
+                      {skill}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
 
