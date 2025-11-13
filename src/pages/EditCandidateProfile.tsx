@@ -55,6 +55,10 @@ export default function EditCandidateProfile() {
   const [remotePreference, setRemotePreference] = useState("");
   const [specializationAreas, setSpecializationAreas] = useState<string[]>([]);
   const [opportunityType, setOpportunityType] = useState<string[]>([]);
+  
+  // Inclusão e Diversidade
+  const [isPcd, setIsPcd] = useState<boolean>(false);
+  const [pcdType, setPcdType] = useState("");
 
   // Display names - prioritizes social name
   const [userName, setUserName] = useState("Usuário");
@@ -89,7 +93,7 @@ export default function EditCandidateProfile() {
 
       const { data } = await supabase
         .from("profiles")
-        .select("gender, linkedin_url, about_me, experience, education, journey, resume_url, photo_url, state, city, social_name, full_name, experience_level, work_area, github_level, remote_preference, specialization_areas, opportunity_type")
+        .select("gender, linkedin_url, about_me, experience, education, journey, resume_url, photo_url, state, city, social_name, full_name, experience_level, work_area, github_level, remote_preference, specialization_areas, opportunity_type, is_pcd, pcd_type")
         .eq("id", user.id)
         .maybeSingle();
       
@@ -125,6 +129,10 @@ export default function EditCandidateProfile() {
         setRemotePreference(data.remote_preference || "");
         setSpecializationAreas(data.specialization_areas || []);
         setOpportunityType(data.opportunity_type || []);
+        
+        // Load inclusão e diversidade
+        setIsPcd(data.is_pcd || false);
+        setPcdType(data.pcd_type || "");
       } else {
         // If no profile data, load from metadata
         setState(user.user_metadata?.state || "");
@@ -329,6 +337,14 @@ export default function EditCandidateProfile() {
       }
       if (opportunityType.length > 0) {
         updates.opportunity_type = opportunityType;
+      }
+      
+      // Save inclusão e diversidade
+      updates.is_pcd = isPcd;
+      if (isPcd && pcdType.trim() !== "") {
+        updates.pcd_type = pcdType.trim();
+      } else if (!isPcd) {
+        updates.pcd_type = null;
       }
       
       // Handle AI-generated resume
@@ -777,6 +793,43 @@ export default function EditCandidateProfile() {
                         </label>
                       ))}
                     </div>
+                  </div>
+                  
+                  {/* Inclusão e Diversidade */}
+                  <div className={`rounded-xl p-4 sm:p-6 space-y-4 ${darkMode ? "bg-gray-700" : "bg-gray-50"}`}>
+                    <h3 className={`text-lg font-semibold mb-4 ${darkMode ? "text-white" : "text-gray-800"}`}>
+                      Inclusão e Diversidade
+                    </h3>
+                    
+                    <div>
+                      <label className={`flex items-center gap-3 cursor-pointer ${darkMode ? "text-white" : "text-gray-800"}`}>
+                        <input
+                          type="checkbox"
+                          checked={isPcd}
+                          onChange={(e) => {
+                            setIsPcd(e.target.checked);
+                            if (!e.target.checked) setPcdType("");
+                          }}
+                          className="w-5 h-5 rounded"
+                        />
+                        <span className="font-medium">Você é Pessoa com Deficiência (PcD)?</span>
+                      </label>
+                    </div>
+                    
+                    {isPcd && (
+                      <div>
+                        <label className={`block mb-2 font-medium ${darkMode ? "text-white" : "text-gray-800"}`}>
+                          Tipo de Deficiência (opcional)
+                        </label>
+                        <input
+                          type="text"
+                          value={pcdType}
+                          onChange={(e) => setPcdType(e.target.value)}
+                          placeholder="Ex: Visual, Auditiva, Física, etc."
+                          className={`w-full p-3 rounded-lg border ${darkMode ? "bg-gray-600 text-white border-gray-500 placeholder-gray-400" : "bg-white text-gray-800 border-gray-300 placeholder-gray-400"}`}
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
