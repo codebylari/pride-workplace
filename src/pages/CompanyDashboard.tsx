@@ -7,14 +7,73 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { ChatBot } from "@/components/ChatBot";
 import { useTheme } from "@/contexts/ThemeContext";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function CompanyDashboard() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { darkMode } = useTheme();
   const [showSidebar, setShowSidebar] = useState(false);
+  const [stats, setStats] = useState({
+    activeJobs: 0,
+    totalApplications: 0,
+    pendingApplications: 0
+  });
 
   const companyName = user?.user_metadata?.company_name || "Empresa";
+
+  useEffect(() => {
+    if (user?.id) {
+      fetchStats();
+    }
+  }, [user?.id]);
+
+  const fetchStats = async () => {
+    if (!user?.id) return;
+
+    try {
+      // Buscar vagas ativas
+      const { count: jobsCount } = await supabase
+        .from('jobs')
+        .select('*', { count: 'exact', head: true })
+        .eq('company_id', user.id);
+
+      // Buscar total de candidaturas
+      const { data: jobs } = await supabase
+        .from('jobs')
+        .select('id')
+        .eq('company_id', user.id);
+
+      const jobIds = jobs?.map(j => j.id) || [];
+
+      let applicationsCount = 0;
+      let pendingCount = 0;
+
+      if (jobIds.length > 0) {
+        const { count: totalApps } = await supabase
+          .from('applications')
+          .select('*', { count: 'exact', head: true })
+          .in('job_id', jobIds);
+
+        const { count: pendingApps } = await supabase
+          .from('applications')
+          .select('*', { count: 'exact', head: true })
+          .in('job_id', jobIds)
+          .eq('status', 'pending');
+
+        applicationsCount = totalApps || 0;
+        pendingCount = pendingApps || 0;
+      }
+
+      setStats({
+        activeJobs: jobsCount || 0,
+        totalApplications: applicationsCount,
+        pendingApplications: pendingCount
+      });
+    } catch (error) {
+      console.error('Erro ao buscar estatísticas:', error);
+    }
+  };
 
   return (
     <div className={`min-h-screen relative overflow-hidden ${darkMode ? "bg-gray-800" : "bg-gray-50"}`}>
@@ -182,17 +241,17 @@ export default function CompanyDashboard() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
             <div className={`rounded-xl p-4 sm:p-6 shadow-md ${darkMode ? "bg-gray-700" : "bg-white"}`}>
               <h3 className={`text-xs sm:text-sm font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>Vagas Ativas</h3>
-              <p className="text-2xl sm:text-3xl font-bold text-purple-600">0</p>
+              <p className="text-2xl sm:text-3xl font-bold text-purple-600">{stats.activeJobs}</p>
             </div>
             
             <div className={`rounded-xl p-4 sm:p-6 shadow-md ${darkMode ? "bg-gray-700" : "bg-white"}`}>
               <h3 className={`text-xs sm:text-sm font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>Candidaturas</h3>
-              <p className="text-2xl sm:text-3xl font-bold text-green-600">0</p>
+              <p className="text-2xl sm:text-3xl font-bold text-green-600">{stats.totalApplications}</p>
             </div>
             
             <div className={`rounded-xl p-4 sm:p-6 shadow-md ${darkMode ? "bg-gray-700" : "bg-white"}`}>
               <h3 className={`text-xs sm:text-sm font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>Em Análise</h3>
-              <p className="text-2xl sm:text-3xl font-bold text-blue-600">0</p>
+              <p className="text-2xl sm:text-3xl font-bold text-blue-600">{stats.pendingApplications}</p>
             </div>
           </div>
         </div>
