@@ -87,6 +87,20 @@ export type Database = {
             referencedRelation: "jobs"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "fk_applications_candidate_id"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_applications_job_id"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["id"]
+          },
         ]
       }
       company_profiles: {
@@ -204,7 +218,15 @@ export type Database = {
           title?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "fk_jobs_company_id"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "company_profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
       }
       matches: {
         Row: {
@@ -233,7 +255,28 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "fk_matches_candidate_id"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_matches_company_id"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "company_profiles"
+            referencedColumns: ["user_id"]
+          },
+          {
             foreignKeyName: "fk_matches_job"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_matches_job_id"
             columns: ["job_id"]
             isOneToOne: false
             referencedRelation: "jobs"
@@ -394,6 +437,13 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "fk_ratings_application_id"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "applications"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "ratings_application_id_fkey"
             columns: ["application_id"]
             isOneToOne: false
@@ -464,6 +514,27 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "fk_testimonials_application_id"
+            columns: ["application_id"]
+            isOneToOne: true
+            referencedRelation: "applications"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_testimonials_candidate_id"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_testimonials_company_id"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "company_profiles"
+            referencedColumns: ["user_id"]
+          },
           {
             foreignKeyName: "testimonials_application_id_fkey"
             columns: ["application_id"]
