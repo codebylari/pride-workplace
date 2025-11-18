@@ -210,6 +210,86 @@ CREATE TABLE public.admin_logs (
 );
 
 -- ============================================
+-- ÍNDICES PARA FOREIGN KEYS
+-- Descrição: Índices para melhorar performance de queries com JOIN e filtros
+-- ============================================
+
+-- Índices para user_roles
+CREATE INDEX idx_user_roles_user_id ON public.user_roles(user_id);
+
+-- Índices para company_profiles
+CREATE INDEX idx_company_profiles_user_id ON public.company_profiles(user_id);
+
+-- Índices para jobs
+CREATE INDEX idx_jobs_company_id ON public.jobs(company_id);
+CREATE INDEX idx_jobs_created_at ON public.jobs(created_at DESC);
+
+-- Índices para applications
+CREATE INDEX idx_applications_candidate_id ON public.applications(candidate_id);
+CREATE INDEX idx_applications_job_id ON public.applications(job_id);
+CREATE INDEX idx_applications_status ON public.applications(status);
+CREATE INDEX idx_applications_contract_status ON public.applications(contract_status);
+CREATE INDEX idx_applications_created_at ON public.applications(created_at DESC);
+
+-- Índices para swipes
+CREATE INDEX idx_swipes_user_id ON public.swipes(user_id);
+CREATE INDEX idx_swipes_target_id ON public.swipes(target_id);
+CREATE INDEX idx_swipes_target_type ON public.swipes(target_type);
+CREATE INDEX idx_swipes_action ON public.swipes(action);
+
+-- Índices compostos para swipes (evitar duplicatas)
+CREATE INDEX idx_swipes_user_target ON public.swipes(user_id, target_id, target_type);
+
+-- Índices para matches
+CREATE INDEX idx_matches_candidate_id ON public.matches(candidate_id);
+CREATE INDEX idx_matches_job_id ON public.matches(job_id);
+CREATE INDEX idx_matches_company_id ON public.matches(company_id);
+CREATE INDEX idx_matches_status ON public.matches(status);
+CREATE INDEX idx_matches_matched_at ON public.matches(matched_at DESC);
+
+-- Índices para ratings
+CREATE INDEX idx_ratings_application_id ON public.ratings(application_id);
+CREATE INDEX idx_ratings_rater_id ON public.ratings(rater_id);
+CREATE INDEX idx_ratings_rated_user_id ON public.ratings(rated_user_id);
+CREATE INDEX idx_ratings_created_at ON public.ratings(created_at DESC);
+
+-- Índices para notifications
+CREATE INDEX idx_notifications_user_id ON public.notifications(user_id);
+CREATE INDEX idx_notifications_read ON public.notifications(read);
+CREATE INDEX idx_notifications_type ON public.notifications(type);
+CREATE INDEX idx_notifications_created_at ON public.notifications(created_at DESC);
+
+-- Índice composto para notificações não lidas
+CREATE INDEX idx_notifications_user_unread ON public.notifications(user_id, read, created_at DESC);
+
+-- Índices para testimonials
+CREATE INDEX idx_testimonials_candidate_id ON public.testimonials(candidate_id);
+CREATE INDEX idx_testimonials_company_id ON public.testimonials(company_id);
+CREATE INDEX idx_testimonials_application_id ON public.testimonials(application_id);
+CREATE INDEX idx_testimonials_status ON public.testimonials(status);
+CREATE INDEX idx_testimonials_created_at ON public.testimonials(created_at DESC);
+
+-- Índices para admin_logs
+CREATE INDEX idx_admin_logs_admin_id ON public.admin_logs(admin_id);
+CREATE INDEX idx_admin_logs_action ON public.admin_logs(action);
+CREATE INDEX idx_admin_logs_created_at ON public.admin_logs(created_at DESC);
+
+-- Índices para profiles (melhorar busca e filtros)
+CREATE INDEX idx_profiles_city ON public.profiles(city);
+CREATE INDEX idx_profiles_state ON public.profiles(state);
+CREATE INDEX idx_profiles_work_area ON public.profiles(work_area);
+CREATE INDEX idx_profiles_experience_level ON public.profiles(experience_level);
+CREATE INDEX idx_profiles_is_active ON public.profiles(is_active);
+CREATE INDEX idx_profiles_rating ON public.profiles(rating DESC);
+
+-- Índices para company_profiles (melhorar busca)
+CREATE INDEX idx_company_profiles_city ON public.company_profiles(city);
+CREATE INDEX idx_company_profiles_state ON public.company_profiles(state);
+CREATE INDEX idx_company_profiles_sector ON public.company_profiles(sector);
+CREATE INDEX idx_company_profiles_is_active ON public.company_profiles(is_active);
+CREATE INDEX idx_company_profiles_rating ON public.company_profiles(rating DESC);
+
+-- ============================================
 -- SCHEMA: AUTH (19 TABELAS)
 -- Descrição: Sistema de autenticação gerenciado pelo Supabase
 -- IMPORTANTE: Estas tabelas são gerenciadas automaticamente pelo Supabase
