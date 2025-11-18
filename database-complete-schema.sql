@@ -22,7 +22,7 @@
 -- ============================================
 CREATE TABLE public.user_roles (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL,
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
     role TEXT NOT NULL CHECK (role IN ('admin', 'candidate', 'company')),
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
     UNIQUE(user_id, role)
@@ -33,7 +33,7 @@ CREATE TABLE public.user_roles (
 -- Descrição: Armazena informações dos candidatos
 -- ============================================
 CREATE TABLE public.profiles (
-    id UUID PRIMARY KEY,
+    id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
     full_name TEXT NOT NULL,
     social_name TEXT,
     city TEXT,
@@ -68,7 +68,7 @@ CREATE TABLE public.profiles (
 -- ============================================
 CREATE TABLE public.company_profiles (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL UNIQUE,
+    user_id UUID NOT NULL UNIQUE REFERENCES auth.users(id) ON DELETE CASCADE,
     fantasy_name TEXT NOT NULL,
     cnpj TEXT NOT NULL UNIQUE,
     sector TEXT,
@@ -94,7 +94,7 @@ CREATE TABLE public.company_profiles (
 -- ============================================
 CREATE TABLE public.jobs (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    company_id UUID NOT NULL,
+    company_id UUID NOT NULL REFERENCES public.company_profiles(user_id) ON DELETE CASCADE,
     title TEXT NOT NULL,
     description TEXT NOT NULL,
     location TEXT NOT NULL,
@@ -115,8 +115,8 @@ CREATE TABLE public.jobs (
 -- ============================================
 CREATE TABLE public.applications (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    candidate_id UUID NOT NULL,
-    job_id UUID NOT NULL,
+    candidate_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+    job_id UUID NOT NULL REFERENCES public.jobs(id) ON DELETE CASCADE,
     status TEXT DEFAULT 'pending',
     candidate_accepted BOOLEAN DEFAULT false,
     start_date TIMESTAMP WITH TIME ZONE,
@@ -132,7 +132,7 @@ CREATE TABLE public.applications (
 -- ============================================
 CREATE TABLE public.swipes (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL,
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
     target_id UUID NOT NULL,
     target_type TEXT NOT NULL,
     action TEXT NOT NULL,
@@ -145,9 +145,9 @@ CREATE TABLE public.swipes (
 -- ============================================
 CREATE TABLE public.matches (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    candidate_id UUID NOT NULL,
-    job_id UUID NOT NULL,
-    company_id UUID NOT NULL,
+    candidate_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+    job_id UUID NOT NULL REFERENCES public.jobs(id) ON DELETE CASCADE,
+    company_id UUID NOT NULL REFERENCES public.company_profiles(user_id) ON DELETE CASCADE,
     status TEXT DEFAULT 'active',
     matched_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
 );
@@ -158,9 +158,9 @@ CREATE TABLE public.matches (
 -- ============================================
 CREATE TABLE public.ratings (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    application_id UUID NOT NULL,
-    rater_id UUID NOT NULL,
-    rated_user_id UUID NOT NULL,
+    application_id UUID NOT NULL REFERENCES public.applications(id) ON DELETE CASCADE,
+    rater_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    rated_user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
     rating NUMERIC NOT NULL,
     comment TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
@@ -172,7 +172,7 @@ CREATE TABLE public.ratings (
 -- ============================================
 CREATE TABLE public.notifications (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL,
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
     title TEXT NOT NULL,
     message TEXT NOT NULL,
     type TEXT NOT NULL,
@@ -187,9 +187,9 @@ CREATE TABLE public.notifications (
 -- ============================================
 CREATE TABLE public.testimonials (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    candidate_id UUID NOT NULL,
-    company_id UUID NOT NULL,
-    application_id UUID NOT NULL,
+    candidate_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+    company_id UUID NOT NULL REFERENCES public.company_profiles(user_id) ON DELETE CASCADE,
+    application_id UUID NOT NULL REFERENCES public.applications(id) ON DELETE CASCADE,
     job_title TEXT NOT NULL,
     comment TEXT NOT NULL,
     status TEXT DEFAULT 'pending',
@@ -203,7 +203,7 @@ CREATE TABLE public.testimonials (
 -- ============================================
 CREATE TABLE public.admin_logs (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    admin_id UUID NOT NULL,
+    admin_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
     action TEXT NOT NULL,
     details JSONB,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
