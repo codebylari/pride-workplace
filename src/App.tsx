@@ -72,6 +72,7 @@ import AdminSeedData from "./pages/AdminSeedData";
 import AdminGeneratePhotos from "./pages/AdminGeneratePhotos";
 import InitAdmin from "./pages/InitAdmin";
 import CreateTestAccounts from "./pages/CreateTestAccounts";
+import CreateTestUsers from "./pages/CreateTestUsers";
 import DatabaseDiagram from "./pages/DatabaseDiagram";
 
 const queryClient = new QueryClient();
@@ -88,6 +89,7 @@ const App = () => (
             <Route path="/register" element={<Register />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/create-test-accounts" element={<CreateTestAccounts />} />
+            <Route path="/create-test-users" element={<CreateTestUsers />} />
             <Route path="/init-admin" element={<InitAdmin />} />
             <Route path="/" element={<Index />} />
             
