@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Users, Briefcase, Building2, FileText, LogOut, TrendingUp, UserCheck, Database } from "lucide-react";
+import { Users, Briefcase, Building2, FileText, LogOut, TrendingUp, UserCheck } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { StatsCard } from "@/components/admin/StatsCard";
@@ -328,16 +328,6 @@ export default function AdminDashboard() {
           />
         </div>
 
-        {/* Tools Section */}
-        <div className="grid grid-cols-1 gap-4">
-          <StatsCard
-            title="Gerar Dados de Teste"
-            value="🧪"
-            description="Criar candidatos e empresas para testes"
-            icon={Database}
-            onClick={() => navigate("/admin-seed-data")}
-          />
-        </div>
 
         {/* Secondary Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
