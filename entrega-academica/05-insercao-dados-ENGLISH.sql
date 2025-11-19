@@ -14,30 +14,37 @@
 -- INSERTING USER ROLES (at least 5 records)
 -- ============================================
 
--- CRITICAL: Replace these UUIDs with real UUIDs from your auth.users table
--- You need at least:
--- - 1 admin user
--- - 3 candidate users  
--- - 2 company users
+-- ⚠️ CRITICAL: GET REAL UUIDs FROM YOUR DATABASE FIRST!
+-- Run this query to get existing user IDs:
+-- SELECT id, email FROM auth.users ORDER BY created_at DESC LIMIT 10;
+
+-- ⚠️ REPLACE ALL UUIDs BELOW WITH REAL ONES FROM YOUR DATABASE!
+-- Example structure (DO NOT USE THESE FAKE UUIDs):
 
 INSERT INTO user_roles (user_id, role) VALUES
--- Admin (1 record)
-('00000000-0000-0000-0000-000000000001', 'admin'),
+-- Get 1 real UUID for admin from auth.users
+('PUT-REAL-ADMIN-UUID-HERE'::uuid, 'admin'),
 
--- Candidates (3 records)
-('11111111-1111-1111-1111-111111111111', 'candidate'),
-('11111111-1111-1111-1111-111111111112', 'candidate'),
-('11111111-1111-1111-1111-111111111113', 'candidate'),
+-- Get 5 real UUIDs for candidates from auth.users
+('PUT-REAL-CANDIDATE-UUID-1'::uuid, 'candidate'),
+('PUT-REAL-CANDIDATE-UUID-2'::uuid, 'candidate'),
+('PUT-REAL-CANDIDATE-UUID-3'::uuid, 'candidate'),
+('PUT-REAL-CANDIDATE-UUID-4'::uuid, 'candidate'),
+('PUT-REAL-CANDIDATE-UUID-5'::uuid, 'candidate'),
 
--- Companies (2 records)
-('22222222-2222-2222-2222-222222222221', 'company'),
-('22222222-2222-2222-2222-222222222222', 'company')
+-- Get 5 real UUIDs for companies from auth.users
+('PUT-REAL-COMPANY-UUID-1'::uuid, 'company'),
+('PUT-REAL-COMPANY-UUID-2'::uuid, 'company'),
+('PUT-REAL-COMPANY-UUID-3'::uuid, 'company'),
+('PUT-REAL-COMPANY-UUID-4'::uuid, 'company'),
+('PUT-REAL-COMPANY-UUID-5'::uuid, 'company')
 ON CONFLICT (user_id, role) DO NOTHING;
 
 -- ============================================
 -- INSERTING CANDIDATE PROFILES (at least 5 records)
 -- ============================================
 
+-- ⚠️ Use the same candidate UUIDs from user_roles above
 INSERT INTO profiles (
     id, 
     full_name, 
@@ -48,17 +55,18 @@ INSERT INTO profiles (
     about_me,
     linkedin_url
 ) VALUES
-('11111111-1111-1111-1111-111111111111', 'Ana Silva Santos', 'São Paulo', 'SP', 'Pleno', 'Desenvolvimento Web', 'Desenvolvedora Full Stack com 3 anos de experiência', 'https://linkedin.com/in/anasilva'),
-('11111111-1111-1111-1111-111111111112', 'Carlos Eduardo Oliveira', 'Rio de Janeiro', 'RJ', 'Sênior', 'DevOps', 'Especialista em infraestrutura cloud', 'https://linkedin.com/in/carloseduardo'),
-('11111111-1111-1111-1111-111111111113', 'Mariana Costa Lima', 'Belo Horizonte', 'MG', 'Júnior', 'UI/UX Design', 'Designer apaixonada por criar experiências incríveis', 'https://linkedin.com/in/marianacosta'),
-('11111111-1111-1111-1111-111111111114', 'Pedro Henrique Santos', 'Porto Alegre', 'RS', 'Pleno', 'Análise de Dados', 'Analista de dados com foco em business intelligence', 'https://linkedin.com/in/pedrosantos'),
-('11111111-1111-1111-1111-111111111115', 'Juliana Ferreira Souza', 'Curitiba', 'PR', 'Júnior', 'Marketing Digital', 'Profissional de marketing com experiência em redes sociais', 'https://linkedin.com/in/julianaferreira')
+('PUT-REAL-CANDIDATE-UUID-1'::uuid, 'Ana Silva Santos', 'São Paulo', 'SP', 'Pleno', 'Desenvolvimento Web', 'Desenvolvedora Full Stack com 3 anos de experiência', 'https://linkedin.com/in/anasilva'),
+('PUT-REAL-CANDIDATE-UUID-2'::uuid, 'Carlos Eduardo Oliveira', 'Rio de Janeiro', 'RJ', 'Sênior', 'DevOps', 'Especialista em infraestrutura cloud', 'https://linkedin.com/in/carloseduardo'),
+('PUT-REAL-CANDIDATE-UUID-3'::uuid, 'Mariana Costa Lima', 'Belo Horizonte', 'MG', 'Júnior', 'UI/UX Design', 'Designer apaixonada por criar experiências incríveis', 'https://linkedin.com/in/marianacosta'),
+('PUT-REAL-CANDIDATE-UUID-4'::uuid, 'Pedro Henrique Santos', 'Porto Alegre', 'RS', 'Pleno', 'Análise de Dados', 'Analista de dados com foco em business intelligence', 'https://linkedin.com/in/pedrosantos'),
+('PUT-REAL-CANDIDATE-UUID-5'::uuid, 'Juliana Ferreira Souza', 'Curitiba', 'PR', 'Júnior', 'Marketing Digital', 'Profissional de marketing com experiência em redes sociais', 'https://linkedin.com/in/julianaferreira')
 ON CONFLICT (id) DO NOTHING;
 
 -- ============================================
 -- INSERTING COMPANY PROFILES (at least 5 records)
 -- ============================================
 
+-- ⚠️ Use the same company UUIDs from user_roles above
 INSERT INTO company_profiles (
     user_id, 
     fantasy_name, 
@@ -69,17 +77,18 @@ INSERT INTO company_profiles (
     description,
     about
 ) VALUES
-('22222222-2222-2222-2222-222222222221', 'TechInova Solutions', '12.345.678/0001-90', 'Technology', 'São Paulo', 'SP', 'Software development company', 'Leaders in digital transformation'),
-('22222222-2222-2222-2222-222222222222', 'DataCo Analytics', '23.456.789/0001-01', 'Data Science', 'Rio de Janeiro', 'RJ', 'Data analysis and AI', 'Transforming data into insights'),
-('22222222-2222-2222-2222-222222222223', 'DesignHub Studio', '34.567.890/0001-12', 'Design', 'Belo Horizonte', 'MG', 'Creative design agency', 'Creating visual experiences'),
-('22222222-2222-2222-2222-222222222224', 'CloudMasters Inc', '45.678.901/0001-23', 'Cloud Computing', 'Porto Alegre', 'RS', 'Cloud infrastructure specialists', 'Building the future in the cloud'),
-('22222222-2222-2222-2222-222222222225', 'Marketing Plus Digital', '56.789.012/0001-34', 'Marketing', 'Curitiba', 'PR', 'Digital marketing agency', 'Growing brands digitally')
+('PUT-REAL-COMPANY-UUID-1'::uuid, 'TechInova Solutions', '12.345.678/0001-90', 'Technology', 'São Paulo', 'SP', 'Software development company', 'Leaders in digital transformation'),
+('PUT-REAL-COMPANY-UUID-2'::uuid, 'DataCo Analytics', '23.456.789/0001-01', 'Data Science', 'Rio de Janeiro', 'RJ', 'Data analysis and AI', 'Transforming data into insights'),
+('PUT-REAL-COMPANY-UUID-3'::uuid, 'DesignHub Studio', '34.567.890/0001-12', 'Design', 'Belo Horizonte', 'MG', 'Creative design agency', 'Creating visual experiences'),
+('PUT-REAL-COMPANY-UUID-4'::uuid, 'CloudMasters Inc', '45.678.901/0001-23', 'Cloud Computing', 'Porto Alegre', 'RS', 'Cloud infrastructure specialists', 'Building the future in the cloud'),
+('PUT-REAL-COMPANY-UUID-5'::uuid, 'Marketing Plus Digital', '56.789.012/0001-34', 'Marketing', 'Curitiba', 'PR', 'Digital marketing agency', 'Growing brands digitally')
 ON CONFLICT (user_id) DO NOTHING;
 
 -- ============================================
 -- INSERTING JOBS (at least 5 records)
 -- ============================================
 
+-- ⚠️ Use the same company UUIDs from company_profiles above
 INSERT INTO jobs (
     company_id, 
     title, 
@@ -90,30 +99,30 @@ INSERT INTO jobs (
     is_remote,
     required_experience_level
 ) VALUES
-('22222222-2222-2222-2222-222222222221', 'Full Stack Developer', 'Develop web applications with React and Node.js', 'CLT', 'São Paulo, SP', 'R$ 8.000 - R$ 12.000', true, 'Pleno'),
-('22222222-2222-2222-2222-222222222222', 'Data Scientist', 'Analyze data and build ML models', 'PJ', 'Rio de Janeiro, RJ', 'R$ 10.000 - R$ 15.000', true, 'Sênior'),
-('22222222-2222-2222-2222-222222222223', 'UI/UX Designer', 'Design intuitive and beautiful interfaces', 'CLT', 'Belo Horizonte, MG', 'R$ 5.000 - R$ 7.000', false, 'Júnior'),
-('22222222-2222-2222-2222-222222222224', 'DevOps Engineer', 'Manage cloud infrastructure and CI/CD', 'CLT', 'Porto Alegre, RS', 'R$ 9.000 - R$ 13.000', true, 'Pleno'),
-('22222222-2222-2222-2222-222222222225', 'Social Media Manager', 'Manage social media campaigns', 'PJ', 'Curitiba, PR', 'R$ 4.000 - R$ 6.000', true, 'Júnior')
+('PUT-REAL-COMPANY-UUID-1'::uuid, 'Full Stack Developer', 'Develop web applications with React and Node.js', 'CLT', 'São Paulo, SP', 'R$ 8.000 - R$ 12.000', true, 'Pleno'),
+('PUT-REAL-COMPANY-UUID-2'::uuid, 'Data Scientist', 'Analyze data and build ML models', 'PJ', 'Rio de Janeiro, RJ', 'R$ 10.000 - R$ 15.000', true, 'Sênior'),
+('PUT-REAL-COMPANY-UUID-3'::uuid, 'UI/UX Designer', 'Design intuitive and beautiful interfaces', 'CLT', 'Belo Horizonte, MG', 'R$ 5.000 - R$ 7.000', false, 'Júnior'),
+('PUT-REAL-COMPANY-UUID-4'::uuid, 'DevOps Engineer', 'Manage cloud infrastructure and CI/CD', 'CLT', 'Porto Alegre, RS', 'R$ 9.000 - R$ 13.000', true, 'Pleno'),
+('PUT-REAL-COMPANY-UUID-5'::uuid, 'Social Media Manager', 'Manage social media campaigns', 'PJ', 'Curitiba, PR', 'R$ 4.000 - R$ 6.000', true, 'Júnior')
 ON CONFLICT DO NOTHING;
 
 -- ============================================
 -- INSERTING APPLICATIONS (at least 5 records)
 -- ============================================
 
--- Note: Use actual job IDs from your jobs table
--- Get them with: SELECT id, title FROM jobs LIMIT 5;
+-- ⚠️ Use the candidate UUIDs from profiles above
+-- Jobs are auto-selected by title from the jobs table
 
 INSERT INTO applications (
     candidate_id, 
     job_id, 
     status
 ) VALUES
-('11111111-1111-1111-1111-111111111111', (SELECT id FROM jobs WHERE title = 'Full Stack Developer' LIMIT 1), 'pending'),
-('11111111-1111-1111-1111-111111111112', (SELECT id FROM jobs WHERE title = 'DevOps Engineer' LIMIT 1), 'accepted'),
-('11111111-1111-1111-1111-111111111113', (SELECT id FROM jobs WHERE title = 'UI/UX Designer' LIMIT 1), 'pending'),
-('11111111-1111-1111-1111-111111111114', (SELECT id FROM jobs WHERE title = 'Data Scientist' LIMIT 1), 'rejected'),
-('11111111-1111-1111-1111-111111111115', (SELECT id FROM jobs WHERE title = 'Social Media Manager' LIMIT 1), 'accepted')
+('PUT-REAL-CANDIDATE-UUID-1'::uuid, (SELECT id FROM jobs WHERE title = 'Full Stack Developer' LIMIT 1), 'pending'),
+('PUT-REAL-CANDIDATE-UUID-2'::uuid, (SELECT id FROM jobs WHERE title = 'DevOps Engineer' LIMIT 1), 'accepted'),
+('PUT-REAL-CANDIDATE-UUID-3'::uuid, (SELECT id FROM jobs WHERE title = 'UI/UX Designer' LIMIT 1), 'pending'),
+('PUT-REAL-CANDIDATE-UUID-4'::uuid, (SELECT id FROM jobs WHERE title = 'Data Scientist' LIMIT 1), 'rejected'),
+('PUT-REAL-CANDIDATE-UUID-5'::uuid, (SELECT id FROM jobs WHERE title = 'Social Media Manager' LIMIT 1), 'accepted')
 ON CONFLICT DO NOTHING;
 
 -- ============================================
@@ -128,7 +137,7 @@ SET contract_status = 'completed', completed_at = NOW()
 WHERE status = 'accepted'
 LIMIT 2;
 
--- Now insert ratings (get actual application IDs first)
+-- ⚠️ Use the UUIDs you set above
 INSERT INTO ratings (
     application_id,
     rater_id,
@@ -137,19 +146,20 @@ INSERT INTO ratings (
     comment
 ) VALUES
 -- Company rating candidate
-((SELECT id FROM applications WHERE status = 'accepted' LIMIT 1), '22222222-2222-2222-2222-222222222222', '11111111-1111-1111-1111-111111111112', 4.5, 'Excellent professional, delivered on time'),
+((SELECT id FROM applications WHERE status = 'accepted' LIMIT 1), 'PUT-REAL-COMPANY-UUID-2'::uuid, 'PUT-REAL-CANDIDATE-UUID-2'::uuid, 4.5, 'Excellent professional, delivered on time'),
 -- Candidate rating company
-((SELECT id FROM applications WHERE status = 'accepted' LIMIT 1), '11111111-1111-1111-1111-111111111112', '22222222-2222-2222-2222-222222222222', 5.0, 'Great company to work with'),
+((SELECT id FROM applications WHERE status = 'accepted' LIMIT 1), 'PUT-REAL-CANDIDATE-UUID-2'::uuid, 'PUT-REAL-COMPANY-UUID-2'::uuid, 5.0, 'Great company to work with'),
 -- More ratings
-((SELECT id FROM applications WHERE status = 'accepted' OFFSET 1 LIMIT 1), '22222222-2222-2222-2222-222222222225', '11111111-1111-1111-1111-111111111115', 4.0, 'Good work ethic'),
-((SELECT id FROM applications WHERE status = 'accepted' OFFSET 1 LIMIT 1), '11111111-1111-1111-1111-111111111115', '22222222-2222-2222-2222-222222222225', 4.5, 'Professional environment'),
-((SELECT id FROM applications WHERE status = 'accepted' LIMIT 1), '22222222-2222-2222-2222-222222222221', '11111111-1111-1111-1111-111111111111', 5.0, 'Outstanding developer')
+((SELECT id FROM applications WHERE status = 'accepted' OFFSET 1 LIMIT 1), 'PUT-REAL-COMPANY-UUID-5'::uuid, 'PUT-REAL-CANDIDATE-UUID-5'::uuid, 4.0, 'Good work ethic'),
+((SELECT id FROM applications WHERE status = 'accepted' OFFSET 1 LIMIT 1), 'PUT-REAL-CANDIDATE-UUID-5'::uuid, 'PUT-REAL-COMPANY-UUID-5'::uuid, 4.5, 'Professional environment'),
+((SELECT id FROM applications WHERE status = 'accepted' LIMIT 1), 'PUT-REAL-COMPANY-UUID-1'::uuid, 'PUT-REAL-CANDIDATE-UUID-1'::uuid, 5.0, 'Outstanding developer')
 ON CONFLICT DO NOTHING;
 
 -- ============================================
 -- INSERTING NOTIFICATIONS (at least 5 records)
 -- ============================================
 
+-- ⚠️ Use the UUIDs you set above
 INSERT INTO notifications (
     user_id,
     title,
@@ -157,18 +167,18 @@ INSERT INTO notifications (
     type,
     related_id
 ) VALUES
-('11111111-1111-1111-1111-111111111111', 'New Match!', 'You matched with TechInova Solutions', 'match', (SELECT id FROM jobs WHERE title = 'Full Stack Developer' LIMIT 1)),
-('22222222-2222-2222-2222-222222222222', 'New Application', 'Ana Silva Santos applied for your job', 'new_application', (SELECT id FROM applications WHERE candidate_id = '11111111-1111-1111-1111-111111111111' LIMIT 1)),
-('11111111-1111-1111-1111-111111111112', 'Application Accepted!', 'Your application was accepted', 'application_accepted', (SELECT id FROM applications WHERE candidate_id = '11111111-1111-1111-1111-111111111112' LIMIT 1)),
-('11111111-1111-1111-1111-111111111113', 'Profile Viewed', 'DesignHub Studio viewed your profile', 'profile_view', NULL),
-('22222222-2222-2222-2222-222222222221', 'New Rating', 'You received a 5-star rating', 'new_rating', (SELECT id FROM ratings WHERE rated_user_id = '22222222-2222-2222-2222-222222222221' LIMIT 1))
+('PUT-REAL-CANDIDATE-UUID-1'::uuid, 'New Match!', 'You matched with TechInova Solutions', 'match', (SELECT id FROM jobs WHERE title = 'Full Stack Developer' LIMIT 1)),
+('PUT-REAL-COMPANY-UUID-2'::uuid, 'New Application', 'Ana Silva Santos applied for your job', 'new_application', (SELECT id FROM applications WHERE candidate_id = 'PUT-REAL-CANDIDATE-UUID-1'::uuid LIMIT 1)),
+('PUT-REAL-CANDIDATE-UUID-2'::uuid, 'Application Accepted!', 'Your application was accepted', 'application_accepted', (SELECT id FROM applications WHERE candidate_id = 'PUT-REAL-CANDIDATE-UUID-2'::uuid LIMIT 1)),
+('PUT-REAL-CANDIDATE-UUID-3'::uuid, 'Profile Viewed', 'DesignHub Studio viewed your profile', 'profile_view', NULL),
+('PUT-REAL-COMPANY-UUID-1'::uuid, 'New Rating', 'You received a 5-star rating', 'new_rating', (SELECT id FROM ratings WHERE rated_user_id = 'PUT-REAL-COMPANY-UUID-1'::uuid LIMIT 1))
 ON CONFLICT DO NOTHING;
 
 -- ============================================
 -- INSERTING TESTIMONIALS (at least 5 records)
 -- ============================================
 
--- Note: Testimonials require completed applications
+-- ⚠️ Use the UUIDs you set above
 INSERT INTO testimonials (
     application_id,
     candidate_id,
@@ -177,11 +187,11 @@ INSERT INTO testimonials (
     comment,
     status
 ) VALUES
-((SELECT id FROM applications WHERE contract_status = 'completed' LIMIT 1), '11111111-1111-1111-1111-111111111112', '22222222-2222-2222-2222-222222222222', 'DevOps Engineer', 'Amazing experience working here. Great team and challenging projects.', 'approved'),
-((SELECT id FROM applications WHERE contract_status = 'completed' OFFSET 1 LIMIT 1), '11111111-1111-1111-1111-111111111115', '22222222-2222-2222-2222-222222222225', 'Social Media Manager', 'Learned a lot and had great support from the team.', 'approved'),
-((SELECT id FROM applications WHERE status = 'accepted' LIMIT 1), '11111111-1111-1111-1111-111111111111', '22222222-2222-2222-2222-222222222221', 'Full Stack Developer', 'Professional environment with growth opportunities.', 'pending'),
-((SELECT id FROM applications WHERE status = 'accepted' OFFSET 2 LIMIT 1), '11111111-1111-1111-1111-111111111113', '22222222-2222-2222-2222-222222222223', 'UI/UX Designer', 'Creative freedom and supportive leadership.', 'approved'),
-((SELECT id FROM applications WHERE status = 'accepted' OFFSET 3 LIMIT 1), '11111111-1111-1111-1111-111111111114', '22222222-2222-2222-2222-222222222224', 'Data Scientist', 'Innovative company with cutting-edge technology.', 'pending')
+((SELECT id FROM applications WHERE contract_status = 'completed' LIMIT 1), 'PUT-REAL-CANDIDATE-UUID-2'::uuid, 'PUT-REAL-COMPANY-UUID-2'::uuid, 'DevOps Engineer', 'Amazing experience working here. Great team and challenging projects.', 'approved'),
+((SELECT id FROM applications WHERE contract_status = 'completed' OFFSET 1 LIMIT 1), 'PUT-REAL-CANDIDATE-UUID-5'::uuid, 'PUT-REAL-COMPANY-UUID-5'::uuid, 'Social Media Manager', 'Learned a lot and had great support from the team.', 'approved'),
+((SELECT id FROM applications WHERE status = 'accepted' LIMIT 1), 'PUT-REAL-CANDIDATE-UUID-1'::uuid, 'PUT-REAL-COMPANY-UUID-1'::uuid, 'Full Stack Developer', 'Professional environment with growth opportunities.', 'pending'),
+((SELECT id FROM applications WHERE status = 'accepted' OFFSET 2 LIMIT 1), 'PUT-REAL-CANDIDATE-UUID-3'::uuid, 'PUT-REAL-COMPANY-UUID-3'::uuid, 'UI/UX Designer', 'Creative freedom and supportive leadership.', 'approved'),
+((SELECT id FROM applications WHERE status = 'accepted' OFFSET 3 LIMIT 1), 'PUT-REAL-CANDIDATE-UUID-4'::uuid, 'PUT-REAL-COMPANY-UUID-4'::uuid, 'Data Scientist', 'Innovative company with cutting-edge technology.', 'pending')
 ON CONFLICT (application_id) DO NOTHING;
 
 -- ============================================
