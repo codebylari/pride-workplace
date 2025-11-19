@@ -73,6 +73,7 @@ import AdminGeneratePhotos from "./pages/AdminGeneratePhotos";
 import InitAdmin from "./pages/InitAdmin";
 import CreateTestAccounts from "./pages/CreateTestAccounts";
 import CreateTestUsers from "./pages/CreateTestUsers";
+import SeedMyData from "./pages/SeedMyData";
 import DatabaseDiagram from "./pages/DatabaseDiagram";
 
 const queryClient = new QueryClient();
@@ -160,6 +161,7 @@ const App = () => (
             
             {/* Database Diagram */}
             <Route path="/database-diagram" element={<DatabaseDiagram />} />
+            <Route path="/seed-my-data" element={<SeedMyData />} />
             
             <Route path="*" element={<NotFound />} />
           </Routes>
