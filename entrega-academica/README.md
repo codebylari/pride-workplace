@@ -24,6 +24,7 @@ entrega-academica/
 ├── 03-triggers.sql             ✅ Criação de triggers para INSERT
 ├── 04-procedures-joins.sql     ✅ Stored procedures e views com JOIN
 ├── 05-insercao-dados.sql       ✅ Inserção de 5+ registros por tabela
+├── executar-tudo.sql           🚀 Script único que executa TUDO automaticamente
 └── README.md                   📖 Este arquivo
 ```
 
@@ -168,7 +169,19 @@ entrega-academica/
 - PostgreSQL instalado (versão 12 ou superior)
 - Acesso ao terminal ou cliente SQL (pgAdmin, DBeaver, etc.)
 
-### Passo a Passo
+### Opção 1: Execução Automática (RECOMENDADO) 🚀
+
+```bash
+# 1. Criar o banco de dados
+psql -U postgres -c "CREATE DATABASE linkar_db;"
+
+# 2. Executar TUDO de uma vez com o script único
+psql -U postgres -d linkar_db -f executar-tudo.sql
+```
+
+**Pronto!** Todas as tabelas, funções, triggers, procedures e dados são criados automaticamente.
+
+### Opção 2: Execução Individual (passo a passo)
 
 ```bash
 # 1. Criar o banco de dados
