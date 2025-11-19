@@ -210,6 +210,94 @@ CREATE TABLE public.admin_logs (
 );
 
 -- ============================================
+-- FOREIGN KEYS (CHAVES ESTRANGEIRAS)
+-- Descrição: Relacionamentos entre tabelas com CASCADE DELETE
+-- ============================================
+
+-- Foreign Keys: user_roles
+ALTER TABLE public.user_roles
+ADD CONSTRAINT fk_user_roles_user_id 
+FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE;
+
+-- Foreign Keys: profiles
+ALTER TABLE public.profiles
+ADD CONSTRAINT fk_profiles_id 
+FOREIGN KEY (id) REFERENCES auth.users(id) ON DELETE CASCADE;
+
+-- Foreign Keys: company_profiles
+ALTER TABLE public.company_profiles
+ADD CONSTRAINT fk_company_profiles_user_id 
+FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE;
+
+-- Foreign Keys: jobs
+ALTER TABLE public.jobs
+ADD CONSTRAINT fk_jobs_company_id 
+FOREIGN KEY (company_id) REFERENCES public.company_profiles(user_id) ON DELETE CASCADE;
+
+-- Foreign Keys: applications
+ALTER TABLE public.applications
+ADD CONSTRAINT fk_applications_candidate_id 
+FOREIGN KEY (candidate_id) REFERENCES public.profiles(id) ON DELETE CASCADE;
+
+ALTER TABLE public.applications
+ADD CONSTRAINT fk_applications_job_id 
+FOREIGN KEY (job_id) REFERENCES public.jobs(id) ON DELETE CASCADE;
+
+-- Foreign Keys: swipes
+ALTER TABLE public.swipes
+ADD CONSTRAINT fk_swipes_user_id 
+FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE;
+
+-- Foreign Keys: matches
+ALTER TABLE public.matches
+ADD CONSTRAINT fk_matches_candidate_id 
+FOREIGN KEY (candidate_id) REFERENCES public.profiles(id) ON DELETE CASCADE;
+
+ALTER TABLE public.matches
+ADD CONSTRAINT fk_matches_job_id 
+FOREIGN KEY (job_id) REFERENCES public.jobs(id) ON DELETE CASCADE;
+
+ALTER TABLE public.matches
+ADD CONSTRAINT fk_matches_company_id 
+FOREIGN KEY (company_id) REFERENCES public.company_profiles(user_id) ON DELETE CASCADE;
+
+-- Foreign Keys: ratings
+ALTER TABLE public.ratings
+ADD CONSTRAINT fk_ratings_application_id 
+FOREIGN KEY (application_id) REFERENCES public.applications(id) ON DELETE CASCADE;
+
+ALTER TABLE public.ratings
+ADD CONSTRAINT fk_ratings_rater_id 
+FOREIGN KEY (rater_id) REFERENCES auth.users(id) ON DELETE CASCADE;
+
+ALTER TABLE public.ratings
+ADD CONSTRAINT fk_ratings_rated_user_id 
+FOREIGN KEY (rated_user_id) REFERENCES auth.users(id) ON DELETE CASCADE;
+
+-- Foreign Keys: notifications
+ALTER TABLE public.notifications
+ADD CONSTRAINT fk_notifications_user_id 
+FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE;
+
+-- Foreign Keys: testimonials
+ALTER TABLE public.testimonials
+ADD CONSTRAINT fk_testimonials_candidate_id 
+FOREIGN KEY (candidate_id) REFERENCES public.profiles(id) ON DELETE CASCADE;
+
+ALTER TABLE public.testimonials
+ADD CONSTRAINT fk_testimonials_company_id 
+FOREIGN KEY (company_id) REFERENCES public.company_profiles(user_id) ON DELETE CASCADE;
+
+ALTER TABLE public.testimonials
+ADD CONSTRAINT fk_testimonials_application_id 
+FOREIGN KEY (application_id) REFERENCES public.applications(id) ON DELETE CASCADE;
+
+-- Foreign Keys: admin_logs
+ALTER TABLE public.admin_logs
+ADD CONSTRAINT fk_admin_logs_admin_id 
+FOREIGN KEY (admin_id) REFERENCES auth.users(id) ON DELETE CASCADE;
+
+-- ============================================
 -- ÍNDICES PARA FOREIGN KEYS
 -- Descrição: Índices para melhorar performance de queries com JOIN e filtros
 -- ============================================
