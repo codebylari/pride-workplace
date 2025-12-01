@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
-import { ArrowLeft, Edit, Trash2 } from "lucide-react";
+import { ArrowLeft, Edit, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface Application {
   id: string;
@@ -45,6 +45,8 @@ export default function AdminApplications() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editStatus, setEditStatus] = useState<string>("");
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   useEffect(() => {
     if (!loading && userRole !== "admin") {
@@ -170,25 +172,41 @@ export default function AdminApplications() {
   };
 
   const getStatusBadge = (status: string) => {
-    const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
-      pending: "secondary",
-      accepted: "default",
-      rejected: "destructive",
-      contact_requested: "outline",
+    const statusConfig: Record<string, { label: string; className: string }> = {
+      pending: { 
+        label: "Pendente", 
+        className: "bg-yellow-500/10 text-yellow-700 dark:text-yellow-400 border-yellow-500/20" 
+      },
+      accepted: { 
+        label: "Aceita", 
+        className: "bg-green-500/10 text-green-700 dark:text-green-400 border-green-500/20" 
+      },
+      rejected: { 
+        label: "Rejeitada", 
+        className: "bg-red-500/10 text-red-700 dark:text-red-400 border-red-500/20" 
+      },
+      contact_requested: { 
+        label: "Contato Solicitado", 
+        className: "bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/20" 
+      },
     };
 
-    const labels: Record<string, string> = {
-      pending: "Pendente",
-      accepted: "Aceita",
-      rejected: "Rejeitada",
-      contact_requested: "Contato Solicitado",
-    };
+    const config = statusConfig[status] || { label: status, className: "" };
 
     return (
-      <Badge variant={variants[status] || "default"}>
-        {labels[status] || status}
+      <Badge variant="outline" className={config.className}>
+        {config.label}
       </Badge>
     );
+  };
+
+  const totalPages = Math.ceil(applications.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentApplications = applications.slice(startIndex, endIndex);
+
+  const goToPage = (page: number) => {
+    setCurrentPage(Math.max(1, Math.min(page, totalPages)));
   };
 
   if (loading) {
@@ -232,7 +250,7 @@ export default function AdminApplications() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {applications.map((application) => {
+                {currentApplications.map((application) => {
                   const job = jobs[application.job_id];
                   const companyName = job ? companies[job.company_id] : "N/A";
                   
@@ -270,6 +288,40 @@ export default function AdminApplications() {
                 })}
               </TableBody>
             </Table>
+            
+            {totalPages > 1 && (
+              <div className="flex items-center justify-center gap-2 mt-4">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => goToPage(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+                
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <Button
+                    key={page}
+                    variant={currentPage === page ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => goToPage(page)}
+                    className="min-w-[40px]"
+                  >
+                    {page}
+                  </Button>
+                ))}
+                
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => goToPage(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
+            )}
           </CardContent>
         </Card>
 
