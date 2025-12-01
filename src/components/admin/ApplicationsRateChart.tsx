@@ -10,6 +10,21 @@ interface ApplicationsRateChartProps {
 }
 
 export function ApplicationsRateChart({ data }: ApplicationsRateChartProps) {
+  if (!data || data.length === 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Taxa de Candidaturas</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-center h-[300px] text-muted-foreground">
+            Nenhuma vaga cadastrada ainda
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card>
       <CardHeader>
