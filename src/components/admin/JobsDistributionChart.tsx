@@ -18,6 +18,21 @@ const COLORS = [
 ];
 
 export function JobsDistributionChart({ data }: JobsDistributionChartProps) {
+  if (!data || data.length === 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Distribuição de Vagas por Área</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-center h-[300px] text-muted-foreground">
+            Nenhuma vaga cadastrada ainda
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card>
       <CardHeader>

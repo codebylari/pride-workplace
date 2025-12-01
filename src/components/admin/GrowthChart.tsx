@@ -10,6 +10,21 @@ interface GrowthChartProps {
 }
 
 export function GrowthChart({ data }: GrowthChartProps) {
+  if (!data || data.length === 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Crescimento de Cadastros</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-center h-[300px] text-muted-foreground">
+            Sem dados de crescimento ainda
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card>
       <CardHeader>
