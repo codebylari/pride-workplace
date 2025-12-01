@@ -152,12 +152,10 @@ export default function AdminDashboard() {
         }
       });
 
-      const chartData = Object.entries(distribution)
-        .filter(([_, value]) => value > 0)
-        .map(([name, value]) => ({
-          name,
-          value,
-        }));
+      const chartData = Object.entries(distribution).map(([name, value]) => ({
+        name,
+        value,
+      }));
 
       setJobsDistribution(chartData);
     } catch (error) {
