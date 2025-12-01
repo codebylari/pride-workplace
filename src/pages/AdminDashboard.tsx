@@ -209,10 +209,15 @@ export default function AdminDashboard() {
 
   const fetchApplicationsRate = async () => {
     try {
-      const { data: jobs } = await supabase
+      const { data: jobs, error } = await supabase
         .from("jobs")
-        .select("id, title, applications(id)")
+        .select("id, title, applications!fk_applications_job_id(id)")
         .limit(10);
+
+      if (error) {
+        console.error("Error fetching applications rate:", error);
+        return;
+      }
 
       const chartData = (jobs || []).map((job: any) => ({
         name: job.title.substring(0, 20) + (job.title.length > 20 ? '...' : ''),
