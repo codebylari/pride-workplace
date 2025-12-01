@@ -211,27 +211,12 @@ export default function AdminDashboard() {
     try {
       const { data: jobs } = await supabase
         .from("jobs")
-        .select("id, title, applications!inner(id)")
+        .select("id, title, applications(id)")
         .limit(10);
 
-      // Group applications by job
-      const jobsMap = new Map<string, { title: string; count: number }>();
-      
-      jobs?.forEach((job: any) => {
-        const jobKey = job.id;
-        if (!jobsMap.has(jobKey)) {
-          jobsMap.set(jobKey, { title: job.title, count: 0 });
-        }
-        if (job.applications) {
-          const current = jobsMap.get(jobKey)!;
-          current.count++;
-          jobsMap.set(jobKey, current);
-        }
-      });
-
-      const chartData = Array.from(jobsMap.values()).map((job) => ({
+      const chartData = (jobs || []).map((job: any) => ({
         name: job.title.substring(0, 20) + (job.title.length > 20 ? '...' : ''),
-        candidaturas: job.count,
+        candidaturas: job.applications?.length || 0,
         vagas: 1,
       }));
 
