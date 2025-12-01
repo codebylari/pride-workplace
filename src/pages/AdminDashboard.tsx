@@ -134,19 +134,30 @@ export default function AdminDashboard() {
     try {
       const { data: jobs } = await supabase
         .from("jobs")
-        .select("job_type");
+        .select("is_remote");
 
-      const distribution: { [key: string]: number } = {};
+      const distribution = {
+        "Remoto": 0,
+        "Presencial": 0,
+        "Híbrido": 0,
+      };
       
       jobs?.forEach((job) => {
-        const type = job.job_type || "Outros";
-        distribution[type] = (distribution[type] || 0) + 1;
+        if (job.is_remote === true) {
+          distribution["Remoto"]++;
+        } else if (job.is_remote === false) {
+          distribution["Presencial"]++;
+        } else {
+          distribution["Híbrido"]++;
+        }
       });
 
-      const chartData = Object.entries(distribution).map(([name, value]) => ({
-        name,
-        value,
-      }));
+      const chartData = Object.entries(distribution)
+        .filter(([_, value]) => value > 0)
+        .map(([name, value]) => ({
+          name,
+          value,
+        }));
 
       setJobsDistribution(chartData);
     } catch (error) {

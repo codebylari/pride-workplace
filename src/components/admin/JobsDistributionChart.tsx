@@ -22,7 +22,7 @@ export function JobsDistributionChart({ data }: JobsDistributionChartProps) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Distribuição de Vagas por Área</CardTitle>
+          <CardTitle>Distribuição de Vagas por Modalidade</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-center h-[300px] text-muted-foreground">
@@ -36,7 +36,7 @@ export function JobsDistributionChart({ data }: JobsDistributionChartProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Distribuição de Vagas por Área</CardTitle>
+        <CardTitle>Distribuição de Vagas por Modalidade</CardTitle>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={300}>
