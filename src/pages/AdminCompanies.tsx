@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
-import { ArrowLeft, Edit, Trash2 } from "lucide-react";
+import { ArrowLeft, Edit, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface Company {
   id: string;
@@ -36,6 +36,8 @@ export default function AdminCompanies() {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [editingCompany, setEditingCompany] = useState<Company | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
   const [editForm, setEditForm] = useState({ 
     fantasy_name: "", 
     cnpj: "",
@@ -146,6 +148,39 @@ export default function AdminCompanies() {
     }
   };
 
+  const totalPages = Math.ceil(companies.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentCompanies = companies.slice(startIndex, endIndex);
+
+  const goToPage = (page: number) => {
+    setCurrentPage(Math.max(1, Math.min(page, totalPages)));
+  };
+
+  const getPageNumbers = () => {
+    const maxVisible = 5;
+    const pages: number[] = [];
+    
+    if (totalPages <= maxVisible) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      let startPage = Math.max(1, currentPage - 2);
+      let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+      
+      if (endPage - startPage < maxVisible - 1) {
+        startPage = Math.max(1, endPage - maxVisible + 1);
+      }
+      
+      for (let i = startPage; i <= endPage; i++) {
+        pages.push(i);
+      }
+    }
+    
+    return pages;
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -188,7 +223,7 @@ export default function AdminCompanies() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {companies.map((company) => (
+                {currentCompanies.map((company) => (
                   <TableRow key={company.id}>
                     <TableCell className="font-medium">{company.fantasy_name}</TableCell>
                     <TableCell>{company.cnpj}</TableCell>
@@ -226,6 +261,39 @@ export default function AdminCompanies() {
                 ))}
               </TableBody>
             </Table>
+
+            {totalPages > 1 && (
+              <div className="flex items-center justify-center gap-2 mt-4">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => goToPage(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+                
+                {getPageNumbers().map((page) => (
+                  <Button
+                    key={page}
+                    variant={currentPage === page ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => goToPage(page)}
+                  >
+                    {page}
+                  </Button>
+                ))}
+                
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => goToPage(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
+            )}
           </CardContent>
         </Card>
 
