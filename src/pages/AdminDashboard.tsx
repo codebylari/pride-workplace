@@ -134,7 +134,7 @@ export default function AdminDashboard() {
     try {
       const { data: jobs } = await supabase
         .from("jobs")
-        .select("is_remote");
+        .select("job_type");
 
       const distribution = {
         "Remoto": 0,
@@ -143,11 +143,12 @@ export default function AdminDashboard() {
       };
       
       jobs?.forEach((job) => {
-        if (job.is_remote === true) {
+        const jobType = job.job_type?.trim();
+        if (jobType === "Remoto") {
           distribution["Remoto"]++;
-        } else if (job.is_remote === false) {
+        } else if (jobType === "Presencial") {
           distribution["Presencial"]++;
-        } else {
+        } else if (jobType === "Híbrido") {
           distribution["Híbrido"]++;
         }
       });
