@@ -209,6 +209,30 @@ export default function AdminApplications() {
     setCurrentPage(Math.max(1, Math.min(page, totalPages)));
   };
 
+  const getPageNumbers = () => {
+    const maxVisible = 5;
+    const pages: number[] = [];
+    
+    if (totalPages <= maxVisible) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      let startPage = Math.max(1, currentPage - 2);
+      let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+      
+      if (endPage - startPage < maxVisible - 1) {
+        startPage = Math.max(1, endPage - maxVisible + 1);
+      }
+      
+      for (let i = startPage; i <= endPage; i++) {
+        pages.push(i);
+      }
+    }
+    
+    return pages;
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -300,7 +324,7 @@ export default function AdminApplications() {
                   <ChevronLeft className="h-4 w-4" />
                 </Button>
                 
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                {getPageNumbers().map((page) => (
                   <Button
                     key={page}
                     variant={currentPage === page ? "default" : "outline"}
